@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÉduRéussite QC — Guide de Tests</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FAF7F2;--warm:#F0EBE3;--sand:#E5DED4;
+  --coral:#D97757;--coral-light:#F4DDD3;--coral-dark:#B85C3A;
+  --brown:#8B6B4A;--dark:#1A1715;--text:#2D2926;
+  --muted:#7A756E;--subtle:#AEA89F;
+  --ok:#2D9E6A;--ok-light:#D4F0E2;--ok-bg:#EEFAF3;
+  --ko:#D94343;--ko-light:#FADEDE;--ko-bg:#FEF2F2;
+  --untested:#C4BEB6;--untested-light:#EDE9E3;
+  --radius:10px;--font:'DM Sans',-apple-system,system-ui,sans-serif;--mono:'DM Mono',monospace;
+  --shadow:0 1px 3px rgba(26,23,21,.06);--shadow-md:0 4px 12px rgba(26,23,21,.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--cream);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+.header{background:var(--dark);color:#fff;position:sticky;top:0;z-index:100}
+.header-inner{max-width:1140px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:var(--coral);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.logo-text{font-size:16px;font-weight:600;color:#fff;letter-spacing:-.2px}
+.logo-sub{font-size:12px;color:var(--subtle);font-weight:400;margin-left:6px}
+.header-actions{display:flex;align-items:center;gap:8px}
+.header-date{font-size:11px;color:var(--subtle);margin-right:8px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:7px;font-size:12px;font-weight:500;font-family:var(--font);cursor:pointer;border:none;transition:all .15s}
+.btn svg{width:13px;height:13px}
+.btn-ghost{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.1)}
+.btn-ghost:hover{background:rgba(255,255,255,.15);color:#fff}
+.btn-danger{background:rgba(217,67,67,.15);color:#F87171;border:1px solid transparent}
+.btn-danger:hover{background:var(--ko);color:#fff}
+
+.stats-bar{background:#fff;border-bottom:1px solid var(--sand);padding:16px 24px}
+.stats-inner{max-width:1140px;margin:0 auto;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.stat-block{display:flex;align-items:center;gap:10px}
+.stat-ring{position:relative;width:52px;height:52px}
+.stat-ring svg{transform:rotate(-90deg)}
+.stat-ring-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text)}
+.stat-nums{display:flex;gap:12px}
+.stat-pill{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px}
+.stat-pill.ok{background:var(--ok-bg);color:var(--ok)}
+.stat-pill.ko{background:var(--ko-bg);color:var(--ko)}
+.stat-pill.untested{background:var(--untested-light);color:var(--muted)}
+.stat-pill .dot{width:6px;height:6px;border-radius:50%}
+.stat-pill.ok .dot{background:var(--ok)}
+.stat-pill.ko .dot{background:var(--ko)}
+.stat-pill.untested .dot{background:var(--untested)}
+.stat-divider{width:1px;height:32px;background:var(--sand)}
+.progress-wrap{flex:1;min-width:200px}
+.progress-label{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;display:flex;justify-content:space-between}
+.progress-track{height:6px;background:var(--warm);border-radius:99px;overflow:hidden;display:flex}
+.progress-ok{height:100%;background:var(--ok);transition:width .4s}
+.progress-ko{height:100%;background:var(--ko);transition:width .4s}
+
+.creds-wrap{max-width:1140px;margin:16px auto 0;padding:0 24px}
+.creds-card{background:#fff;border:1px solid var(--sand);border-radius:var(--radius);padding:16px 20px;display:flex;gap:24px;flex-wrap:wrap}
+.creds-section{flex:1;min-width:240px}
+.creds-section h3{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.cred-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:12px}
+.cred-role{min-width:80px;padding:2px 8px;border-radius:5px;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.3px;text-align:center}
+.cred-role.superadmin{background:#EDE9FE;color:#5B21B6}
+.cred-role.admin{background:var(--coral-light);color:var(--coral-dark)}
+.cred-role.parent{background:var(--ok-light);color:var(--ok)}
+.cred-role.enseignant{background:#FEF3C7;color:#92400E}
+.cred-role.eleve{background:var(--warm);color:var(--brown)}
+.cred-val{font-family:var(--mono);font-size:11px;color:var(--text)}
+.cred-pass{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.cred-copy{background:none;border:none;cursor:pointer;padding:2px;color:var(--subtle);transition:.15s}
+.cred-copy:hover{color:var(--coral)}
+.cred-copy svg{width:12px;height:12px}
+.url-row{font-size:12px;margin-bottom:3px}
+.url-row a{color:var(--coral);text-decoration:none;font-family:var(--mono);font-size:11px}
+.url-row a:hover{text-decoration:underline}
+.url-label{color:var(--muted);min-width:36px;display:inline-block;font-weight:600}
+
+.tabs-wrap{max-width:1140px;margin:16px auto 0;padding:0 24px;overflow-x:auto;scrollbar-width:none}
+.tabs-wrap::-webkit-scrollbar{display:none}
+.tabs{display:flex;gap:3px;min-width:max-content}
+.tab{padding:8px 14px;border-radius:8px 8px 0 0;font-size:12px;font-weight:500;cursor:pointer;border:1px solid transparent;border-bottom:none;background:transparent;color:var(--muted);font-family:var(--font);transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--text);background:var(--warm)}
+.tab.active{background:#fff;color:var(--coral);border-color:var(--sand);font-weight:600}
+.tab-badge{font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;min-width:20px;text-align:center}
+.tab .tab-badge{background:var(--warm);color:var(--muted)}
+.tab.active .tab-badge{background:var(--coral-light);color:var(--coral)}
+.tab.all-ok .tab-badge{background:var(--ok-light);color:var(--ok)}
+.tab.has-ko .tab-badge{background:var(--ko-light);color:var(--ko)}
+
+.content-wrap{max-width:1140px;margin:0 auto;padding:0 24px 40px}
+.parcours{background:#fff;border:1px solid var(--sand);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:24px 28px 28px;display:none}
+.parcours.active{display:block}
+
+.parcours-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.parcours-title{font-size:20px;font-weight:700;color:var(--dark);letter-spacing:-.3px}
+.parcours-desc{font-size:13px;color:var(--muted);margin-top:3px}
+.parcours-tags{display:flex;gap:6px;margin-top:8px}
+.tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.3px}
+.tag-superadmin{background:#EDE9FE;color:#5B21B6}
+.tag-admin{background:var(--coral-light);color:var(--coral-dark)}
+.tag-parent{background:var(--ok-light);color:var(--ok)}
+.tag-enseignant{background:#FEF3C7;color:#92400E}
+.tag-eleve{background:var(--warm);color:var(--brown)}
+.tag-all{background:var(--warm);color:var(--muted)}
+.parcours-chart{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--cream);border-radius:8px}
+.mini-bar{display:flex;width:120px;height:18px;border-radius:4px;overflow:hidden;background:var(--warm)}
+.mini-bar-ok{height:100%;background:var(--ok);transition:width .3s}
+.mini-bar-ko{height:100%;background:var(--ko);transition:width .3s}
+.mini-stats{font-size:11px;color:var(--muted);font-weight:600;line-height:1.4}
+.mini-stats span{display:block}
+
+.step-group{margin-bottom:24px}
+.step-group-title{font-size:13px;font-weight:700;color:var(--brown);padding-bottom:6px;margin-bottom:10px;border-bottom:1px solid var(--sand);display:flex;align-items:center;gap:8px}
+.step-group-num{width:22px;height:22px;border-radius:6px;background:var(--coral-light);color:var(--coral);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+
+.step{display:grid;grid-template-columns:auto 1fr auto;gap:12px;padding:10px 12px;border-radius:8px;margin-bottom:3px;transition:background .15s;align-items:start}
+.step:hover{background:var(--cream)}
+.step.status-ok{background:var(--ok-bg)}
+.step.status-ko{background:var(--ko-bg)}
+.step-num{font-size:10px;font-weight:700;color:var(--subtle);font-family:var(--mono);letter-spacing:.5px}
+.step-action{font-size:13px;font-weight:500;color:var(--text);line-height:1.4}
+.step.status-ok .step-action{color:var(--ok)}
+.step.status-ko .step-action{color:var(--ko)}
+.step-expect{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;padding-left:10px;border-left:2px solid var(--sand)}
+
+.step-toggle{display:flex;gap:4px;margin-top:2px}
+.toggle-btn{width:36px;height:28px;border-radius:6px;border:1.5px solid var(--sand);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:11px;font-weight:700;font-family:var(--font)}
+.toggle-btn:hover{border-color:var(--subtle)}
+.toggle-btn.ok-btn.active{background:var(--ok);border-color:var(--ok);color:#fff}
+.toggle-btn.ko-btn.active{background:var(--ko);border-color:var(--ko);color:#fff}
+.toggle-btn svg{width:14px;height:14px}
+
+.ko-note{grid-column:1/-1;margin-top:-2px}
+.ko-note textarea{width:100%;padding:8px 10px;border:1px solid var(--ko-light);border-radius:6px;font-family:var(--font);font-size:12px;color:var(--ko);background:var(--ko-bg);resize:vertical;min-height:40px;line-height:1.4}
+.ko-note textarea:focus{outline:none;border-color:var(--ko)}
+.ko-note textarea::placeholder{color:rgba(217,67,67,.4)}
+
+.bugs-section{margin-top:24px;padding-top:20px;border-top:1px solid var(--sand)}
+.bugs-section h3{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.bugs-section h3 svg{width:16px;height:16px;color:var(--ko)}
+.bugs-textarea{width:100%;min-height:100px;padding:12px 14px;border:1px solid var(--sand);border-radius:var(--radius);font-family:var(--font);font-size:13px;color:var(--text);resize:vertical;line-height:1.6;transition:border-color .15s}
+.bugs-textarea:focus{outline:none;border-color:var(--coral);box-shadow:0 0 0 3px var(--coral-light)}
+.bugs-textarea::placeholder{color:var(--subtle)}
+
+.tester-bar{background:#fff;border-bottom:1px solid var(--sand);padding:10px 24px}
+.tester-inner{max-width:1140px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tester-label{font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+.tester-input{padding:6px 12px;border:1px solid var(--sand);border-radius:7px;font-family:var(--font);font-size:13px;color:var(--text);background:var(--cream);width:220px;transition:border-color .15s}
+.tester-input:focus{outline:none;border-color:var(--coral);background:#fff}
+.tester-input::placeholder{color:var(--subtle)}
+.tester-saved{font-size:11px;color:var(--ok);font-weight:500;opacity:0;transition:opacity .3s}
+.tester-saved.show{opacity:1}
+.export-group{margin-left:auto;display:flex;gap:6px}
+.btn-export{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:7px;font-size:11px;font-weight:600;font-family:var(--font);cursor:pointer;border:1px solid var(--sand);background:#fff;color:var(--text);transition:all .15s}
+.btn-export:hover{border-color:var(--coral);color:var(--coral)}
+.btn-export svg{width:13px;height:13px}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:#fff;padding:10px 18px;border-radius:8px;font-size:12px;font-weight:500;z-index:9999;transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media print{
+  .header,.stats-bar,.tabs-wrap,.header-actions,.btn,.cred-copy,.toggle-btn{display:none!important}
+  .parcours{display:block!important;break-inside:avoid;border:1px solid #ddd;margin-bottom:12px;border-radius:8px}
+  .content-wrap,.creds-wrap,.tabs-wrap{max-width:100%;padding:0}
+  body{background:#fff}
+  .step.status-ok{border-left:3px solid var(--ok)}
+  .step.status-ko{border-left:3px solid var(--ko)}
+}
+@media(max-width:768px){
+  .header-inner{padding:10px 14px}
+  .stats-inner{gap:12px}
+  .stat-divider{display:none}
+  .creds-card{flex-direction:column;gap:12px;padding:12px}
+  .parcours{padding:16px 14px}
+  .content-wrap,.creds-wrap,.tabs-wrap{padding:0 10px}
+  .step{grid-template-columns:1fr;gap:6px}
+  .step-toggle{justify-content:flex-end}
+  .parcours-head{flex-direction:column}
+  .mini-bar{width:100px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">✦</div>
+      <div class="logo-text">ÉduRéussite QC<span class="logo-sub">Guide de Tests</span></div>
+    </div>
+    <div class="header-actions">
+      <span class="header-date" id="dateDisplay"></span>
+      <button class="btn btn-ghost" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimer</button>
+      <button class="btn btn-danger" onclick="resetAll()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>Reset</button>
+    </div>
+  </div>
+</header>
+
+<div class="tester-bar">
+  <div class="tester-inner">
+    <span class="tester-label">Testeur :</span>
+    <input class="tester-input" id="testerName" placeholder="Votre nom complet" oninput="saveTester()" />
+    <span class="tester-saved" id="testerSaved">Enregistré ✓</span>
+    <div class="export-group">
+      <button class="btn-export" onclick="exportMarkdown()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        Export .md
+      </button>
+      <button class="btn-export" onclick="exportJSON()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        Export .json
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-block">
+      <div class="stat-ring">
+        <svg width="52" height="52" viewBox="0 0 52 52">
+          <circle cx="26" cy="26" r="22" fill="none" stroke="var(--warm)" stroke-width="5"/>
+          <circle id="ringOk" cx="26" cy="26" r="22" fill="none" stroke="var(--ok)" stroke-width="5" stroke-dasharray="0 138.2" stroke-linecap="round"/>
+          <circle id="ringKo" cx="26" cy="26" r="22" fill="none" stroke="var(--ko)" stroke-width="5" stroke-dasharray="0 138.2" stroke-linecap="round"/>
+        </svg>
+        <div class="stat-ring-text" id="ringPct">0%</div>
+      </div>
+    </div>
+    <div class="stat-nums">
+      <div class="stat-pill ok"><div class="dot"></div><span id="globalOk">0</span> OK</div>
+      <div class="stat-pill ko"><div class="dot"></div><span id="globalKo">0</span> KO</div>
+      <div class="stat-pill untested"><div class="dot"></div><span id="globalUntested">0</span> restants</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progression globale</span><span id="progressPct">0%</span></div>
+      <div class="progress-track"><div class="progress-ok" id="progressOk" style="width:0"></div><div class="progress-ko" id="progressKo" style="width:0"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="creds-wrap">
+  <div class="creds-card">
+    <div class="creds-section">
+      <h3>Comptes de test</h3>
+      <div class="cred-row"><span class="cred-role superadmin">Super Admin</span><span class="cred-val">[fourni séparément]</span><span class="cred-pass">••••••••</span></div>
+      <div class="cred-row"><span class="cred-role parent">Parent</span><span class="cred-val">[fourni séparément]</span><span class="cred-pass">+ OTP email</span></div>
+      <div class="cred-row"><span class="cred-role eleve">Élève</span><span class="cred-val">Code d'accès fourni séparément</span><span class="cred-pass">mot de passe</span></div>
+    </div>
+    <div class="creds-section">
+      <h3>URLs</h3>
+      <div class="url-row"><span class="url-label">App</span><a href="https://edureussite.edevtic.com" target="_blank">edureussite.edevtic.com</a></div>
+      <div class="url-row"><span class="url-label">Login</span><a href="https://edureussite.edevtic.com/login" target="_blank">edureussite.edevtic.com/login</a></div>
+      <div class="url-row"><span class="url-label">Inscription</span><a href="https://edureussite.edevtic.com/register" target="_blank">edureussite.edevtic.com/register</a></div>
+    </div>
+    <div class="creds-section">
+      <h3>Notes importantes</h3>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6">
+        ⚠️ Les comptes adultes (Parent/Enseignant) reçoivent un <strong>code OTP par courriel</strong> à chaque connexion.<br>
+        ⚠️ Les élèves se connectent avec un <strong>code d'accès</strong> (pas d'email).
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-wrap"><div class="tabs" id="tabsContainer"></div></div>
+<div class="content-wrap" id="contentContainer"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const P = [
+  {
+    id:'p1', title:'Inscription & Connexion', profile:'Tous', profileClass:'tag-all',
+    desc:'Vérifier l\'inscription, la vérification email et la connexion pour chaque profil.',
+    groups:[
+      {title:'Inscription Parent / Enseignant', icon:'1', steps:[
+        {a:'Aller sur /register', e:'Formulaire avec choix du rôle (Parent / Enseignant), prénom, nom, courriel, mot de passe'},
+        {a:'Sélectionner "Parent" et remplir le formulaire', e:'Formulaire validé'},
+        {a:'Cliquer "Créer mon compte"', e:'Code OTP à 6 chiffres reçu par courriel. Affichage de la saisie OTP sur la même page'},
+        {a:'Entrer le code OTP reçu par courriel', e:'Connexion automatique + redirection vers le tableau de bord parent'},
+        {a:'Tester avec un courriel déjà utilisé', e:'Message d\'erreur : "Cet email est déjà utilisé"'},
+        {a:'Tester avec un mot de passe de moins de 8 caractères', e:'Message d\'erreur : "Minimum 8 caractères"'},
+      ]},
+      {title:'Connexion Parent / Enseignant', icon:'2', steps:[
+        {a:'Aller sur /login > choisir "Adulte"', e:'Formulaire email + mot de passe'},
+        {a:'Se connecter avec un compte parent valide', e:'Code OTP envoyé par courriel. Page affiche les champs de saisie OTP'},
+        {a:'Entrer le code OTP reçu', e:'Redirection vers le tableau de bord parent'},
+        {a:'Tester avec un mauvais mot de passe', e:'Message : "Email ou mot de passe incorrect"'},
+        {a:'Tester avec un mauvais code OTP', e:'Message : "Code incorrect ou expiré"'},
+        {a:'Cliquer "Renvoyer le code"', e:'Nouveau code reçu dans la boîte courriel'},
+      ]},
+      {title:'Connexion Élève', icon:'3', steps:[
+        {a:'Aller sur /login > choisir "Élève"', e:'Formulaire avec "Code d\'accès" et "Mot de passe"'},
+        {a:'Se connecter avec un code d\'accès et mot de passe valides', e:'Redirection vers le tableau de bord élève (pas d\'OTP pour les élèves)'},
+        {a:'Tester avec un mauvais code d\'accès', e:'Message : "Code d\'accès ou mot de passe incorrect"'},
+      ]},
+      {title:'Déconnexion', icon:'4', steps:[
+        {a:'Se déconnecter depuis le menu utilisateur (avatar en haut)', e:'Retour à la page de login'},
+        {a:'Tenter d\'accéder à /eleve ou /parent sans être connecté', e:'Redirection vers /login'},
+      ]},
+    ]
+  },
+  {
+    id:'p2', title:'Tableau de bord Élève', profile:'Élève', profileClass:'tag-eleve',
+    desc:'Vérifier le tableau de bord, le profil et les fonctionnalités propres à l\'élève.',
+    groups:[
+      {title:'Page d\'accueil élève', icon:'1', steps:[
+        {a:'Se connecter en tant qu\'élève', e:'Tableau de bord avec : message de bienvenue, objectifs de la semaine, exercices du jour, cours disponibles'},
+        {a:'Vérifier la barre de navigation', e:'Logo, nom de l\'élève, avatar avec menu déroulant'},
+        {a:'Vérifier les statistiques affichées', e:'Nombre d\'exercices complétés, score moyen, badges'},
+        {a:'Vérifier la section "Exercices du jour"', e:'Au moins un exercice proposé avec bouton "Commencer"'},
+        {a:'Vérifier la section "Mes cours"', e:'Liste des cours de remédiation disponibles (ou message si aucun)'},
+      ]},
+      {title:'Anniversaire', icon:'2', steps:[
+        {a:'Si l\'élève a son anniversaire aujourd\'hui (à configurer en test)', e:'Overlay plein écran avec confettis et message d\'anniversaire s\'affiche à la connexion'},
+        {a:'Cliquer "Fermer" ou attendre', e:'L\'overlay disparaît et le tableau de bord s\'affiche normalement'},
+      ]},
+      {title:'Profil élève', icon:'3', steps:[
+        {a:'Cliquer sur l\'avatar > "Mon profil" ou /eleve/parametres', e:'Page de paramètres avec infos du profil (niveau, matières, intérêts)'},
+        {a:'Modifier le style d\'apprentissage et sauvegarder', e:'Toast de confirmation. Changement sauvegardé'},
+        {a:'Changer le mot de passe (ancien + nouveau)', e:'Mot de passe mis à jour. Confirmation visible'},
+      ]},
+    ]
+  },
+  {
+    id:'p3', title:'Exercices & IA', profile:'Élève', profileClass:'tag-eleve',
+    desc:'Génération, complétion et feedback des exercices personnalisés par l\'IA.',
+    groups:[
+      {title:'Génération d\'exercice', icon:'1', steps:[
+        {a:'Depuis le tableau de bord, cliquer "Commencer" sur un exercice', e:'Exercice chargé avec : titre personnalisé, contexte / mise en situation, données, questions (minimum 1 question visible)'},
+        {a:'Vérifier que l\'exercice contient bien des questions', e:'Section "Questions" présente et non vide'},
+        {a:'Vérifier que l\'exercice est adapté au profil (prénom, niveau, intérêts)', e:'Titre ou contexte fait référence aux intérêts de l\'élève (ex: sport, jeu favori)'},
+      ]},
+      {title:'Complétion et feedback', icon:'2', steps:[
+        {a:'Répondre à l\'exercice et soumettre', e:'Feedback IA affiché : score, mention, ce qui a bien été, erreurs identifiées'},
+        {a:'Vérifier le score affiché (0-100)', e:'Score cohérent avec la qualité de la réponse'},
+        {a:'Vérifier la correction détaillée', e:'Explication des erreurs et de la bonne démarche'},
+        {a:'Compléter 3 exercices (pour déclencher la génération de cours)', e:'Après le 3e exercice terminé, un cours de remédiation apparaît dans "Mes cours"'},
+      ]},
+      {title:'Choix du niveau de difficulté', icon:'3', steps:[
+        {a:'Depuis le tableau de bord, lancer un nouvel exercice (matière + mode simple)', e:'Wizard multi-étapes : après la sélection des notions, une nouvelle étape "Difficulté" s\'affiche'},
+        {a:'Vérifier les 3 options disponibles', e:'3 boutons colorés : 😊 Facile (BASE — vert), 🎯 Intermédiaire (ATTENDU — bleu, sélectionné par défaut), 🚀 Difficile (AVANCÉ — violet)'},
+        {a:'Sélectionner "Facile" puis générer l\'exercice', e:'Exercice généré avec un niveau de complexité adapté à un élève en difficulté'},
+        {a:'Sélectionner "Difficile" puis générer un autre exercice', e:'Exercice notablement plus exigeant que le précédent (vocabulaire, complexité, nombre d\'étapes)'},
+        {a:'Lancer une épreuve — vérifier la même étape de difficulté', e:'L\'étape "Difficulté" est également présente avant l\'étape "Durée" dans le wizard épreuve'},
+        {a:'Choisir "Intermédiaire" et générer une épreuve', e:'Épreuve générée. Le récapitulatif avant génération affiche l\'emoji + label de la difficulté choisie'},
+      ]},
+      {title:'Cours de remédiation', icon:'4', steps:[
+        {a:'Aller dans "Mes cours" depuis le tableau de bord', e:'Liste des cours disponibles avec titre et matière'},
+        {a:'Ouvrir un cours', e:'Cours structuré : introduction, erreurs identifiées, leçon étape par étape, exercices de vérification'},
+        {a:'Vérifier le contenu du cours', e:'Référence aux intérêts de l\'élève, analogies personnalisées, checkpoints'},
+        {a:'Marquer un cours comme "Lu"', e:'Statut du cours mis à jour'},
+      ]},
+      {title:'Écrans de chargement animés', icon:'5', steps:[
+        {a:'Lancer la génération d\'un exercice (matière + notions sélectionnées)', e:'Au lieu d\'un simple spinner, un écran de chargement animé s\'affiche avec : barre de progression circulaire colorée, message rotatif toutes les 3,5 s, indication du temps estimé (< 1 minute)'},
+        {a:'Observer les messages rotatifs pendant la génération', e:'6 messages différents défilent (ex: "Préparation de l\'exercice…", "Personnalisation en cours…"). Chaque changement déclenche un fondu-enchaîné (animation CSS)'},
+        {a:'Vérifier la barre de progression circulaire', e:'Cercle SVG animé qui se remplit progressivement depuis 0 % jusqu\'à 100 % sur 60 secondes'},
+        {a:'Lancer la génération d\'une épreuve', e:'Même écran mais couleur violette (vs orange pour exercice), messages spécifiques à l\'épreuve, estimation "1 à 2 minutes"'},
+        {a:'Attendre la fin de la génération', e:'Un son de notification (accord ascendant harmonieux) joue automatiquement quand l\'exercice/épreuve est prêt, puis redirection vers la page de l\'exercice'},
+        {a:'Soumettre une épreuve complétée pour correction', e:'Écran de correction animé identique : barre circulaire bleue-indigo, messages rotatifs "Correction en cours…", estimation "2 à 6 minutes"'},
+        {a:'Attendre la fin de la correction (ou simuler)', e:'Son de notification joue à la réception de la correction. Page mise à jour avec les résultats'},
+        {a:'Couper le son du navigateur et générer un exercice', e:'L\'écran animé fonctionne normalement. L\'absence de son ne provoque aucune erreur (AudioContext gracieusement silencieux)'},
+      ]},
+    ]
+  },
+  {
+    id:'p4', title:'Tableau de bord Parent', profile:'Parent', profileClass:'tag-parent',
+    desc:'Suivi des enfants, temps passé, réinitialisation de mot de passe.',
+    groups:[
+      {title:'Accueil parent', icon:'1', steps:[
+        {a:'Se connecter en tant que parent', e:'Tableau de bord avec liste des enfants liés au compte'},
+        {a:'Vérifier les statistiques par enfant', e:'Temps passé cette semaine, dernière connexion, streak (jours consécutifs)'},
+        {a:'Vérifier que le temps affiché est > 0 si l\'enfant s\'est connecté', e:'Durée de session en minutes / heures visible'},
+        {a:'Vérifier les exercices récents de l\'enfant', e:'Liste des derniers exercices avec score et matière'},
+      ]},
+      {title:'Réinitialisation du mot de passe enfant', icon:'2', steps:[
+        {a:'Cliquer "Réinitialiser le mot de passe" pour un enfant', e:'Modal avec champ nouveau mot de passe'},
+        {a:'Entrer un nouveau mot de passe (8+ caractères) et confirmer', e:'Toast de succès. Mot de passe mis à jour'},
+        {a:'Se connecter avec le compte de l\'enfant avec le nouveau mot de passe', e:'Connexion réussie'},
+      ]},
+      {title:'Ajouter un enfant (nouveau compte)', icon:'3', steps:[
+        {a:'Cliquer "Ajouter un enfant" depuis le tableau de bord parent', e:'Formulaire avec prénom, niveau scolaire, matières'},
+        {a:'Remplir et soumettre le formulaire', e:'Code d\'accès généré automatiquement. Enfant visible dans le tableau de bord'},
+        {a:'Vérifier le code d\'accès généré', e:'Format : Prénom-XXXX (sans espaces)'},
+      ]},
+      {title:'Lier un enfant existant (via code d\'accès)', icon:'4', steps:[
+        {a:'Cliquer "Lier un enfant existant" depuis le tableau de bord parent', e:'Formulaire demandant le CODE D\'ACCÈS de l\'enfant (et non son courriel)'},
+        {a:'Saisir le code d\'accès valide de l\'enfant', e:'Enfant lié et visible dans le tableau de bord parent'},
+        {a:'Saisir un code d\'accès invalide', e:'Message d\'erreur : "Code d\'accès introuvable"'},
+        {a:'Vérifier que le formulaire NE demande PAS de courriel', e:'Champ "Code d\'accès" uniquement — aucun champ email'},
+      ]},
+    ]
+  },
+  {
+    id:'p5', title:'Administration', profile:'Admin', profileClass:'tag-admin',
+    desc:'Gestion des utilisateurs, réinitialisation de mots de passe, visualisation globale.',
+    groups:[
+      {title:'Page admin', icon:'1', steps:[
+        {a:'Se connecter avec un compte Admin ou Super Admin', e:'Accès à /admin. Liste de tous les utilisateurs'},
+        {a:'Vérifier les filtres (rôle, recherche)', e:'Filtrage des utilisateurs par rôle fonctionne'},
+        {a:'Vérifier que les boutons d\'action sont visibles', e:'Bouton "Réinitialiser MDP" et "Changer rôle" présents pour chaque utilisateur'},
+      ]},
+      {title:'Réinitialisation de mot de passe', icon:'2', steps:[
+        {a:'Cliquer "Réinitialiser MDP" pour un utilisateur', e:'Modal avec champ nouveau mot de passe'},
+        {a:'Saisir un nouveau mot de passe et confirmer', e:'Toast de succès. Mot de passe mis à jour en base'},
+        {a:'Se connecter avec l\'utilisateur concerné et le nouveau mot de passe', e:'Connexion réussie'},
+      ]},
+      {title:'Changement de rôle', icon:'3', steps:[
+        {a:'Cliquer "Changer rôle" pour un Parent ou Enseignant', e:'Bouton "Nommer Admin" en doré visible'},
+        {a:'Confirmer la promotion en Admin', e:'Rôle mis à jour. Badge Admin visible'},
+        {a:'Cliquer "Retirer Admin" pour cet utilisateur', e:'Rôle remis à PARENT ou ENSEIGNANT selon le cas'},
+        {a:'Vérifier que le bouton est absent pour les élèves', e:'Aucun bouton de changement de rôle pour les comptes ELEVE'},
+        {a:'Vérifier que le bouton est absent pour SUPER_ADMIN', e:'Aucun bouton pour le Super Admin'},
+      ]},
+    ]
+  },
+  {
+    id:'p6', title:'Super Administration', profile:'Super Admin', profileClass:'tag-superadmin',
+    desc:'Fonctionnalités exclusives au Super Admin.',
+    groups:[
+      {title:'Accès et droits', icon:'1', steps:[
+        {a:'Se connecter avec le compte Super Admin', e:'Accès complet à /admin'},
+        {a:'Vérifier que les autres admins ne voient pas les boutons de promotion/rétrogradation sur le Super Admin', e:'Aucun bouton d\'action sur le compte Super Admin'},
+      ]},
+      {title:'Promotion / Rétrogradation d\'admins', icon:'2', steps:[
+        {a:'Trouver un PARENT dans la liste et cliquer "Nommer Admin"', e:'Rôle ADMIN attribué. Confirmation visible'},
+        {a:'Cliquer "Retirer Admin" sur ce même utilisateur', e:'Rôle remis à PARENT'},
+        {a:'Vérifier qu\'un ADMIN ne peut pas nommer d\'autres admins', e:'Le bouton de promotion n\'est visible que pour le Super Admin'},
+      ]},
+      {title:'Documents IA — ajout avec matière et niveau', icon:'3', steps:[
+        {a:'Depuis /admin, aller dans la section "Documents IA" (menu ou lien)', e:'Page listant les documents pédagogiques avec leurs badges matière/niveau'},
+        {a:'Cliquer "Ajouter un document" (bouton principal en haut à droite)', e:'Formulaire/modal avec champs : Titre, Type, Contenu, Auteurs, Année, Source, Mots-clés'},
+        {a:'Vérifier la présence des sélecteurs de matière et de niveau', e:'Deux sections de boutons toggle : une pour les matières (Français, Maths, Sciences, …) et une pour les niveaux (Primaire 1–6, Secondaire 1–5)'},
+        {a:'Ajouter un document sans sélectionner de matière ni de niveau, puis sauvegarder', e:'Document créé. Aucun badge matière/niveau. Document s\'applique à tous les élèves'},
+        {a:'Ajouter un document en sélectionnant "Maths" + "Sec.2", puis sauvegarder', e:'Document créé avec badges bleu "Maths" et violet "Sec.2" visibles sur la carte du document'},
+        {a:'Vérifier que les documents apparaissent filtrés côté IA', e:'Un élève de Secondaire 2 en Maths voit ses exercices enrichis par ce document ; un élève de Primaire ne le voit pas'},
+        {a:'Modifier un document existant et changer ses tags matière/niveau', e:'Les badges sur la carte sont mis à jour immédiatement après sauvegarde'},
+        {a:'Supprimer un document — confirmer dans le modal de confirmation', e:'Document supprimé. Plus visible dans la liste. Toast de confirmation. Événement logué dans les journaux de sécurité'},
+      ]},
+      {title:'Journaux de sécurité', icon:'4', steps:[
+        {a:'Se connecter avec le compte Super Admin et aller sur /admin', e:'En bas du tableau de bord, section "Journaux de sécurité" visible (absente pour les Admins simples)'},
+        {a:'Vérifier l\'affichage des événements récents', e:'Liste de 25 événements max, chacun avec : date/heure, point de couleur (vert/orange/rouge), libellé de l\'action, email de l\'acteur, email de la cible (si applicable)'},
+        {a:'Vérifier les codes couleur de sévérité', e:'Vert = INFO (connexions, inscriptions), Orange = WARNING (tentatives échouées, demandes de reset), Rouge = CRITICAL (accès refusés, suppressions, modifications de rôle)'},
+        {a:'Provoquer un événement INFO : se connecter avec succès avec le compte parent (dans un autre onglet)', e:'Événement "Connexion réussie" apparaît dans la liste après rechargement'},
+        {a:'Provoquer un événement WARNING : tenter de se connecter avec un mauvais mot de passe', e:'Événement "Tentative de connexion échouée" avec severity WARNING visible'},
+        {a:'Provoquer un événement CRITICAL : tenter d\'accéder à /admin avec un compte non-admin', e:'Événement "Accès refusé" avec severity CRITICAL et zone "admin" visible dans les journaux'},
+        {a:'Modifier le rôle d\'un utilisateur et revenir aux journaux', e:'Événement "Rôle modifié" avec ancienRole et nouveauRole dans les détails'},
+        {a:'Supprimer un document IA et vérifier les journaux', e:'Événement "Document IA supprimé" avec titre et type du document'},
+        {a:'Vérifier que les journaux sont vides ou absents pour un Admin (rôle ADMIN)', e:'Se connecter en tant qu\'Admin : aucune section "Journaux de sécurité" dans le tableau de bord'},
+      ]},
+    ]
+  },
+  {
+    id:'p7', title:'Vérification UX & Mobile', profile:'Tous', profileClass:'tag-all',
+    desc:'Qualité visuelle, responsive, accessibilité et stabilité.',
+    groups:[
+      {title:'Navigation mobile', icon:'1', steps:[
+        {a:'Ouvrir l\'application sur mobile (ou < 768px dans DevTools)', e:'Menu hamburger visible dans la navigation'},
+        {a:'Cliquer sur le menu hamburger', e:'Menu s\'ouvre avec les liens de navigation'},
+        {a:'Cliquer en dehors du menu', e:'Menu se ferme automatiquement'},
+        {a:'Cliquer sur un lien dans le menu mobile', e:'Navigation correcte + menu se ferme'},
+        {a:'Vérifier la page de login sur mobile', e:'Formulaire lisible, boutons accessibles, pas de débordement horizontal'},
+      ]},
+      {title:'Responsive général', icon:'2', steps:[
+        {a:'Naviguer sur le tableau de bord élève en mobile', e:'Contenu empilé verticalement, textes lisibles'},
+        {a:'Naviguer sur le tableau de bord parent en mobile', e:'Cards enfants empilées, statistiques visibles'},
+        {a:'Naviguer sur la page admin en mobile', e:'Liste des utilisateurs scrollable, boutons accessibles'},
+        {a:'Tester sur tablette (768px - 1024px)', e:'Grilles adaptées, pas d\'espace vide excessif'},
+      ]},
+      {title:'Interactions et états', icon:'3', steps:[
+        {a:'Vérifier les boutons avec état de chargement', e:'Spinner visible lors des appels IA (génération exercice, feedback)'},
+        {a:'Vérifier les messages d\'erreur', e:'Erreurs en rouge sous les champs concernés, messages clairs'},
+        {a:'Vérifier les toasts de succès', e:'Messages de confirmation visibles et disparaissent après 2-3 secondes'},
+        {a:'Ouvrir la console navigateur (F12) et naviguer', e:'Aucune erreur JavaScript en rouge'},
+      ]},
+      {title:'Affichage show/hide mot de passe', icon:'4', steps:[
+        {a:'Page login > champ mot de passe : cliquer l\'icône œil', e:'Mot de passe affiché en clair'},
+        {a:'Cliquer à nouveau l\'icône', e:'Mot de passe masqué de nouveau'},
+        {a:'Tester sur la page d\'inscription', e:'Même comportement'},
+        {a:'Tester sur la page de réinitialisation de mot de passe', e:'Même comportement'},
+      ]},
+      {title:'Favicon et identité', icon:'5', steps:[
+        {a:'Vérifier l\'onglet du navigateur', e:'Favicon avec mortier de diplômé visible'},
+        {a:'Vérifier le titre de la page', e:'"ÉduRéussite QC" dans le titre de l\'onglet'},
+        {a:'Vérifier le footer', e:'"© 2026 ÉduRéussite QC" visible en bas des pages auth'},
+      ]},
+      {title:'Déconnexion automatique par inactivité', icon:'6', steps:[
+        {a:'Se connecter et rester inactif (ne pas bouger la souris ni appuyer sur une touche) pendant 13 minutes', e:'Aucune action visible'},
+        {a:'Attendre les 13 premières minutes sans interaction', e:'Un modal apparaît : "Session sur le point d\'expirer" avec un compte à rebours de 2 minutes'},
+        {a:'Lire le modal', e:'Deux boutons : "Je suis là — continuer" et "Se déconnecter"'},
+        {a:'Cliquer "Je suis là — continuer"', e:'Le modal disparaît. Le timer repart à zéro. La session continue normalement'},
+        {a:'Laisser le compte à rebours atteindre 0:00 sans interaction', e:'Déconnexion automatique + redirection vers /login'},
+        {a:'Vérifier qu\'un simple mouvement de souris réinitialise le timer', e:'Le modal ne réapparaît qu\'après 13 nouvelles minutes d\'inactivité'},
+      ]},
+    ]
+  },
+  {
+    id:'p8', title:'Session avec Mira (Enseignant IA)', profile:'Élève', profileClass:'tag-eleve',
+    desc:'Tester la session vocale avec l\'enseignante IA : TTS ElevenLabs, microphone, transcription, timer de session, résumé envoyé aux parents.',
+    groups:[
+      {title:'Ouverture de la session', icon:'1', steps:[
+        {a:'Depuis "Mes cours", ouvrir un cours disponible', e:'Page avec deux onglets : "Mode lecture" et "Session avec Mira"'},
+        {a:'Cliquer "Session avec Mira"', e:'Interface Enseignant IA s\'affiche : photo de Mira, timer décompte, message de bienvenue personnalisé avec prénom et matière'},
+        {a:'Le navigateur demande la permission micro à l\'ouverture', e:'Boîte de dialogue du navigateur : "edureussite.edevtic.com veut accéder à votre microphone"'},
+        {a:'Cliquer "Autoriser"', e:'Permission accordée. Aucun message d\'erreur visible'},
+        {a:'Vérifier que Mira parle automatiquement le message de bienvenue', e:'Audio joué (voix féminine française). Indicateur de parole animé (3 barres vertes) sous la photo de Mira'},
+        {a:'Vérifier la personnalisation du message', e:'Le prénom de l\'élève ET la matière du cours sont mentionnés dans le message'},
+      ]},
+      {title:'Microphone et transcription', icon:'2', steps:[
+        {a:'Cliquer sur le bouton 🎤', e:'Bandeau rouge animé "Je t\'écoute… Parle maintenant" apparaît en haut du champ de saisie'},
+        {a:'Parler une phrase (ex: "Explique-moi les fractions")', e:'Le texte dicté s\'écrit en temps réel dans le champ de saisie'},
+        {a:'S\'arrêter de parler ou cliquer ⏹', e:'La phrase transcrite est automatiquement envoyée à Mira. Le champ de saisie se vide'},
+        {a:'Vérifier la réponse de Mira', e:'Bulle de réponse IA apparaît. Mira lit la réponse à voix haute (si son actif)'},
+        {a:'Tester plusieurs échanges vocaux de suite', e:'Chaque échange fonctionne de façon indépendante'},
+      ]},
+      {title:'Contrôles audio', icon:'3', steps:[
+        {a:'Cliquer sur 🔊 pour couper le son pendant que Mira parle', e:'Audio s\'arrête immédiatement. Bouton passe à 🔇 (fond rouge)'},
+        {a:'Envoyer un message — vérifier que Mira ne parle pas', e:'Réponse IA visible dans la bulle mais aucun audio'},
+        {a:'Cliquer 🔇 pour réactiver le son', e:'Bouton repasse à 🔊. Prochaine réponse de Mira sera audible'},
+        {a:'Cliquer ⏹ (stop) pendant la lecture vocale de Mira', e:'Audio s\'arrête immédiatement'},
+      ]},
+      {title:'Suggestions rapides et saisie texte', icon:'4', steps:[
+        {a:'Au début de session (moins de 3 messages), vérifier les suggestions', e:'3 suggestions visibles : "Je ne comprends pas ce sujet", "Donne-moi un exemple concret", "Explique-moi étape par étape"'},
+        {a:'Cliquer sur une suggestion', e:'Message envoyé directement. Réponse IA reçue'},
+        {a:'Écrire une question et appuyer sur Entrée', e:'Message envoyé. Réponse de Mira affichée'},
+        {a:'Après 2+ messages, vérifier que les suggestions disparaissent', e:'Plus de bulles de suggestion visibles'},
+      ]},
+      {title:'Timer et fin de session', icon:'5', steps:[
+        {a:'Observer le timer en haut à droite dans l\'en-tête', e:'Décompte affiché (ex: 59:32). Format MM:SS'},
+        {a:'Vérifier le changement de couleur du timer', e:'Blanc neutre → jaune (sous 10% du temps restant) → rouge (sous 2%)'},
+        {a:'Cliquer "Terminer" manuellement', e:'Message d\'au revoir de Mira, voix audible, bannière "Résumé envoyé à tes parents" visible en bas de conversation'},
+        {a:'Vérifier la notification côté parent', e:'Se connecter en tant que parent : notification "Rapport de session" visible dans le tableau de bord'},
+        {a:'Vérifier que la zone de saisie est désactivée après la fin', e:'Champ de texte et bouton micro masqués. Message "✅ Session terminée — à bientôt !"'},
+        {a:'Cliquer ✕ pour fermer la session et retourner au mode lecture', e:'Retour au mode lecture du cours'},
+      ]},
+    ]
+  },
+  {
+    id:'p9', title:'Surprises parentales', profile:'Parent + Élève', profileClass:'tag-parent',
+    desc:'Système de récompenses réelles accordées par les parents. Les surprises sont déclenchées automatiquement par des jalons comportementaux (max 7 par an).',
+    groups:[
+      {title:'Côté parent — Voir et accorder une surprise', icon:'1', steps:[
+        {a:'Se connecter en tant que parent. Vérifier la section "Surprises" en haut du tableau de bord', e:'Si un jalon a été atteint par l\'enfant, une carte surprise est visible avec : explication du jalon, 3 options de privilèges personnalisées'},
+        {a:'Lire l\'explication du jalon (ex: "7 jours consécutifs", "score parfait après 2 tentatives")', e:'L\'explication est claire et mentionne le prénom de l\'enfant et la raison concrète'},
+        {a:'Vérifier les 3 options de privilèges proposées', e:'3 suggestions personnalisées basées sur les intérêts de l\'enfant (sport, jeux vidéo, etc.). Exemple : "1h de jeu vidéo en plus ce soir"'},
+        {a:'Sélectionner une option et cliquer "Accorder cette surprise"', e:'La carte passe en mode "en attente de l\'enfant". Le parent voit : "Marie-Stella recevra sa surprise sur son tableau de bord"'},
+        {a:'Vérifier qu\'une notification a été envoyée à l\'enfant', e:'Se connecter en tant qu\'élève : une notification de type SURPRISE_ACCORDEE est visible dans le badge de notification'},
+      ]},
+      {title:'Côté élève — Découvrir et confirmer la surprise', icon:'2', steps:[
+        {a:'Se connecter en tant qu\'élève après qu\'un parent ait accordé une surprise', e:'Une carte dorée avec un emoji 🎁 animé (bounce) s\'affiche en haut du tableau de bord, avant le contenu habituel'},
+        {a:'Vérifier le message affiché', e:'"Tes parents ont une surprise pour toi ! Tu as travaillé très fort et tes parents veulent te récompenser."'},
+        {a:'Cliquer "Découvrir ma surprise ✨"', e:'La carte passe à l\'étape 2 : révèle le privilège choisi (ex: "1h de jeu vidéo") et l\'explication du jalon'},
+        {a:'Lire le privilège et écrire une phrase dans le champ texte', e:'Champ de saisie affiché avec placeholder "Je suis content·e parce que…". Le bouton "Confirmer" est désactivé si < 2 caractères'},
+        {a:'Écrire au moins 2 caractères et cliquer "Confirmer ma réception ✓"', e:'La carte passe à l\'étape 3 : emoji 🥳, message "Souvenir enregistré ! Ce moment est maintenant dans ton Cahier de réussites pour toujours."'},
+        {a:'Actualiser la page et revenir sur le tableau de bord', e:'La carte surprise n\'est plus visible (surprise marquée CONFIRME). Le reste du tableau de bord s\'affiche normalement'},
+      ]},
+      {title:'Quotas et comportement système', icon:'3', steps:[
+        {a:'Vérifier que le système respecte le quota annuel (max 7 surprises par an)', e:'Impossible d\'avoir plus de 7 surprises CONFIRME + ACCORDE + EN_ATTENTE dans l\'année calendaire pour un même enfant'},
+        {a:'Vérifier le délai entre deux surprises (30 jours)', e:'Après une surprise confirmée, aucune nouvelle surprise n\'est déclenchée pendant 30 jours pour le même enfant'},
+        {a:'Tenter de confirmer sans écrire de message (champ vide)', e:'Bouton "Confirmer" reste désactivé (disabled). Aucune soumission possible'},
+        {a:'Vérifier côté parent après confirmation par l\'enfant', e:'La carte surprise dans le tableau de bord parent affiche le statut "Confirmée" et le message écrit par l\'enfant est visible'},
+        {a:'Vérifier l\'expiration automatique (14 jours sans action du parent)', e:'Une surprise EN_ATTENTE depuis plus de 14 jours passe automatiquement au statut EXPIRE et disparaît du tableau de bord parent'},
+      ]},
+      {title:'Fix mot de passe enfant', icon:'4', steps:[
+        {a:'Depuis le tableau de bord parent, cliquer "Réinitialiser le mot de passe" pour un enfant', e:'Modal avec deux champs : "Nouveau mot de passe" et "Confirmer"'},
+        {a:'Vérifier que le navigateur ne pré-remplit PAS les champs avec l\'ancien mot de passe sauvegardé', e:'Les champs "Nouveau mot de passe" et "Confirmer" sont vides à l\'ouverture du modal (attribut autoComplete="new-password" présent)'},
+        {a:'Entrer un nouveau mot de passe sans accents (ex: Tigre1234) et confirmer', e:'Toast "Mot de passe mis à jour". Modal se ferme après 1,5 s'},
+        {a:'Se connecter avec le compte de l\'enfant et le NOUVEAU mot de passe', e:'Connexion réussie sans erreur'},
+        {a:'Tester avec le mot de passe temporaire généré automatiquement (format: Koala4827)', e:'Les mots temporaires ne contiennent AUCUN accent — l\'enfant peut les taper facilement sur n\'importe quel clavier'},
+      ]},
+    ]
+  },
+  {
+    id:'p10', title:'Plan de réussite', profile:'Élève', profileClass:'tag-eleve',
+    desc:'Créer et gérer un plan de réussite personnalisé : objectifs de note, disponibilité hebdomadaire, notions prioritaires et Mira contextuelle.',
+    groups:[
+      {title:'Création du plan — wizard 3 étapes', icon:'1', steps:[
+        {a:'Depuis /eleve/plan (aucun plan existant), cliquer "Créer mon plan en 3 min 🚀"', e:'Wizard chargé. Indicateur 3 étapes visible en haut'},
+        {a:'Étape 0 — vérifier la bulle Mira', e:'Bulle avec avatar ✦ violet visible : "Fixe-toi des objectifs motivants — ni trop facile, ni trop ambitieux !"'},
+        {a:'Ajouter une matière (ex: Maths), score visé 80%, échéance 3 mois', e:'Badge "✓ Ajouté" sur la matière. Sliders note et date visibles'},
+        {a:'Passer à l\'étape 1 (Disponibilité) — vérifier la bulle Mira', e:'Bulle Mira : "Mieux vaut 20 minutes chaque jour qu\'une longue session le week-end."'},
+        {a:'Ajuster les sliders (ex: Lundi 20 min, Samedi 45 min)', e:'Valeurs mises à jour en temps réel'},
+        {a:'Passer à l\'étape 2 (Notions) — vérifier la bulle Mira', e:'Bulle Mira : "Mets Urgent sur ce que tu ne comprends vraiment pas encore"'},
+        {a:'Sélectionner 2-3 notions avec priorités différentes (Urgent, Important, Plus tard)', e:'Notions listées avec badges colorés rouge/jaune/bleu'},
+        {a:'Cliquer "Créer mon plan ✓"', e:'Plan sauvegardé. Redirection vers /eleve/plan avec notion active, calendrier et objectifs'},
+      ]},
+      {title:'Page du plan — contenu et navigation', icon:'2', steps:[
+        {a:'Vérifier la section "🎯 Notion en cours"', e:'Carte violette avec notion prioritaire, badge priorité, matière, semaine planifiée'},
+        {a:'Vérifier la section "🏆 Mes objectifs de note"', e:'Score actuel → score visé, barre de progression, jours restants'},
+        {a:'Vérifier la section "📅 Mon calendrier de révision"', e:'Semaines ISO listées. La semaine en cours : "📍 Cette semaine" avec point animé violet'},
+        {a:'Cliquer "✨ M\'entraîner sur cette notion"', e:'Redirection vers /eleve/exercices/nouveau avec la notion active pré-sélectionnée'},
+        {a:'Cliquer "✏️ Modifier" en haut à droite', e:'Redirection vers /eleve/plan/configurer en mode modification'},
+      ]},
+      {title:'Mira contextuelle dans le plan', icon:'3', steps:[
+        {a:'Sur /eleve/plan, vérifier le bouton Mira inline sous la notion active', e:'Carte "Mira peut t\'aider! 💬" visible sous le bouton d\'exercice'},
+        {a:'Cliquer le bouton Mira inline', e:'Panneau chat s\'ouvre. Message de bienvenue mentionne la notion active ET le % de progression'},
+        {a:'Vérifier les 3 suggestions contextuelles', e:'Chips de suggestion liées à la notion en cours visibles'},
+        {a:'Envoyer un message à Mira', e:'Réponse IA avec contexte de la notion. Mira connaît le sujet travaillé'},
+        {a:'Vérifier le bouton Mira flottant (FAB violet bas droite)', e:'Bouton "✦ Mira — mon plan" visible en bas à droite de la page'},
+        {a:'Cliquer le FAB — vérifier que le contexte est identique', e:'Même panneau, même contexte de plan chargé'},
+      ]},
+    ]
+  },
+  {
+    id:'p11', title:'Objectif de note atteint', profile:'Élève', profileClass:'tag-eleve',
+    desc:'Vérifier la célébration plein écran et le bonus +50 XP quand l\'élève franchit son objectif de note.',
+    groups:[
+      {title:'Détection et overlay de célébration', icon:'1', steps:[
+        {a:'Configurer un objectif atteignable (ex: 60% en Français, score actuel ~55%)', e:'Objectif visible dans /eleve/plan avec barre de progression'},
+        {a:'Faire un exercice de Français et obtenir un bon score (80+)', e:'Exercice soumis et corrigé normalement'},
+        {a:'Observer l\'écran après soumission si l\'objectif est franchi', e:'Overlay plein écran "🎯 Objectif atteint !" s\'affiche : gradient violet-vert, emoji 🏆 animé, matière, score visé, "+50 XP bonus"'},
+        {a:'Cliquer "Super ! 🚀" ou attendre 5 secondes', e:'Overlay disparaît. Redirection vers la page de feedback de l\'exercice'},
+        {a:'Vérifier la bannière dans le feedback', e:'Bandeau "🏆 Objectif atteint !" visible au-dessus de la correction, avec matière, score visé et "+50 XP bonus"'},
+      ]},
+      {title:'Bonus XP et unicité', icon:'2', steps:[
+        {a:'Après avoir atteint l\'objectif, revenir au tableau de bord — vérifier l\'XP', e:'Total XP = points exercice + 50 XP bonus objectif'},
+        {a:'Refaire un exercice dans la même matière', e:'Aucun nouvel overlay "objectif atteint" — le bonus ne se déclenche qu\'une seule fois par objectif'},
+      ]},
+    ]
+  },
+  {
+    id:'p12', title:'Interface Jeunes Élèves', profile:'Élève', profileClass:'tag-eleve',
+    desc:'Interface simplifiée activée uniquement pour PRIMAIRE_1 et PRIMAIRE_2. PRIMAIRE_3 et supérieur voient l\'interface standard.',
+    groups:[
+      {title:'Tableau de bord PRIMAIRE_1 / PRIMAIRE_2', icon:'1', steps:[
+        {a:'Se connecter avec un compte élève PRIMAIRE_1 ou PRIMAIRE_2', e:'Message d\'accueil : "Coucou [Prénom] ! 👋" (pas "Bonjour")'},
+        {a:'Vérifier la navigation', e:'Icônes grandes (text-3xl). Libellés : "🏠 Maison", "✏️ Exercices", "⭐ Étoiles". Bouton CTA central plus grand (h-14 w-14)'},
+        {a:'Vérifier le widget Check-in émotionnel', e:'Grille 3×2 de grands boutons carrés (72px+) : emoji géant + mot court (Super!, Bien!, Moyen, Fatigué, Inquiet, Triste)'},
+        {a:'Vérifier le widget Plan du jour', e:'Titre "Qu\'est-ce qu\'on fait aujourd\'hui? 🌟". Grande carte notion. Bouton "Je commence! ✨". Pas de sous-objectifs'},
+        {a:'Vérifier le widget Streak/Badges', e:'"⭐ Tes étoiles" (pas XP). Niveaux enfantins (Grimpeur, Étoile, Super-héros…). Barre progression épaisse. Chiffre streak géant'},
+        {a:'Vérifier les widgets absents', e:'Défi du jour, Classement et Inspirations sont cachés pour les jeunes élèves'},
+      ]},
+      {title:'Interface standard — PRIMAIRE_3 et +', icon:'2', steps:[
+        {a:'Se connecter avec un compte PRIMAIRE_3', e:'Message "Bonjour [Prénom]". Interface standard (pas simplifiée)'},
+        {a:'Vérifier la navigation', e:'Libellés normaux : "Accueil", "Exercice", "Progrès". Icônes taille standard'},
+        {a:'Vérifier que tous les widgets sont présents', e:'Défi du jour, Classement, Inspirations tous visibles'},
+      ]},
+    ]
+  },
+  {
+    id:'p13', title:'Notifications de mise à jour', profile:'Parent', profileClass:'tag-parent',
+    desc:'Vérifier que les parents et admins reçoivent un email automatique après chaque déploiement.',
+    groups:[
+      {title:'Email de mise à jour reçu', icon:'1', steps:[
+        {a:'Après un déploiement, vérifier la boîte courriel du parent', e:'Email reçu avec objet "🚀 ÉduRéussite QC — Nouvelle mise à jour pour une meilleure expérience"'},
+        {a:'Vérifier le contenu de l\'email', e:'En-tête ÉduRéussite QC, date du jour, section 🚀, message avec prénom du parent, liste "Pourquoi ces mises à jour ?", bouton CTA "Découvrir les nouveautés →"'},
+        {a:'Cliquer le bouton CTA', e:'Redirection vers /parent de la plateforme'},
+        {a:'Vérifier que le compte super admin reçoit aussi l\'email', e:'L\'admin reçoit l\'email même sans ProfilParent associé'},
+      ]},
+      {title:'Sécurité de l\'endpoint', icon:'2', steps:[
+        {a:'Appeler POST /api/admin/notify-update sans header Authorization', e:'Réponse HTTP 401 : {"error":"Non autorisé"}'},
+        {a:'Appeler avec un mauvais Bearer token', e:'Réponse HTTP 401'},
+        {a:'Appeler avec le bon CRON_SECRET', e:'Réponse 200 : {"ok":true,"parentsTotal":N,"emailsEnvoyes":N}'},
+      ]},
+    ]
+  }
+];
+
+const KEY = 'edureussite_tests_v1';
+let state = JSON.parse(localStorage.getItem(KEY) || '{}');
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+let stepIdx = 0;
+function render() {
+  let tabs = '', content = ''; stepIdx = 0;
+  P.forEach((p, pi) => {
+    const cnt = p.groups.reduce((s, g) => s + g.steps.length, 0);
+    tabs += `<button class="tab${pi===0?' active':''}" data-tab="${p.id}" onclick="switchTab('${p.id}')">${p.title}<span class="tab-badge" id="tb_${p.id}">0/${cnt}</span></button>`;
+    let gs = '';
+    p.groups.forEach(g => {
+      let ss = '';
+      g.steps.forEach((s, si) => {
+        const i = stepIdx++;
+        const st = state[`s${i}`] || '';
+        ss += `<div class="step${st?' status-'+st:''}" id="step_${i}">
+          <div class="step-body">
+            <div class="step-num">ÉTAPE ${si+1}</div>
+            <div class="step-action">${s.a}</div>
+            <div class="step-expect">${s.e}</div>
+          </div>
+          <div class="step-toggle">
+            <button class="toggle-btn ok-btn${st==='ok'?' active':''}" onclick="setStatus(${i},'ok')" title="OK">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+            </button>
+            <button class="toggle-btn ko-btn${st==='ko'?' active':''}" onclick="setStatus(${i},'ko')" title="KO">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          ${st==='ko'?`<div class="ko-note"><textarea placeholder="Décrire le problème observé..." oninput="saveNote(${i},this.value)">${state[`n${i}`]||''}</textarea></div>`:''}
+        </div>`;
+      });
+      gs += `<div class="step-group"><div class="step-group-title"><div class="step-group-num">${g.icon}</div>${g.title}</div>${ss}</div>`;
+    });
+    content += `<div class="parcours${pi===0?' active':''}" id="par_${p.id}">
+      <div class="parcours-head">
+        <div class="parcours-info">
+          <div class="parcours-title">${p.title}</div>
+          <div class="parcours-desc">${p.desc}</div>
+          <div class="parcours-tags"><span class="tag ${p.profileClass}">${p.profile}</span></div>
+        </div>
+        <div class="parcours-chart" id="chart_${p.id}">
+          <div class="mini-bar"><div class="mini-bar-ok" id="mbok_${p.id}"></div><div class="mini-bar-ko" id="mbko_${p.id}"></div></div>
+          <div class="mini-stats" id="ms_${p.id}"></div>
+        </div>
+      </div>
+      ${gs}
+      <div class="bugs-section">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Notes et bugs</h3>
+        <textarea class="bugs-textarea" id="bugs_${p.id}" placeholder="Notez ici les bugs ou remarques pour ce parcours..." oninput="saveBugs('${p.id}')">${state[`b_${p.id}`]||''}</textarea>
+      </div>
+    </div>`;
+  });
+  document.getElementById('tabsContainer').innerHTML = tabs;
+  document.getElementById('contentContainer').innerHTML = content;
+  updateAll();
+}
+
+function setStatus(i, status) {
+  const cur = state[`s${i}`] || '';
+  state[`s${i}`] = cur === status ? '' : status;
+  save();
+  const el = document.getElementById(`step_${i}`);
+  const s = state[`s${i}`] || '';
+  el.className = 'step' + (s ? ' status-' + s : '');
+  el.querySelector('.ok-btn').classList.toggle('active', s === 'ok');
+  el.querySelector('.ko-btn').classList.toggle('active', s === 'ko');
+  const existing = el.querySelector('.ko-note');
+  if (s === 'ko' && !existing) {
+    const div = document.createElement('div'); div.className = 'ko-note';
+    div.innerHTML = `<textarea placeholder="Décrire le problème observé..." oninput="saveNote(${i},this.value)">${state[`n${i}`]||''}</textarea>`;
+    el.appendChild(div);
+  } else if (s !== 'ko' && existing) { existing.remove(); }
+  updateAll();
+}
+
+function saveNote(i, v) { state[`n${i}`] = v; save(); }
+function saveBugs(pid) { state[`b_${pid}`] = document.getElementById(`bugs_${pid}`).value; save(); }
+
+function updateAll() {
+  let gOk = 0, gKo = 0, gTotal = 0, idx = 0;
+  P.forEach(p => {
+    let pOk = 0, pKo = 0, pTotal = 0;
+    p.groups.forEach(g => { g.steps.forEach(() => {
+      const s = state[`s${idx}`] || '';
+      pTotal++; gTotal++;
+      if (s === 'ok') { pOk++; gOk++; }
+      if (s === 'ko') { pKo++; gKo++; }
+      idx++;
+    }); });
+    const tb = document.getElementById(`tb_${p.id}`);
+    if (tb) {
+      const done = pOk + pKo;
+      tb.textContent = `${done}/${pTotal}`;
+      const tab = tb.closest('.tab');
+      tab.classList.toggle('all-ok', pOk === pTotal && pTotal > 0);
+      tab.classList.toggle('has-ko', pKo > 0);
+    }
+    const okP = pTotal ? pOk / pTotal * 100 : 0;
+    const koP = pTotal ? pKo / pTotal * 100 : 0;
+    const untested = pTotal - pOk - pKo;
+    const mbok = document.getElementById(`mbok_${p.id}`);
+    const mbko = document.getElementById(`mbko_${p.id}`);
+    const ms = document.getElementById(`ms_${p.id}`);
+    if (mbok) mbok.style.width = okP + '%';
+    if (mbko) mbko.style.width = koP + '%';
+    if (ms) ms.innerHTML = `<span style="color:var(--ok)">${pOk} OK</span><span style="color:var(--ko)">${pKo} KO</span><span>${untested} restant${untested > 1 ? 's' : ''}</span>`;
+  });
+  const gUntested = gTotal - gOk - gKo;
+  const tested = gOk + gKo;
+  const pctTested = gTotal ? Math.round(tested / gTotal * 100) : 0;
+  document.getElementById('globalOk').textContent = gOk;
+  document.getElementById('globalKo').textContent = gKo;
+  document.getElementById('globalUntested').textContent = gUntested;
+  const okW = gTotal ? gOk / gTotal * 100 : 0;
+  const koW = gTotal ? gKo / gTotal * 100 : 0;
+  document.getElementById('progressOk').style.width = okW + '%';
+  document.getElementById('progressKo').style.width = koW + '%';
+  document.getElementById('progressPct').textContent = pctTested + '%';
+  const C = 2 * Math.PI * 22;
+  const okArc = gTotal ? gOk / gTotal * C : 0;
+  const koArc = gTotal ? gKo / gTotal * C : 0;
+  document.getElementById('ringOk').setAttribute('stroke-dasharray', `${okArc} ${C}`);
+  document.getElementById('ringKo').setAttribute('stroke-dasharray', `${koArc} ${C}`);
+  document.getElementById('ringKo').setAttribute('stroke-dashoffset', `${-okArc}`);
+  document.getElementById('ringPct').textContent = pctTested + '%';
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.parcours').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-tab="${id}"]`).classList.add('active');
+  document.getElementById(`par_${id}`).classList.add('active');
+}
+
+function resetAll() {
+  if (!confirm('Réinitialiser TOUS les résultats de test ? Cette action est irréversible.')) return;
+  localStorage.removeItem(KEY); state = {}; render(); showToast('Tous les tests réinitialisés');
+}
+
+function copyText(t) { navigator.clipboard.writeText(t).then(() => showToast('Copié !')); }
+function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+
+function saveTester() {
+  state._tester = document.getElementById('testerName').value; save();
+  const s = document.getElementById('testerSaved'); s.classList.add('show'); setTimeout(() => s.classList.remove('show'), 1500);
+}
+function restoreTester() {
+  if (state._tester) document.getElementById('testerName').value = state._tester;
+}
+
+function gatherResults() {
+  const tester = state._tester || 'Non renseigné';
+  const date = new Date().toISOString();
+  let idx = 0, totalOk = 0, totalKo = 0, totalUntested = 0;
+  const parcours = P.map(p => {
+    let pOk = 0, pKo = 0, pUntested = 0;
+    const groups = p.groups.map(g => {
+      const steps = g.steps.map((s, si) => {
+        const status = state[`s${idx}`] || 'untested';
+        const note = state[`n${idx}`] || '';
+        if (status === 'ok') pOk++; else if (status === 'ko') pKo++; else pUntested++;
+        idx++;
+        return { step: si + 1, action: s.a, expected: s.e, status, note: status === 'ko' ? note : undefined };
+      });
+      return { title: g.title, steps };
+    });
+    totalOk += pOk; totalKo += pKo; totalUntested += pUntested;
+    const bugs = state[`b_${p.id}`] || '';
+    return { id: p.id, title: p.title, profile: p.profile, ok: pOk, ko: pKo, untested: pUntested, groups, bugs: bugs || undefined };
+  });
+  return {
+    meta: { tester, date, app: 'ÉduRéussite QC', url: 'https://edureussite.edevtic.com' },
+    summary: { total: totalOk + totalKo + totalUntested, ok: totalOk, ko: totalKo, untested: totalUntested, passRate: totalOk + totalKo > 0 ? Math.round(totalOk / (totalOk + totalKo) * 100) : 0 },
+    parcours
+  };
+}
+
+function exportJSON() {
+  const data = gatherResults();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  download(blob, `test-edureussite-${slugify(data.meta.tester)}-${dateSlug()}.json`);
+  showToast('Export JSON téléchargé');
+}
+
+function exportMarkdown() {
+  const d = gatherResults();
+  let md = `# Rapport de Tests — ÉduRéussite QC\n\n`;
+  md += `- **Testeur** : ${d.meta.tester}\n`;
+  md += `- **Date** : ${new Date(d.meta.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}\n`;
+  md += `- **URL** : ${d.meta.url}\n\n`;
+  md += `## Résumé\n\n`;
+  md += `| Total | OK | KO | Non testés | Taux de réussite |\n`;
+  md += `|-------|----|----|------------|------------------|\n`;
+  md += `| ${d.summary.total} | ${d.summary.ok} | ${d.summary.ko} | ${d.summary.untested} | ${d.summary.passRate}% |\n\n`;
+  const allKo = [];
+  d.parcours.forEach(p => { p.groups.forEach(g => { g.steps.forEach(s => { if (s.status === 'ko') allKo.push({ parcours: p.title, group: g.title, step: s.step, action: s.action, expected: s.expected, note: s.note }); }); }); });
+  if (allKo.length > 0) {
+    md += `## Bugs et KO (${allKo.length})\n\n`;
+    allKo.forEach((k, i) => {
+      md += `### Bug ${i + 1} — ${k.parcours} > ${k.group}\n\n`;
+      md += `- **Action** : ${k.action}\n`;
+      md += `- **Attendu** : ${k.expected}\n`;
+      if (k.note) md += `- **Problème constaté** : ${k.note}\n`;
+      md += `\n`;
+    });
+  }
+  md += `## Détail par parcours\n\n`;
+  d.parcours.forEach(p => {
+    const pTotal = p.ok + p.ko + p.untested;
+    md += `### ${p.title} (${p.profile}) — ${p.ok}/${pTotal} OK`;
+    if (p.ko > 0) md += ` | ${p.ko} KO`;
+    md += `\n\n`;
+    p.groups.forEach(g => {
+      md += `#### ${g.title}\n\n`;
+      g.steps.forEach(s => {
+        const icon = s.status === 'ok' ? '[OK]' : s.status === 'ko' ? '[KO]' : '[ ]';
+        md += `- ${icon} **Étape ${s.step}** : ${s.action}\n`;
+        if (s.status === 'ko' && s.note) md += `  - *KO* : ${s.note}\n`;
+      });
+      md += `\n`;
+    });
+    if (p.bugs) md += `> **Notes** : ${p.bugs}\n\n`;
+  });
+  const blob = new Blob([md], { type: 'text/markdown' });
+  download(blob, `test-edureussite-${slugify(d.meta.tester)}-${dateSlug()}.md`);
+  showToast('Export Markdown téléchargé');
+}
+
+function download(blob, name) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); URL.revokeObjectURL(a.href); }
+function slugify(s) { return (s || 'anonyme').toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, ''); }
+function dateSlug() { return new Date().toISOString().slice(0, 10); }
+
+document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+render();
+restoreTester();
+</script>
+</body>
+</html>

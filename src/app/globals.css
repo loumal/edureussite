@@ -1,0 +1,205 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens ÉduRéussite QC ─── */
+@theme inline {
+  /* Couleurs principales */
+  --color-ink: #0f1623;
+  --color-ink-soft: #3a4460;
+  --color-paper: #f5f0e8;
+  --color-paper-warm: #ede7d7;
+  --color-accent: #d94f2b;
+  --color-accent-hover: #c23f1e;
+  --color-success: #2a7c6f;
+  --color-success-hover: #1e5f55;
+  --color-purple: #5b4fcf;
+  --color-gold: #c9952a;
+  --color-rule: rgba(15, 22, 35, 0.12);
+
+  /* Typographie */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Georgia", serif;
+
+  /* Rayons */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Ombres */
+  --shadow-card: 0 2px 12px rgba(15, 22, 35, 0.07);
+  --shadow-elevated: 0 8px 32px rgba(15, 22, 35, 0.12);
+}
+
+/* ─── Thèmes de couleur ─── */
+/* Classique = défaut (sable/terracotta) — pas de data-theme attr nécessaire */
+
+[data-theme="ocean"] {
+  --color-ink: #0d2137;
+  --color-ink-soft: #2a4a6b;
+  --color-paper: #edf4fb;
+  --color-paper-warm: #daeaf6;
+  --color-accent: #1a6fb5;
+  --color-accent-hover: #145d99;
+  --color-success: #1e8c6e;
+  --color-success-hover: #177358;
+  --color-purple: #5b4fcf;
+  --color-gold: #c9952a;
+  --color-rule: rgba(13, 33, 55, 0.12);
+}
+
+[data-theme="foret"] {
+  --color-ink: #0f2210;
+  --color-ink-soft: #2d4d2e;
+  --color-paper: #eef5ee;
+  --color-paper-warm: #dff0df;
+  --color-accent: #3d8b37;
+  --color-accent-hover: #307029;
+  --color-success: #2a7c6f;
+  --color-success-hover: #1e5f55;
+  --color-purple: #6b4fcf;
+  --color-gold: #b8a020;
+  --color-rule: rgba(15, 34, 16, 0.12);
+}
+
+[data-theme="nuit"] {
+  --color-ink: #e8eaf0;
+  --color-ink-soft: #9aa3b8;
+  --color-paper: #161b27;
+  --color-paper-warm: #1e2535;
+  --color-accent: #e06c3a;
+  --color-accent-hover: #c85e2e;
+  --color-success: #38c4a8;
+  --color-success-hover: #2ea68e;
+  --color-purple: #9b8af5;
+  --color-gold: #e8c060;
+  --color-rule: rgba(232, 234, 240, 0.10);
+}
+
+/* ─── Base ─── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Focus visible accessible ─── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Scrollbar subtile ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-rule);
+  border-radius: 3px;
+}
+
+/* ─── Animations ─── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes celebration {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes streakPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 149, 42, 0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(201, 149, 42, 0); }
+}
+
+.animate-fade-in    { animation: fadeIn 0.3s ease forwards; }
+.animate-scale-in   { animation: scaleIn 0.2s ease forwards; }
+.animate-celebrate  { animation: celebration 0.5s ease; }
+.animate-streak     { animation: streakPulse 2s infinite; }
+
+/* ─── Landing page scroll snap ─── */
+@keyframes floatUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-float-up { animation: floatUp 0.5s ease forwards; }
+
+/* ─── Confetti célébration ─── */
+@keyframes confettiFall {
+  0%   { transform: translateY(-10px) rotate(0deg) scale(1.2); opacity: 1; }
+  100% { transform: translateY(72px)  rotate(380deg) scale(0.4); opacity: 0; }
+}
+.animate-confetti { animation: confettiFall 0.85s ease-out forwards; }
+
+/* ─── XP bar (couleur or) ─── */
+.xp-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--color-gold), #e8b441);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Pulse niveau ─── */
+@keyframes levelPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+.animate-level-pop { animation: levelPop 0.4s ease; }
+
+/* ─── Mode Dyslexie ─── */
+.font-dyslexic { font-family: "OpenDyslexic", "Comic Sans MS", cursive !important; letter-spacing: 0.05em; word-spacing: 0.1em; }
+
+/* ─── Avatar animé ─── */
+@keyframes avatarPulse {
+  0%   { opacity: 0.6; r: 54; }
+  50%  { opacity: 0.15; r: 58; }
+  100% { opacity: 0.6; r: 54; }
+}
+.animate-avatar-pulse { animation: avatarPulse 1.2s ease-in-out infinite; }
+
+/* ─── Sofia idle (flottement doux) ─── */
+@keyframes sofiaFloat {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  30%  { transform: translateY(-5px) rotate(0.6deg); }
+  60%  { transform: translateY(-3px) rotate(-0.4deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+.animate-sofia-idle { animation: sofiaFloat 4s ease-in-out infinite; }
+
+@keyframes speakWave {
+  0%, 100% { transform: scaleY(0.4); }
+  50%       { transform: scaleY(1); }
+}
+.speak-bar { animation: speakWave 0.6s ease-in-out infinite; transform-origin: bottom; }
+.speak-bar:nth-child(2) { animation-delay: 0.1s; }
+.speak-bar:nth-child(3) { animation-delay: 0.2s; }
+.speak-bar:nth-child(4) { animation-delay: 0.1s; }
+
+/* ─── Progress bar ─── */
+.progress-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--color-rule);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--color-success), #38b2a0);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}

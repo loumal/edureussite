@@ -1,0 +1,1114 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── ENUMS ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  ELEVE
+  PARENT
+  ENSEIGNANT
+  SPECIALISTE
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum Province {
+  QC
+  ON
+  BC
+  AB
+  SK
+  MB
+  NB
+  NS
+  PE
+  NL
+  YT
+  NT
+  NU
+}
+
+enum LangueInterface {
+  FR
+  EN
+}
+
+enum SourceEpreuve {
+  MEES_OFFICIEL
+  COMMISSION_SCOLAIRE
+  MANUEL_SCOLAIRE
+  AUTRE
+}
+
+enum NiveauScolaire {
+  PRIMAIRE_1
+  PRIMAIRE_2
+  PRIMAIRE_3
+  PRIMAIRE_4
+  PRIMAIRE_5
+  PRIMAIRE_6
+  SECONDAIRE_1
+  SECONDAIRE_2
+  SECONDAIRE_3
+  SECONDAIRE_4
+  SECONDAIRE_5
+}
+
+enum StyleApprentissage {
+  VISUEL
+  AUDITIF
+  KINESTHESIQUE
+  LECTURE_ECRITURE
+}
+
+enum StatutPlan {
+  ACTIF
+  PAUSE
+  TERMINE
+  ARCHIVE
+}
+
+enum StatutExercice {
+  NON_COMMENCE
+  EN_COURS
+  TERMINE
+  ABANDONNE
+}
+
+enum TypeExercice {
+  TEXTE_TROUS
+  QCM
+  QUESTION_OUVERTE
+  PROBLEME_MATHEMATIQUE
+  LECTURE_COMPREHENSION
+  EXERCICE_ORAL
+  MISE_EN_SITUATION
+  SCHEMA_COMPLETER
+  CHRONOLOGIE
+  MINI_DEFI
+  EPREUVE_COMPLETE
+}
+
+enum Matiere {
+  FRANCAIS
+  MATHEMATIQUES
+  SCIENCES
+  UNIVERS_SOCIAL
+  ARTS
+  ETHIQUE
+  ANGLAIS
+  EDUCATION_PHYSIQUE
+}
+
+enum NiveauDifficulte {
+  REMEDIATION
+  BASE
+  ATTENDU
+  AVANCE
+  EXCELLENCE
+}
+
+enum EtatEmotionnel {
+  TRES_BIEN
+  BIEN
+  CORRECT
+  FATIGUE
+  STRESSE
+  TRISTE
+}
+
+enum TypeNotification {
+  ALERTE_BLOCAGE
+  ALERTE_DECROCHAGE
+  ALERTE_EMOTIONNELLE
+  RAPPORT_POSITIF
+  RAPPORT_HEBDOMADAIRE
+  RELANCE_ABSENCE
+  EXERCICE_AJOUTE
+  PLAN_MODIFIE
+  SURPRISE_DISPONIBLE
+  SURPRISE_ACCORDEE
+  AIDE_PLANIFICATION
+}
+
+enum StatutSurprise {
+  EN_ATTENTE  // Système attend que le parent accorde
+  ACCORDE     // Parent a accordé, enfant doit confirmer
+  CONFIRME    // Enfant a confirmé et laissé un souvenir
+  EXPIRE      // Parent n'a pas répondu dans 14 jours
+}
+
+enum TypeCommentaireParent {
+  OBSERVATION_PARENT
+  COMMENTAIRE_ENSEIGNANT
+  PLAN_INTERVENTION
+  RAPPORT_BILAN
+  AUTRE
+}
+
+enum StatutCours {
+  NON_LU
+  EN_COURS
+  TERMINE
+}
+
+enum StatutRendezVous {
+  EN_ATTENTE
+  CONFIRME
+  ANNULE
+  TERMINE
+}
+
+enum TypeCommentaireEleve {
+  DIFFICULTE
+  OBJECTIF_MAITRISE
+  QUESTION
+  AUTRE
+}
+
+enum TypeMission {
+  EXERCICES_COUNT     // Compléter X exercices
+  SCORE_MINIMUM       // Obtenir un score >= X sur un exercice
+  MATIERE_EXERCICES   // Compléter X exercices dans une matière précise
+  PERFECT_SCORE       // Obtenir 100% sur un exercice
+  STREAK_MAINTENU     // Maintenir la série X jours
+}
+
+// ─── USERS & AUTH ─────────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  password      String?
+  role          Role      @default(ELEVE)
+  province      Province        @default(QC)
+  langueInterface LangueInterface @default(FR)
+
+  // Sécurité — contrôle d'accès
+  suspended          Boolean   @default(false)
+  suspendedAt        DateTime?
+  suspendedRaison    String?
+  forcePasswordReset Boolean   @default(false)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  profilEleve      ProfilEleve?
+  profilParent     ProfilParent?
+  profilEnseignant ProfilEnseignant?
+  specialiste      Specialiste?
+
+  notificationsEnvoyees Notification[] @relation("NotificationExpediteur")
+  notificationsRecues   Notification[] @relation("NotificationDestinataire")
+  securityLogs          SecurityLog[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ─── PROFILS ──────────────────────────────────────────────────────────────────
+
+model ProfilEleve {
+  id             String         @id @default(cuid())
+  userId         String         @unique
+  codeAcces      String?        @unique
+  prenom         String
+  nom            String         @default("")
+  dateNaissance  DateTime?
+  niveauScolaire NiveauScolaire
+  ecole          String?
+
+  styleApprentissage StyleApprentissage?
+  vitesseTraitement  Int?
+  niveauMotivation   Int?
+  facteursStress     String[]
+  matieresPreferees  Matiere[]
+  matieresRedoutees  Matiere[]
+
+  tdah            Boolean @default(false)
+  dyslexie        Boolean @default(false)
+  dyscalculie     Boolean @default(false)
+  anxieteScolaire Boolean @default(false)
+  autresBesoins   String?
+
+  // Univers personnel — personnalisation des exercices
+  centresInteret    String[]  // ex: ["SOCCER", "MANGA", "JEUX_VIDEO"]
+  sportFavori       String?   // ex: "Hockey sur glace"
+  universMediatique String?   // ex: "Naruto, Marvel, Occupation Double"
+  autresPassions    String?   // texte libre
+  environnement     String?   // "VILLE", "BANLIEUE", "CAMPAGNE"
+  personnalite      String[]  // ex: ["CURIEUX", "CREATIF", "COMPETITEUR"]
+  objectifScolaire  String?   // ex: "REUSSIR_ANNEE", "UNIVERSITE"
+
+  streakJours       Int      @default(0)
+  streakMaxJours    Int      @default(0)
+  streakBoucliers   Int      @default(0)
+  derniereConnexion DateTime?
+  totalPoints       Int      @default(0)
+  niveauJeu         Int      @default(1)
+
+  onboardingComplete Boolean @default(false)
+  onboardingEtape    Int     @default(0)
+
+  enseignantId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enseignant ProfilEnseignant? @relation(fields: [enseignantId], references: [id])
+  parents    ProfilParent[]    @relation("ParentEnfants")
+
+  niveauxMatieres       NiveauMatiere[]
+  planActions           PlanAction[]
+  sessions              SessionPratique[]
+  checkIns              CheckInEmotionnel[]
+  badges                BadgeEleve[]
+  exercicesAssignes     ExerciceAssigne[]
+  commentaires          CommentairePedagogique[]
+  plansAccompagnement   PlanAccompagnementParent[]
+  commentairesParents   CommentaireParent[]
+  commentairesEleve     CommentaireEleve[]
+  coursRemediation      CoursRemediation[]
+  recommandationsIA     RecommandationIA[]
+  demandesRencontre     DemandeRencontre[]
+  rendezVous            RendezVous[]
+  defJourCompletions    DefJourCompletion[]
+  missionsHebdo         MissionHebdo[]
+  surprises             SurpriseParent[]
+  miraMessages        MiraMessage[]
+  objectifsNotes        ObjectifNote[]
+  planifNotions         PlanifNotionEleve[]
+  disponibilite         DisponibiliteEleve?
+
+  // ── Quota Mira IA (session vocale hebdomadaire) ───────────────────────
+  miraSecsUsedWeek Int     @default(0)   @map("sofiaSecsUsedWeek") // secondes utilisées cette semaine
+  miraWeekOf       String?               @map("sofiaWeekOf")       // lundi de la semaine ISO (YYYY-MM-DD) pour reset auto
+  miraSecsBonus    Int     @default(0)   @map("sofiaSecsBonus")    // bonus accordé par super admin (s'ajoute aux 30 min)
+
+  @@map("profils_eleves")
+}
+
+// ── Historique persistant des conversations Mira (mode aide libre) ─────────
+model MiraMessage {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  eleveId   String
+  role      String      // "user" | "assistant"
+  content   String
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@index([eleveId, createdAt(sort: Desc)])
+  @@map("sofia_messages")
+}
+
+model NiveauMatiere {
+  id               String           @id @default(cuid())
+  eleveId          String
+  matiere          Matiere
+  niveau           NiveauDifficulte @default(BASE)
+  scoreGlobal      Float            @default(0)
+  lacunes          String[]
+  competencesPFEQ  String[]
+  derniereEval     DateTime?
+  prochaineRevision DateTime?       // SRS — date calculée selon le score
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@unique([eleveId, matiere])
+  @@index([prochaineRevision])
+  @@map("niveaux_matieres")
+}
+
+model ProfilParent {
+  id        String @id @default(cuid())
+  userId    String @unique
+  prenom    String
+  nom       String
+  telephone String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eleves ProfilEleve[] @relation("ParentEnfants")
+  plansAccompagnement PlanAccompagnementParent[]
+  commentaires        CommentaireParent[]
+  surprises           SurpriseParent[]
+
+  @@map("profils_parents")
+}
+
+model PlanAccompagnementParent {
+  id        String   @id @default(cuid())
+  parentId  String
+  eleveId   String
+  contenu   Json
+  genereLeAt DateTime @default(now())
+
+  parent ProfilParent @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  eleve  ProfilEleve  @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  tokenPartage String?  @unique @default(cuid())
+
+  @@unique([parentId, eleveId])
+  @@map("plans_accompagnement_parent")
+}
+
+model CoursRemediation {
+  id           String      @id @default(cuid())
+  eleveId      String
+  matieres     Matiere[]
+  contenu      Json        // CoursStructure — generated by AI
+  statut       StatutCours @default(NON_LU)
+  exerciceIds  String[]    // The 3 source exercise assignment IDs
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@map("cours_remediation")
+}
+
+// ─── SURPRISES PARENTALES ─────────────────────────────────────────────────────
+
+model SurpriseParent {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expireAt  DateTime // createdAt + 14 jours
+
+  eleveId  String
+  parentId String
+
+  // Contexte du jalon
+  declencheur  String // ex: "7 jours consécutifs de connexion"
+  explication  String // Message expliquant pourquoi c'est un vrai jalon
+  options      String[] // 3 suggestions personnalisées
+
+  // Cycle de vie
+  statut          StatutSurprise @default(EN_ATTENTE)
+  privilegeChoisi String?  // Ce que le parent a choisi d'accorder
+  accordeAt       DateTime?
+
+  // Souvenir de l'enfant
+  messageEnfant String?
+  confirmeAt    DateTime?
+
+  eleve  ProfilEleve  @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+  parent ProfilParent @relation(fields: [parentId], references: [id], onDelete: Cascade)
+
+  @@map("surprises_parent")
+}
+
+model CommentaireParent {
+  id       String                @id @default(cuid())
+  parentId String
+  eleveId  String
+  type     TypeCommentaireParent @default(OBSERVATION_PARENT)
+  contenu  String
+  visible  Boolean               @default(true)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  parent ProfilParent @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  eleve  ProfilEleve  @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@map("commentaires_parents")
+}
+
+model ProfilEnseignant {
+  id        String           @id @default(cuid())
+  userId    String           @unique
+  prenom    String
+  nom       String
+  ecole     String?
+  matieres  Matiere[]
+  niveaux   NiveauScolaire[]
+  codeAcces String           @unique @default(cuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user                     User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eleves                   ProfilEleve[]
+  commentairesPedagogiques CommentairePedagogique[]
+
+  @@map("profils_enseignants")
+}
+
+// ─── PLAN D'ACTION ────────────────────────────────────────────────────────────
+
+model PlanAction {
+  id          String     @id @default(cuid())
+  eleveId     String
+  titre       String
+  description String?
+  statut      StatutPlan @default(ACTIF)
+  dateDebut   DateTime   @default(now())
+  dateFin     DateTime?
+  genereParIA Boolean    @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  eleve        ProfilEleve              @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+  objectifs    ObjectifPlan[]
+  commentaires CommentairePedagogique[]
+
+  @@map("plans_action")
+}
+
+model ObjectifPlan {
+  id             String   @id @default(cuid())
+  planId         String
+  titre          String
+  description    String?
+  matiere        Matiere
+  competencePFEQ String?
+  dateEcheance   DateTime?
+  atteint        Boolean  @default(false)
+  scoreVise      Float    @default(80)
+
+  plan      PlanAction        @relation(fields: [planId], references: [id], onDelete: Cascade)
+  exercices ExerciceAssigne[]
+
+  @@map("objectifs_plan")
+}
+
+// ─── EXERCICES ────────────────────────────────────────────────────────────────
+
+model Exercice {
+  id              String           @id @default(cuid())
+  titre           String
+  consigne        String
+  contenu         Json
+  type            TypeExercice
+  matiere         Matiere
+  niveauScolaire  NiveauScolaire
+  difficulte      NiveauDifficulte @default(ATTENDU)
+  competencesPFEQ String[]
+  dureeMinutes    Int              @default(10)
+  genereParIA     Boolean          @default(true)
+  validePedagogue Boolean          @default(false)
+  correctionType    String           @default("ia")
+  correctionAttendue Json?
+  baremePoints      Int              @default(10)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assignations ExerciceAssigne[]
+
+  @@map("exercices")
+}
+
+model ExerciceAssigne {
+  id            String         @id @default(cuid())
+  eleveId       String
+  exerciceId    String
+  objectifId    String?
+  statut        StatutExercice @default(NON_COMMENCE)
+  reponseEleve  Json?
+  score         Float?
+  tempsSecondes Int?
+  nbTentatives  Int            @default(0)
+  feedbackIA    String?
+
+  dateAssignation DateTime  @default(now())
+  dateDebut       DateTime?
+  dateFin         DateTime?
+
+  eleve    ProfilEleve   @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+  exercice Exercice      @relation(fields: [exerciceId], references: [id])
+  objectif ObjectifPlan? @relation(fields: [objectifId], references: [id])
+
+  @@index([eleveId, statut])
+  @@index([eleveId, dateFin(sort: Desc)])
+  @@map("exercices_assignes")
+}
+
+// ─── SESSIONS DE PRATIQUE ─────────────────────────────────────────────────────
+
+model SessionPratique {
+  id               String          @id @default(cuid())
+  eleveId          String
+  etatEmotionnel   EtatEmotionnel?
+  dateSession      DateTime        @default(now())
+  dureeSecondes    Int             @default(0)
+  exercicesTotal   Int             @default(0)
+  exercicesReussis Int             @default(0)
+  pointsGagnes     Int             @default(0)
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@map("sessions_pratique")
+}
+
+// ─── CHECK-IN ÉMOTIONNEL ──────────────────────────────────────────────────────
+
+model CheckInEmotionnel {
+  id       String         @id @default(cuid())
+  eleveId  String
+  etat     EtatEmotionnel
+  note     String?
+  modeDoux Boolean        @default(false)
+  date     DateTime       @default(now())
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@map("checkins_emotionnels")
+}
+
+// ─── BADGES ───────────────────────────────────────────────────────────────────
+
+model Badge {
+  id          String @id @default(cuid())
+  code        String @unique
+  titre       String
+  description String
+  icone       String
+  critere     Json
+
+  attributions BadgeEleve[]
+
+  @@map("badges")
+}
+
+model BadgeEleve {
+  id      String   @id @default(cuid())
+  eleveId String
+  badgeId String
+  date    DateTime @default(now())
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+  badge Badge       @relation(fields: [badgeId], references: [id])
+
+  @@unique([eleveId, badgeId])
+  @@map("badges_eleves")
+}
+
+// ─── COMMENTAIRES PÉDAGOGIQUES ────────────────────────────────────────────────
+
+model CommentairePedagogique {
+  id             String   @id @default(cuid())
+  enseignantId   String
+  eleveId        String
+  planId         String?
+  contenu        String
+  matiere        Matiere?
+  visibleParents Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  enseignant ProfilEnseignant @relation(fields: [enseignantId], references: [id])
+  eleve      ProfilEleve      @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+  plan       PlanAction?      @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@map("commentaires_pedagogiques")
+}
+
+// ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
+
+model Notification {
+  id             String           @id @default(cuid())
+  expediteurId   String?
+  destinataireId String
+  type           TypeNotification
+  titre          String
+  contenu        String
+  lue            Boolean          @default(false)
+  donnees        Json?
+  createdAt      DateTime         @default(now())
+
+  expediteur   User? @relation("NotificationExpediteur", fields: [expediteurId], references: [id])
+  destinataire User  @relation("NotificationDestinataire", fields: [destinataireId], references: [id])
+
+  @@map("notifications")
+}
+
+// ─── COMMENTAIRES ÉLÈVE ───────────────────────────────────────────────────────
+
+model CommentaireEleve {
+  id        String               @id @default(cuid())
+  eleveId   String
+  type      TypeCommentaireEleve
+  contenu   String
+  matieres  Matiere[]
+  createdAt DateTime             @default(now())
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@map("commentaires_eleves")
+}
+
+// ─── DOCUMENTS PÉDAGOGIQUES ───────────────────────────────────────────────────
+
+enum TypeDocument {
+  RECHERCHE_SCIENTIFIQUE
+  GUIDE_PEDAGOGIQUE
+  STRATEGIE_INTERVENTION
+  RESULTAT_ETUDE
+  RESSOURCE_PARENTALE
+  AUTRE
+}
+
+model DocumentPedagogique {
+  id        String         @id @default(cuid())
+  titre     String
+  type      TypeDocument
+  contenu   String         @db.Text
+  source    String?
+  auteurs   String?
+  annee     Int?
+  motsCles  String[]       @default([])
+  matieres      Matiere[]        @default([])
+  niveaux       NiveauScolaire[] @default([])
+  matiereLibre  String?
+  niveauLibre   String?
+  province      Province         @default(QC)
+  actif         Boolean          @default(true)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@map("documents_pedagogiques")
+}
+
+// ─── PARAMÈTRES APPLICATIFS ───────────────────────────────────────────────────
+
+model ParametreApp {
+  cle       String   @id
+  valeur    String
+  updatedAt DateTime @updatedAt
+
+  @@map("parametres_app")
+}
+
+// ─── SPÉCIALISTES & WEBINAIRES ────────────────────────────────────────────────
+
+enum Specialite {
+  ORTHOPEDAGOGUE
+  PSYCHONEUROLOGUE
+  PSYCHOEDUCATEUR
+  ORTHOPHONISTE
+  TRAVAILLEUR_SOCIAL
+  PSYCHOLOGUE
+  AUTRE
+}
+
+model Specialiste {
+  id             String     @id @default(cuid())
+  userId         String?    @unique
+  prenom         String
+  nom            String
+  specialite     Specialite
+  bio            String
+  photo          String?
+  email          String     @unique
+  telephone      String?
+  langues        String[]   @default(["Français"])
+  disponibilites String?
+  actif          Boolean    @default(true)
+
+  invitationToken     String?   @unique
+  invitationExpiresAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user       User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  webinaires Webinaire[]
+  demandes   DemandeRencontre[]
+  creneaux   CreneauDisponible[]
+  rendezVous RendezVous[]
+
+  @@map("specialistes")
+}
+
+model Webinaire {
+  id              String      @id @default(cuid())
+  specialisteId   String
+  titre           String
+  description     String?
+  dateHeure       DateTime
+  dureeMinutes    Int         @default(60)
+  lienInscription String?
+  gratuit         Boolean     @default(true)
+  actif           Boolean     @default(true)
+  maxParticipants Int?
+  createdAt       DateTime    @default(now())
+
+  specialiste  Specialiste            @relation(fields: [specialisteId], references: [id], onDelete: Cascade)
+  inscriptions InscriptionWebinaire[]
+
+  @@map("webinaires")
+}
+
+model DemandeRencontre {
+  id            String           @id @default(cuid())
+  specialisteId String
+  parentId      String
+  eleveId       String?
+  prenomEnfant  String?
+  message       String
+  statut        StatutRendezVous @default(EN_ATTENTE)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  specialiste Specialiste  @relation(fields: [specialisteId], references: [id])
+  eleve       ProfilEleve? @relation(fields: [eleveId], references: [id])
+  rendezVous  RendezVous?
+
+  @@map("demandes_rencontres")
+}
+
+model CreneauDisponible {
+  id            String   @id @default(cuid())
+  specialisteId String
+  debut         DateTime
+  fin           DateTime
+  actif         Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  specialiste Specialiste @relation(fields: [specialisteId], references: [id], onDelete: Cascade)
+  rendezVous  RendezVous?
+
+  @@map("creneaux_disponibles")
+}
+
+model RendezVous {
+  id              String           @id @default(cuid())
+  demandeId       String           @unique
+  creneauId       String           @unique
+  specialisteId   String
+  parentId        String
+  eleveId         String?
+  debut           DateTime
+  fin             DateTime
+  statut          StatutRendezVous @default(CONFIRME)
+  noteSpecialiste String?
+  lienVisio       String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  demande     DemandeRencontre  @relation(fields: [demandeId], references: [id])
+  creneau     CreneauDisponible @relation(fields: [creneauId], references: [id])
+  specialiste Specialiste       @relation(fields: [specialisteId], references: [id])
+  eleve       ProfilEleve?      @relation(fields: [eleveId], references: [id])
+
+  @@map("rendez_vous")
+}
+
+model InscriptionWebinaire {
+  id          String   @id @default(cuid())
+  webinaireId String
+  parentId    String
+  createdAt   DateTime @default(now())
+
+  webinaire Webinaire @relation(fields: [webinaireId], references: [id], onDelete: Cascade)
+
+  @@unique([webinaireId, parentId])
+  @@map("inscriptions_webinaires")
+}
+
+model RecommandationIA {
+  id            String   @id @default(cuid())
+  parentId      String
+  eleveId       String
+  recommande    Boolean
+  urgence       String
+  specialites   String[]
+  raisonnement  String
+  declencheurs  String[]
+  messageParent String
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@map("recommandations_ia")
+}
+
+// ─── JOURNAUX DE SÉCURITÉ ─────────────────────────────────────────────────────
+
+enum SecuritySeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+model SecurityLog {
+  id         String           @id @default(cuid())
+  createdAt  DateTime         @default(now())
+  action     String
+  severity   SecuritySeverity @default(WARNING)
+  userId     String?
+  userEmail  String?
+  userRole   String?
+  cibleId    String?
+  cibleEmail String?
+  ip         String?
+  details    Json?
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt(sort: Desc)])
+  @@index([severity])
+  @@map("security_logs")
+}
+
+// ─── MODÈLES D'ÉPREUVES (SUPER ADMIN) ────────────────────────────────────────
+
+model ModeleEpreuve {
+  id               String         @id @default(cuid())
+  titre            String
+  matiere          Matiere
+  niveauScolaire   NiveauScolaire
+  source           SourceEpreuve  @default(MEES_OFFICIEL)
+  annee            Int?
+  description      String?
+  contenuOriginal   String?        // texte brut collé par le super admin
+  structureAnalysee Json?         // structure extraite par Claude
+  totalPoints       Int?
+  dureeMinutes      Int?
+  valide            Boolean        @default(false)
+  uploadePar        String?        // userId du super admin
+  province          Province       @default(QC)
+  matiereLibre      String?        // ex: "Science 9" pour provinces hors QC
+  niveauLibre       String?        // ex: "Grade 9" pour provinces hors QC
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sections SectionEpreuve[]
+
+  @@map("modeles_epreuves")
+}
+
+model SectionEpreuve {
+  id              String       @id @default(cuid())
+  modeleId        String
+  ordre           Int
+  titre           String
+  typeQuestion    TypeExercice
+  nombreQuestions Int          @default(1)
+  pointsTotal     Int          @default(10)
+  competencesPFEQ String[]
+  difficulte      NiveauDifficulte @default(ATTENDU)
+  instructions    String?
+  exempleQuestion Json?
+
+  modele ModeleEpreuve @relation(fields: [modeleId], references: [id], onDelete: Cascade)
+
+  @@map("sections_epreuves")
+}
+
+// ─── GAMIFICATION ─────────────────────────────────────────────────────────────
+
+model DefJour {
+  id        String   @id @default(cuid())
+  date      DateTime @unique // date du défi (minuit UTC)
+  matiere   Matiere
+  notion    String
+  xpBonus   Int      @default(50)
+  createdAt DateTime @default(now())
+
+  completions DefJourCompletion[]
+
+  @@map("defis_jour")
+}
+
+model DefJourCompletion {
+  id        String   @id @default(cuid())
+  defId     String
+  eleveId   String
+  score     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  def   DefJour     @relation(fields: [defId], references: [id], onDelete: Cascade)
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@unique([defId, eleveId])
+  @@map("defis_jour_completions")
+}
+
+model MissionHebdo {
+  id          String      @id @default(cuid())
+  semaine     String      // "2026-W13" ISO week
+  eleveId     String
+  titre       String
+  description String
+  type        TypeMission
+  matiere     Matiere?
+  cible       Int         // valeur cible (ex: 5 exercices, score 80)
+  progres     Int         @default(0)
+  xpBonus     Int         @default(100)
+  completee   Boolean     @default(false)
+  completeeAt DateTime?
+  createdAt   DateTime    @default(now())
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@map("missions_hebdo")
+}
+
+// ─── Suivi des coûts API ───────────────────────────────────────────────────
+
+enum ApiService {
+  CLAUDE_MIRA @map("CLAUDE_SOFIA")
+  CLAUDE_EXERCICE
+  CLAUDE_DOCUMENT
+  CLAUDE_ANALYSE
+  ELEVENLABS_TTS
+  ELEVENLABS_STT
+  DEEPGRAM_STT
+  DEEPGRAM_TTS
+  OPENAI_TTS
+  RESEND
+}
+
+model ApiUsageLog {
+  id           String     @id @default(cuid())
+  service      ApiService
+  inputTokens  Int        @default(0)
+  outputTokens Int        @default(0)
+  characters   Int        @default(0)
+  audioSecs    Int        @default(0)
+  emails       Int        @default(0)
+  coutUSD      Float      @default(0)
+  userId       String?
+  createdAt    DateTime   @default(now())
+
+  @@index([service, createdAt])
+  @@index([createdAt])
+  @@map("api_usage_logs")
+}
+
+// ─── Sécurité — IPs bloquées ──────────────────────────────────────────────
+
+model BlockedIp {
+  id        String   @id @default(cuid())
+  ip        String   @unique
+  raison    String?
+  blockedBy String?
+  createdAt DateTime @default(now())
+
+  @@map("blocked_ips")
+}
+
+// ─── Système de planification intelligente ────────────────────────────────────
+
+enum PrioriteNotion {
+  URGENT      // rouge — score < 60 % ou échéance proche
+  IMPORTANT   // jaune — score 60-80 %
+  PLUS_TARD   // gris  — score > 80 % ou bas de liste
+  MAITRISE    // vert  — score >= 85 %, archivé
+}
+
+/// Objectif de note par matière (ex: "80 % en maths d'ici juin")
+model ObjectifNote {
+  id           String      @id @default(cuid())
+  eleveId      String
+  matiere      Matiere
+  scoreVise    Int         // 0-100
+  scoreDepart  Float       @default(0) // snapshot au moment de la création
+  dateEcheance DateTime
+  actif        Boolean     @default(true)
+  atteint      Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@unique([eleveId, matiere])
+  @@map("objectifs_notes")
+}
+
+/// Priorité d'une notion PFEQ choisie par l'élève
+model PlanifNotionEleve {
+  id          String         @id @default(cuid())
+  eleveId     String
+  notion      String         // ID PFEQ (ex: "MATH_FRACTIONS")
+  matiere     Matiere
+  priorite    PrioriteNotion @default(IMPORTANT)
+  ordre       Int            @default(0)    // position dans la séquence d'apprentissage
+  maitrisee   Boolean        @default(false) // true = notion validée, passer à la suivante
+  semaineDebut String?        // ISO week débutant cette notion (ex: "2026-W14")
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@unique([eleveId, notion])
+  @@map("planif_notions_eleve")
+}
+
+/// Disponibilité quotidienne déclarée (minutes par jour)
+model DisponibiliteEleve {
+  id        String      @id @default(cuid())
+  eleveId   String      @unique
+  lundi     Int         @default(15)
+  mardi     Int         @default(15)
+  mercredi  Int         @default(20)
+  jeudi     Int         @default(15)
+  vendredi  Int         @default(15)
+  samedi    Int         @default(30)
+  dimanche  Int         @default(20)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@map("disponibilites_eleve")
+}

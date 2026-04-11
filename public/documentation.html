@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÉduRéussite QC — Documentation Développeur</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FAF7F2;--warm:#F0EBE3;--sand:#E5DED4;
+  --coral:#D97757;--coral-light:#F4DDD3;--coral-dark:#B85C3A;
+  --dark:#1A1715;--text:#2D2926;--muted:#7A756E;--subtle:#AEA89F;
+  --ok:#2D9E6A;--ok-bg:#EEFAF3;--ok-light:#D4F0E2;
+  --warn:#D97706;--warn-bg:#FFFBEB;--warn-light:#FEF3C7;
+  --info:#2563EB;--info-bg:#EFF6FF;--info-light:#DBEAFE;
+  --sidebar:260px;--font:'DM Sans',-apple-system,sans-serif;--mono:'DM Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--cream);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;min-height:100vh}
+
+/* HEADER */
+.header{background:var(--dark);color:#fff;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600}
+.logo-icon{width:30px;height:30px;background:var(--coral);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.header-meta{font-size:11px;color:rgba(255,255,255,.45)}
+
+/* LAYOUT */
+.layout{display:flex;flex:1}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);min-height:calc(100vh - 52px);background:#fff;border-right:1px solid var(--sand);position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;flex-shrink:0}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:var(--sand);border-radius:2px}
+.nav-section{padding:16px 0 4px}
+.nav-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--subtle);padding:0 18px;margin-bottom:4px}
+.nav-link{display:flex;align-items:center;gap:8px;padding:7px 18px;font-size:13px;color:var(--muted);text-decoration:none;transition:all .15s;border-left:2px solid transparent;cursor:pointer}
+.nav-link:hover{color:var(--text);background:var(--cream)}
+.nav-link.active{color:var(--coral);background:var(--coral-light);border-left-color:var(--coral);font-weight:600}
+.nav-link .nav-num{font-size:10px;font-family:var(--mono);background:var(--warm);color:var(--subtle);padding:1px 5px;border-radius:4px;min-width:20px;text-align:center}
+.nav-link.active .nav-num{background:var(--coral-light);color:var(--coral)}
+
+/* CONTENT */
+.content{flex:1;max-width:860px;padding:40px 48px 80px;min-width:0}
+
+/* SECTIONS */
+.section{margin-bottom:64px;scroll-margin-top:72px}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--sand)}
+.section-num{width:32px;height:32px;background:var(--coral);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.section-title{font-size:22px;font-weight:700;color:var(--dark);letter-spacing:-.3px}
+.section-desc{font-size:14px;color:var(--muted);margin-top:-16px;margin-bottom:20px}
+
+h3{font-size:16px;font-weight:700;color:var(--dark);margin:28px 0 10px;display:flex;align-items:center;gap:8px}
+h3::before{content:'';width:3px;height:16px;background:var(--coral);border-radius:2px;display:inline-block}
+h4{font-size:14px;font-weight:600;color:var(--text);margin:16px 0 6px}
+p{font-size:14px;color:var(--text);margin-bottom:12px}
+ul,ol{font-size:14px;color:var(--text);padding-left:20px;margin-bottom:12px}
+li{margin-bottom:5px}
+strong{font-weight:600;color:var(--dark)}
+a{color:var(--coral);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* CODE */
+.code-block{position:relative;background:var(--dark);border-radius:10px;margin:12px 0;overflow:hidden}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
+.code-lang{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--coral)}
+.code-copy{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);font-size:11px;font-family:var(--font);padding:2px 6px;border-radius:4px;transition:.15s;display:flex;align-items:center;gap:4px}
+.code-copy:hover{color:#fff;background:rgba(255,255,255,.1)}
+.code-copy svg{width:12px;height:12px}
+pre{padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:#E2DDD8}
+pre::-webkit-scrollbar{height:4px}
+pre::-webkit-scrollbar-track{background:transparent}
+pre::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+code{font-family:var(--mono);font-size:12.5px;background:var(--warm);color:var(--coral-dark);padding:1px 5px;border-radius:4px}
+pre code{background:none;color:inherit;padding:0;font-size:inherit}
+.hl{color:#79B8FF}
+.hl-green{color:#85E89D}
+.hl-orange{color:#FFAB70}
+.hl-comment{color:#6A737D;font-style:italic}
+
+/* CALLOUTS */
+.callout{border-radius:10px;padding:14px 18px;margin:16px 0;display:flex;gap:12px;font-size:13px}
+.callout-icon{font-size:18px;flex-shrink:0;line-height:1.4}
+.callout.info{background:var(--info-bg);border:1px solid var(--info-light)}
+.callout.warn{background:var(--warn-bg);border:1px solid var(--warn-light)}
+.callout.ok{background:var(--ok-bg);border:1px solid var(--ok-light)}
+.callout.tip{background:var(--coral-light);border:1px solid rgba(217,119,87,.25)}
+.callout-body strong{display:block;font-weight:700;margin-bottom:3px;color:var(--dark)}
+
+/* STEPS */
+.steps{list-style:none;padding:0;counter-reset:step}
+.steps li{counter-increment:step;display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}
+.steps li::before{content:counter(step);width:26px;height:26px;background:var(--coral);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.steps li .step-content{flex:1}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+th{background:var(--warm);font-weight:600;color:var(--dark);padding:8px 12px;text-align:left;font-size:12px}
+td{padding:8px 12px;border-bottom:1px solid var(--sand);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--cream)}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700;margin:0 2px}
+.badge.tech{background:var(--info-bg);color:var(--info)}
+.badge.file{background:var(--warm);color:var(--muted);font-family:var(--mono)}
+.badge.required{background:var(--ko-bg, #FEF2F2);color:#D94343}
+.badge.optional{background:var(--ok-bg);color:var(--ok)}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--sand);margin:32px 0}
+
+/* FILE TREE */
+.file-tree{background:var(--dark);border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:12px;line-height:1.8;color:#E2DDD8}
+.ft-dir{color:#79B8FF;font-weight:500}
+.ft-file{color:#E2DDD8}
+.ft-comment{color:#6A737D;font-style:italic}
+
+/* PROGRESS BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--subtle);margin-bottom:32px;flex-wrap:wrap}
+.breadcrumb span{color:var(--muted)}
+.breadcrumb .sep{color:var(--sand)}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .content{padding:24px 20px 60px}
+  .section-title{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">✦</div>
+    ÉduRéussite QC — Documentation Développeur
+  </div>
+  <div class="header-meta">Mise à jour : 28 mars 2026 · Version production</div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="nav-section">
+      <div class="nav-label">Démarrage</div>
+      <a class="nav-link active" onclick="scrollTo('s0')"><span class="nav-num">0</span>Vue d'ensemble</a>
+      <a class="nav-link" onclick="scrollTo('s1')"><span class="nav-num">1</span>Prérequis</a>
+      <a class="nav-link" onclick="scrollTo('s2')"><span class="nav-num">2</span>Installation locale</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Architecture</div>
+      <a class="nav-link" onclick="scrollTo('s3')"><span class="nav-num">3</span>Stack technique</a>
+      <a class="nav-link" onclick="scrollTo('s4')"><span class="nav-num">4</span>Structure du projet</a>
+      <a class="nav-link" onclick="scrollTo('s5')"><span class="nav-num">5</span>Base de données</a>
+      <a class="nav-link" onclick="scrollTo('s6')"><span class="nav-num">6</span>Authentification</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Déploiement</div>
+      <a class="nav-link" onclick="scrollTo('s7')"><span class="nav-num">7</span>Déploiement Vercel</a>
+      <a class="nav-link" onclick="scrollTo('s8')"><span class="nav-num">8</span>Nom de domaine</a>
+      <a class="nav-link" onclick="scrollTo('s9')"><span class="nav-num">9</span>Emails avec Resend</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Fonctionnalités</div>
+      <a class="nav-link" onclick="scrollTo('s10')"><span class="nav-num">10</span>Fonctionnalités clés</a>
+      <a class="nav-link" onclick="scrollTo('s11')"><span class="nav-num">11</span>Variables d'env.</a>
+      <a class="nav-link" onclick="scrollTo('s12')"><span class="nav-num">12</span>Commandes utiles</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Reprise</div>
+      <a class="nav-link" onclick="scrollTo('s13')"><span class="nav-num">13</span>Reprise du projet</a>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- S0 - VUE D'ENSEMBLE -->
+    <div class="section" id="s0">
+      <div class="section-header">
+        <div class="section-num">✦</div>
+        <div class="section-title">Vue d'ensemble du projet</div>
+      </div>
+
+      <p><strong>ÉduRéussite QC</strong> est une plateforme éducative intelligente destinée aux élèves québécois (primaire et secondaire). Elle génère des exercices personnalisés par l'IA (Claude d'Anthropic), fournit un feedback pédagogique détaillé, crée automatiquement des cours de remédiation après les erreurs, et offre un tableau de bord aux parents pour suivre la progression de leurs enfants.</p>
+
+      <div class="callout ok">
+        <div class="callout-icon">🌐</div>
+        <div class="callout-body"><strong>Application en production</strong>URL : <a href="https://edureussite.edevtic.com" target="_blank">edureussite.edevtic.com</a> · Hébergé sur Vercel · Base de données Supabase (PostgreSQL)</div>
+      </div>
+
+      <h3>Rôles dans l'application</h3>
+      <table>
+        <tr><th>Rôle</th><th>Accès</th><th>Connexion</th></tr>
+        <tr><td><strong>SUPER_ADMIN</strong></td><td>Tout + promotion/rétrogradation d'admins</td><td>Email + MDP + OTP email</td></tr>
+        <tr><td><strong>ADMIN</strong></td><td>Dashboard admin, gestion utilisateurs</td><td>Email + MDP + OTP email</td></tr>
+        <tr><td><strong>PARENT</strong></td><td>Suivi de ses enfants, réinitialisation MDP</td><td>Email + MDP + OTP email</td></tr>
+        <tr><td><strong>ENSEIGNANT</strong></td><td>Accès enseignant</td><td>Email + MDP + OTP email</td></tr>
+        <tr><td><strong>ELEVE</strong></td><td>Exercices, cours, profil</td><td>Code d'accès + MDP (pas d'OTP)</td></tr>
+      </table>
+    </div>
+
+    <!-- S1 - PRÉREQUIS -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">Prérequis</div>
+      </div>
+      <p class="section-desc">Tout ce qu'il faut installer avant de commencer, dans l'ordre.</p>
+
+      <h3>Logiciels à installer</h3>
+      <ol class="steps">
+        <li>
+          <div class="step-content">
+            <strong>Visual Studio Code</strong> — L'éditeur de code<br>
+            Télécharger sur <a href="https://code.visualstudio.com" target="_blank">code.visualstudio.com</a> · Choisir la version Windows/Mac selon votre système.<br>
+            Extensions recommandées : <code>Prisma</code>, <code>Tailwind CSS IntelliSense</code>, <code>ESLint</code>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Node.js v20+</strong> — Moteur JavaScript côté serveur<br>
+            Télécharger sur <a href="https://nodejs.org" target="_blank">nodejs.org</a> · Choisir la version <strong>LTS</strong>.<br>
+            Vérifier l'installation :
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>node --version   <span class="hl-comment"># doit afficher v20.x.x ou supérieur</span>
+npm --version    <span class="hl-comment"># doit afficher 10.x.x ou supérieur</span></pre></div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Git</strong> — Gestion de versions<br>
+            Télécharger sur <a href="https://git-scm.com" target="_blank">git-scm.com</a>.<br>
+            Vérifier : <code>git --version</code>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Claude Code CLI</strong> — L'assistant IA de développement (Anthropic)<br>
+            Une fois Node.js installé, ouvrir un terminal et taper :
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npm install -g @anthropic-ai/claude-code</pre></div>
+            Puis se connecter avec son compte Anthropic : <code>claude</code>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Vercel CLI</strong> — Pour déployer l'application<br>
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npm install -g vercel</pre></div>
+          </div>
+        </li>
+      </ol>
+
+      <h3>Comptes à créer</h3>
+      <table>
+        <tr><th>Service</th><th>Utilité</th><th>Gratuit ?</th></tr>
+        <tr><td><a href="https://supabase.com" target="_blank"><strong>Supabase</strong></a></td><td>Base de données PostgreSQL hébergée</td><td>Oui (plan Free)</td></tr>
+        <tr><td><a href="https://vercel.com" target="_blank"><strong>Vercel</strong></a></td><td>Hébergement de l'application Next.js</td><td>Oui (plan Hobby)</td></tr>
+        <tr><td><a href="https://resend.com" target="_blank"><strong>Resend</strong></a></td><td>Envoi d'emails (OTP de connexion)</td><td>Oui (100 emails/jour)</td></tr>
+        <tr><td><a href="https://console.anthropic.com" target="_blank"><strong>Anthropic</strong></a></td><td>API Claude pour la génération IA</td><td>Non (payant à l'usage)</td></tr>
+      </table>
+    </div>
+
+    <!-- S2 - INSTALLATION LOCALE -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">Installation locale</div>
+      </div>
+      <p class="section-desc">Mettre en place le projet en local, étape par étape.</p>
+
+      <h3>Cloner et installer</h3>
+      <ol class="steps">
+        <li>
+          <div class="step-content">
+            <strong>Récupérer le code source</strong><br>
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>git clone [URL_DU_REPO] edureussite-qc
+cd edureussite-qc</pre></div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Installer les dépendances</strong><br>
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npm install</pre></div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Créer le fichier de variables d'environnement</strong><br>
+            Créer un fichier <code>.env</code> à la racine du projet avec ce contenu (voir section 11 pour les valeurs) :
+            <div class="code-block"><div class="code-header"><span class="code-lang">.env</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre><span class="hl-comment"># Base de données Supabase</span>
+<span class="hl">DATABASE_URL</span>=<span class="hl-green">"postgresql://..."</span>
+
+<span class="hl-comment"># NextAuth</span>
+<span class="hl">NEXTAUTH_SECRET</span>=<span class="hl-green">"une-chaine-aleatoire-longue"</span>
+<span class="hl">NEXTAUTH_URL</span>=<span class="hl-green">"http://localhost:3000"</span>
+
+<span class="hl-comment"># Claude AI (Anthropic)</span>
+<span class="hl">ANTHROPIC_API_KEY</span>=<span class="hl-green">"sk-ant-api03-..."</span>
+
+<span class="hl-comment"># Resend (emails)</span>
+<span class="hl">RESEND_API_KEY</span>=<span class="hl-green">"re_..."</span>
+<span class="hl">EMAIL_FROM</span>=<span class="hl-green">"noreply@votre-domaine.com"</span></pre></div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Générer le client Prisma</strong><br>
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npx prisma generate</pre></div>
+            <div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><strong>Important</strong>Le client Prisma est généré dans <code>src/generated/prisma/</code> (pas le chemin par défaut). C'est configuré dans <code>prisma/schema.prisma</code> avec <code>output = "../src/generated/prisma"</code>.</div></div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Synchroniser la base de données</strong><br>
+            Si c'est une première installation (nouvelle base de données vide) :
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npx prisma db push</pre></div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Lancer le serveur de développement</strong><br>
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npm run dev</pre></div>
+            L'application est accessible sur <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- S3 - STACK -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">Stack technique</div>
+      </div>
+
+      <table>
+        <tr><th>Technologie</th><th>Rôle</th><th>Version</th></tr>
+        <tr><td><strong>Next.js</strong> <span class="badge tech">App Router</span></td><td>Framework React fullstack avec routing basé sur les fichiers</td><td>16</td></tr>
+        <tr><td><strong>TypeScript</strong></td><td>JavaScript typé — détecte les erreurs avant l'exécution</td><td>5+</td></tr>
+        <tr><td><strong>Prisma</strong></td><td>ORM — interface entre le code et la base de données</td><td>7</td></tr>
+        <tr><td><strong>PostgreSQL via Supabase</strong></td><td>Base de données relationnelle hébergée dans le cloud</td><td>—</td></tr>
+        <tr><td><strong>tRPC</strong></td><td>API typesafe entre le frontend et le backend (pas de REST)</td><td>11</td></tr>
+        <tr><td><strong>NextAuth.js</strong></td><td>Authentification (sessions, OTP, credentials)</td><td>4</td></tr>
+        <tr><td><strong>Tailwind CSS</strong></td><td>Styles utilitaires directement dans le HTML/JSX</td><td>4</td></tr>
+        <tr><td><strong>Anthropic SDK</strong></td><td>Appels à l'API Claude pour la génération IA</td><td>—</td></tr>
+        <tr><td><strong>Resend</strong></td><td>Envoi d'emails transactionnels (OTP de connexion)</td><td>—</td></tr>
+        <tr><td><strong>Framer Motion</strong></td><td>Animations (overlay anniversaire, transitions)</td><td>—</td></tr>
+        <tr><td><strong>canvas-confetti</strong></td><td>Effet confettis pour l'anniversaire</td><td>—</td></tr>
+        <tr><td><strong>bcryptjs</strong></td><td>Hachage sécurisé des mots de passe</td><td>—</td></tr>
+        <tr><td><strong>@vercel/functions</strong></td><td><code>waitUntil()</code> pour tâches background sur Vercel</td><td>—</td></tr>
+      </table>
+
+      <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body"><strong>Pourquoi tRPC ?</strong> tRPC remplace les API REST classiques. Toutes les fonctions backend sont définies dans <code>src/server/routers/</code> et sont appelées depuis le frontend comme des fonctions TypeScript normales. Les types sont partagés automatiquement — impossible d'appeler une route avec les mauvais paramètres.</div>
+      </div>
+    </div>
+
+    <!-- S4 - STRUCTURE -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-title">Structure du projet</div>
+      </div>
+
+      <div class="file-tree">
+<span class="ft-dir">edureussite-qc/</span>
+├── <span class="ft-dir">prisma/</span>
+│   └── <span class="ft-file">schema.prisma</span>          <span class="ft-comment"># Schéma de la base de données</span>
+├── <span class="ft-dir">public/</span>                        <span class="ft-comment"># Fichiers statiques servis directement</span>
+│   ├── <span class="ft-file">guide-testeurs.html</span>     <span class="ft-comment"># Guide de tests pour les testeurs</span>
+│   └── <span class="ft-file">documentation.html</span>      <span class="ft-comment"># Ce fichier</span>
+├── <span class="ft-dir">src/</span>
+│   ├── <span class="ft-dir">app/</span>                       <span class="ft-comment"># Pages Next.js (App Router)</span>
+│   │   ├── <span class="ft-dir">(auth)/</span>                <span class="ft-comment"># Pages d'authentification</span>
+│   │   │   ├── <span class="ft-dir">login/</span>             <span class="ft-comment"># Page de connexion (élève + adulte)</span>
+│   │   │   ├── <span class="ft-dir">register/</span>          <span class="ft-comment"># Inscription avec vérification OTP intégrée</span>
+│   │   │   ├── <span class="ft-dir">verify-email/</span>      <span class="ft-comment"># Vérification email (fallback)</span>
+│   │   │   └── <span class="ft-dir">forgot-password/</span>   <span class="ft-comment"># Réinitialisation mot de passe</span>
+│   │   ├── <span class="ft-dir">(dashboard)/</span>           <span class="ft-comment"># Pages protégées (nécessitent connexion)</span>
+│   │   │   ├── <span class="ft-dir">eleve/</span>             <span class="ft-comment"># Tableau de bord élève</span>
+│   │   │   ├── <span class="ft-dir">parent/</span>            <span class="ft-comment"># Tableau de bord parent</span>
+│   │   │   └── <span class="ft-dir">admin/</span>             <span class="ft-comment"># Tableau de bord admin</span>
+│   │   ├── <span class="ft-dir">api/</span>
+│   │   │   ├── <span class="ft-dir">auth/</span>              <span class="ft-comment"># Handler NextAuth</span>
+│   │   │   └── <span class="ft-dir">trpc/</span>              <span class="ft-comment"># Handler tRPC</span>
+│   │   ├── <span class="ft-file">icon.tsx</span>               <span class="ft-comment"># Favicon (mortier de diplômé)</span>
+│   │   └── <span class="ft-file">layout.tsx</span>             <span class="ft-comment"># Layout racine</span>
+│   ├── <span class="ft-dir">components/</span>
+│   │   ├── <span class="ft-dir">ui/</span>                    <span class="ft-comment"># Composants réutilisables (Button, Input, Card...)</span>
+│   │   ├── <span class="ft-dir">layout/</span>                <span class="ft-comment"># Navbars (nav-eleve, nav-parent, nav-admin)</span>
+│   │   ├── <span class="ft-dir">eleve/</span>                 <span class="ft-comment"># Composants spécifiques à l'élève</span>
+│   │   │   ├── <span class="ft-file">birthday-overlay.tsx</span> <span class="ft-comment"># Overlay anniversaire avec confettis</span>
+│   │   │   └── <span class="ft-file">surprise-card.tsx</span>    <span class="ft-comment"># Carte de découverte de surprise (3 étapes)</span>
+│   │   ├── <span class="ft-dir">parent/</span>                <span class="ft-comment"># Composants parent</span>
+│   │   │   └── <span class="ft-file">surprises-section.tsx</span> <span class="ft-comment"># Section surprises dans le dashboard parent</span>
+│   │   └── <span class="ft-dir">admin/</span>                 <span class="ft-comment"># Composants admin</span>
+│   ├── <span class="ft-dir">server/</span>
+│   │   ├── <span class="ft-dir">routers/</span>               <span class="ft-comment"># Toute la logique backend (tRPC)</span>
+│   │   │   ├── <span class="ft-file">auth.ts</span>            <span class="ft-comment"># Inscription, OTP, vérification email</span>
+│   │   │   ├── <span class="ft-file">eleve.ts</span>           <span class="ft-comment"># Profil, paramètres élève</span>
+│   │   │   ├── <span class="ft-file">exercice.ts</span>        <span class="ft-comment"># Génération, soumission, feedback</span>
+│   │   │   ├── <span class="ft-file">cours.ts</span>           <span class="ft-comment"># Cours de remédiation</span>
+│   │   │   ├── <span class="ft-file">parent.ts</span>          <span class="ft-comment"># Dashboard parent, enfants, temps</span>
+│   │   │   ├── <span class="ft-file">surprise.ts</span>        <span class="ft-comment"># Cycle de vie des surprises parentales</span>
+│   │   │   └── <span class="ft-file">admin.ts</span>           <span class="ft-comment"># Gestion utilisateurs, rôles</span>
+│   │   └── <span class="ft-file">context.ts</span>             <span class="ft-comment"># Contexte tRPC (session, prisma)</span>
+│   ├── <span class="ft-dir">lib/</span>
+│   │   ├── <span class="ft-dir">ai/</span>
+│   │   │   ├── <span class="ft-file">client.ts</span>          <span class="ft-comment"># Initialisation client Anthropic</span>
+│   │   │   ├── <span class="ft-file">exercice.ts</span>        <span class="ft-comment"># Génération exercices + feedback IA</span>
+│   │   │   └── <span class="ft-file">cours.ts</span>           <span class="ft-comment"># Génération cours de remédiation IA</span>
+│   │   ├── <span class="ft-dir">surprises/</span>
+│   │   │   ├── <span class="ft-file">detecter-jalon.ts</span>  <span class="ft-comment"># Détection des jalons + création surprise</span>
+│   │   │   └── <span class="ft-file">generer-options.ts</span> <span class="ft-comment"># Génération des 3 options de privilèges</span>
+│   │   ├── <span class="ft-dir">email/</span>
+│   │   │   └── <span class="ft-file">send-surprise-parent.ts</span> <span class="ft-comment"># Email Resend notifiant le parent</span>
+│   │   ├── <span class="ft-dir">trpc/</span>                  <span class="ft-comment"># Configuration tRPC client/serveur</span>
+│   │   ├── <span class="ft-file">auth.ts</span>                <span class="ft-comment"># Configuration NextAuth</span>
+│   │   └── <span class="ft-file">email.ts</span>               <span class="ft-comment"># Envoi d'emails via Resend</span>
+│   └── <span class="ft-dir">generated/prisma/</span>          <span class="ft-comment"># Client Prisma généré (ne pas modifier)</span>
+├── <span class="ft-file">.env</span>                           <span class="ft-comment"># Variables d'environnement (ne pas committer)</span>
+├── <span class="ft-file">next.config.ts</span>
+└── <span class="ft-file">package.json</span>
+      </div>
+    </div>
+
+    <!-- S5 - BASE DE DONNÉES -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <div class="section-title">Base de données (Supabase + Prisma)</div>
+      </div>
+
+      <h3>Créer le projet Supabase</h3>
+      <ol class="steps">
+        <li><div class="step-content">Créer un compte sur <a href="https://supabase.com" target="_blank">supabase.com</a> et créer un nouveau projet.</div></li>
+        <li><div class="step-content">Dans le dashboard Supabase, aller dans <strong>Settings → Database → Connection string</strong>.</div></li>
+        <li>
+          <div class="step-content">
+            Copier l'URL de connexion <strong>Transaction mode (port 6543)</strong> — c'est celle-ci qui doit être utilisée en production pour éviter l'erreur <code>MaxClientsInSessionMode</code> avec PgBouncer.
+            <div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><strong>Attention aux ports</strong><br>Port <strong>5432</strong> = connexion directe (pour le développement local)<br>Port <strong>6543</strong> = PgBouncer transaction mode (pour Vercel en production)<br>Toujours utiliser le port <strong>6543</strong> en production. Ajouter aussi <code>?sslmode=disable</code> si Supabase l'exige.</div></div>
+            <div class="code-block"><div class="code-header"><span class="code-lang">.env</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>DATABASE_URL=<span class="hl-green">"postgresql://postgres.[PROJECT-REF]:[PASSWORD]@aws-1-ca-central-1.pooler.supabase.com:6543/postgres?sslmode=disable"</span></pre></div>
+          </div>
+        </li>
+      </ol>
+
+      <h3>Modifier le schéma</h3>
+      <p>Toutes les tables sont définies dans <code>prisma/schema.prisma</code>. Pour ajouter une table ou modifier une colonne :</p>
+      <ol class="steps">
+        <li><div class="step-content">Modifier <code>prisma/schema.prisma</code></div></li>
+        <li><div class="step-content">Appliquer les changements : <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npx prisma db push    <span class="hl-comment"># applique le schéma à la DB</span>
+npx prisma generate   <span class="hl-comment"># regénère le client TypeScript</span></pre></div></div></li>
+      </ol>
+
+      <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body"><strong>Visualiser la base de données</strong><br>Lancer <code>npx prisma studio</code> pour ouvrir une interface graphique sur <code>http://localhost:5555</code> — très pratique pour voir et modifier les données directement.</div>
+      </div>
+    </div>
+
+    <!-- S6 - AUTH -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <div class="section-title">Authentification</div>
+      </div>
+
+      <p>L'authentification utilise <strong>NextAuth.js</strong> avec un provider <code>Credentials</code> personnalisé. Le fichier de configuration est <code>src/lib/auth.ts</code>.</p>
+
+      <h3>Flux de connexion — Adultes (Parent, Enseignant, Admin)</h3>
+      <ol class="steps">
+        <li><div class="step-content">L'utilisateur entre son <strong>email + mot de passe</strong> sur /login</div></li>
+        <li><div class="step-content">Le backend vérifie les credentials via <code>trpc.auth.initiateLogin</code><br>→ Si email non vérifié : envoie un OTP de <em>vérification</em> et redirige vers /verify-email<br>→ Si email vérifié : envoie un OTP de <em>connexion</em> et affiche les champs OTP</div></li>
+        <li><div class="step-content">L'utilisateur entre le <strong>code à 6 chiffres</strong> reçu par email</div></li>
+        <li><div class="step-content">NextAuth crée la session et redirige vers le bon dashboard selon le rôle</div></li>
+      </ol>
+
+      <h3>Flux de connexion — Élève</h3>
+      <ol class="steps">
+        <li><div class="step-content">L'élève entre son <strong>code d'accès</strong> (ex: <code>Charbel-1234</code>) + <strong>mot de passe</strong></div></li>
+        <li><div class="step-content">Pas d'OTP — connexion directe. Les élèves n'ont pas d'adresse email réelle.</div></li>
+      </ol>
+
+      <h3>OTP — Comment ça marche</h3>
+      <p>Les codes OTP sont stockés dans la table <code>verification_tokens</code> avec une expiration. La génération et la vérification se trouvent dans <code>src/server/routers/auth.ts</code> :</p>
+      <div class="code-block"><div class="code-header"><span class="code-lang">typescript</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre><span class="hl-comment">// Créer un OTP (6 chiffres aléatoires, expire dans 10 minutes)</span>
+<span class="hl">async function</span> <span class="hl-orange">createOtp</span>(email: string) { ... }
+
+<span class="hl-comment">// Vérifier un OTP</span>
+<span class="hl">async function</span> <span class="hl-orange">verifyOtp</span>(email: string, otp: string): <span class="hl">Promise</span>&lt;boolean&gt; { ... }</pre></div>
+
+      <h3>Générer un NEXTAUTH_SECRET</h3>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>openssl rand -base64 32    <span class="hl-comment"># Sur Mac/Linux</span>
+<span class="hl-comment"># Sur Windows : utiliser https://generate-secret.vercel.app/32</span></pre></div>
+    </div>
+
+    <!-- S7 - DÉPLOIEMENT VERCEL -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <div class="section-title">Déploiement sur Vercel</div>
+      </div>
+
+      <h3>Premier déploiement</h3>
+      <ol class="steps">
+        <li>
+          <div class="step-content">
+            <strong>Se connecter à Vercel</strong>
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>vercel login   <span class="hl-comment"># ouvre le navigateur pour se connecter</span></pre></div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Déployer le projet</strong> (depuis la racine du projet)
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>vercel --prod</pre></div>
+            Vercel demande quelques questions (nom du projet, framework détecté automatiquement comme Next.js). Répondre par défaut.
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Ajouter les variables d'environnement sur Vercel</strong><br>
+            Pour chaque variable du <code>.env</code>, l'ajouter via :
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>echo "valeur" | vercel env add NOM_VARIABLE production</pre></div>
+            Ou via le dashboard Vercel : <strong>Project Settings → Environment Variables</strong>.
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Redéployer après avoir ajouté les variables</strong>
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>vercel --prod</pre></div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="callout info">
+        <div class="callout-icon">ℹ️</div>
+        <div class="callout-body"><strong>NEXTAUTH_URL en production</strong><br>Mettre à jour la variable <code>NEXTAUTH_URL</code> avec l'URL de production une fois le domaine configuré :<br><code>NEXTAUTH_URL=https://edureussite.edevtic.com</code></div>
+      </div>
+
+      <h3>Déploiements suivants</h3>
+      <p>À chaque modification du code, redéployer simplement avec :</p>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>vercel --prod</pre></div>
+    </div>
+
+    <!-- S8 - NOM DE DOMAINE -->
+    <div class="section" id="s8">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <div class="section-title">Nom de domaine personnalisé</div>
+      </div>
+
+      <p>Le domaine <strong>edureussite.edevtic.com</strong> est un sous-domaine d'<strong>edevtic.com</strong>, géré chez <strong>o2switch</strong>. La configuration relie o2switch → Vercel.</p>
+
+      <h3>Étape 1 — Ajouter le domaine sur Vercel</h3>
+      <ol class="steps">
+        <li><div class="step-content">Aller sur <a href="https://vercel.com" target="_blank">vercel.com</a> → sélectionner le projet → onglet <strong>Settings → Domains</strong></div></li>
+        <li><div class="step-content">Entrer le sous-domaine : <code>edureussite.edevtic.com</code> → cliquer <strong>Add</strong></div></li>
+        <li><div class="step-content">Vercel affiche une erreur car le DNS n'est pas encore configuré. Il indique la valeur CNAME à utiliser : <code>cname.vercel-dns.com</code></div></li>
+      </ol>
+
+      <h3>Étape 2 — Configurer le DNS sur o2switch</h3>
+      <ol class="steps">
+        <li><div class="step-content">Se connecter au <strong>cPanel o2switch</strong> → section <strong>Domaines → Zone Editor</strong></div></li>
+        <li><div class="step-content">Cliquer sur <strong>Gérer</strong> à côté du domaine <code>edevtic.com</code></div></li>
+        <li>
+          <div class="step-content">
+            Ajouter un nouvel enregistrement DNS :
+            <table>
+              <tr><th>Type</th><th>Nom</th><th>Valeur</th></tr>
+              <tr><td><strong>CNAME</strong></td><td><code>edureussite.edevtic.com.</code> <em>(avec le point final)</em></td><td><code>cname.vercel-dns.com</code></td></tr>
+            </table>
+          </div>
+        </li>
+        <li><div class="step-content">Sauvegarder l'enregistrement. La propagation DNS peut prendre <strong>5 à 30 minutes</strong> (parfois jusqu'à 24h).</div></li>
+        <li><div class="step-content">Retourner sur Vercel → onglet Domains → le statut passe de ❌ à ✅ une fois propagé.</div></li>
+      </ol>
+
+      <div class="callout ok">
+        <div class="callout-icon">✅</div>
+        <div class="callout-body"><strong>Comment vérifier que ça marche ?</strong><br>Ouvrir un terminal et taper : <code>nslookup edureussite.edevtic.com</code><br>Si la réponse mentionne <code>vercel</code>, la propagation est effectuée.</div>
+      </div>
+
+      <h3>Étape 3 — Mettre à jour NEXTAUTH_URL</h3>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>vercel env rm NEXTAUTH_URL production --yes
+echo "https://edureussite.edevtic.com" | vercel env add NEXTAUTH_URL production
+vercel --prod   <span class="hl-comment"># redéployer pour prendre en compte</span></pre></div>
+    </div>
+
+    <!-- S9 - RESEND -->
+    <div class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <div class="section-title">Emails avec Resend</div>
+      </div>
+
+      <p>Les emails OTP (codes de connexion et de vérification) sont envoyés via <strong>Resend</strong>. Sans vérification du domaine, Resend ne peut envoyer qu'à l'adresse de votre propre compte (mode test).</p>
+
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body"><strong>Mode test vs Production</strong><br>En mode test (sans domaine vérifié), tous les emails vont à l'adresse du compte Resend uniquement — les vraies utilisateurs ne reçoivent rien. La vérification du domaine est indispensable.</div>
+      </div>
+
+      <h3>Étape 1 — Créer le compte et la clé API</h3>
+      <ol class="steps">
+        <li><div class="step-content">Créer un compte sur <a href="https://resend.com" target="_blank">resend.com</a></div></li>
+        <li><div class="step-content">Aller dans <strong>API Keys → Create API Key</strong> → copier la clé <code>re_xxxx</code></div></li>
+        <li><div class="step-content">Ajouter dans Vercel : <code>RESEND_API_KEY=re_xxxx</code></div></li>
+      </ol>
+
+      <h3>Étape 2 — Ajouter et vérifier le domaine</h3>
+      <ol class="steps">
+        <li><div class="step-content">Sur Resend → section <strong>Domains → Add Domain</strong> → entrer <code>edevtic.com</code></div></li>
+        <li>
+          <div class="step-content">
+            Resend affiche 3 enregistrements DNS à ajouter sur o2switch. Aller dans cPanel → Zone Editor → Gérer <code>edevtic.com</code> et ajouter :
+            <table>
+              <tr><th>Type</th><th>Nom</th><th>Valeur</th></tr>
+              <tr><td><strong>TXT</strong></td><td><code>resend._domainkey.edevtic.com</code></td><td>Clé DKIM fournie par Resend (commence par <code>p=MIGf...</code>)</td></tr>
+              <tr><td><strong>MX</strong></td><td><code>send.edevtic.com</code></td><td>Valeur feedback SES fournie par Resend · Priorité : 10</td></tr>
+              <tr><td><strong>TXT</strong></td><td><code>send.edevtic.com</code></td><td><code>v=spf1 include:amazonses.com ~all</code></td></tr>
+            </table>
+          </div>
+        </li>
+        <li><div class="step-content">Attendre 5-15 minutes, puis cliquer <strong>Verify DNS Records</strong> sur Resend. Le statut passe à <strong>Vérifié ✅</strong>.</div></li>
+      </ol>
+
+      <h3>Étape 3 — Mettre à jour EMAIL_FROM</h3>
+      <p>Une fois le domaine vérifié, mettre à jour la variable d'envoi :</p>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>vercel env rm EMAIL_FROM production --yes
+echo "noreply@edevtic.com" | vercel env add EMAIL_FROM production
+vercel --prod</pre></div>
+
+      <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body"><strong>Adresse d'expéditeur</strong><br>Utiliser <code>noreply@edevtic.com</code> (domaine racine vérifié), pas <code>noreply@send.edevtic.com</code>. Seul le domaine racine est vérifié sur Resend dans cette configuration.</div>
+      </div>
+    </div>
+
+    <!-- S10 - FONCTIONNALITÉS -->
+    <div class="section" id="s10">
+      <div class="section-header">
+        <div class="section-num">10</div>
+        <div class="section-title">Fonctionnalités clés</div>
+      </div>
+
+      <h3>Génération d'exercices par l'IA</h3>
+      <p>Chaque exercice est généré par Claude (claude-sonnet-4-6) en fonction du profil de l'élève (prénom, niveau scolaire, intérêts, style d'apprentissage). Le code se trouve dans <code>src/lib/ai/exercice.ts</code>.</p>
+      <p>Une validation automatique vérifie que l'exercice contient bien des questions. Si ce n'est pas le cas, la génération est relancée automatiquement avec un prompt correctif (max 2 tentatives).</p>
+
+      <h3>Cours de remédiation automatiques</h3>
+      <p>Après chaque tranche de 3 exercices terminés, un cours personnalisé est généré automatiquement. Fichier : <code>src/lib/ai/cours.ts</code>.</p>
+      <div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><strong>Tâche background sur Vercel</strong><br>La génération de cours utilise <code>waitUntil()</code> de <code>@vercel/functions</code>. Sans ça, la fonction serverless serait tuée dès l'envoi de la réponse, avant que le cours soit sauvegardé. Ne jamais utiliser un simple <code>.then()</code> sans <code>await</code> pour des tâches longues sur Vercel.</div></div>
+
+      <h3>Overlay anniversaire</h3>
+      <p>Si la date de naissance de l'élève correspond à aujourd'hui, un overlay plein écran avec des confettis et une animation Framer Motion s'affiche au chargement du dashboard. Fichier : <code>src/components/eleve/birthday-overlay.tsx</code>.</p>
+
+      <h3>Gestion des rôles (Admin / Super Admin)</h3>
+      <p>Un <strong>SUPER_ADMIN</strong> peut promouvoir un PARENT ou ENSEIGNANT en ADMIN, ou rétrograder un ADMIN. Un ADMIN ne peut pas modifier d'autres admins ni le Super Admin. Logique dans <code>src/server/routers/admin.ts</code> et bouton dans <code>src/components/admin/changer-role-btn.tsx</code>.</p>
+
+      <h3>Show/Hide mot de passe</h3>
+      <p>Le composant <code>src/components/ui/input.tsx</code> détecte automatiquement <code>type="password"</code> et ajoute une icône œil pour afficher/masquer le mot de passe. Aucune modification nécessaire pour les champs qui utilisent ce composant.</p>
+
+      <h3>Responsive mobile</h3>
+      <p>Toutes les navbars ont un menu hamburger sur mobile (< 768px) qui se ferme au clic extérieur ou au changement de route. Les grilles passent d'une à deux colonnes selon la taille d'écran avec les classes Tailwind <code>sm:</code> et <code>lg:</code>.</p>
+
+      <h3>Session avec Sofia — Enseignant IA</h3>
+      <p>Chaque cours de remédiation dispose d'un deuxième mode : <strong>Session avec Sofia</strong>, une enseignante IA vocale interactive. L'interface se compose d'une colonne avatar (photo, contrôles audio, timer) et d'une zone de conversation.</p>
+      <ul style="margin:10px 0 10px 20px;font-size:14px;line-height:1.8;color:var(--text)">
+        <li><strong>TTS (Text-to-Speech)</strong> : ElevenLabs <code>eleven_multilingual_v2</code> via <code>/api/avatar/speak</code>. La clé <code>ELEVENLABS_API_KEY</code> reste strictement côté serveur.</li>
+        <li><strong>IA Chat</strong> : Claude <code>claude-sonnet-4-6</code> via <code>/api/avatar/chat</code>. Prompt système 4 personas (enseignante + psychoneurologue + orthopédagogue + coach).</li>
+        <li><strong>Microphone</strong> : Web Speech API (<code>SpeechRecognition</code> / <code>webkitSpeechRecognition</code>). Transcription temps réel dans le champ de saisie (<code>continuous: true</code>, <code>interimResults: true</code>). Aucun audio stocké (conformité Loi 25).</li>
+        <li><strong>Timer de session</strong> : Quota quotidien 60 min stocké en <code>localStorage</code> (clé <code>sessionIA_YYYY-MM-DD</code>). Composant : <code>src/components/cours/enseignant-ia-timer.tsx</code>.</li>
+        <li><strong>Résumé parent</strong> : En fin de session, <code>generateSummary: true</code> est envoyé à <code>/api/avatar/chat</code> qui crée une notification de type <code>RAPPORT_POSITIF</code> en base via Prisma.</li>
+        <li><strong>Déverrouillage audio iOS</strong> : Un son silencieux est joué sur le premier clic micro via <code>unlockAudio()</code> dans <code>src/hooks/useAvatarVoice.ts</code> pour contourner la politique autoplay d'iOS.</li>
+      </ul>
+      <p>Fichiers principaux : <code>src/components/cours/enseignant-ia.tsx</code>, <code>src/hooks/useAvatarVoice.ts</code>, <code>src/lib/avatarVoices.ts</code>, <code>src/app/api/avatar/speak/route.ts</code>, <code>src/app/api/avatar/chat/route.ts</code>.</p>
+
+      <h3>Déconnexion automatique par inactivité</h3>
+      <p>Le composant <code>src/components/providers/idle-timeout.tsx</code> détecte l'inactivité de l'utilisateur connecté. Après <strong>13 minutes sans interaction</strong> (souris, clavier, clic, scroll, touch), un modal s'affiche avec un compte à rebours de 2 minutes. Si l'utilisateur ne réagit pas, <code>signOut()</code> de NextAuth est appelé et l'utilisateur est redirigé vers <code>/login</code>. Tout mouvement réinitialise le timer. Le composant est monté dans <code>src/app/layout.tsx</code> et ne s'active que si une session est présente.</p>
+      <p>Configuration : <code>IDLE_MS = 15 * 60 * 1000</code> (15 min total) · <code>WARN_MS = 2 * 60 * 1000</code> (avertissement à 2 min de la fin). La session JWT a une durée max absolue de 8h (<code>maxAge: 8 * 60 * 60</code> dans <code>src/lib/auth/config.ts</code>).</p>
+
+      <h3>Lier un enfant existant (code d'accès)</h3>
+      <p>Le formulaire "Lier un enfant existant" dans le tableau de bord parent demande le <strong>code d'accès</strong> de l'enfant, et non son courriel. Fichier : <code>src/components/parent/ajouter-enfant-modal.tsx</code>. Les élèves n'ont pas de courriel — leur identifiant est le code d'accès généré à la création du compte.</p>
+
+      <h3>Journaux de sécurité (Security Logging)</h3>
+      <p>Le système enregistre automatiquement les événements sensibles dans un modèle <code>SecurityLog</code> en base de données. L'utilitaire <code>logSecurityEvent()</code> est fire-and-forget : il ne bloque jamais les opérations principales (enveloppé dans un try/catch silencieux).</p>
+      <h4>Modèle Prisma</h4>
+      <div class="code-block"><div class="code-header"><span class="code-lang">prisma</span></div><pre><span class="hl-comment">// prisma/schema.prisma</span>
+<span class="hl">enum</span> SecuritySeverity { INFO  WARNING  CRITICAL }
+
+<span class="hl">model</span> SecurityLog {
+  id         String           <span class="hl-orange">@id @default(cuid())</span>
+  createdAt  DateTime         <span class="hl-orange">@default(now())</span>
+  action     String
+  severity   SecuritySeverity
+  userId     String?          <span class="hl-comment">// FK nullable (null si non authentifié)</span>
+  userEmail  String?
+  userRole   String?
+  cibleId    String?
+  cibleEmail String?
+  ip         String?
+  details    Json
+}</pre></div>
+      <h4>16 types d'événements surveillés</h4>
+      <table>
+        <tr><th>Action</th><th>Sévérité</th><th>Déclencheur</th></tr>
+        <tr><td><code>CONNEXION_REUSSIE</code></td><td><span class="badge" style="background:#EEFAF3;color:#2D9E6A">INFO</span></td><td>Authentification adulte réussie (config.ts)</td></tr>
+        <tr><td><code>COMPTE_INSCRIT</code></td><td><span class="badge" style="background:#EEFAF3;color:#2D9E6A">INFO</span></td><td>Création d'un nouveau compte (auth.ts)</td></tr>
+        <tr><td><code>CONNEXION_ECHOUEE</code></td><td><span class="badge" style="background:#FFFBEB;color:#D97706">WARNING</span></td><td>Mot de passe incorrect ou compte introuvable</td></tr>
+        <tr><td><code>CONNEXION_ELEVE_ECHOUEE</code></td><td><span class="badge" style="background:#FFFBEB;color:#D97706">WARNING</span></td><td>Code d'accès ou mot de passe élève invalide</td></tr>
+        <tr><td><code>OTP_INVALIDE</code></td><td><span class="badge" style="background:#FFFBEB;color:#D97706">WARNING</span></td><td>Code OTP incorrect ou expiré</td></tr>
+        <tr><td><code>SPAM_OTP</code></td><td><span class="badge" style="background:#FFFBEB;color:#D97706">WARNING</span></td><td>Limite de renvoi OTP atteinte</td></tr>
+        <tr><td><code>DEMANDE_RESET_MDP</code></td><td><span class="badge" style="background:#FFFBEB;color:#D97706">WARNING</span></td><td>Demande de réinitialisation de mot de passe</td></tr>
+        <tr><td><code>RESET_MDP_CONFIRME</code></td><td><span class="badge" style="background:#EEFAF3;color:#2D9E6A">INFO</span></td><td>Nouveau mot de passe confirmé via OTP</td></tr>
+        <tr><td><code>ACCES_REFUSE</code></td><td><span class="badge" style="background:#FEF2F2;color:#D94343">CRITICAL</span></td><td>Accès à une zone admin/super-admin sans droit</td></tr>
+        <tr><td><code>ROLE_MODIFIE</code></td><td><span class="badge" style="background:#FEF2F2;color:#D94343">CRITICAL</span></td><td>Changement de rôle d'un utilisateur</td></tr>
+        <tr><td><code>UTILISATEUR_SUPPRIME</code></td><td><span class="badge" style="background:#FEF2F2;color:#D94343">CRITICAL</span></td><td>Suppression d'un compte utilisateur</td></tr>
+        <tr><td><code>SUPER_ADMIN_CREE</code></td><td><span class="badge" style="background:#FEF2F2;color:#D94343">CRITICAL</span></td><td>Création d'un compte Super Admin</td></tr>
+        <tr><td><code>FEATURE_FLAG_MODIFIE</code></td><td><span class="badge" style="background:#FEF2F2;color:#D94343">CRITICAL</span></td><td>Activation/désactivation d'un feature flag</td></tr>
+        <tr><td><code>MOT_DE_PASSE_REINITIALISE</code></td><td><span class="badge" style="background:#FEF2F2;color:#D94343">CRITICAL</span></td><td>Admin réinitialise le MDP d'un autre utilisateur</td></tr>
+        <tr><td><code>DOCUMENT_IA_SUPPRIME</code></td><td><span class="badge" style="background:#FEF2F2;color:#D94343">CRITICAL</span></td><td>Suppression d'un document pédagogique IA</td></tr>
+        <tr><td><code>EPREUVE_SUPPRIMEE</code></td><td><span class="badge" style="background:#FEF2F2;color:#D94343">CRITICAL</span></td><td>Suppression d'une épreuve par un admin</td></tr>
+      </table>
+      <h4>Utilisation</h4>
+      <div class="code-block"><div class="code-header"><span class="code-lang">typescript</span></div><pre><span class="hl-comment">// src/lib/security/log.ts</span>
+<span class="hl">import</span> { logSecurityEvent } <span class="hl">from</span> <span class="hl-green">"@/lib/security/log"</span>;
+
+<span class="hl-comment">// Fire-and-forget (ne bloque jamais)</span>
+logSecurityEvent(prisma, {
+  action: <span class="hl-green">"ROLE_MODIFIE"</span>,
+  userId: ctx.session.user.id,
+  userEmail: ctx.session.user.email,
+  userRole: ctx.session.user.role,
+  cibleId: input.userId,
+  cibleEmail: cible.email,
+  details: { ancienRole: cible.role, nouveauRole: input.role },
+}).<span class="hl">catch</span>(() => {});</pre></div>
+      <p>Les 25 derniers événements sont consultables dans le tableau de bord Super Admin via <code>api.admin.getSecurityLogs({ limit: 25 })</code>. Cette section est invisible pour les Admins ordinaires.</p>
+
+      <h3>Tagging des documents IA par matière et niveau</h3>
+      <p>Les <code>DocumentPedagogique</code> peuvent être associés à des matières (<code>Matiere[]</code>) et des niveaux scolaires (<code>NiveauScolaire[]</code>). Ces tags sont utilisés par <code>getContexteDocuments()</code> pour filtrer intelligemment les documents injectés dans les prompts IA.</p>
+      <div class="callout info"><div class="callout-icon">📌</div><div class="callout-body"><strong>Règle de filtrage</strong><br>Un document avec des tableaux vides (<code>matieres: []</code>, <code>niveaux: []</code>) est considéré comme <em>général</em> et est toujours inclus. Un document avec des valeurs non vides n'est inclus que si elles correspondent au profil de l'élève. Implémenté avec <code>OR: [{ matieres: &#123; isEmpty: true &#125; }, { matieres: &#123; has: matiere &#125; }]</code> dans Prisma.</div></div>
+      <p>Interface d'administration : <code>src/components/admin/gerer-documents-client.tsx</code>. Les boutons toggle permettent d'activer/désactiver chaque matière et chaque niveau (groupés en Primaire 1–6 et Secondaire 1–5). Fichier de filtrage : <code>src/lib/ai/contexte-documents.ts</code>.</p>
+
+      <h3>Choix du niveau de difficulté par l'élève</h3>
+      <p>Avant de générer un exercice ou une épreuve, l'élève peut choisir parmi trois niveaux de difficulté. Ce choix remplace le calcul automatique basé sur le niveau actuel et l'état émotionnel.</p>
+      <table>
+        <tr><th>Valeur (NiveauDifficulte)</th><th>Label</th><th>Comportement IA</th></tr>
+        <tr><td><code>BASE</code></td><td>😊 Facile</td><td>Exercice accessible, vocabulaire simplifié, moins d'étapes</td></tr>
+        <tr><td><code>ATTENDU</code></td><td>🎯 Intermédiaire</td><td>Niveau standard du curriculum (valeur par défaut)</td></tr>
+        <tr><td><code>AVANCE</code></td><td>🚀 Difficile</td><td>Exercice enrichi, problèmes composés, raisonnement plus profond</td></tr>
+      </table>
+      <p>L'étape "Difficulté" s'insère dans le wizard élève entre "Notions" et "Durée" (pour les épreuves) ou directement avant la génération (pour les exercices simples). Fichier UI : <code>src/app/(dashboard)/eleve/exercices/nouveau/page.tsx</code>. Côté IA : <code>difficulteChoisie</code> est passé à <code>generateExercice()</code> et <code>genererEpreuve()</code> dans <code>src/lib/ai/exercice.ts</code>, où il remplace <code>getDifficulteAdaptee()</code> si fourni.</p>
+
+      <h3>Écrans de chargement animés (génération et correction)</h3>
+      <p>Les attentes IA (génération d'exercice, génération d'épreuve, correction d'épreuve) affichent un écran de chargement animé adapté pour les enfants, au lieu d'un simple spinner.</p>
+      <h4>Architecture commune</h4>
+      <ul style="margin:8px 0 12px 20px;font-size:14px;line-height:1.8">
+        <li><strong>Barre de progression circulaire SVG</strong> — cercle avec <code>stroke-dashoffset</code> animé via CSS <code>transition</code>. Progresse de 0 à 100 % sur la durée estimée.</li>
+        <li><strong>Messages rotatifs</strong> — tableau de messages enfant-friendly, rotation toutes les 3,5 s via <code>setInterval</code>. Chaque changement déclenche un <code>fadeIn</code> CSS via <code>key={msgIndex}</code>.</li>
+        <li><strong>Notification sonore</strong> — accord ascendant C5→E5→G5→C6 généré par Web Audio API (<code>AudioContext</code> + <code>OscillatorNode</code> + <code>GainNode</code>). Silencieux si AudioContext indisponible (SSR, restrictions navigateur).</li>
+      </ul>
+      <h4>Variantes</h4>
+      <table>
+        <tr><th>Composant</th><th>Fichier</th><th>Couleur</th><th>Durée max</th><th>Estimation affichée</th></tr>
+        <tr><td><code>GenerationEnCours</code> (exercice)</td><td><code>eleve/exercices/nouveau/page.tsx</code></td><td><code>--color-accent</code> (orange)</td><td>60 s</td><td>"moins d'une minute"</td></tr>
+        <tr><td><code>GenerationEnCours</code> (épreuve)</td><td><code>eleve/exercices/nouveau/page.tsx</code></td><td><code>--color-purple</code></td><td>120 s</td><td>"1 à 2 minutes"</td></tr>
+        <tr><td><code>CorrectionEnCours</code></td><td><code>exercises/epreuve-interactive.tsx</code></td><td>indigo <code>#6366f1</code></td><td>360 s</td><td>"2 à 6 minutes"</td></tr>
+      </table>
+      <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-body"><strong>Patience prolongée</strong><br>Si la correction dépasse 120 secondes, un message d'encouragement supplémentaire s'affiche ("C'est une correction approfondie — ça vaut la peine d'attendre !") pour rassurer l'enfant.</div></div>
+
+      <h3>Système de surprises parentales</h3>
+      <p>Les parents peuvent accorder des récompenses réelles (privilèges) à leurs enfants, déclenchées automatiquement par des jalons comportementaux. Maximum 7 par an, complètement invisible pour l'enfant jusqu'au moment de la révélation.</p>
+      <h4>Cycle de vie</h4>
+      <div class="code-block"><div class="code-header"><span class="code-lang">prisma</span></div><pre><span class="hl-comment">// StatutSurprise enum</span>
+EN_ATTENTE  <span class="hl-comment">→ jalon détecté, parent notifié, en attente de son choix</span>
+ACCORDE     <span class="hl-comment">→ parent a choisi un privilège, enfant notifié</span>
+CONFIRME    <span class="hl-comment">→ enfant a découvert, écrit un souvenir, surprise archivée</span>
+EXPIRE      <span class="hl-comment">→ parent n'a pas agi dans les 14 jours (auto via updateMany)</span></pre></div>
+      <h4>Détection des jalons</h4>
+      <p>Appelé dans un bloc <code>waitUntil()</code> après chaque soumission d'exercice. Fichier : <code>src/lib/surprises/detecter-jalon.ts</code>.</p>
+      <table>
+        <tr><th>Jalon</th><th>Condition</th></tr>
+        <tr><td>Streak multiple de 7</td><td><code>streakJours % 7 === 0 &amp;&amp; streakJours &gt; 0</code></td></tr>
+        <tr><td>Score parfait après 2+ tentatives</td><td><code>score === 100 &amp;&amp; nbTentatives &gt;= 2</code></td></tr>
+        <tr><td>Progression +20 pts</td><td>Score actuel ≥ dernier score + 20</td></tr>
+        <tr><td>Streak 21 jours</td><td><code>streakJours === 21</code></td></tr>
+      </table>
+      <p>Quotas vérifiés avant création : max 7 surprises dans l'année civile + délai minimum 30 jours depuis la dernière surprise confirmée.</p>
+      <h4>Génération des options</h4>
+      <p>Fichier : <code>src/lib/surprises/generer-options.ts</code>. Basé sur des templates (pas d'appel IA) : dictionnaire d'options indexé par centre d'intérêt (<code>SOCCER</code>, <code>HOCKEY</code>, <code>JEUX_VIDEO</code>, <code>MANGA</code>, etc.). Retourne exactement 3 options personnalisées. Fallback sur 8 options génériques si les intérêts de l'enfant ne matchent pas le dictionnaire.</p>
+      <h4>Email parent</h4>
+      <p>Fichier : <code>src/lib/email/send-surprise-parent.ts</code>. Envoyé via Resend quand une surprise passe en <code>EN_ATTENTE</code>. Sujet : <em>"🌟 [prénom] mérite une surprise !"</em>. En mode DEV (<code>RESEND_API_KEY</code> absente) : <code>console.log</code> sans erreur.</p>
+      <h4>Endpoints tRPC</h4>
+      <table>
+        <tr><th>Procédure</th><th>Rôle</th><th>Qui peut l'appeler</th></tr>
+        <tr><td><code>surprise.listerParent</code></td><td>Lit les surprises EN_ATTENTE/ACCORDE + expire les anciennes</td><td>Parent</td></tr>
+        <tr><td><code>surprise.accorder</code></td><td>Parent choisit un privilège → statut ACCORDE + notif enfant</td><td>Parent</td></tr>
+        <tr><td><code>surprise.surpriseEnAttente</code></td><td>Retourne la surprise ACCORDE en attente de confirmation</td><td>Élève</td></tr>
+        <tr><td><code>surprise.confirmerReception</code></td><td>Enfant confirme + sauvegarde son message souvenir</td><td>Élève</td></tr>
+        <tr><td><code>surprise.getCahier</code></td><td>Liste toutes les surprises CONFIRME (Cahier de réussites)</td><td>Parent ou Élève</td></tr>
+      </table>
+      <div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><strong>Invisible jusqu'à l'accord</strong><br>L'enfant ne voit JAMAIS qu'un jalon a été atteint. La carte surprise n'apparaît sur son dashboard que lorsque le parent a explicitement accordé la surprise (statut ACCORDE). Si le parent ignore la notification, l'enfant ne sait jamais qu'une surprise était possible.</div></div>
+    </div>
+
+    <!-- S11 - ENV VARIABLES -->
+    <div class="section" id="s11">
+      <div class="section-header">
+        <div class="section-num">11</div>
+        <div class="section-title">Variables d'environnement</div>
+      </div>
+
+      <table>
+        <tr><th>Variable</th><th>Description</th><th>Obligatoire ?</th></tr>
+        <tr>
+          <td><code>DATABASE_URL</code></td>
+          <td>URL de connexion PostgreSQL Supabase. En production : port 6543 + <code>sslmode=disable</code></td>
+          <td><span class="badge required">Oui</span></td>
+        </tr>
+        <tr>
+          <td><code>NEXTAUTH_SECRET</code></td>
+          <td>Clé secrète pour chiffrer les sessions NextAuth. Générer avec <code>openssl rand -base64 32</code></td>
+          <td><span class="badge required">Oui</span></td>
+        </tr>
+        <tr>
+          <td><code>NEXTAUTH_URL</code></td>
+          <td>URL de base de l'application. <code>http://localhost:3000</code> en local, <code>https://edureussite.edevtic.com</code> en prod</td>
+          <td><span class="badge required">Oui</span></td>
+        </tr>
+        <tr>
+          <td><code>ANTHROPIC_API_KEY</code></td>
+          <td>Clé API Claude (Anthropic). Obtenir sur <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></td>
+          <td><span class="badge required">Oui</span></td>
+        </tr>
+        <tr>
+          <td><code>RESEND_API_KEY</code></td>
+          <td>Clé API Resend pour l'envoi d'emails OTP. Obtenir sur <a href="https://resend.com" target="_blank">resend.com</a></td>
+          <td><span class="badge required">Oui</span></td>
+        </tr>
+        <tr>
+          <td><code>EMAIL_FROM</code></td>
+          <td>Adresse expéditeur des emails. Doit appartenir au domaine vérifié sur Resend. Ex: <code>noreply@edevtic.com</code></td>
+          <td><span class="badge required">Oui</span></td>
+        </tr>
+        <tr>
+          <td><code>ELEVENLABS_API_KEY</code></td>
+          <td>Clé API ElevenLabs pour la synthèse vocale (TTS) de Sofia. Obtenir sur <a href="https://elevenlabs.io" target="_blank">elevenlabs.io</a> → Developers → API Keys. Utilisée dans <code>/api/avatar/speak</code> uniquement côté serveur.</td>
+          <td><span class="badge required">Oui</span></td>
+        </tr>
+      </table>
+
+      <h3>Modifier une variable en production</h3>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre><span class="hl-comment"># Supprimer l'ancienne valeur</span>
+vercel env rm NOM_VARIABLE production --yes
+
+<span class="hl-comment"># Ajouter la nouvelle valeur</span>
+echo "nouvelle_valeur" | vercel env add NOM_VARIABLE production
+
+<span class="hl-comment"># Redéployer pour appliquer</span>
+vercel --prod</pre></div>
+    </div>
+
+    <!-- S12 - COMMANDES -->
+    <div class="section" id="s12">
+      <div class="section-header">
+        <div class="section-num">12</div>
+        <div class="section-title">Commandes utiles</div>
+      </div>
+
+      <h3>Développement</h3>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npm run dev          <span class="hl-comment"># Lancer le serveur local (http://localhost:3000)</span>
+npm run build        <span class="hl-comment"># Builder l'application (vérifier les erreurs TypeScript)</span>
+npm run lint         <span class="hl-comment"># Vérifier le style du code</span></pre></div>
+
+      <h3>Base de données</h3>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npx prisma generate  <span class="hl-comment"># Regénérer le client TypeScript après modif du schéma</span>
+npx prisma db push   <span class="hl-comment"># Appliquer le schéma à la base de données</span>
+npx prisma studio    <span class="hl-comment"># Interface graphique pour explorer la DB</span></pre></div>
+
+      <h3>Déploiement</h3>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>vercel --prod        <span class="hl-comment"># Déployer en production</span>
+vercel env ls        <span class="hl-comment"># Lister les variables d'environnement</span>
+vercel logs          <span class="hl-comment"># Voir les logs de production</span></pre></div>
+
+      <div class="divider"></div>
+
+      <div class="callout ok">
+        <div class="callout-icon">📎</div>
+        <div class="callout-body">
+          <strong>Liens utiles</strong><br>
+          <a href="https://edureussite.edevtic.com" target="_blank">Application en production</a> ·
+          <a href="/guide-testeurs.html" target="_blank">Guide de tests</a> ·
+          <a href="https://supabase.com/dashboard" target="_blank">Dashboard Supabase</a> ·
+          <a href="https://vercel.com/dashboard" target="_blank">Dashboard Vercel</a> ·
+          <a href="https://resend.com/domains" target="_blank">Domaines Resend</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- S13 - REPRISE DU PROJET -->
+    <div class="section" id="s13">
+      <div class="section-header">
+        <div class="section-num">13</div>
+        <div class="section-title">Reprise du projet</div>
+      </div>
+      <p class="section-desc">Tout ce qu'un nouveau développeur doit faire pour reprendre le projet depuis zéro, récupérer les fichiers, configurer l'environnement et être opérationnel.</p>
+
+      <div class="callout warn">
+        <div class="callout-icon">🔑</div>
+        <div class="callout-body"><strong>Avant de commencer</strong>Demandez à l'équipe actuelle les accès aux comptes suivants : Vercel (projet <code>edureussite-qc</code>), Supabase (organisation edevtic), Resend (domaine edevtic.com), Anthropic (clé API Claude), o2switch (panneau cPanel pour le DNS).</div>
+      </div>
+
+      <h3>Étape 1 — Récupérer le code source</h3>
+      <p>Le projet est lié à Vercel. La façon la plus simple de récupérer tout le code est :</p>
+
+      <ol class="steps">
+        <li>
+          <div class="step-content">
+            <strong>Option A — Via Vercel CLI (recommandée)</strong>
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre><span class="hl-comment"># Installer Vercel CLI</span>
+npm install -g vercel
+
+<span class="hl-comment"># Se connecter avec votre compte (invité en tant que membre du projet)</span>
+vercel login
+
+<span class="hl-comment"># Lier et télécharger le projet</span>
+vercel pull edureussite-qc</pre></div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Option B — Via GitHub (si le repo est connecté à Vercel)</strong>
+            <p>Accédez au tableau de bord Vercel → projet <code>edureussite-qc</code> → onglet <em>Settings &gt; Git</em> pour trouver le dépôt GitHub lié. Clonez-le normalement :</p>
+            <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>git clone https://github.com/ORGANISATION/edureussite-qc.git
+cd edureussite-qc</pre></div>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Option C — Transfert direct de fichiers</strong>
+            <p>Si vous récupérez le projet via une archive ZIP ou un transfert direct, assurez-vous d'avoir <strong>tous</strong> les dossiers suivants :</p>
+            <div class="file-tree">
+<span class="ft-dir">edureussite-qc/</span>
+├── <span class="ft-dir">src/</span>              <span class="ft-comment"># Code source principal (NE PAS oublier)</span>
+├── <span class="ft-dir">public/</span>           <span class="ft-comment"># Fichiers statiques (images, HTML docs)</span>
+├── <span class="ft-dir">prisma/</span>           <span class="ft-comment"># Schéma de la base de données</span>
+├── <span class="ft-file">package.json</span>      <span class="ft-comment"># Dépendances</span>
+├── <span class="ft-file">package-lock.json</span> <span class="ft-comment"># Versions verrouillées (important)</span>
+├── <span class="ft-file">next.config.ts</span>    <span class="ft-comment"># Config Next.js</span>
+├── <span class="ft-file">tsconfig.json</span>     <span class="ft-comment"># Config TypeScript</span>
+└── <span class="ft-file">.env</span>              <span class="ft-comment"># Variables locales (NE PAS inclure dans git)</span></div>
+            <div class="callout warn">
+              <div class="callout-icon">⚠️</div>
+              <div class="callout-body"><strong>Le fichier <code>.env</code> ne sera jamais dans le zip</strong> — il contient des secrets. Il faut le recréer manuellement (voir Étape 3).</div>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <h3>Étape 2 — Installer les dépendances</h3>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npm install
+
+<span class="hl-comment"># Générer le client Prisma (obligatoire après install)</span>
+npx prisma generate</pre></div>
+
+      <h3>Étape 3 — Créer le fichier <code>.env</code></h3>
+      <p>Créez un fichier <code>.env</code> à la racine du projet et renseignez toutes les variables. Référez-vous à la section <strong>11 — Variables d'environnement</strong> pour la liste complète.</p>
+      <div class="code-block"><div class="code-header"><span class="code-lang">.env</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre><span class="hl-comment"># Base de données Supabase (port 5432 pour local, 6543 pour Vercel)</span>
+DATABASE_URL="postgresql://postgres:[MOT_DE_PASSE]@[HOST]:5432/postgres"
+DIRECT_URL="postgresql://postgres:[MOT_DE_PASSE]@[HOST]:5432/postgres"
+
+<span class="hl-comment"># NextAuth</span>
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="[générer avec: openssl rand -base64 32]"
+
+<span class="hl-comment"># Anthropic (Claude)</span>
+ANTHROPIC_API_KEY="sk-ant-..."
+
+<span class="hl-comment"># Resend (emails)</span>
+RESEND_API_KEY="re_..."
+EMAIL_FROM="noreply@edevtic.com"</pre></div>
+
+      <div class="callout info">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body"><strong>Où trouver les valeurs ?</strong>
+        <ul style="margin-top:6px">
+          <li><code>DATABASE_URL</code> → Supabase → projet → Settings → Database → Connection string (mode <em>Transaction</em> pour Vercel, <em>Direct</em> pour local)</li>
+          <li><code>NEXTAUTH_SECRET</code> → Générez avec <code>openssl rand -base64 32</code> dans le terminal</li>
+          <li><code>ANTHROPIC_API_KEY</code> → <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys</li>
+          <li><code>RESEND_API_KEY</code> → <a href="https://resend.com/api-keys" target="_blank">resend.com/api-keys</a></li>
+        </ul>
+        </div>
+      </div>
+
+      <h3>Étape 4 — Récupérer les variables Vercel (si déjà déployé)</h3>
+      <p>Si le projet est déjà déployé sur Vercel, vous pouvez télécharger les variables de production directement :</p>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre><span class="hl-comment"># Se connecter au projet Vercel (dans le dossier du projet)</span>
+vercel link
+
+<span class="hl-comment"># Télécharger les variables d'environnement de production vers .env.local</span>
+vercel env pull .env.local
+
+<span class="hl-comment"># Renommer pour utilisation locale</span>
+mv .env.local .env</pre></div>
+      <div class="callout ok">
+        <div class="callout-icon">✅</div>
+        <div class="callout-body"><strong>Cette commande récupère automatiquement toutes les variables</strong> — c'est la méthode la plus fiable pour ne rien oublier. Vous devrez quand même ajuster <code>NEXTAUTH_URL</code> à <code>http://localhost:3000</code> pour le développement local.</div>
+      </div>
+
+      <h3>Étape 5 — Lancer en local</h3>
+      <div class="code-block"><div class="code-header"><span class="code-lang">terminal</span><button class="code-copy" onclick="copyCode(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button></div><pre>npm run dev</pre></div>
+      <p>L'application est accessible sur <a href="http://localhost:3000" target="_blank">http://localhost:3000</a>. Elle se connecte à la base de données Supabase de production (même données que le site live).</p>
+
+      <div class="divider"></div>
+
+      <h3>Fichiers clés développés dans ce projet</h3>
+      <p>Voici les fichiers qui ont été créés ou significativement modifiés — à connaître en priorité avant de toucher au code :</p>
+
+      <table>
+        <tr><th>Fichier</th><th>Rôle</th><th>Points d'attention</th></tr>
+        <tr>
+          <td><code>src/server/routers/exercice.ts</code></td>
+          <td>Génération d'exercices IA + cours de remédiation</td>
+          <td>Utilise <code>waitUntil()</code> de <code>@vercel/functions</code> pour les tâches background sur Vercel. Sans ça, les cours ne se génèrent pas.</td>
+        </tr>
+        <tr>
+          <td><code>src/server/routers/auth.ts</code></td>
+          <td>Inscription, OTP, vérification email, réinitialisation MDP</td>
+          <td>OTP requis pour PARENT/ENSEIGNANT/ADMIN. Les élèves se connectent avec code d'accès uniquement.</td>
+        </tr>
+        <tr>
+          <td><code>src/app/(auth)/register/page.tsx</code></td>
+          <td>Page d'inscription avec vérification OTP inline</td>
+          <td>L'OTP s'affiche sur la même page après inscription (pas de redirection séparée). Auto-connexion après vérification.</td>
+        </tr>
+        <tr>
+          <td><code>src/app/(auth)/login/page.tsx</code></td>
+          <td>Connexion (adultes + élèves)</td>
+          <td>Deux flux distincts : email+MDP+OTP pour les adultes, codeAcces+MDP pour les élèves.</td>
+        </tr>
+        <tr>
+          <td><code>src/lib/auth.ts</code></td>
+          <td>Configuration NextAuth (providers, callbacks)</td>
+          <td>Le champ <code>emailVerified</code> doit être non-null pour que la connexion OTP fonctionne. Vérifier si un utilisateur est bloqué.</td>
+        </tr>
+        <tr>
+          <td><code>prisma/schema.prisma</code></td>
+          <td>Schéma complet de la base de données</td>
+          <td>Après toute modification : <code>npx prisma generate</code> + <code>npx prisma db push</code>. Le client est généré dans <code>src/generated/prisma/</code>.</td>
+        </tr>
+        <tr>
+          <td><code>src/lib/email.ts</code></td>
+          <td>Envoi d'emails via Resend</td>
+          <td>L'expéditeur doit être sur un domaine vérifié dans Resend. Utiliser <code>noreply@edevtic.com</code> (pas un sous-domaine).</td>
+        </tr>
+        <tr>
+          <td><code>src/server/routers/surprise.ts</code></td>
+          <td>Router tRPC pour les surprises parentales</td>
+          <td>5 procédures : listerParent, accorder, surpriseEnAttente, confirmerReception, getCahier. L'expiration auto des surprises > 14j se fait dans <code>listerParent</code> via <code>updateMany</code>.</td>
+        </tr>
+        <tr>
+          <td><code>src/lib/surprises/detecter-jalon.ts</code></td>
+          <td>Détection des jalons comportementaux après chaque exercice</td>
+          <td>Appelé dans <code>waitUntil()</code> de <code>exercice.ts</code>. Vérifie quota (7/an) + cooldown (30j) avant de créer une surprise. Fire-and-forget.</td>
+        </tr>
+        <tr>
+          <td><code>src/lib/surprises/generer-options.ts</code></td>
+          <td>Génère 3 options de privilèges personnalisées</td>
+          <td>Basé sur un dictionnaire de templates (pas d'IA). Clés : centres d'intérêt de l'élève. Toujours retourne exactement 3 options.</td>
+        </tr>
+        <tr>
+          <td><code>src/components/eleve/surprise-card.tsx</code></td>
+          <td>Carte de découverte de la surprise (3 étapes animées)</td>
+          <td>Montée en haut du dashboard élève uniquement si statut ACCORDE. Étapes : decouverte → confirmation (textarea souvenir) → souvenir.</td>
+        </tr>
+        <tr>
+          <td><code>src/components/parent/surprises-section.tsx</code></td>
+          <td>Section surprises dans le dashboard parent</td>
+          <td>Affiche les surprises EN_ATTENTE avec 3 options radio + champ libre. Bouton "Accorder" déclenche la mutation tRPC.</td>
+        </tr>
+        <tr>
+          <td><code>public/guide-testeurs.html</code></td>
+          <td>Guide de test interactif pour l'équipe QA</td>
+          <td>Accessible sur <a href="https://edureussite.edevtic.com/guide-testeurs.html" target="_blank">edureussite.edevtic.com/guide-testeurs.html</a> — aucun impact sur l'app.</td>
+        </tr>
+        <tr>
+          <td><code>public/documentation.html</code></td>
+          <td>Ce document</td>
+          <td>Fichier statique, aucun impact sur l'application Next.js.</td>
+        </tr>
+      </table>
+
+      <div class="divider"></div>
+
+      <h3>Points de vigilance importants</h3>
+
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <strong>Tâche en suspens — Suivi du temps (<code>sessions_pratique</code>)</strong>
+          La table <code>sessions_pratique</code> existe dans le schéma Prisma mais aucun code ne crée de sessions. Le tableau de bord parent affiche toujours 0 minute. Il faudra implémenter un mécanisme de heartbeat dans le dashboard élève pour peupler cette table.
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-body">
+          <strong>Tâche en suspens — Date de naissance des élèves existants</strong>
+          Les élèves déjà inscrits n'ont pas de date de naissance renseignée. Une interface dans <code>/eleve/parametres</code> devrait permettre de la saisir (nécessaire pour les fonctionnalités liées aux anniversaires).
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-icon">🔌</div>
+        <div class="callout-body">
+          <strong>Connexion à la DB en local vs Vercel</strong>
+          En local, utiliser le port <strong>5432</strong> (connexion directe Supabase). Sur Vercel, utiliser le port <strong>6543</strong> (PgBouncer, mode Transaction). La variable <code>DATABASE_URL</code> dans Vercel doit pointer vers le port 6543, et <code>DIRECT_URL</code> vers 5432.
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">🧪</div>
+        <div class="callout-body">
+          <strong>Comptes de test disponibles</strong>
+          Consultez le <a href="/guide-testeurs.html" target="_blank">guide testeurs</a> pour la liste des comptes de démonstration (élèves, parents, admins) et leurs identifiants de connexion.
+        </div>
+      </div>
+
+      <h3>Vérification rapide que tout fonctionne</h3>
+      <ol class="steps">
+        <li><div class="step-content"><strong>App démarre sans erreur</strong> — <code>npm run dev</code> sans erreur dans le terminal</div></li>
+        <li><div class="step-content"><strong>Connexion DB</strong> — <code>npx prisma studio</code> ouvre l'interface et affiche les tables avec des données</div></li>
+        <li><div class="step-content"><strong>Connexion utilisateur</strong> — Se connecter avec un compte élève (code d'accès) et un compte parent (email + MDP + OTP)</div></li>
+        <li><div class="step-content"><strong>Génération IA</strong> — Lancer un exercice et vérifier que l'IA génère des questions (nécessite <code>ANTHROPIC_API_KEY</code> valide)</div></li>
+        <li><div class="step-content"><strong>Email OTP</strong> — Créer un nouveau compte adulte et vérifier que l'email OTP arrive (nécessite <code>RESEND_API_KEY</code> valide)</div></li>
+        <li><div class="step-content"><strong>Build sans erreur</strong> — <code>npm run build</code> se termine sans erreur TypeScript avant tout déploiement</div></li>
+      </ol>
+
+    </div>
+
+  </main>
+</div>
+
+<div id="copyToast" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#1A1715;color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:500;transition:transform .3s;z-index:999">Copié !</div>
+
+<script>
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById('copyToast');
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => { toast.style.transform = 'translateX(-50%) translateY(80px)'; }, 1800);
+  });
+}
+
+// Highlight active section on scroll
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav-link');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[onclick*="${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
