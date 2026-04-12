@@ -573,7 +573,19 @@ export const adminRouter = createTRPCRouter({
       if (input.userId === ctx.user.id) throw new Error("Vous ne pouvez pas suspendre votre propre compte.");
       const cible = await ctx.prisma.user.findUnique({
         where: { id: input.userId },
-        select: { email: true, name: true, role: true, suspended: true },
+        select: {
+          email: true,
+          name: true,
+          role: true,
+          suspended: true,
+          profilEleve: {
+            select: {
+              prenom: true,
+              nom: true,
+              parents: { select: { user: { select: { email: true } } }, take: 1 },
+            },
+          },
+        },
       });
       if (!cible) throw new Error("Utilisateur introuvable.");
       if (cible.suspended) throw new Error("Ce compte est déjà suspendu.");
@@ -594,8 +606,20 @@ export const adminRouter = createTRPCRouter({
         details: { raison: input.raison },
       });
 
-      if (cible.email && cible.name) {
-        sendSuspensionEmail({ userEmail: cible.email, userName: cible.name, raison: input.raison }).catch(() => {});
+      // Pour les élèves : email interne (@edureussite.internal) → notifier le parent
+      if (cible.role === "ELEVE") {
+        const parentEmail = cible.profilEleve?.parents[0]?.user?.email;
+        const prenomEleve = cible.profilEleve?.prenom ?? cible.name ?? "votre enfant";
+        if (parentEmail) {
+          sendSuspensionEmail({
+            userEmail: parentEmail,
+            userName: `${prenomEleve} (votre enfant)`,
+            raison: input.raison,
+          }).catch((e) => console.error("[suspension email parent]", e));
+        }
+      } else if (cible.email && !cible.email.endsWith("@edureussite.internal") && cible.name) {
+        sendSuspensionEmail({ userEmail: cible.email, userName: cible.name, raison: input.raison })
+          .catch((e) => console.error("[suspension email]", e));
       }
 
       return { success: true };
@@ -610,7 +634,18 @@ export const adminRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const cible = await ctx.prisma.user.findUnique({
         where: { id: input.userId },
-        select: { email: true, name: true, role: true, suspended: true },
+        select: {
+          email: true,
+          name: true,
+          role: true,
+          suspended: true,
+          profilEleve: {
+            select: {
+              prenom: true,
+              parents: { select: { user: { select: { email: true } } }, take: 1 },
+            },
+          },
+        },
       });
       if (!cible) throw new Error("Utilisateur introuvable.");
       if (!cible.suspended) throw new Error("Ce compte n'est pas suspendu.");
@@ -635,8 +670,20 @@ export const adminRouter = createTRPCRouter({
         details: { forcerResetMdp: input.forcerResetMdp },
       });
 
-      if (cible.email && cible.name) {
-        sendReactivationEmail({ userEmail: cible.email, userName: cible.name, forcePasswordReset: input.forcerResetMdp }).catch(() => {});
+      // Pour les élèves : notifier le parent
+      if (cible.role === "ELEVE") {
+        const parentEmail = cible.profilEleve?.parents[0]?.user?.email;
+        const prenomEleve = cible.profilEleve?.prenom ?? cible.name ?? "votre enfant";
+        if (parentEmail) {
+          sendReactivationEmail({
+            userEmail: parentEmail,
+            userName: `${prenomEleve} (votre enfant)`,
+            forcePasswordReset: input.forcerResetMdp,
+          }).catch((e) => console.error("[reactivation email parent]", e));
+        }
+      } else if (cible.email && !cible.email.endsWith("@edureussite.internal") && cible.name) {
+        sendReactivationEmail({ userEmail: cible.email, userName: cible.name, forcePasswordReset: input.forcerResetMdp })
+          .catch((e) => console.error("[reactivation email]", e));
       }
 
       return { success: true };

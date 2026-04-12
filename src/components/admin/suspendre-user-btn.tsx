@@ -10,21 +10,41 @@ interface Props {
   suspended: boolean;
 }
 
-export function SuspendreUserBtn({ userId, nom, suspended }: Props) {
+export function SuspendreUserBtn({ userId, nom, suspended: initialSuspended }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [raison, setRaison] = useState("");
+  const [isSuspended, setIsSuspended] = useState(initialSuspended);
 
   const suspendre = trpc.admin.suspendreCompte.useMutation({
     onSuccess: () => {
       setOpen(false);
       setRaison("");
+      setIsSuspended(true);
       router.refresh();
     },
   });
 
-  // Les comptes déjà suspendus sont gérés par ComptesSuspendus
-  if (suspended) return null;
+  const reactiver = trpc.admin.reactiverCompte.useMutation({
+    onSuccess: () => {
+      setIsSuspended(false);
+      router.refresh();
+    },
+  });
+
+  // Compte suspendu — bouton de réactivation
+  if (isSuspended) {
+    return (
+      <button
+        onClick={() => reactiver.mutate({ userId, forcerResetMdp: true })}
+        disabled={reactiver.isPending}
+        title="Réactiver ce compte"
+        className="rounded-lg px-2 py-1 text-xs font-medium text-green-700 hover:bg-green-50 transition-colors disabled:opacity-50"
+      >
+        {reactiver.isPending ? "…" : "🔓"}
+      </button>
+    );
+  }
 
   if (!open) {
     return (
