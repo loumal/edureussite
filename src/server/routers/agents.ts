@@ -3,6 +3,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { anthropic } from "@/lib/ai/client";
 import { logClaude } from "@/lib/api-usage/logger";
+import { rechercherWeb, formaterContexteWeb, type TavilyResult } from "@/lib/tavily/client";
 
 // ─── Profil de l'organisation (system prompt de base) ────────────────────────
 
@@ -160,20 +161,30 @@ Pour chaque publication : date, plateforme, sujet/angle, type de contenu (image,
       focusPoints: z.array(z.string()).optional(),
     }))
     .mutation(async ({ ctx, input }) => {
+      // Recherche web en temps réel
+      const { results: webResults, disponible: webDispo } = await rechercherWeb(
+        `${input.concurrent} EdTech plateforme éducative fonctionnalités tarifs 2024 2025`,
+        { maxResults: 8, searchDepth: "advanced" }
+      );
+      const contextWeb = formaterContexteWeb(webResults);
+
       const SYSTEM = `${PROFIL_EDU}
 
 Tu es l'analyste de veille concurrentielle d'ÉduRéussite QC. Tu analyses les plateformes EdTech concurrentes.
-Base-toi sur ta connaissance du marché (jusqu'à ta date limite d'entraînement). Sois structuré, objectif, stratégique.
-Réponds en Markdown avec des sections claires : Forces, Faiblesses, Opportunités pour ÉduRéussite QC, Menaces.`;
+${webDispo ? "Des données web récentes te sont fournies ci-dessous — utilise-les en priorité, en les citant si pertinent." : "Base-toi sur ta connaissance du marché."}
+Sois structuré, objectif, stratégique. Réponds en Markdown avec des sections claires.`;
 
       const prompt = `Analyse le concurrent "${input.concurrent}" dans le contexte EdTech québécois/canadien/international.
 ${input.focusPoints?.length ? `Points d'attention particuliers : ${input.focusPoints.join(", ")}` : ""}
-Inclure : positionnement, fonctionnalités clés, modèle tarifaire (si connu), public cible, forces, faiblesses, et recommandations stratégiques pour ÉduRéussite QC.`;
+
+${contextWeb ? `=== DONNÉES WEB RÉCENTES ===\n${contextWeb}\n=== FIN DES DONNÉES ===\n` : ""}
+
+Inclure : positionnement actuel, fonctionnalités clés, modèle tarifaire, public cible, Forces, Faiblesses, Opportunités pour ÉduRéussite QC, Menaces, et recommandations stratégiques concrètes.`;
 
       try {
-        const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 2000);
+        const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 2500);
         await logAgent(ctx, { agentType: "VEILLE", action: `Analyse : ${input.concurrent}`, prompt, output: text, inputTokens, outputTokens });
-        return { analyse: text };
+        return { analyse: text, sources: webResults as TavilyResult[], webDispo };
       } catch {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Erreur lors de l'analyse concurrentielle." });
       }
@@ -199,13 +210,30 @@ Réponds en Markdown.`;
         SAAS_EDUCATION: "le SaaS en éducation",
       };
 
+      // Requête Tavily adaptée au domaine
+      const QUERY_MAP: Record<string, string> = {
+        EDTECH_QC: "tendances EdTech Québec éducation numérique 2025",
+        EDTECH_CA: "EdTech Canada tendances marché éducation 2025",
+        EDTECH_INTERNATIONAL: "global EdTech trends education technology 2025",
+        IA_EDUCATION: "intelligence artificielle éducation tendances IA pédagogie 2025",
+        SAAS_EDUCATION: "SaaS education market trends platforms 2025",
+      };
+      const { results: webResults, disponible: webDispo } = await rechercherWeb(
+        QUERY_MAP[input.domaine] ?? "EdTech tendances 2025",
+        { maxResults: 8, searchDepth: "advanced" }
+      );
+      const contextWeb = formaterContexteWeb(webResults);
+
       const prompt = `Analyse les tendances de ${DOMAINE_LABELS[input.domaine]} sur un horizon de ${input.horizon.replace("_", " ")}.
+
+${contextWeb ? `=== DONNÉES WEB RÉCENTES ===\n${contextWeb}\n=== FIN DES DONNÉES ===\n` : ""}
+
 Sections : Tendances technologiques, Évolution des usages pédagogiques, Opportunités de marché, Risques à anticiper, Recommandations stratégiques pour ÉduRéussite QC.`;
 
       try {
-        const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 2000);
+        const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 2500);
         await logAgent(ctx, { agentType: "VEILLE", action: `Tendances : ${input.domaine}`, prompt, output: text, inputTokens, outputTokens });
-        return { rapport: text };
+        return { rapport: text, sources: webResults as TavilyResult[], webDispo };
       } catch {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Erreur lors de l'analyse des tendances." });
       }
@@ -311,15 +339,40 @@ Sois précis : nomme les organismes réels, les programmes existants, les fenêt
 
       const REGION_LABELS: Record<string, string> = { QC: "au Québec", CA: "au Canada", INTERNATIONAL: "à l'international", TOUS: "au Québec, au Canada et à l'international" };
 
+      // Construire des requêtes Tavily ciblées selon le type
+      const QUERIES: Record<string, string[]> = {
+        COMMISSION_SCOLAIRE: ["commissions scolaires centres services scolaires Québec appel projets numérique 2025", "CSS Québec partenariat technologie éducative"],
+        MINISTERE_QC: ["appel projets subvention MEES MIFI MEI Québec EdTech 2025", "programme financement éducation numérique Québec gouvernement"],
+        MINISTERE_CA: ["federal Canada education technology funding ISDE EDSC 2025", "programme financement fédéral éducation Canada appel projets"],
+        ENTREPRISE: ["entreprise Canada partenariat EdTech plateforme éducative Québec 2025", "investissement technologie éducation secteur privé Canada"],
+        UNIVERSITE: ["université cégep Québec partenariat recherche EdTech 2025", "collaboration recherche intelligence artificielle éducation universités canadiennes"],
+        INTERNATIONAL: ["UNESCO francophonie OCDE appel projets éducation numérique 2025", "international education partnership EdTech francophone funding"],
+        TOUS: ["partenariat EdTech Québec Canada subvention financement éducation 2025"],
+      };
+
+      const queries = QUERIES[input.type] ?? QUERIES["TOUS"];
+      const allResults: TavilyResult[] = [];
+      for (const q of queries) {
+        const { results } = await rechercherWeb(q, { maxResults: 5, searchDepth: "advanced" });
+        allResults.push(...results);
+      }
+      // Dédoublonner par URL
+      const seen = new Set<string>();
+      const uniqueResults = allResults.filter((r) => { if (seen.has(r.url)) return false; seen.add(r.url); return true; }).slice(0, 10);
+      const contextWeb = formaterContexteWeb(uniqueResults);
+      const webDispo = uniqueResults.length > 0;
+
       const prompt = `Identifie 8 à 12 opportunités de partenariat concrètes pour ÉduRéussite QC auprès de ${TYPE_LABELS[input.type]} ${REGION_LABELS[input.region]}.
 ${input.contexte ? `Contexte supplémentaire : ${input.contexte}` : ""}
 
-Pour chaque opportunité : Nom de l'organisation/programme, Type de partenariat possible, Valeur stratégique pour ÉduRéussite QC, Niveau de priorité (Haute/Moyenne/Faible), Prochaine action recommandée.`;
+${contextWeb ? `=== DONNÉES WEB RÉCENTES (programmes, appels d'offres, organismes actifs) ===\n${contextWeb}\n=== FIN DES DONNÉES ===\n` : ""}
+
+Pour chaque opportunité : Nom de l'organisation/programme, Type de partenariat possible, Valeur stratégique pour ÉduRéussite QC, Niveau de priorité (Haute/Moyenne/Faible), Lien ou référence si disponible, Prochaine action recommandée.`;
 
       try {
-        const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 2500);
+        const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 3000);
         await logAgent(ctx, { agentType: "PARTENARIAT", action: `Recherche : ${input.type}/${input.region}`, prompt, output: text, inputTokens, outputTokens });
-        return { opportunites: text };
+        return { opportunites: text, sources: uniqueResults as TavilyResult[], webDispo };
       } catch {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Erreur lors de la recherche d'opportunités." });
       }

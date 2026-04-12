@@ -8,6 +8,44 @@ import { Card } from "@/components/ui/card";
 
 type Onglet = "SOCIAL" | "VEILLE" | "MARKETING" | "PARTENARIAT" | "JOURNAL";
 
+interface Source { title: string; url: string; content: string; score: number; }
+
+// ─── Composant Sources Web ────────────────────────────────────────────────────
+
+function SourcesWeb({ sources, webDispo }: { sources?: Source[]; webDispo?: boolean }) {
+  const [ouvert, setOuvert] = useState(false);
+  if (!webDispo) return (
+    <div className="mt-2 flex items-center gap-1.5 text-[11px] text-[var(--color-ink-soft)]">
+      <span className="rounded-full bg-gray-100 px-2 py-0.5 font-medium">Base IA uniquement</span>
+      <span>— Configurez TAVILY_API_KEY pour activer la recherche web en temps réel</span>
+    </div>
+  );
+  if (!sources?.length) return null;
+  return (
+    <div className="mt-2">
+      <button onClick={() => setOuvert(!ouvert)}
+        className="flex items-center gap-1.5 text-[11px] font-semibold text-[var(--color-success)] hover:opacity-75 transition-opacity">
+        <span className="rounded-full bg-green-100 px-2 py-0.5">🌐 Web live · {sources.length} source{sources.length > 1 ? "s" : ""}</span>
+        <span className="text-[var(--color-ink-soft)]">{ouvert ? "▲ Masquer" : "▼ Voir les sources"}</span>
+      </button>
+      {ouvert && (
+        <div className="mt-2 space-y-1.5">
+          {sources.map((s, i) => (
+            <a key={i} href={s.url} target="_blank" rel="noopener noreferrer"
+              className="flex items-start gap-2 rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-warm)] px-3 py-2 hover:bg-[var(--color-rule)] transition-colors">
+              <span className="text-[10px] font-bold text-[var(--color-ink-soft)] mt-0.5 flex-shrink-0">#{i + 1}</span>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-[var(--color-ink)] truncate">{s.title}</p>
+                <p className="text-[10px] text-[var(--color-ink-soft)] truncate">{s.url}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Helpers UI ───────────────────────────────────────────────────────────────
 
 function ResultatCard({ titre, contenu, onCopier }: { titre: string; contenu: string; onCopier: () => void }) {
@@ -191,11 +229,18 @@ function OngletVeille() {
   const [domaine, setDomaine] = useState("EDTECH_QC");
   const [horizon, setHorizon] = useState("1_AN");
   const [resultat, setResultat] = useState("");
+  const [sources, setSources] = useState<Source[]>([]);
+  const [webDispo, setWebDispo] = useState<boolean | undefined>();
 
-  const analyseConcurrent = trpc.agents.analyserConcurrence.useMutation({ onSuccess: (d) => setResultat(d.analyse) });
-  const analyseTendances = trpc.agents.analyserTendances.useMutation({ onSuccess: (d) => setResultat(d.rapport) });
+  const analyseConcurrent = trpc.agents.analyserConcurrence.useMutation({
+    onSuccess: (d) => { setResultat(d.analyse); setSources((d.sources ?? []) as Source[]); setWebDispo(d.webDispo); }
+  });
+  const analyseTendances = trpc.agents.analyserTendances.useMutation({
+    onSuccess: (d) => { setResultat(d.rapport); setSources((d.sources ?? []) as Source[]); setWebDispo(d.webDispo); }
+  });
 
   function generer() {
+    setSources([]); setWebDispo(undefined);
     if (mode === "CONCURRENT") {
       if (!concurrent.trim()) return;
       analyseConcurrent.mutate({ concurrent });
@@ -211,7 +256,7 @@ function OngletVeille() {
     <div className="space-y-4">
       <div className="flex gap-2">
         {["CONCURRENT", "TENDANCES"].map((m) => (
-          <button key={m} onClick={() => { setMode(m as "CONCURRENT" | "TENDANCES"); setResultat(""); }}
+          <button key={m} onClick={() => { setMode(m as "CONCURRENT" | "TENDANCES"); setResultat(""); setSources([]); setWebDispo(undefined); }}
             className={`rounded-lg px-4 py-1.5 text-xs font-bold transition-colors ${mode === m ? "bg-[var(--color-ink)] text-white" : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]"}`}>
             {m === "CONCURRENT" ? "Analyser un concurrent" : "Tendances du marché"}
           </button>
@@ -246,7 +291,12 @@ function OngletVeille() {
 
       <BoutonGenerer onClick={generer} pending={isPending} label={mode === "CONCURRENT" ? "Analyser" : "Générer le rapport"} />
       {error && <ErreurMsg msg={error} />}
-      {resultat && <ResultatCard titre={mode === "CONCURRENT" ? `Analyse : ${concurrent}` : `Tendances ${domaine}`} contenu={resultat} onCopier={() => {}} />}
+      {resultat && (
+        <>
+          <SourcesWeb sources={sources} webDispo={webDispo} />
+          <ResultatCard titre={mode === "CONCURRENT" ? `Analyse : ${concurrent}` : `Tendances ${domaine}`} contenu={resultat} onCopier={() => {}} />
+        </>
+      )}
     </div>
   );
 }
@@ -353,6 +403,8 @@ function OngletPartenariats() {
   const [exigences, setExigences] = useState("");
   const [signataire, setSignataire] = useState("");
   const [resultat, setResultat] = useState("");
+  const [sources, setSources] = useState<Source[]>([]);
+  const [webDispo, setWebDispo] = useState<boolean | undefined>();
   const [opportuniteSelectee, setOpportuniteSelectee] = useState<string | undefined>();
 
   // Formulaire nouvelle opportunité
@@ -365,13 +417,16 @@ function OngletPartenariats() {
   const [newNotes, setNewNotes] = useState("");
 
   const utils = trpc.useUtils();
-  const rechercherOpp = trpc.agents.rechercherOpportunites.useMutation({ onSuccess: (d) => setResultat(d.opportunites) });
+  const rechercherOpp = trpc.agents.rechercherOpportunites.useMutation({
+    onSuccess: (d) => { setResultat(d.opportunites); setSources((d.sources ?? []) as Source[]); setWebDispo(d.webDispo); }
+  });
   const genSoumission = trpc.agents.genererSoumission.useMutation({ onSuccess: (d) => setResultat(d.soumission) });
   const { data: opportunites, isLoading } = trpc.agents.getOpportunites.useQuery();
   const creerOpp = trpc.agents.creerOpportunite.useMutation({ onSuccess: () => { utils.agents.getOpportunites.invalidate(); setShowForm(false); setNewTitre(""); setNewOrg(""); setNewNotes(""); setNewEcheance(""); } });
   const updateOpp = trpc.agents.updateOpportunite.useMutation({ onSuccess: () => utils.agents.getOpportunites.invalidate() });
 
   function generer() {
+    setSources([]); setWebDispo(undefined);
     if (mode === "RECHERCHE") {
       rechercherOpp.mutate({
         type: typeRecherche as "COMMISSION_SCOLAIRE" | "MINISTERE_QC" | "MINISTERE_CA" | "ENTREPRISE" | "UNIVERSITE" | "INTERNATIONAL" | "TOUS",
@@ -538,7 +593,12 @@ function OngletPartenariats() {
             placeholder="Ex: focus sur les élèves HDAA, subventions pour outils numériques…" rows={2} />
           <BoutonGenerer onClick={generer} pending={isPending} label="Identifier des opportunités" />
           {error && <ErreurMsg msg={error} />}
-          {resultat && <ResultatCard titre="Opportunités identifiées" contenu={resultat} onCopier={() => {}} />}
+          {resultat && (
+            <>
+              <SourcesWeb sources={sources} webDispo={webDispo} />
+              <ResultatCard titre="Opportunités identifiées" contenu={resultat} onCopier={() => {}} />
+            </>
+          )}
         </div>
       )}
 
