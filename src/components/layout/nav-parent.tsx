@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { trpc } from "@/lib/trpc/client";
 
 interface NavParentProps {
@@ -15,6 +15,8 @@ export function NavParent({ specialistesActif }: NavParentProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "ADMIN" || session?.user?.role === "SUPER_ADMIN";
 
   const { data: nonLues } = trpc.parent.countNotificationsNonLues.useQuery(undefined, {
     refetchInterval: 60_000,
@@ -45,6 +47,7 @@ export function NavParent({ specialistesActif }: NavParentProps) {
       { href: "/parent/rendez-vous", label: "Rendez-vous", emoji: "📅" },
     ] : []),
     { href: "/parent/notifications", label: "Notifications", emoji: "🔔", badge: nonLues && nonLues > 0 ? nonLues : null },
+    ...(isAdmin ? [{ href: "/admin", label: "Admin", emoji: "⚙️", badge: null }] : []),
   ];
 
   return (

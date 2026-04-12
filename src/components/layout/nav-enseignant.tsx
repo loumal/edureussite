@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 interface NavEnseignantProps {
   nom: string;
@@ -13,6 +13,8 @@ export function NavEnseignant({ nom }: NavEnseignantProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "ADMIN" || session?.user?.role === "SUPER_ADMIN";
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -37,6 +39,9 @@ export function NavEnseignant({ nom }: NavEnseignantProps) {
         <div className="hidden items-center gap-1 md:flex">
           <NavLink href="/enseignant" active={pathname === "/enseignant"}>Mes élèves</NavLink>
           <NavLink href="/enseignant/rapports" active={pathname.startsWith("/enseignant/rapports")}>Rapports</NavLink>
+          {isAdmin && (
+            <NavLink href="/admin" active={pathname.startsWith("/admin")}>⚙️ Admin</NavLink>
+          )}
         </div>
 
         <div className="relative flex items-center gap-3" ref={menuRef}>
@@ -77,6 +82,12 @@ export function NavEnseignant({ nom }: NavEnseignantProps) {
                 className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">
                 📊 Rapports
               </Link>
+              {isAdmin && (
+                <Link href="/admin" onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">
+                  ⚙️ Admin
+                </Link>
+              )}
               <hr className="my-1 border-[var(--color-rule)]" />
               <button onClick={() => signOut({ callbackUrl: "/login" })}
                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-[var(--color-accent)] hover:bg-[rgba(217,79,43,0.06)]">
