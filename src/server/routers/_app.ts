@@ -5,6 +5,7 @@ import { parentRouter } from "./parent";
 import { authRouter } from "./auth";
 import { enseignantRouter } from "./enseignant";
 import { adminRouter } from "./admin";
+import { agentsRouter } from "./agents";
 import { coursRouter } from "./cours";
 import { specialisteRouter } from "./specialiste";
 import { gamificationRouter } from "./gamification";
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   parent: parentRouter,
   enseignant: enseignantRouter,
   admin: adminRouter,
+  agents: agentsRouter,
   cours: coursRouter,
   specialiste: specialisteRouter,
   gamification: gamificationRouter,

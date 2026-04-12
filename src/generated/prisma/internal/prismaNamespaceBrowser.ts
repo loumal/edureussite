@@ -94,7 +94,9 @@ export const ModelName = {
   BlockedIp: 'BlockedIp',
   ObjectifNote: 'ObjectifNote',
   PlanifNotionEleve: 'PlanifNotionEleve',
-  DisponibiliteEleve: 'DisponibiliteEleve'
+  DisponibiliteEleve: 'DisponibiliteEleve',
+  AgentLog: 'AgentLog',
+  OpportunitePartenariat: 'OpportunitePartenariat'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -811,6 +813,41 @@ export const DisponibiliteEleveScalarFieldEnum = {
 } as const
 
 export type DisponibiliteEleveScalarFieldEnum = (typeof DisponibiliteEleveScalarFieldEnum)[keyof typeof DisponibiliteEleveScalarFieldEnum]
+
+
+export const AgentLogScalarFieldEnum = {
+  id: 'id',
+  agentType: 'agentType',
+  action: 'action',
+  prompt: 'prompt',
+  output: 'output',
+  inputTokens: 'inputTokens',
+  outputTokens: 'outputTokens',
+  coutUSD: 'coutUSD',
+  adminId: 'adminId',
+  opportuniteId: 'opportuniteId',
+  createdAt: 'createdAt'
+} as const
+
+export type AgentLogScalarFieldEnum = (typeof AgentLogScalarFieldEnum)[keyof typeof AgentLogScalarFieldEnum]
+
+
+export const OpportunitePartenariatScalarFieldEnum = {
+  id: 'id',
+  titre: 'titre',
+  organisation: 'organisation',
+  type: 'type',
+  region: 'region',
+  source: 'source',
+  echeance: 'echeance',
+  statut: 'statut',
+  notes: 'notes',
+  adminId: 'adminId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OpportunitePartenariatScalarFieldEnum = (typeof OpportunitePartenariatScalarFieldEnum)[keyof typeof OpportunitePartenariatScalarFieldEnum]
 
 
 export const SortOrder = {

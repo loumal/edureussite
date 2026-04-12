@@ -271,6 +271,8 @@ export type UserWhereInput = {
   notificationsEnvoyees?: Prisma.NotificationListRelationFilter
   notificationsRecues?: Prisma.NotificationListRelationFilter
   securityLogs?: Prisma.SecurityLogListRelationFilter
+  agentLogs?: Prisma.AgentLogListRelationFilter
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -298,6 +300,8 @@ export type UserOrderByWithRelationInput = {
   notificationsEnvoyees?: Prisma.NotificationOrderByRelationAggregateInput
   notificationsRecues?: Prisma.NotificationOrderByRelationAggregateInput
   securityLogs?: Prisma.SecurityLogOrderByRelationAggregateInput
+  agentLogs?: Prisma.AgentLogOrderByRelationAggregateInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -328,6 +332,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notificationsEnvoyees?: Prisma.NotificationListRelationFilter
   notificationsRecues?: Prisma.NotificationListRelationFilter
   securityLogs?: Prisma.SecurityLogListRelationFilter
+  agentLogs?: Prisma.AgentLogListRelationFilter
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -397,6 +403,8 @@ export type UserCreateInput = {
   notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -424,6 +432,8 @@ export type UserUncheckedCreateInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserUpdateInput = {
@@ -451,6 +461,8 @@ export type UserUpdateInput = {
   notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -478,6 +490,8 @@ export type UserUncheckedUpdateInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -762,6 +776,34 @@ export type UserUpdateOneWithoutSecurityLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSecurityLogsInput, Prisma.UserUpdateWithoutSecurityLogsInput>, Prisma.UserUncheckedUpdateWithoutSecurityLogsInput>
 }
 
+export type UserCreateNestedOneWithoutAgentLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAgentLogsInput, Prisma.UserUncheckedCreateWithoutAgentLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAgentLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAgentLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAgentLogsInput, Prisma.UserUncheckedCreateWithoutAgentLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAgentLogsInput
+  upsert?: Prisma.UserUpsertWithoutAgentLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAgentLogsInput, Prisma.UserUpdateWithoutAgentLogsInput>, Prisma.UserUncheckedUpdateWithoutAgentLogsInput>
+}
+
+export type UserCreateNestedOneWithoutOpportunitesPartenariatInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOpportunitesPartenariatInput, Prisma.UserUncheckedCreateWithoutOpportunitesPartenariatInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOpportunitesPartenariatInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOpportunitesPartenariatNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOpportunitesPartenariatInput, Prisma.UserUncheckedCreateWithoutOpportunitesPartenariatInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOpportunitesPartenariatInput
+  upsert?: Prisma.UserUpsertWithoutOpportunitesPartenariatInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOpportunitesPartenariatInput, Prisma.UserUpdateWithoutOpportunitesPartenariatInput>, Prisma.UserUncheckedUpdateWithoutOpportunitesPartenariatInput>
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   email: string
@@ -786,6 +828,8 @@ export type UserCreateWithoutAccountsInput = {
   notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -812,6 +856,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -854,6 +900,8 @@ export type UserUpdateWithoutAccountsInput = {
   notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -880,6 +928,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -906,6 +956,8 @@ export type UserCreateWithoutSessionsInput = {
   notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -932,6 +984,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -974,6 +1028,8 @@ export type UserUpdateWithoutSessionsInput = {
   notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1000,6 +1056,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutProfilEleveInput = {
@@ -1026,6 +1084,8 @@ export type UserCreateWithoutProfilEleveInput = {
   notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutProfilEleveInput = {
@@ -1052,6 +1112,8 @@ export type UserUncheckedCreateWithoutProfilEleveInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutProfilEleveInput = {
@@ -1094,6 +1156,8 @@ export type UserUpdateWithoutProfilEleveInput = {
   notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilEleveInput = {
@@ -1120,6 +1184,8 @@ export type UserUncheckedUpdateWithoutProfilEleveInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutProfilParentInput = {
@@ -1146,6 +1212,8 @@ export type UserCreateWithoutProfilParentInput = {
   notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutProfilParentInput = {
@@ -1172,6 +1240,8 @@ export type UserUncheckedCreateWithoutProfilParentInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutProfilParentInput = {
@@ -1214,6 +1284,8 @@ export type UserUpdateWithoutProfilParentInput = {
   notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilParentInput = {
@@ -1240,6 +1312,8 @@ export type UserUncheckedUpdateWithoutProfilParentInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutProfilEnseignantInput = {
@@ -1266,6 +1340,8 @@ export type UserCreateWithoutProfilEnseignantInput = {
   notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutProfilEnseignantInput = {
@@ -1292,6 +1368,8 @@ export type UserUncheckedCreateWithoutProfilEnseignantInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutProfilEnseignantInput = {
@@ -1334,6 +1412,8 @@ export type UserUpdateWithoutProfilEnseignantInput = {
   notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilEnseignantInput = {
@@ -1360,6 +1440,8 @@ export type UserUncheckedUpdateWithoutProfilEnseignantInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutNotificationsEnvoyeesInput = {
@@ -1386,6 +1468,8 @@ export type UserCreateWithoutNotificationsEnvoyeesInput = {
   specialiste?: Prisma.SpecialisteCreateNestedOneWithoutUserInput
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsEnvoyeesInput = {
@@ -1412,6 +1496,8 @@ export type UserUncheckedCreateWithoutNotificationsEnvoyeesInput = {
   specialiste?: Prisma.SpecialisteUncheckedCreateNestedOneWithoutUserInput
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsEnvoyeesInput = {
@@ -1443,6 +1529,8 @@ export type UserCreateWithoutNotificationsRecuesInput = {
   specialiste?: Prisma.SpecialisteCreateNestedOneWithoutUserInput
   notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsRecuesInput = {
@@ -1469,6 +1557,8 @@ export type UserUncheckedCreateWithoutNotificationsRecuesInput = {
   specialiste?: Prisma.SpecialisteUncheckedCreateNestedOneWithoutUserInput
   notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsRecuesInput = {
@@ -1511,6 +1601,8 @@ export type UserUpdateWithoutNotificationsEnvoyeesInput = {
   specialiste?: Prisma.SpecialisteUpdateOneWithoutUserNestedInput
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsEnvoyeesInput = {
@@ -1537,6 +1629,8 @@ export type UserUncheckedUpdateWithoutNotificationsEnvoyeesInput = {
   specialiste?: Prisma.SpecialisteUncheckedUpdateOneWithoutUserNestedInput
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUpsertWithoutNotificationsRecuesInput = {
@@ -1574,6 +1668,8 @@ export type UserUpdateWithoutNotificationsRecuesInput = {
   specialiste?: Prisma.SpecialisteUpdateOneWithoutUserNestedInput
   notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsRecuesInput = {
@@ -1600,6 +1696,8 @@ export type UserUncheckedUpdateWithoutNotificationsRecuesInput = {
   specialiste?: Prisma.SpecialisteUncheckedUpdateOneWithoutUserNestedInput
   notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutSpecialisteInput = {
@@ -1626,6 +1724,8 @@ export type UserCreateWithoutSpecialisteInput = {
   notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutSpecialisteInput = {
@@ -1652,6 +1752,8 @@ export type UserUncheckedCreateWithoutSpecialisteInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutSpecialisteInput = {
@@ -1694,6 +1796,8 @@ export type UserUpdateWithoutSpecialisteInput = {
   notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSpecialisteInput = {
@@ -1720,6 +1824,8 @@ export type UserUncheckedUpdateWithoutSpecialisteInput = {
   notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutSecurityLogsInput = {
@@ -1746,6 +1852,8 @@ export type UserCreateWithoutSecurityLogsInput = {
   specialiste?: Prisma.SpecialisteCreateNestedOneWithoutUserInput
   notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutSecurityLogsInput = {
@@ -1772,6 +1880,8 @@ export type UserUncheckedCreateWithoutSecurityLogsInput = {
   specialiste?: Prisma.SpecialisteUncheckedCreateNestedOneWithoutUserInput
   notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutSecurityLogsInput = {
@@ -1814,6 +1924,8 @@ export type UserUpdateWithoutSecurityLogsInput = {
   specialiste?: Prisma.SpecialisteUpdateOneWithoutUserNestedInput
   notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSecurityLogsInput = {
@@ -1840,6 +1952,264 @@ export type UserUncheckedUpdateWithoutSecurityLogsInput = {
   specialiste?: Prisma.SpecialisteUncheckedUpdateOneWithoutUserNestedInput
   notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+}
+
+export type UserCreateWithoutAgentLogsInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+}
+
+export type UserUncheckedCreateWithoutAgentLogsInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveUncheckedCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentUncheckedCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteUncheckedCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+}
+
+export type UserCreateOrConnectWithoutAgentLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAgentLogsInput, Prisma.UserUncheckedCreateWithoutAgentLogsInput>
+}
+
+export type UserUpsertWithoutAgentLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAgentLogsInput, Prisma.UserUncheckedUpdateWithoutAgentLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAgentLogsInput, Prisma.UserUncheckedCreateWithoutAgentLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAgentLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAgentLogsInput, Prisma.UserUncheckedUpdateWithoutAgentLogsInput>
+}
+
+export type UserUpdateWithoutAgentLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAgentLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUncheckedUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUncheckedUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUncheckedUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+}
+
+export type UserCreateWithoutOpportunitesPartenariatInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+}
+
+export type UserUncheckedCreateWithoutOpportunitesPartenariatInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveUncheckedCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentUncheckedCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteUncheckedCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+}
+
+export type UserCreateOrConnectWithoutOpportunitesPartenariatInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOpportunitesPartenariatInput, Prisma.UserUncheckedCreateWithoutOpportunitesPartenariatInput>
+}
+
+export type UserUpsertWithoutOpportunitesPartenariatInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOpportunitesPartenariatInput, Prisma.UserUncheckedUpdateWithoutOpportunitesPartenariatInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOpportunitesPartenariatInput, Prisma.UserUncheckedCreateWithoutOpportunitesPartenariatInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOpportunitesPartenariatInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOpportunitesPartenariatInput, Prisma.UserUncheckedUpdateWithoutOpportunitesPartenariatInput>
+}
+
+export type UserUpdateWithoutOpportunitesPartenariatInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOpportunitesPartenariatInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUncheckedUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUncheckedUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUncheckedUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 
@@ -1853,6 +2223,8 @@ export type UserCountOutputType = {
   notificationsEnvoyees: number
   notificationsRecues: number
   securityLogs: number
+  agentLogs: number
+  opportunitesPartenariat: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1861,6 +2233,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   notificationsEnvoyees?: boolean | UserCountOutputTypeCountNotificationsEnvoyeesArgs
   notificationsRecues?: boolean | UserCountOutputTypeCountNotificationsRecuesArgs
   securityLogs?: boolean | UserCountOutputTypeCountSecurityLogsArgs
+  agentLogs?: boolean | UserCountOutputTypeCountAgentLogsArgs
+  opportunitesPartenariat?: boolean | UserCountOutputTypeCountOpportunitesPartenariatArgs
 }
 
 /**
@@ -1908,6 +2282,20 @@ export type UserCountOutputTypeCountSecurityLogsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.SecurityLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAgentLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgentLogWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOpportunitesPartenariatArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OpportunitePartenariatWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1934,6 +2322,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notificationsEnvoyees?: boolean | Prisma.User$notificationsEnvoyeesArgs<ExtArgs>
   notificationsRecues?: boolean | Prisma.User$notificationsRecuesArgs<ExtArgs>
   securityLogs?: boolean | Prisma.User$securityLogsArgs<ExtArgs>
+  agentLogs?: boolean | Prisma.User$agentLogsArgs<ExtArgs>
+  opportunitesPartenariat?: boolean | Prisma.User$opportunitesPartenariatArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2002,6 +2392,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notificationsEnvoyees?: boolean | Prisma.User$notificationsEnvoyeesArgs<ExtArgs>
   notificationsRecues?: boolean | Prisma.User$notificationsRecuesArgs<ExtArgs>
   securityLogs?: boolean | Prisma.User$securityLogsArgs<ExtArgs>
+  agentLogs?: boolean | Prisma.User$agentLogsArgs<ExtArgs>
+  opportunitesPartenariat?: boolean | Prisma.User$opportunitesPartenariatArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2019,6 +2411,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notificationsEnvoyees: Prisma.$NotificationPayload<ExtArgs>[]
     notificationsRecues: Prisma.$NotificationPayload<ExtArgs>[]
     securityLogs: Prisma.$SecurityLogPayload<ExtArgs>[]
+    agentLogs: Prisma.$AgentLogPayload<ExtArgs>[]
+    opportunitesPartenariat: Prisma.$OpportunitePartenariatPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2439,6 +2833,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notificationsEnvoyees<T extends Prisma.User$notificationsEnvoyeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsEnvoyeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationsRecues<T extends Prisma.User$notificationsRecuesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsRecuesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   securityLogs<T extends Prisma.User$securityLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$securityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SecurityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  agentLogs<T extends Prisma.User$agentLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$agentLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  opportunitesPartenariat<T extends Prisma.User$opportunitesPartenariatArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$opportunitesPartenariatArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OpportunitePartenariatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3069,6 +3465,54 @@ export type User$securityLogsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.SecurityLogScalarFieldEnum | Prisma.SecurityLogScalarFieldEnum[]
+}
+
+/**
+ * User.agentLogs
+ */
+export type User$agentLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AgentLog
+   */
+  select?: Prisma.AgentLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AgentLog
+   */
+  omit?: Prisma.AgentLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgentLogInclude<ExtArgs> | null
+  where?: Prisma.AgentLogWhereInput
+  orderBy?: Prisma.AgentLogOrderByWithRelationInput | Prisma.AgentLogOrderByWithRelationInput[]
+  cursor?: Prisma.AgentLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AgentLogScalarFieldEnum | Prisma.AgentLogScalarFieldEnum[]
+}
+
+/**
+ * User.opportunitesPartenariat
+ */
+export type User$opportunitesPartenariatArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OpportunitePartenariat
+   */
+  select?: Prisma.OpportunitePartenariatSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OpportunitePartenariat
+   */
+  omit?: Prisma.OpportunitePartenariatOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OpportunitePartenariatInclude<ExtArgs> | null
+  where?: Prisma.OpportunitePartenariatWhereInput
+  orderBy?: Prisma.OpportunitePartenariatOrderByWithRelationInput | Prisma.OpportunitePartenariatOrderByWithRelationInput[]
+  cursor?: Prisma.OpportunitePartenariatWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OpportunitePartenariatScalarFieldEnum | Prisma.OpportunitePartenariatScalarFieldEnum[]
 }
 
 /**

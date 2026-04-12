@@ -427,7 +427,9 @@ export const ModelName = {
   BlockedIp: 'BlockedIp',
   ObjectifNote: 'ObjectifNote',
   PlanifNotionEleve: 'PlanifNotionEleve',
-  DisponibiliteEleve: 'DisponibiliteEleve'
+  DisponibiliteEleve: 'DisponibiliteEleve',
+  AgentLog: 'AgentLog',
+  OpportunitePartenariat: 'OpportunitePartenariat'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -443,7 +445,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "agentLog" | "opportunitePartenariat"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3703,6 +3705,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AgentLog: {
+      payload: Prisma.$AgentLogPayload<ExtArgs>
+      fields: Prisma.AgentLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AgentLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AgentLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload>
+        }
+        findFirst: {
+          args: Prisma.AgentLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AgentLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload>
+        }
+        findMany: {
+          args: Prisma.AgentLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload>[]
+        }
+        create: {
+          args: Prisma.AgentLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload>
+        }
+        createMany: {
+          args: Prisma.AgentLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AgentLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload>[]
+        }
+        delete: {
+          args: Prisma.AgentLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload>
+        }
+        update: {
+          args: Prisma.AgentLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.AgentLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AgentLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AgentLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.AgentLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentLogPayload>
+        }
+        aggregate: {
+          args: Prisma.AgentLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAgentLog>
+        }
+        groupBy: {
+          args: Prisma.AgentLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgentLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AgentLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgentLogCountAggregateOutputType> | number
+        }
+      }
+    }
+    OpportunitePartenariat: {
+      payload: Prisma.$OpportunitePartenariatPayload<ExtArgs>
+      fields: Prisma.OpportunitePartenariatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OpportunitePartenariatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OpportunitePartenariatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload>
+        }
+        findFirst: {
+          args: Prisma.OpportunitePartenariatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OpportunitePartenariatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload>
+        }
+        findMany: {
+          args: Prisma.OpportunitePartenariatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload>[]
+        }
+        create: {
+          args: Prisma.OpportunitePartenariatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload>
+        }
+        createMany: {
+          args: Prisma.OpportunitePartenariatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OpportunitePartenariatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload>[]
+        }
+        delete: {
+          args: Prisma.OpportunitePartenariatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload>
+        }
+        update: {
+          args: Prisma.OpportunitePartenariatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload>
+        }
+        deleteMany: {
+          args: Prisma.OpportunitePartenariatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OpportunitePartenariatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OpportunitePartenariatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload>[]
+        }
+        upsert: {
+          args: Prisma.OpportunitePartenariatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OpportunitePartenariatPayload>
+        }
+        aggregate: {
+          args: Prisma.OpportunitePartenariatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOpportunitePartenariat>
+        }
+        groupBy: {
+          args: Prisma.OpportunitePartenariatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OpportunitePartenariatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OpportunitePartenariatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OpportunitePartenariatCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -4442,6 +4592,41 @@ export const DisponibiliteEleveScalarFieldEnum = {
 export type DisponibiliteEleveScalarFieldEnum = (typeof DisponibiliteEleveScalarFieldEnum)[keyof typeof DisponibiliteEleveScalarFieldEnum]
 
 
+export const AgentLogScalarFieldEnum = {
+  id: 'id',
+  agentType: 'agentType',
+  action: 'action',
+  prompt: 'prompt',
+  output: 'output',
+  inputTokens: 'inputTokens',
+  outputTokens: 'outputTokens',
+  coutUSD: 'coutUSD',
+  adminId: 'adminId',
+  opportuniteId: 'opportuniteId',
+  createdAt: 'createdAt'
+} as const
+
+export type AgentLogScalarFieldEnum = (typeof AgentLogScalarFieldEnum)[keyof typeof AgentLogScalarFieldEnum]
+
+
+export const OpportunitePartenariatScalarFieldEnum = {
+  id: 'id',
+  titre: 'titre',
+  organisation: 'organisation',
+  type: 'type',
+  region: 'region',
+  source: 'source',
+  echeance: 'echeance',
+  statut: 'statut',
+  notes: 'notes',
+  adminId: 'adminId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OpportunitePartenariatScalarFieldEnum = (typeof OpportunitePartenariatScalarFieldEnum)[keyof typeof OpportunitePartenariatScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -5047,6 +5232,8 @@ export type GlobalOmitConfig = {
   objectifNote?: Prisma.ObjectifNoteOmit
   planifNotionEleve?: Prisma.PlanifNotionEleveOmit
   disponibiliteEleve?: Prisma.DisponibiliteEleveOmit
+  agentLog?: Prisma.AgentLogOmit
+  opportunitePartenariat?: Prisma.OpportunitePartenariatOmit
 }
 
 /* Types for Logging */

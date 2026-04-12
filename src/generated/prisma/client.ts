@@ -261,3 +261,13 @@ export type PlanifNotionEleve = Prisma.PlanifNotionEleveModel
  * Disponibilité quotidienne déclarée (minutes par jour)
  */
 export type DisponibiliteEleve = Prisma.DisponibiliteEleveModel
+/**
+ * Model AgentLog
+ * Journal de toutes les générations IA faites via la page Agents
+ */
+export type AgentLog = Prisma.AgentLogModel
+/**
+ * Model OpportunitePartenariat
+ * Opportunités de partenariat détectées ou saisies manuellement
+ */
+export type OpportunitePartenariat = Prisma.OpportunitePartenariatModel

@@ -17,6 +17,7 @@ const SUPER_ADMIN_LINKS = [
   { href: "/admin/utilisateurs", label: "Utilisateurs", emoji: "👥", exact: false },
   { href: "/admin/specialistes", label: "Spécialistes", emoji: "👩‍⚕️", exact: false },
   { href: "/admin/documents", label: "Docs IA", emoji: "📚", exact: false },
+  { href: "/admin/agents", label: "Agents", emoji: "🤖", exact: false },
 ];
 
 export function NavAdmin({ role }: NavAdminProps) {

@@ -213,6 +213,8 @@ model User {
   notificationsEnvoyees Notification[] @relation("NotificationExpediteur")
   notificationsRecues   Notification[] @relation("NotificationDestinataire")
   securityLogs          SecurityLog[]
+  agentLogs             AgentLog[]     @relation("AgentLogs")
+  opportunitesPartenariat OpportunitePartenariat[] @relation("OpportunitesPartenariat")
 
   @@map("users")
 }
@@ -1111,4 +1113,50 @@ model DisponibiliteEleve {
   eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
 
   @@map("disponibilites_eleve")
+}
+
+// ─── AGENTS IA ADMIN ──────────────────────────────────────────────────────────
+
+/// Journal de toutes les générations IA faites via la page Agents
+model AgentLog {
+  id            String    @id @default(cuid())
+  agentType     String    // SOCIAL | VEILLE | MARKETING | PARTENARIAT
+  action        String    // ex: "Post LinkedIn", "Analyse concurrentielle"
+  prompt        String    @db.Text
+  output        String    @db.Text
+  inputTokens   Int       @default(0)
+  outputTokens  Int       @default(0)
+  coutUSD       Float     @default(0)
+  adminId       String
+  admin         User      @relation("AgentLogs", fields: [adminId], references: [id])
+  opportuniteId String?   // lié à une opportunité de partenariat si applicable
+  opportunite   OpportunitePartenariat? @relation(fields: [opportuniteId], references: [id])
+  createdAt     DateTime  @default(now())
+
+  @@index([agentType])
+  @@index([adminId])
+  @@index([createdAt(sort: Desc)])
+  @@map("agent_logs")
+}
+
+/// Opportunités de partenariat détectées ou saisies manuellement
+model OpportunitePartenariat {
+  id           String    @id @default(cuid())
+  titre        String
+  organisation String
+  type         String    // COMMISSION_SCOLAIRE | MINISTERE_QC | MINISTERE_CA | ENTREPRISE | UNIVERSITE | INTERNATIONAL | AUTRE
+  region       String    @default("QC") // QC | CA | INTERNATIONAL
+  source       String?   @db.Text
+  echeance     DateTime?
+  statut       String    @default("DETECTEE") // DETECTEE | EN_COURS | SOUMIS | GAGNE | ABANDONNE
+  notes        String?   @db.Text
+  adminId      String
+  admin        User      @relation("OpportunitesPartenariat", fields: [adminId], references: [id])
+  soumissions  AgentLog[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([statut])
+  @@index([adminId])
+  @@map("opportunites_partenariat")
 }
