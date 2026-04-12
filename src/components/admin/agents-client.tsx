@@ -128,97 +128,725 @@ function ErreurMsg({ msg }: { msg: string }) {
   return <p className="mt-2 text-xs text-[var(--color-accent)]">{msg}</p>;
 }
 
-// ─── Onglet Social Media ──────────────────────────────────────────────────────
+// ─── Social Media — Constantes ────────────────────────────────────────────────
 
-function OngletSocial() {
-  const [mode, setMode] = useState<"POST" | "CALENDRIER">("POST");
+const PLATEFORME_SOCIAL: Record<string, { label: string; emoji: string; color: string; bg: string }> = {
+  LINKEDIN:  { label: "LinkedIn",  emoji: "💼", color: "text-blue-700",   bg: "bg-blue-50 border-blue-200" },
+  FACEBOOK:  { label: "Facebook",  emoji: "📘", color: "text-indigo-700", bg: "bg-indigo-50 border-indigo-200" },
+  INSTAGRAM: { label: "Instagram", emoji: "📸", color: "text-pink-700",   bg: "bg-pink-50 border-pink-200" },
+};
+
+const OBJECTIF_BADGE: Record<string, { label: string; color: string }> = {
+  NOTORIETE:    { label: "Notoriété",    color: "bg-sky-100 text-sky-700" },
+  ENGAGEMENT:   { label: "Engagement",   color: "bg-amber-100 text-amber-700" },
+  CONVERSION:   { label: "Conversion",   color: "bg-green-100 text-green-700" },
+  FIDELISATION: { label: "Fidélisation", color: "bg-purple-100 text-purple-700" },
+};
+
+const STATUT_PUB: Record<string, { label: string; color: string }> = {
+  BROUILLON: { label: "Brouillon", color: "bg-gray-100 text-gray-600" },
+  PLANIFIE:  { label: "Planifié",  color: "bg-amber-100 text-amber-700" },
+  PUBLIE:    { label: "Publié ✓",  color: "bg-green-100 text-green-700" },
+  ERREUR:    { label: "Erreur",    color: "bg-red-100 text-red-600" },
+};
+
+const JOURS_FR = ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."];
+const MOIS_FR  = ["jan", "fév", "mar", "avr", "mai", "juin", "juil", "aoû", "sep", "oct", "nov", "déc"];
+
+// ─── Sous-onglet : Comptes ────────────────────────────────────────────────────
+
+function SocialComptesTab() {
+  const utils = trpc.useUtils();
+  const { data: comptes, isLoading } = trpc.agents.getComptesSociaux.useQuery();
+  const connecter = trpc.agents.connecterCompte.useMutation({
+    onSuccess: () => { utils.agents.getComptesSociaux.invalidate(); setShowForm(false); setNom(""); setPageId(""); setToken(""); setExpire(""); },
+  });
+  const supprimer = trpc.agents.supprimerCompte.useMutation({
+    onSuccess: () => utils.agents.getComptesSociaux.invalidate(),
+  });
+
+  const [showForm, setShowForm] = useState(false);
+  const [plateforme, setPlateforme] = useState("LINKEDIN");
+  const [nom, setNom] = useState("");
+  const [pageId, setPageId] = useState("");
+  const [token, setToken] = useState("");
+  const [expire, setExpire] = useState("");
+
+  const PLATEFORME_HELP: Record<string, string> = {
+    LINKEDIN:  "ID numérique de la page organisation (trouvable dans l'URL admin). Token OAuth 2.0 d'une app LinkedIn.",
+    FACEBOOK:  "Page ID Facebook (Paramètres de la page > À propos). Token de page longue durée via Meta for Developers.",
+    INSTAGRAM: "Instagram Business Account ID (via Meta Graph API Explorer). Token de la page Facebook liée.",
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-[var(--color-ink-soft)]">
+          {comptes?.length ?? 0} compte{(comptes?.length ?? 0) !== 1 ? "s" : ""} connecté{(comptes?.length ?? 0) !== 1 ? "s" : ""}
+        </p>
+        <button onClick={() => setShowForm(!showForm)}
+          className="rounded-lg bg-[var(--color-ink)] px-4 py-1.5 text-xs font-bold text-white hover:opacity-90 transition-opacity">
+          {showForm ? "Annuler" : "+ Connecter un compte"}
+        </button>
+      </div>
+
+      {showForm && (
+        <div className="rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper-warm)] p-5 space-y-4">
+          <p className="text-xs font-bold text-[var(--color-ink)]">Nouveau compte social</p>
+
+          <div className="grid grid-cols-3 gap-2">
+            {["LINKEDIN", "FACEBOOK", "INSTAGRAM"].map(p => {
+              const meta = PLATEFORME_SOCIAL[p]!;
+              return (
+                <button key={p} onClick={() => setPlateforme(p)}
+                  className={`flex flex-col items-center gap-1.5 rounded-xl border-2 p-3 transition-all ${
+                    plateforme === p ? `${meta.bg} border-current ${meta.color}` : "border-[var(--color-rule)] bg-white text-[var(--color-ink-soft)]"
+                  }`}>
+                  <span className="text-xl">{meta.emoji}</span>
+                  <span className="text-[10px] font-bold">{meta.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-[11px] text-amber-700">
+            <strong>💡 {plateforme}</strong> — {PLATEFORME_HELP[plateforme]}
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Nom du compte</label>
+              <input value={nom} onChange={e => setNom(e.target.value)} placeholder="Ex: ÉduRéussite QC officiel"
+                className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">
+                {plateforme === "LINKEDIN" ? "Organisation/Person ID" : plateforme === "FACEBOOK" ? "Page ID" : "IG Business Account ID"}
+              </label>
+              <input value={pageId} onChange={e => setPageId(e.target.value)} placeholder="Ex: 12345678"
+                className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Access Token</label>
+            <textarea value={token} onChange={e => setToken(e.target.value)} rows={3}
+              placeholder="Coller ici le token OAuth 2.0…"
+              className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-xs font-mono text-[var(--color-ink)] placeholder:text-[var(--color-ink-soft)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)] resize-none" />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Expiration du token (optionnel)</label>
+            <input type="date" value={expire} onChange={e => setExpire(e.target.value)}
+              className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]" />
+          </div>
+
+          <button
+            onClick={() => connecter.mutate({ plateforme: plateforme as "LINKEDIN" | "FACEBOOK" | "INSTAGRAM", nomCompte: nom, pageId: pageId || undefined, accessToken: token, tokenExpire: expire || undefined })}
+            disabled={connecter.isPending || !nom.trim() || !token.trim()}
+            className="w-full rounded-xl bg-[var(--color-ink)] py-2.5 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 transition-opacity">
+            {connecter.isPending ? "Connexion en cours…" : "✦ Connecter ce compte"}
+          </button>
+          {connecter.error && <ErreurMsg msg={connecter.error.message} />}
+        </div>
+      )}
+
+      {isLoading ? (
+        <p className="text-center text-sm text-[var(--color-ink-soft)] py-6">Chargement…</p>
+      ) : !comptes?.length ? (
+        <div className="text-center py-12 text-sm text-[var(--color-ink-soft)]">
+          <div className="text-4xl mb-3">🔗</div>
+          <p className="font-medium">Aucun compte connecté</p>
+          <p className="text-xs mt-1 max-w-xs mx-auto">Connectez vos comptes LinkedIn, Facebook ou Instagram pour publier directement depuis cet espace.</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {comptes.map(c => {
+            const meta = PLATEFORME_SOCIAL[c.plateforme];
+            const expBientot = c.tokenExpire && new Date(c.tokenExpire) < new Date(Date.now() + 7 * 86_400_000);
+            return (
+              <div key={c.id} className={`flex items-center gap-3 rounded-xl border-2 p-4 ${meta?.bg ?? "border-[var(--color-rule)] bg-white"}`}>
+                <span className="text-2xl">{meta?.emoji ?? "📄"}</span>
+                <div className="flex-1 min-w-0">
+                  <p className={`font-semibold text-sm ${meta?.color ?? ""}`}>{c.nomCompte}</p>
+                  <p className="text-xs text-[var(--color-ink-soft)]">{meta?.label} · ID {c.pageId ?? "—"}</p>
+                  {expBientot && (
+                    <p className="text-[11px] text-red-600 font-medium mt-0.5">⚠️ Token expire le {new Date(c.tokenExpire!).toLocaleDateString("fr-CA")}</p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-bold text-green-700">Actif</span>
+                  <button onClick={() => { if (confirm("Retirer ce compte ?")) supprimer.mutate({ id: c.id }); }}
+                    className="rounded-lg bg-red-50 border border-red-200 px-2.5 py-1 text-xs text-red-600 hover:bg-red-100 transition-colors">
+                    Retirer
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Sous-onglet : Rédiger un post ────────────────────────────────────────────
+
+function SocialPostTab() {
+  const utils = trpc.useUtils();
+  const { data: comptes } = trpc.agents.getComptesSociaux.useQuery();
   const [plateforme, setPlateforme] = useState("LINKEDIN");
   const [sujet, setSujet] = useState("");
   const [ton, setTon] = useState("PROFESSIONNEL");
   const [inclureEmoji, setInclureEmoji] = useState(true);
   const [inclureHashtags, setInclureHashtags] = useState(true);
-  const [periode, setPeriode] = useState("SEMAINE");
-  const [plateformes, setPlateformes] = useState<string[]>(["LINKEDIN"]);
-  const [themes, setThemes] = useState("");
-  const [resultat, setResultat] = useState("");
+  const [contenu, setContenu] = useState("");
+  const [compteId, setCompteId] = useState("");
+  const [datePlan, setDatePlan] = useState("");
+  const [heurePlan, setHeurePlan] = useState("");
   const [validationErr, setValidationErr] = useState("");
+  const [savedOk, setSavedOk] = useState(false);
 
-  const post = trpc.agents.genererPost.useMutation({ onSuccess: (d) => setResultat(d.contenu) });
-  const calendrier = trpc.agents.genererCalendrier.useMutation({ onSuccess: (d) => setResultat(d.calendrier) });
+  const comptesFiltre = (comptes ?? []).filter(c => c.plateforme === plateforme);
 
-  function togglePlateforme(p: string) {
-    setPlateformes((prev) => prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]);
-  }
+  const genPost = trpc.agents.genererPost.useMutation({ onSuccess: d => setContenu(d.contenu) });
+  const sauvegarder = trpc.agents.sauvegarderPublication.useMutation({
+    onSuccess: () => { utils.agents.getPublications.invalidate(); setSavedOk(true); setTimeout(() => setSavedOk(false), 3000); },
+  });
+  const publier = trpc.agents.publierPublication.useMutation({
+    onSuccess: () => { utils.agents.getPublications.invalidate(); setSavedOk(true); setTimeout(() => setSavedOk(false), 3000); },
+  });
 
-  function generer() {
+  async function handleAction(publierMaintenant: boolean) {
+    if (!compteId) { setValidationErr("Sélectionnez un compte pour publier."); return; }
+    if (!contenu) { setValidationErr("Générez d'abord un post."); return; }
     setValidationErr("");
-    if (mode === "POST") {
-      if (!sujet.trim()) { setValidationErr("Veuillez saisir un sujet pour le post."); return; }
-      post.mutate({ plateforme: plateforme as "LINKEDIN" | "FACEBOOK" | "INSTAGRAM", sujet, ton: ton as "PROFESSIONNEL" | "INSPIRANT" | "EDUCATIF" | "PROMOTIONNEL", inclureEmoji, inclureHashtags });
-    } else {
-      if (plateformes.length === 0) { setValidationErr("Sélectionnez au moins une plateforme."); return; }
-      calendrier.mutate({ periode: periode as "SEMAINE" | "MOIS", plateformes: plateformes as ("LINKEDIN" | "FACEBOOK" | "INSTAGRAM")[], themesPrioritaires: themes || undefined });
-    }
+    const dt = datePlan && heurePlan ? `${datePlan}T${heurePlan}:00` : undefined;
+    const pub = await sauvegarder.mutateAsync({ compteId, contenu, sujet: sujet || "Post généré", typeContenu: "TEXTE", planifieLe: dt });
+    if (pub && publierMaintenant) await publier.mutateAsync({ id: pub.id });
   }
 
-  const isPending = post.isPending || calendrier.isPending;
-  const error = validationErr || post.error?.message || calendrier.error?.message;
+  const isPending = genPost.isPending;
+  const isSaving  = sauvegarder.isPending || publier.isPending;
+  const error = validationErr || genPost.error?.message || sauvegarder.error?.message || publier.error?.message;
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
-        {["POST", "CALENDRIER"].map((m) => (
-          <button key={m} onClick={() => { setMode(m as "POST" | "CALENDRIER"); setResultat(""); }}
-            className={`rounded-lg px-4 py-1.5 text-xs font-bold transition-colors ${mode === m ? "bg-[var(--color-ink)] text-white" : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]"}`}>
-            {m === "POST" ? "Rédiger un post" : "Calendrier éditorial"}
+      {/* Plateforme */}
+      <div>
+        <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-2">Plateforme</label>
+        <div className="grid grid-cols-3 gap-2">
+          {["LINKEDIN", "FACEBOOK", "INSTAGRAM"].map(p => {
+            const meta = PLATEFORME_SOCIAL[p]!;
+            return (
+              <button key={p} onClick={() => { setPlateforme(p); setCompteId(""); }}
+                className={`flex items-center justify-center gap-2 rounded-xl border-2 px-3 py-2.5 text-sm font-semibold transition-all ${
+                  plateforme === p ? `${meta.bg} border-current ${meta.color}` : "border-[var(--color-rule)] bg-white text-[var(--color-ink-soft)]"
+                }`}>
+                {meta.emoji} {meta.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <SelectField label="Ton" value={ton} onChange={setTon} options={[
+        { value: "PROFESSIONNEL", label: "Professionnel" },
+        { value: "INSPIRANT",     label: "Inspirant & motivant" },
+        { value: "EDUCATIF",      label: "Éducatif & informatif" },
+        { value: "PROMOTIONNEL",  label: "Promotionnel" },
+      ]} />
+
+      <TextareaField label="Sujet / angle du post" value={sujet} onChange={setSujet}
+        placeholder="Ex: Impact de l'IA adaptative sur les élèves en difficulté au Québec…" rows={2} />
+
+      <div className="flex items-center gap-4">
+        {[["Emojis", inclureEmoji, setInclureEmoji] as const, ["Hashtags", inclureHashtags, setInclureHashtags] as const].map(([lbl, val, set]) => (
+          <label key={lbl} className="flex items-center gap-1.5 text-xs text-[var(--color-ink-soft)] cursor-pointer">
+            <input type="checkbox" checked={val} onChange={e => set(e.target.checked)} className="rounded" />
+            {lbl}
+          </label>
+        ))}
+      </div>
+
+      <BoutonGenerer onClick={() => {
+        if (!sujet.trim()) { setValidationErr("Veuillez saisir un sujet."); return; }
+        setValidationErr(""); setContenu("");
+        genPost.mutate({ plateforme: plateforme as "LINKEDIN" | "FACEBOOK" | "INSTAGRAM", sujet, ton: ton as "PROFESSIONNEL" | "INSPIRANT" | "EDUCATIF" | "PROMOTIONNEL", inclureEmoji, inclureHashtags });
+      }} pending={isPending} label="Générer le post" />
+
+      {error && <ErreurMsg msg={error} />}
+
+      {contenu && (
+        <div className="space-y-3">
+          {/* Aperçu */}
+          <div className={`rounded-xl border-2 p-5 ${PLATEFORME_SOCIAL[plateforme]?.bg ?? "border-[var(--color-rule)] bg-white"}`}>
+            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-current/10">
+              <span className="text-lg">{PLATEFORME_SOCIAL[plateforme]?.emoji}</span>
+              <span className={`text-xs font-bold ${PLATEFORME_SOCIAL[plateforme]?.color}`}>{PLATEFORME_SOCIAL[plateforme]?.label}</span>
+              <span className="flex-1" />
+              <button onClick={() => navigator.clipboard.writeText(contenu)}
+                className="text-xs font-semibold text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] transition-colors">
+                📋 Copier
+              </button>
+            </div>
+            <div className="text-sm text-[var(--color-ink)] whitespace-pre-wrap leading-relaxed max-h-56 overflow-y-auto">
+              {contenu}
+            </div>
+          </div>
+
+          {/* Publication */}
+          <div className="rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper-warm)] p-4 space-y-3">
+            <p className="text-xs font-bold text-[var(--color-ink)]">Publier sur un compte connecté</p>
+
+            {comptesFiltre.length === 0 ? (
+              <p className="text-xs text-[var(--color-ink-soft)]">
+                Aucun compte {PLATEFORME_SOCIAL[plateforme]?.label} connecté.
+                Ajoutez-en un dans l'onglet <strong>Comptes</strong>.
+              </p>
+            ) : (
+              <>
+                <div>
+                  <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Compte cible</label>
+                  <select value={compteId} onChange={e => setCompteId(e.target.value)}
+                    className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]">
+                    <option value="">— Sélectionner —</option>
+                    {comptesFiltre.map(c => <option key={c.id} value={c.id}>{c.nomCompte}</option>)}
+                  </select>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Date de planification</label>
+                    <input type="date" value={datePlan} onChange={e => setDatePlan(e.target.value)}
+                      className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Heure</label>
+                    <input type="time" value={heurePlan} onChange={e => setHeurePlan(e.target.value)}
+                      className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none" />
+                  </div>
+                </div>
+                <div className="flex gap-2 pt-1">
+                  <button onClick={() => handleAction(false)} disabled={isSaving || !compteId}
+                    className="flex-1 rounded-xl border-2 border-[var(--color-ink)] py-2 text-xs font-bold text-[var(--color-ink)] hover:bg-[var(--color-paper-warm)] disabled:opacity-50 transition-colors">
+                    {savedOk ? "✓ Sauvegardé" : isSaving ? "Enregistrement…" : "📅 Sauvegarder"}
+                  </button>
+                  <button onClick={() => handleAction(true)} disabled={isSaving || !compteId || plateforme === "INSTAGRAM"}
+                    title={plateforme === "INSTAGRAM" ? "Instagram requiert un média – publiez via Meta Business Suite" : ""}
+                    className="flex-1 rounded-xl bg-[var(--color-ink)] py-2 text-xs font-bold text-white hover:opacity-90 disabled:opacity-50 transition-opacity">
+                    {isSaving ? "Publication…" : "🚀 Publier maintenant"}
+                  </button>
+                </div>
+                {plateforme === "INSTAGRAM" && (
+                  <p className="text-[11px] text-[var(--color-ink-soft)]">ⓘ Instagram requiert une image — sauvegardez et publiez depuis Meta Business Suite avec le contenu texte.</p>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Sous-onglet : Calendrier éditorial ──────────────────────────────────────
+
+type CalPost = {
+  date: string; plateforme: string; sujet: string; angle: string;
+  typeContenu: string; objectif: string; heureSuggereeTz: string;
+};
+
+function SocialCalendrierTab() {
+  const utils = trpc.useUtils();
+  const { data: comptes } = trpc.agents.getComptesSociaux.useQuery();
+  const [periode, setPeriode] = useState<"SEMAINE" | "MOIS">("SEMAINE");
+  const [plateformes, setPlateformes] = useState<string[]>(["LINKEDIN"]);
+  const [themes, setThemes] = useState("");
+  const [dateDebut, setDateDebut] = useState("");
+  const [posts, setPosts] = useState<CalPost[]>([]);
+  const [savedAll, setSavedAll] = useState(false);
+  const [validationErr, setValidationErr] = useState("");
+
+  const generer = trpc.agents.genererCalendrier.useMutation({
+    onSuccess: d => setPosts(d.posts ?? []),
+  });
+  const sauvegarder = trpc.agents.sauvegarderPublication.useMutation({
+    onSuccess: () => utils.agents.getPublications.invalidate(),
+  });
+
+  function togglePlateforme(p: string) {
+    setPlateformes(prev => prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p]);
+  }
+
+  async function handleSauvegarderTout() {
+    const compteMap: Record<string, string | undefined> = {};
+    (comptes ?? []).forEach(c => { if (!compteMap[c.plateforme]) compteMap[c.plateforme] = c.id; });
+    for (const p of posts) {
+      const cid = compteMap[p.plateforme];
+      if (!cid) continue;
+      const dt = `${p.date}T${p.heureSuggereeTz ?? "09:00"}:00`;
+      await sauvegarder.mutateAsync({ compteId: cid, contenu: "", sujet: p.sujet, typeContenu: (p.typeContenu as "TEXTE" | "IMAGE" | "VIDEO") || "TEXTE", planifieLe: dt });
+    }
+    setSavedAll(true);
+    setTimeout(() => setSavedAll(false), 4000);
+  }
+
+  const byDate = posts.reduce<Record<string, CalPost[]>>((acc, p) => {
+    if (!acc[p.date]) acc[p.date] = [];
+    acc[p.date]!.push(p);
+    return acc;
+  }, {});
+
+  const jours: string[] = [];
+  if (posts.length > 0) {
+    const dates = Object.keys(byDate).sort();
+    const d0 = new Date(dates[0]! + "T12:00:00");
+    const dN = new Date(dates[dates.length - 1]! + "T12:00:00");
+    for (const d = new Date(d0); d <= dN; d.setDate(d.getDate() + 1)) {
+      jours.push(d.toISOString().slice(0, 10));
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1.5">Période</label>
+          <div className="flex gap-2">
+            {(["SEMAINE", "MOIS"] as const).map(p => (
+              <button key={p} onClick={() => setPeriode(p)}
+                className={`flex-1 rounded-xl border-2 py-2 text-xs font-bold transition-all ${
+                  periode === p ? "bg-[var(--color-ink)] text-white border-[var(--color-ink)]" : "border-[var(--color-rule)] text-[var(--color-ink-soft)] bg-white"
+                }`}>
+                {p === "SEMAINE" ? "7 jours" : "30 jours"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1.5">À partir du</label>
+          <input type="date" value={dateDebut} onChange={e => setDateDebut(e.target.value)}
+            className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]" />
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1.5">Plateformes</label>
+        <div className="flex gap-2">
+          {["LINKEDIN", "FACEBOOK", "INSTAGRAM"].map(p => {
+            const meta = PLATEFORME_SOCIAL[p]!;
+            return (
+              <button key={p} onClick={() => togglePlateforme(p)}
+                className={`flex items-center gap-1.5 rounded-xl border-2 px-3 py-1.5 text-xs font-bold transition-all ${
+                  plateformes.includes(p) ? `${meta.bg} border-current ${meta.color}` : "border-[var(--color-rule)] bg-white text-[var(--color-ink-soft)]"
+                }`}>
+                {meta.emoji} {meta.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <TextareaField label="Thèmes prioritaires (optionnel)" value={themes} onChange={setThemes}
+        placeholder="Ex: rentrée scolaire, succès élèves, impact IA, conseils parents TDAH…" rows={2} />
+
+      <BoutonGenerer onClick={() => {
+        if (!plateformes.length) { setValidationErr("Sélectionnez au moins une plateforme."); return; }
+        setValidationErr(""); setPosts([]);
+        generer.mutate({ periode, plateformes: plateformes as ("LINKEDIN" | "FACEBOOK" | "INSTAGRAM")[], themesPrioritaires: themes || undefined, dateDebut: dateDebut || undefined });
+      }} pending={generer.isPending} label="Générer le calendrier éditorial" />
+
+      {validationErr && <ErreurMsg msg={validationErr} />}
+      {generer.error && <ErreurMsg msg={generer.error.message} />}
+
+      {posts.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-bold text-[var(--color-ink)]">{posts.length} publication{posts.length > 1 ? "s" : ""} générée{posts.length > 1 ? "s" : ""}</p>
+            {!!comptes?.length && (
+              <button onClick={handleSauvegarderTout} disabled={sauvegarder.isPending || savedAll}
+                className="rounded-xl bg-[var(--color-ink)] px-4 py-1.5 text-xs font-bold text-white hover:opacity-90 disabled:opacity-50 transition-opacity">
+                {savedAll ? "✓ Tout sauvegardé" : sauvegarder.isPending ? "Sauvegarde…" : "💾 Sauvegarder tout"}
+              </button>
+            )}
+          </div>
+
+          {/* ── Vue semaine (7 colonnes) ── */}
+          {periode === "SEMAINE" ? (
+            <div className="overflow-x-auto pb-2">
+              <div className="grid gap-2 min-w-[700px]" style={{ gridTemplateColumns: `repeat(${Math.min(jours.length, 7)}, 1fr)` }}>
+                {jours.slice(0, 7).map(date => {
+                  const d = new Date(date + "T12:00:00");
+                  const dayPosts = byDate[date] ?? [];
+                  const hasPost = dayPosts.length > 0;
+                  return (
+                    <div key={date}>
+                      <div className={`rounded-t-xl px-2 py-2.5 text-center ${hasPost ? "bg-[var(--color-ink)]" : "bg-[var(--color-paper-warm)]"}`}>
+                        <p className={`text-[10px] font-bold uppercase tracking-wide ${hasPost ? "text-white/60" : "text-[var(--color-ink-soft)]"}`}>
+                          {JOURS_FR[d.getDay()]}
+                        </p>
+                        <p className={`text-xl font-black ${hasPost ? "text-white" : "text-[var(--color-ink-soft)]"}`}>{d.getDate()}</p>
+                        <p className={`text-[9px] ${hasPost ? "text-white/50" : "text-[var(--color-ink-soft)]"}`}>{MOIS_FR[d.getMonth()]}</p>
+                      </div>
+                      <div className="rounded-b-xl border border-t-0 border-[var(--color-rule)] bg-white p-2 space-y-1.5 min-h-[100px]">
+                        {dayPosts.length === 0 ? (
+                          <div className="h-10 flex items-center justify-center">
+                            <span className="text-[11px] text-[var(--color-ink-soft)]">—</span>
+                          </div>
+                        ) : (
+                          dayPosts.map((p, i) => {
+                            const meta = PLATEFORME_SOCIAL[p.plateforme];
+                            const obj  = OBJECTIF_BADGE[p.objectif];
+                            return (
+                              <div key={i} className={`rounded-lg border p-2 space-y-1 ${meta?.bg ?? "border-[var(--color-rule)] bg-white"}`}>
+                                <div className="flex items-center gap-1">
+                                  <span className="text-[11px]">{meta?.emoji}</span>
+                                  <span className={`text-[10px] font-bold truncate ${meta?.color}`}>{meta?.label}</span>
+                                  <span className="flex-1" />
+                                  <span className="text-[9px] text-[var(--color-ink-soft)] flex-shrink-0">{p.heureSuggereeTz}</span>
+                                </div>
+                                <p className="text-[11px] font-medium text-[var(--color-ink)] leading-tight line-clamp-2">{p.sujet}</p>
+                                {obj && <span className={`inline-block rounded-full px-1.5 py-0.5 text-[9px] font-bold ${obj.color}`}>{obj.label}</span>}
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            /* ── Vue mois (liste par semaine) ── */
+            <div className="space-y-3">
+              {Array.from({ length: Math.ceil(jours.length / 7) }, (_, wi) => {
+                const sJours = jours.slice(wi * 7, wi * 7 + 7);
+                const sPosts = sJours.flatMap(d => (byDate[d] ?? []).map(p => ({ ...p, _date: d })));
+                if (!sPosts.length) return null;
+                const d0 = new Date(sJours[0]! + "T12:00:00");
+                const dN = new Date(sJours[sJours.length - 1]! + "T12:00:00");
+                return (
+                  <div key={wi} className="rounded-xl border border-[var(--color-rule)] overflow-hidden">
+                    <div className="bg-[var(--color-paper-warm)] px-4 py-2.5 border-b border-[var(--color-rule)] flex items-center justify-between">
+                      <p className="text-xs font-bold text-[var(--color-ink)]">
+                        Semaine {wi + 1} — {d0.getDate()} {MOIS_FR[d0.getMonth()]} au {dN.getDate()} {MOIS_FR[dN.getMonth()]}
+                      </p>
+                      <span className="text-[11px] text-[var(--color-ink-soft)]">{sPosts.length} post{sPosts.length > 1 ? "s" : ""}</span>
+                    </div>
+                    <div className="divide-y divide-[var(--color-rule)]">
+                      {sPosts.map((p, i) => {
+                        const meta = PLATEFORME_SOCIAL[p.plateforme];
+                        const obj  = OBJECTIF_BADGE[p.objectif];
+                        const d    = new Date(p._date + "T12:00:00");
+                        return (
+                          <div key={i} className="flex items-center gap-3 px-4 py-3 hover:bg-[var(--color-paper-warm)] transition-colors">
+                            <div className="w-10 flex-shrink-0 text-center">
+                              <p className="text-[10px] text-[var(--color-ink-soft)] font-semibold">{JOURS_FR[d.getDay()]}</p>
+                              <p className="text-base font-black text-[var(--color-ink)]">{d.getDate()}</p>
+                            </div>
+                            <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-bold flex-shrink-0 ${meta?.bg} ${meta?.color}`}>
+                              {meta?.emoji} {meta?.label}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-semibold text-[var(--color-ink)] truncate">{p.sujet}</p>
+                              <p className="text-xs text-[var(--color-ink-soft)] truncate">{p.angle}</p>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              {obj && <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${obj.color}`}>{obj.label}</span>}
+                              <span className="text-xs text-[var(--color-ink-soft)]">{p.heureSuggereeTz}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Sous-onglet : Publications & Commentaires ────────────────────────────────
+
+function SocialPublicationsTab() {
+  const utils = trpc.useUtils();
+  const [filtreStatut, setFiltreStatut] = useState("");
+  const [commentaire, setCommentaire] = useState("");
+  const [contexte, setContexte] = useState("");
+  const [platComment, setPlatComment] = useState("LINKEDIN");
+  const [ton, setTon] = useState("CHALEUREUX");
+  const [reponse, setReponse] = useState("");
+
+  const { data: publications, isLoading } = trpc.agents.getPublications.useQuery(
+    filtreStatut ? { statut: filtreStatut } : undefined
+  );
+  const publier   = trpc.agents.publierPublication.useMutation({ onSuccess: () => utils.agents.getPublications.invalidate() });
+  const supprimer = trpc.agents.supprimerPublication.useMutation({ onSuccess: () => utils.agents.getPublications.invalidate() });
+  const genRep    = trpc.agents.genererReponseCommentaire.useMutation({ onSuccess: d => setReponse(d.reponse) });
+
+  return (
+    <div className="space-y-5">
+      {/* Filtre */}
+      <div className="flex gap-2 flex-wrap">
+        {[["", "Toutes"], ["BROUILLON", "Brouillons"], ["PLANIFIE", "Planifiées"], ["PUBLIE", "Publiées"], ["ERREUR", "Erreurs"]].map(([v, l]) => (
+          <button key={v} onClick={() => setFiltreStatut(v!)}
+            className={`rounded-lg px-3 py-1 text-xs font-bold transition-colors ${filtreStatut === v ? "bg-[var(--color-ink)] text-white" : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]"}`}>
+            {l}
           </button>
         ))}
       </div>
 
-      {mode === "POST" ? (
-        <div className="space-y-3">
-          <SelectField label="Plateforme" value={plateforme} onChange={setPlateforme} options={[
-            { value: "LINKEDIN", label: "LinkedIn" }, { value: "FACEBOOK", label: "Facebook" }, { value: "INSTAGRAM", label: "Instagram" }
-          ]} />
-          <SelectField label="Ton" value={ton} onChange={setTon} options={[
-            { value: "PROFESSIONNEL", label: "Professionnel" }, { value: "INSPIRANT", label: "Inspirant" },
-            { value: "EDUCATIF", label: "Éducatif" }, { value: "PROMOTIONNEL", label: "Promotionnel" }
-          ]} />
-          <TextareaField label="Sujet / angle du post" value={sujet} onChange={setSujet} placeholder="Ex: lancement de notre nouveau module de mathématiques adaptatives…" rows={2} />
-          <div className="flex items-center gap-4">
-            <label className="flex items-center gap-1.5 text-xs text-[var(--color-ink-soft)] cursor-pointer">
-              <input type="checkbox" checked={inclureEmoji} onChange={(e) => setInclureEmoji(e.target.checked)} className="rounded" />
-              Emojis
-            </label>
-            <label className="flex items-center gap-1.5 text-xs text-[var(--color-ink-soft)] cursor-pointer">
-              <input type="checkbox" checked={inclureHashtags} onChange={(e) => setInclureHashtags(e.target.checked)} className="rounded" />
-              Hashtags
-            </label>
-          </div>
+      {/* Liste */}
+      {isLoading ? (
+        <p className="text-center text-sm text-[var(--color-ink-soft)] py-6">Chargement…</p>
+      ) : !publications?.length ? (
+        <div className="text-center py-10 text-sm text-[var(--color-ink-soft)]">
+          <div className="text-3xl mb-2">📭</div>
+          Aucune publication. Générez des posts dans <strong>Rédiger</strong> ou <strong>Calendrier</strong>.
         </div>
       ) : (
-        <div className="space-y-3">
-          <SelectField label="Période" value={periode} onChange={setPeriode} options={[
-            { value: "SEMAINE", label: "Semaine prochaine" }, { value: "MOIS", label: "Mois prochain" }
-          ]} />
-          <div>
-            <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1.5">Plateformes</label>
-            <div className="flex gap-2">
-              {["LINKEDIN", "FACEBOOK", "INSTAGRAM"].map((p) => (
-                <button key={p} onClick={() => togglePlateforme(p)}
-                  className={`rounded-lg px-3 py-1 text-xs font-medium transition-colors ${plateformes.includes(p) ? "bg-[var(--color-ink)] text-white" : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)]"}`}>
-                  {p}
-                </button>
-              ))}
-            </div>
-          </div>
-          <TextareaField label="Thèmes prioritaires (optionnel)" value={themes} onChange={setThemes} placeholder="Ex: rentrée scolaire, nouveautés, témoignages de parents…" rows={2} />
+        <div className="space-y-2">
+          {publications.map(pub => {
+            const meta   = PLATEFORME_SOCIAL[pub.compte?.plateforme ?? ""];
+            const statut = STATUT_PUB[pub.statut];
+            return (
+              <div key={pub.id} className="rounded-xl border border-[var(--color-rule)] bg-white overflow-hidden">
+                <div className="flex items-start gap-3 px-4 py-3">
+                  <span className="text-2xl mt-0.5">{meta?.emoji ?? "📄"}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${statut?.color ?? "bg-gray-100 text-gray-600"}`}>{statut?.label ?? pub.statut}</span>
+                      <span className={`text-xs font-semibold ${meta?.color ?? ""}`}>{meta?.label ?? pub.compte?.plateforme}</span>
+                      <span className="text-xs text-[var(--color-ink-soft)]">{pub.compte?.nomCompte}</span>
+                    </div>
+                    <p className="text-sm font-semibold text-[var(--color-ink)] truncate">{pub.sujet}</p>
+                    {pub.contenu && <p className="text-xs text-[var(--color-ink-soft)] mt-0.5 line-clamp-1">{pub.contenu}</p>}
+                    <div className="flex items-center gap-3 mt-1.5 text-[10px] text-[var(--color-ink-soft)]">
+                      {pub.planifieLe && <span>📅 {new Date(pub.planifieLe).toLocaleString("fr-CA", { dateStyle: "short", timeStyle: "short" })}</span>}
+                      {pub.publieLe  && <span>✓ Publié le {new Date(pub.publieLe).toLocaleDateString("fr-CA")}</span>}
+                      {pub.erreur    && <span className="text-red-600 truncate max-w-xs">⚠ {pub.erreur}</span>}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1.5 flex-shrink-0">
+                    {(pub.statut === "BROUILLON" || pub.statut === "PLANIFIE" || pub.statut === "ERREUR") && pub.contenu && (
+                      <button onClick={() => publier.mutate({ id: pub.id })} disabled={publier.isPending}
+                        className="rounded-lg bg-[var(--color-ink)] px-3 py-1.5 text-[11px] font-bold text-white hover:opacity-80 disabled:opacity-50 transition-opacity">
+                        🚀 Publier
+                      </button>
+                    )}
+                    <button onClick={() => { if (confirm("Supprimer ?")) supprimer.mutate({ id: pub.id }); }}
+                      className="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-[11px] text-red-600 hover:bg-red-100 transition-colors">
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
-      <BoutonGenerer onClick={generer} pending={isPending} label={mode === "POST" ? "Générer le post" : "Générer le calendrier"} />
-      {error && <ErreurMsg msg={error} />}
-      {resultat && <ResultatCard titre={mode === "POST" ? `Post ${plateforme}` : `Calendrier ${periode}`} contenu={resultat} onCopier={() => {}} />}
+      {/* Réponse aux commentaires */}
+      <div className="rounded-xl border-2 border-dashed border-[var(--color-rule)] p-5 space-y-3">
+        <div>
+          <p className="text-sm font-bold text-[var(--color-ink)]">💬 Répondre à un commentaire</p>
+          <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">Collez un commentaire d'internaute — l'IA génère une réponse professionnelle prête à poster.</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1.5">Plateforme</label>
+            <div className="flex gap-1.5">
+              {["LINKEDIN", "FACEBOOK", "INSTAGRAM"].map(p => {
+                const meta = PLATEFORME_SOCIAL[p]!;
+                return (
+                  <button key={p} onClick={() => setPlatComment(p)}
+                    className={`flex items-center gap-1 rounded-lg border-2 px-2.5 py-1.5 text-sm transition-all ${
+                      platComment === p ? `${meta.bg} border-current ${meta.color}` : "border-[var(--color-rule)] bg-white text-[var(--color-ink-soft)]"
+                    }`}>
+                    {meta.emoji}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <SelectField label="Ton de la réponse" value={ton} onChange={setTon} options={[
+            { value: "CHALEUREUX",     label: "Chaleureux" },
+            { value: "PROFESSIONNEL",  label: "Professionnel" },
+            { value: "INFORMATIF",     label: "Informatif" },
+            { value: "RECONNAISSANT",  label: "Reconnaissant" },
+          ]} />
+        </div>
+
+        <TextareaField label="Commentaire de l'internaute" value={commentaire} onChange={setCommentaire}
+          placeholder="Ex: Bonjour, mon fils utilise l'app mais il n'y a pas assez d'exercices de géographie…" rows={2} />
+        <TextareaField label="Contexte de la publication (optionnel)" value={contexte} onChange={setContexte}
+          placeholder="Ex: Post sur le lancement du module d'univers social…" rows={1} />
+
+        <BoutonGenerer onClick={() => {
+          if (!commentaire.trim()) return;
+          setReponse("");
+          genRep.mutate({
+            plateforme: platComment as "LINKEDIN" | "FACEBOOK" | "INSTAGRAM",
+            commentaire, contextePublication: contexte || undefined,
+            ton: ton as "PROFESSIONNEL" | "CHALEUREUX" | "INFORMATIF" | "RECONNAISSANT",
+          });
+        }} pending={genRep.isPending} label="Générer une réponse" />
+
+        {genRep.error && <ErreurMsg msg={genRep.error.message} />}
+
+        {reponse && (
+          <div className="rounded-xl bg-green-50 border border-green-200 p-4 space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-bold text-green-700">Réponse suggérée · {PLATEFORME_SOCIAL[platComment]?.label}</p>
+              <button onClick={() => navigator.clipboard.writeText(reponse)}
+                className="text-xs font-semibold text-green-700 hover:opacity-70 transition-opacity">
+                📋 Copier
+              </button>
+            </div>
+            <p className="text-sm text-[var(--color-ink)] leading-relaxed whitespace-pre-wrap">{reponse}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Onglet Social Media (principal) ─────────────────────────────────────────
+
+type ModeSocial = "COMPTES" | "POST" | "CALENDRIER" | "PUBLICATIONS";
+
+function OngletSocial() {
+  const [mode, setMode] = useState<ModeSocial>("POST");
+
+  const MODES: { id: ModeSocial; label: string; emoji: string }[] = [
+    { id: "COMPTES",      label: "Comptes",      emoji: "🔗" },
+    { id: "POST",         label: "Rédiger",       emoji: "✍️" },
+    { id: "CALENDRIER",   label: "Calendrier",    emoji: "📅" },
+    { id: "PUBLICATIONS", label: "Publications",  emoji: "📬" },
+  ];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-2 flex-wrap border-b border-[var(--color-rule)] pb-3">
+        {MODES.map(m => (
+          <button key={m.id} onClick={() => setMode(m.id)}
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${
+              mode === m.id ? "bg-[var(--color-ink)] text-white" : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]"
+            }`}>
+            {m.emoji} {m.label}
+          </button>
+        ))}
+      </div>
+      {mode === "COMPTES"      && <SocialComptesTab />}
+      {mode === "POST"         && <SocialPostTab />}
+      {mode === "CALENDRIER"   && <SocialCalendrierTab />}
+      {mode === "PUBLICATIONS" && <SocialPublicationsTab />}
     </div>
   );
 }

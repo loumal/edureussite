@@ -215,6 +215,8 @@ model User {
   securityLogs          SecurityLog[]
   agentLogs             AgentLog[]     @relation("AgentLogs")
   opportunitesPartenariat OpportunitePartenariat[] @relation("OpportunitesPartenariat")
+  comptesSociaux        CompteSocial[]       @relation("ComptesSociaux")
+  publicationsSociales  PublicationSociale[] @relation("PublicationsSociales")
 
   @@map("users")
 }
@@ -1159,4 +1161,50 @@ model OpportunitePartenariat {
   @@index([statut])
   @@index([adminId])
   @@map("opportunites_partenariat")
+}
+
+// ─── RÉSEAUX SOCIAUX ──────────────────────────────────────────────────────────
+
+/// Comptes sociaux connectés pour publication directe
+model CompteSocial {
+  id           String   @id @default(cuid())
+  plateforme   String   // LINKEDIN | FACEBOOK | INSTAGRAM
+  nomCompte    String
+  pageId       String?  // Facebook page ID / Instagram business account ID / LinkedIn org URN
+  accessToken  String   @db.Text
+  tokenExpire  DateTime?
+  actif        Boolean  @default(true)
+  adminId      String
+  admin        User     @relation("ComptesSociaux", fields: [adminId], references: [id])
+  publications PublicationSociale[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([adminId])
+  @@index([plateforme])
+  @@map("comptes_sociaux")
+}
+
+/// Publications sociales (brouillons, planifiées, publiées)
+model PublicationSociale {
+  id          String       @id @default(cuid())
+  compteId    String
+  compte      CompteSocial @relation(fields: [compteId], references: [id], onDelete: Cascade)
+  contenu     String       @db.Text
+  sujet       String
+  typeContenu String       @default("TEXTE") // TEXTE | IMAGE | VIDEO
+  statut      String       @default("BROUILLON") // BROUILLON | PLANIFIE | PUBLIE | ERREUR
+  planifieLe  DateTime?
+  publieLe    DateTime?
+  postId      String?      // ID retourné par la plateforme après publication
+  erreur      String?      @db.Text
+  adminId     String
+  admin       User         @relation("PublicationsSociales", fields: [adminId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([adminId])
+  @@index([statut])
+  @@index([planifieLe])
+  @@map("publications_sociales")
 }

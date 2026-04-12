@@ -89,6 +89,206 @@ export const agentsRouter = createTRPCRouter({
   // AGENT 1 — SOCIAL MEDIA MANAGER
   // ══════════════════════════════════════════════════════════════════════════
 
+  // ── Gestion des comptes sociaux ──────────────────────────────────────────
+
+  getComptesSociaux: adminProcedure.query(async ({ ctx }) => {
+    return ctx.prisma.compteSocial.findMany({
+      where: { adminId: ctx.user.id },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, plateforme: true, nomCompte: true, pageId: true, actif: true, tokenExpire: true, createdAt: true },
+    });
+  }),
+
+  connecterCompte: adminProcedure
+    .input(z.object({
+      plateforme: z.enum(["LINKEDIN", "FACEBOOK", "INSTAGRAM"]),
+      nomCompte: z.string().min(1).max(200),
+      pageId: z.string().max(200).optional(),
+      accessToken: z.string().min(10),
+      tokenExpire: z.string().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.compteSocial.create({
+        data: {
+          plateforme: input.plateforme,
+          nomCompte: input.nomCompte,
+          pageId: input.pageId ?? null,
+          accessToken: input.accessToken,
+          tokenExpire: input.tokenExpire ? new Date(input.tokenExpire) : null,
+          adminId: ctx.user.id,
+        },
+        select: { id: true, plateforme: true, nomCompte: true, actif: true },
+      });
+    }),
+
+  supprimerCompte: adminProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.compteSocial.deleteMany({
+        where: { id: input.id, adminId: ctx.user.id },
+      });
+    }),
+
+  // ── Publications ─────────────────────────────────────────────────────────
+
+  getPublications: adminProcedure
+    .input(z.object({
+      statut: z.string().optional(),
+      compteId: z.string().optional(),
+    }).optional())
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.publicationSociale.findMany({
+        where: {
+          adminId: ctx.user.id,
+          ...(input?.statut ? { statut: input.statut } : {}),
+          ...(input?.compteId ? { compteId: input.compteId } : {}),
+        },
+        orderBy: [{ planifieLe: "asc" }, { createdAt: "desc" }],
+        include: {
+          compte: { select: { plateforme: true, nomCompte: true } },
+        },
+      });
+    }),
+
+  sauvegarderPublication: adminProcedure
+    .input(z.object({
+      compteId: z.string(),
+      contenu: z.string().min(1).max(5000),
+      sujet: z.string().min(1).max(300),
+      typeContenu: z.enum(["TEXTE", "IMAGE", "VIDEO"]).default("TEXTE"),
+      planifieLe: z.string().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.publicationSociale.create({
+        data: {
+          compteId: input.compteId,
+          contenu: input.contenu,
+          sujet: input.sujet,
+          typeContenu: input.typeContenu,
+          statut: input.planifieLe ? "PLANIFIE" : "BROUILLON",
+          planifieLe: input.planifieLe ? new Date(input.planifieLe) : null,
+          adminId: ctx.user.id,
+        },
+        include: { compte: { select: { plateforme: true, nomCompte: true } } },
+      });
+    }),
+
+  publierPublication: adminProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const pub = await ctx.prisma.publicationSociale.findFirst({
+        where: { id: input.id, adminId: ctx.user.id },
+        include: { compte: true },
+      });
+      if (!pub) throw new TRPCError({ code: "NOT_FOUND", message: "Publication introuvable." });
+
+      try {
+        let postId: string | null = null;
+
+        if (pub.compte.plateforme === "FACEBOOK" && pub.compte.pageId) {
+          const resp = await fetch(
+            `https://graph.facebook.com/v19.0/${pub.compte.pageId}/feed`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ message: pub.contenu, access_token: pub.compte.accessToken }),
+              signal: AbortSignal.timeout(30_000),
+            }
+          );
+          if (!resp.ok) throw new Error(await resp.text());
+          const data = await resp.json() as { id: string };
+          postId = data.id;
+
+        } else if (pub.compte.plateforme === "LINKEDIN") {
+          const author = pub.compte.pageId
+            ? `urn:li:organization:${pub.compte.pageId}`
+            : `urn:li:person:${pub.compte.pageId}`;
+          const resp = await fetch("https://api.linkedin.com/v2/ugcPosts", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${pub.compte.accessToken}`,
+              "Content-Type": "application/json",
+              "X-Restli-Protocol-Version": "2.0.0",
+            },
+            body: JSON.stringify({
+              author,
+              lifecycleState: "PUBLISHED",
+              specificContent: {
+                "com.linkedin.ugc.ShareContent": {
+                  shareCommentary: { text: pub.contenu },
+                  shareMediaCategory: "NONE",
+                },
+              },
+              visibility: { "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC" },
+            }),
+            signal: AbortSignal.timeout(30_000),
+          });
+          if (!resp.ok) throw new Error(await resp.text());
+          const headers = resp.headers;
+          postId = headers.get("x-restli-id") ?? null;
+
+        } else if (pub.compte.plateforme === "INSTAGRAM") {
+          // Instagram nécessite un média — publication text-only non supportée
+          throw new Error("Instagram requiert une image ou une vidéo. Ajoutez un média et publiez depuis l'app Meta Business Suite.");
+        }
+
+        await ctx.prisma.publicationSociale.update({
+          where: { id: pub.id },
+          data: { statut: "PUBLIE", publieLe: new Date(), postId: postId ?? null, erreur: null },
+        });
+        await logAgent(ctx, { agentType: "SOCIAL", action: `Publié sur ${pub.compte.plateforme}`, prompt: pub.contenu, output: `postId: ${postId}`, inputTokens: 0, outputTokens: 0 });
+        return { ok: true, postId };
+
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : "Erreur inconnue";
+        await ctx.prisma.publicationSociale.update({
+          where: { id: pub.id },
+          data: { statut: "ERREUR", erreur: msg },
+        });
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: msg });
+      }
+    }),
+
+  supprimerPublication: adminProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.publicationSociale.deleteMany({
+        where: { id: input.id, adminId: ctx.user.id },
+      });
+    }),
+
+  // ── Réponse aux commentaires ─────────────────────────────────────────────
+
+  genererReponseCommentaire: adminProcedure
+    .input(z.object({
+      plateforme: z.enum(["LINKEDIN", "FACEBOOK", "INSTAGRAM"]),
+      commentaire: z.string().min(2).max(2000),
+      contextePublication: z.string().max(500).optional(),
+      ton: z.enum(["PROFESSIONNEL", "CHALEUREUX", "INFORMATIF", "RECONNAISSANT"]).default("CHALEUREUX"),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const SYSTEM = `${PROFIL_EDU}
+
+Tu es le Community Manager d'ÉduRéussite QC. Tu rédiges des réponses aux commentaires sur les réseaux sociaux.
+Tes réponses sont ${input.ton.toLowerCase()}, authentiques, et valorisent la communauté.
+Règles : courte (2-4 phrases), personnalisée, ne jamais ignorer la question ou la préoccupation, finir par une invitation à continuer l'échange ou une question ouverte quand c'est pertinent.
+Réponds UNIQUEMENT avec le texte de la réponse, prêt à poster.`;
+
+      const prompt = `Plateforme : ${input.plateforme}
+${input.contextePublication ? `Contexte de la publication : ${input.contextePublication}` : ""}
+Commentaire d'un internaute : "${input.commentaire}"
+
+Rédige une réponse ${input.ton.toLowerCase()} et engageante.`;
+
+      try {
+        const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 400);
+        await logAgent(ctx, { agentType: "SOCIAL", action: `Réponse commentaire ${input.plateforme}`, prompt, output: text, inputTokens, outputTokens });
+        return { reponse: text };
+      } catch {
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Erreur lors de la génération de la réponse." });
+      }
+    }),
+
   genererPost: adminProcedure
     .input(z.object({
       plateforme: z.enum(["LINKEDIN", "FACEBOOK", "INSTAGRAM"]),
@@ -131,21 +331,69 @@ Format de réponse : UNIQUEMENT le texte de la publication, prêt à copier-coll
       periode: z.enum(["SEMAINE", "MOIS"]),
       plateformes: z.array(z.enum(["LINKEDIN", "FACEBOOK", "INSTAGRAM"])).min(1),
       themesPrioritaires: z.string().max(300).optional(),
+      dateDebut: z.string().optional(), // ISO date YYYY-MM-DD
     }))
     .mutation(async ({ ctx, input }) => {
+      const debut = input.dateDebut
+        ? new Date(input.dateDebut)
+        : (() => { const d = new Date(); d.setDate(d.getDate() + 1); return d; })();
+      const debutStr = debut.toISOString().slice(0, 10);
+
       const SYSTEM = `${PROFIL_EDU}
 
-Tu es le Social Media Manager d'ÉduRéussite QC. Tu génères des calendriers éditoriaux structurés.
-Réponds en Markdown avec un tableau ou une liste structurée. Sois concis et actionnable.`;
+Tu es le Social Media Manager d'ÉduRéussite QC. Tu génères des calendriers éditoriaux stratégiques.
+Tu réponds UNIQUEMENT avec un objet JSON valide, sans markdown, sans explication, sans texte avant ou après.
+Format attendu :
+{
+  "posts": [
+    {
+      "date": "YYYY-MM-DD",
+      "plateforme": "LINKEDIN" | "FACEBOOK" | "INSTAGRAM",
+      "sujet": "titre court du post (max 80 car.)",
+      "angle": "angle éditorial ou accroche (max 120 car.)",
+      "typeContenu": "TEXTE" | "IMAGE" | "VIDEO",
+      "objectif": "NOTORIETE" | "ENGAGEMENT" | "CONVERSION" | "FIDELISATION",
+      "heureSuggereeTz": "HH:MM"
+    }
+  ]
+}`;
 
-      const prompt = `Génère un calendrier éditorial pour ${input.periode === "SEMAINE" ? "la semaine prochaine" : "le mois prochain"} sur les plateformes : ${input.plateformes.join(", ")}.
-${input.themesPrioritaires ? `Thèmes prioritaires : ${input.themesPrioritaires}` : ""}
-Pour chaque publication : date, plateforme, sujet/angle, type de contenu (image, texte, vidéo).`;
+      const nbJours = input.periode === "SEMAINE" ? 7 : 30;
+      const frequenceParSemaine = input.plateformes.length <= 2 ? 3 : 5;
+
+      const prompt = `Génère un calendrier éditorial professionnel pour ÉduRéussite QC.
+Période : ${nbJours} jours à partir du ${debutStr}
+Plateformes : ${input.plateformes.join(", ")}
+Fréquence : environ ${frequenceParSemaine} posts/semaine au total, répartis intelligemment
+${input.themesPrioritaires ? `Thèmes prioritaires : ${input.themesPrioritaires}` : "Thèmes variés : impact IA, témoignages familles, conseils parentaux, actualité scolaire Québec, gamification, inclusion TDAH/dyslexie"}
+
+Contraintes :
+- Alterner les objectifs (notoriété, engagement, conversion, fidélisation)
+- Adapter le type de contenu à la plateforme (LinkedIn=texte/article, Facebook=texte+image, Instagram=image/vidéo)
+- Respecter les meilleures heures de publication pour chaque plateforme (ex. LinkedIn 9h ou 12h, Instagram 11h ou 18h, Facebook 13h ou 19h)
+- Varier les angles et ne jamais répéter deux posts identiques`;
 
       try {
-        const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 1500);
+        const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 3000);
+
+        // Parser le JSON retourné
+        let posts: {
+          date: string; plateforme: string; sujet: string; angle: string;
+          typeContenu: string; objectif: string; heureSuggereeTz: string;
+        }[] = [];
+        try {
+          const parsed = JSON.parse(text.trim()) as { posts: typeof posts };
+          posts = parsed.posts ?? [];
+        } catch {
+          // Fallback si Claude a quand même mis du markdown
+          const match = text.match(/\{[\s\S]*\}/);
+          if (match) {
+            try { posts = (JSON.parse(match[0]) as { posts: typeof posts }).posts ?? []; } catch { /* ignore */ }
+          }
+        }
+
         await logAgent(ctx, { agentType: "SOCIAL", action: `Calendrier ${input.periode}`, prompt, output: text, inputTokens, outputTokens });
-        return { calendrier: text };
+        return { posts, raw: text };
       } catch {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Erreur lors de la génération du calendrier." });
       }
