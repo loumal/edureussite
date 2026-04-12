@@ -385,18 +385,81 @@ export const planRouter = createTRPCRouter({
     });
     if (!profil) throw new TRPCError({ code: "NOT_FOUND" });
 
-    const minutesDispo = minutesDispoAujourdhui(
-      (profil.disponibilite as Record<string, number> | null) ?? {}
+    const dispoRaw = (profil.disponibilite as Record<string, number> | null) ?? {};
+    const minutesDispo = minutesDispoAujourdhui(dispoRaw);
+
+    // ── Notions actives triées par ordre du plan (comme la page plan) ──────────
+    const notionsActives = [...profil.planifNotions]
+      .filter((n) => n.priorite !== "MAITRISE" && !n.maitrisee)
+      .sort((a, b) => (a.ordre ?? 0) - (b.ordre ?? 0));
+
+    // ── Algorithme d'assignation bin-packing (identique à la page plan) ────────
+    // Détermine quelles notions sont travaillées AUJOURD'HUI selon la dispo hebdo.
+    const DUREE_NOTION: Record<string, number> = { URGENT: 90, IMPORTANT: 60, PLUS_TARD: 30 };
+    const JOURS_ORDRE = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"] as const;
+    const now = new Date();
+    const jourAujourdhuiKey = JOURS[now.getDay()]; // ex: "dimanche"
+
+    const joursAvecDispo = JOURS_ORDRE
+      .map((key) => ({ key, mins: dispoRaw[key] ?? 0 }))
+      .filter((j) => j.mins > 0);
+
+    // Reconstruire semaineDebut manquantes (legacy) puis assigner les jours
+    const capaciteSemaine = Math.max(JOURS_ORDRE.reduce((s, j) => s + (dispoRaw[j] ?? 0), 0), 30);
+    let semAutoIdx = 0;
+    let minsAutoSemaine = 0;
+    const notionsAvecSemaine = notionsActives.map((n) => {
+      if (n.semaineDebut) return n;
+      const duree = DUREE_NOTION[n.priorite] ?? 60;
+      if (minsAutoSemaine + duree > capaciteSemaine && minsAutoSemaine > 0) {
+        semAutoIdx++;
+        minsAutoSemaine = 0;
+      }
+      minsAutoSemaine += duree;
+      return { ...n, semaineDebut: getSemaineISO(addWeeks(now, semAutoIdx)) };
+    });
+
+    // Notions de la semaine courante seulement
+    const semaineActuelle = getSemaineISO(now);
+    const notionsCetteSemaine = notionsAvecSemaine.filter(
+      (n) => n.semaineDebut === semaineActuelle
     );
 
-    // Notions urgentes triées : URGENT → IMPORTANT → PLUS_TARD
+    // Bin-packing → map notionId → jours assignés
+    let dayIdx = 0;
+    let minRestants = joursAvecDispo[0]?.mins ?? 0;
+    const assignationJours: Record<string, string[]> = {};
+    for (const notion of notionsCetteSemaine) {
+      let restant = DUREE_NOTION[notion.priorite] ?? 60;
+      const joursOccupes = new Set<string>();
+      while (restant > 0 && dayIdx < joursAvecDispo.length) {
+        const consomme = Math.min(restant, minRestants);
+        joursOccupes.add(joursAvecDispo[dayIdx].key);
+        restant -= consomme;
+        minRestants -= consomme;
+        if (minRestants <= 0) {
+          dayIdx++;
+          if (dayIdx < joursAvecDispo.length) minRestants = joursAvecDispo[dayIdx].mins;
+        }
+      }
+      assignationJours[notion.id] = [...joursOccupes];
+    }
+
+    // Notions assignées à aujourd'hui (prioritaires dans le défi)
+    const notionsDuJour = notionsCetteSemaine.filter(
+      (n) => assignationJours[n.id]?.includes(jourAujourdhuiKey)
+    );
+
+    // Toutes les notions planifiées (pour la sidebar / pills) — notions du jour en tête
     const ORDRE: PrioriteNotion[] = ["URGENT", "IMPORTANT", "PLUS_TARD"];
-    const notionsPlanifiees = [...profil.planifNotions]
-      .filter((n) => n.priorite !== "MAITRISE")
-      .sort((a, b) => ORDRE.indexOf(a.priorite) - ORDRE.indexOf(b.priorite));
+    const notionsRestantes = notionsActives.filter(
+      (n) => !notionsDuJour.some((d) => d.id === n.id)
+    ).sort((a, b) => ORDRE.indexOf(a.priorite) - ORDRE.indexOf(b.priorite));
+
+    // notionsPlanifiees = notions du jour en premier, puis les autres
+    const notionsPlanifiees = [...notionsDuJour, ...notionsRestantes];
 
     // Notions SRS dues aujourd'hui (prochaineRevision <= now)
-    const now = new Date();
     const notionsSRS = profil.niveauxMatieres
       .filter((nm) => nm.prochaineRevision && new Date(nm.prochaineRevision) <= now)
       .map((nm) => nm.matiere);
