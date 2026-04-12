@@ -60,17 +60,16 @@ export default async function EleveDashboardPage() {
       <NavEleve prenom={profil.prenom} streak={profil.streakJours} niveauScolaire={profil.niveauScolaire} />
 
       <main className="mx-auto max-w-5xl px-4 py-6 sm:py-8">
-        {/* Salutation */}
-        <div className="mb-5 sm:mb-6">
+
+        {/* ── SALUTATION — sobre et directe ── */}
+        <div className="mb-4">
           {jeune ? (
             <>
               <h1 className="text-2xl font-black text-[var(--color-ink)] sm:text-3xl">
                 {modeDoux ? "💙" : "👋"} Coucou {profil.prenom} !
               </h1>
               <p className="text-base text-[var(--color-ink-soft)] mt-1">
-                {modeDoux
-                  ? "Prends soin de toi aujourd'hui 💙"
-                  : "C'est le moment de pratiquer ! 🌟"}
+                {modeDoux ? "Prends soin de toi aujourd'hui 💙" : "C'est le moment de pratiquer ! 🌟"}
               </p>
             </>
           ) : (
@@ -89,29 +88,27 @@ export default async function EleveDashboardPage() {
           )}
         </div>
 
-        {/* Surprise parentale (si le parent a accordé une surprise) */}
-        <SurpriseCard />
-
-        {/* Bannière streak en danger (client-side) */}
+        {/* ── BANNIÈRE STREAK — juste après la salutation ── */}
         <StreakDangerBanner
           streak={profil.streakJours}
           aFaitExerciceAujourdhui={aFaitExerciceAujourdhui}
         />
 
-        {/* Check-in émotionnel — si pas encore fait aujourd'hui */}
-        {!derniereSession && (
-          <div className="mb-6">
-            <CheckInEmotionnelWidget niveauScolaire={profil.niveauScolaire} />
-          </div>
-        )}
-
-        {/* Grille principale */}
+        {/* ── GRILLE PRINCIPALE ── */}
         <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-[2fr_1fr] lg:grid-cols-3">
           {/* Colonne principale (2/3) */}
           <div className="md:col-span-1 lg:col-span-2 space-y-4 sm:space-y-6">
 
-            {/* ── DÉFI DU JOUR — en premier, pièce centrale (plan personnel) ── */}
+            {/* ── DÉFI DU JOUR — première chose visible ── */}
             <PlanDuJourWidget niveauScolaire={profil.niveauScolaire} />
+
+            {/* ── Check-in émotionnel — intégré dans le flux, non bloquant ── */}
+            {!derniereSession && (
+              <CheckInEmotionnelWidget niveauScolaire={profil.niveauScolaire} />
+            )}
+
+            {/* ── Surprise parentale ── */}
+            <SurpriseCard />
 
             {/* ── Exercices assignés (hors plan — source externe) ── */}
             {profil.exercicesAssignes.filter((e) => e.statut !== "TERMINE").length > 0 && (
