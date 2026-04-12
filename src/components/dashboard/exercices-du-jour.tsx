@@ -37,20 +37,20 @@ export function ExercicesDuJourWidget({ exercices, modeDoux }: Props) {
 
   return (
     <Card className="p-5 border-[rgba(217,79,43,0.25)] bg-[rgba(217,79,43,0.02)]">
-      {/* En-tête — source clairement identifiée */}
+      {/* En-tête */}
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2">
-          <span className="text-base">👨‍🏫</span>
+          <span className="text-base">✨</span>
           <CardLabel>
-            {modeDoux ? "💙 De ton professeur" : "De ton professeur"}
+            {modeDoux ? "💙 Exercices recommandés" : "Exercices recommandés"}
           </CardLabel>
         </div>
         <span className="flex items-center gap-1 rounded-full bg-[rgba(217,79,43,0.1)] px-2.5 py-0.5 text-[10px] font-bold text-[var(--color-accent)]">
-          🔔 {enAttente.length} à remettre
+          🔔 {enAttente.length} à faire
         </span>
       </div>
       <p className="text-[11px] text-[var(--color-ink-soft)] mb-4">
-        Ton enseignant t'a assigné {enAttente.length === 1 ? "cet exercice" : "ces exercices"} — à compléter en priorité.
+        Mira t'a préparé {enAttente.length === 1 ? "cet exercice" : "ces exercices"} pour mieux maîtriser tes notions.
       </p>
 
       <div className="space-y-3">
