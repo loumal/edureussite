@@ -110,6 +110,9 @@ export default async function EleveDashboardPage() {
           {/* Colonne principale (2/3) */}
           <div className="md:col-span-1 lg:col-span-2 space-y-4 sm:space-y-6">
 
+            {/* ── DÉFI DU JOUR — en premier, pièce centrale (plan personnel) ── */}
+            <PlanDuJourWidget niveauScolaire={profil.niveauScolaire} />
+
             {/* ── Exercices assignés (hors plan — source externe) ── */}
             {profil.exercicesAssignes.filter((e) => e.statut !== "TERMINE").length > 0 && (
               <ExercicesDuJourWidget
@@ -122,9 +125,6 @@ export default async function EleveDashboardPage() {
             {profil.coursRemediation.filter((c) => c.statut !== "TERMINE").length > 0 && (
               <CoursWidget cours={profil.coursRemediation} />
             )}
-
-            {/* ── DÉFI DU JOUR — pièce centrale (plan personnel) ── */}
-            <PlanDuJourWidget niveauScolaire={profil.niveauScolaire} />
 
             {/* ── Missions de la semaine ── */}
             <MissionsWidget />
