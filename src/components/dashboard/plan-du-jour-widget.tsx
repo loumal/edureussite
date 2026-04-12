@@ -78,14 +78,6 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
 
   const { titreDuJour, minutesDispo, notionsPlanifiees, objectifs, exercicesPlan, notionsSRSDues } = data;
 
-  const notionPrincipale = notionsPlanifiees[0];
-  const matiereEmoji = notionPrincipale ? (MATIERE_EMOJI[notionPrincipale.matiere] ?? "📚") : "📚";
-  const matiereLabel = notionPrincipale
-    ? (jeune
-        ? (MATIERE_JEUNE[notionPrincipale.matiere] ?? notionPrincipale.matiere)
-        : (MATIERES_FR[notionPrincipale.matiere] ?? notionPrincipale.matiere))
-    : "";
-
   const enAttentePlan = exercicesPlan.filter((e) => e.statut !== "TERMINE");
   const completesAujourdhui = exercicesPlan.length - enAttentePlan.length;
   const progressionPct = exercicesPlan.length > 0
@@ -93,10 +85,33 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
     : 0;
   const defiFait = progressionPct === 100 && exercicesPlan.length > 0;
 
+  // ── Source d'affichage : exercice réel en attente > notion du plan ──────────
+  // Si un exercice existe déjà (généré précédemment), on affiche SA matière/titre.
+  // Sinon on se base sur la première notion du plan pour orienter l'enfant.
+  const premierExercice = enAttentePlan[0] ?? null;
+  const matierePrincipale = premierExercice
+    ? premierExercice.exercice.matiere
+    : notionsPlanifiees[0]?.matiere ?? null;
+  const notionPrincipale = notionsPlanifiees[0] ?? null;
+
+  const matiereEmoji = matierePrincipale ? (MATIERE_EMOJI[matierePrincipale] ?? "📚") : "📚";
+  const matiereLabel = matierePrincipale
+    ? (jeune
+        ? (MATIERE_JEUNE[matierePrincipale] ?? matierePrincipale)
+        : (MATIERES_FR[matierePrincipale] ?? matierePrincipale))
+    : "";
+
+  // Titre : titre de l'exercice réel si dispo, sinon notion du plan
+  const titrePrincipal = premierExercice
+    ? premierExercice.exercice.titre
+    : notionPrincipale
+      ? `Maîtrise : ${notionPrincipale.notion.replace(/_/g, " ").toLowerCase()}`
+      : titreDuJour;
+
   const lienDefi = enAttentePlan.length > 0
     ? `/eleve/exercices/${enAttentePlan[0].id}`
-    : notionPrincipale
-      ? `/eleve/exercices/nouveau?plan=1&matiere=${notionPrincipale.matiere}`
+    : matierePrincipale
+      ? `/eleve/exercices/nouveau?plan=1&matiere=${matierePrincipale}`
       : "/eleve/exercices/nouveau?plan=1";
 
   // ── XP estimé selon priorité ──
@@ -119,7 +134,7 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
               C'est {dateDuJour} — voici ton défi ! 🌟
             </p>
 
-            {notionPrincipale ? (
+            {matierePrincipale ? (
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-2xl flex-shrink-0">
                   {matiereEmoji}
@@ -127,7 +142,7 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
                 <div>
                   <p className="text-xs font-bold text-amber-700 uppercase tracking-wide">{matiereLabel}</p>
                   <p className="text-base font-black text-[var(--color-ink)] leading-snug">
-                    {notionPrincipale.notion.replace(/_/g, " ").toLowerCase()}
+                    {titrePrincipal}
                   </p>
                 </div>
               </div>
@@ -228,8 +243,8 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
           ) : (
             /* ── Défi à relever ── */
             <>
-              {/* Notion principale */}
-              {notionPrincipale ? (
+              {/* Matière + titre — toujours aligné sur l'exercice réel */}
+              {matierePrincipale ? (
                 <div className="flex items-center gap-3 mb-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-2xl flex-shrink-0">
                     {matiereEmoji}
@@ -237,12 +252,12 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
                   <div className="flex-1 min-w-0">
                     <p className="text-[11px] font-bold text-amber-700 uppercase tracking-wide">
                       {matiereLabel}
-                      {notionPrincipale.priorite === "URGENT" && (
+                      {notionPrincipale?.priorite === "URGENT" && (
                         <span className="ml-1.5 text-red-500">· 🔴 Urgent</span>
                       )}
                     </p>
                     <p className="text-sm font-semibold text-[var(--color-ink)] leading-snug">
-                      Maîtrise : {notionPrincipale.notion.replace(/_/g, " ").toLowerCase()}
+                      {titrePrincipal}
                     </p>
                   </div>
                 </div>
