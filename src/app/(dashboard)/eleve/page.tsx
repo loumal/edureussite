@@ -107,10 +107,15 @@ export default async function EleveDashboardPage() {
               <CheckInEmotionnelWidget niveauScolaire={profil.niveauScolaire} />
             )}
 
-            {/* ── Surprise parentale ── */}
-            <SurpriseCard />
+            {/* ── Cours personnalisés (remédiation en cours) ── */}
+            {profil.coursRemediation.filter((c) => c.statut !== "TERMINE").length > 0 && (
+              <CoursWidget cours={profil.coursRemediation} />
+            )}
 
-            {/* ── Exercices assignés (hors plan — source externe) ── */}
+            {/* ── Aller plus loin — exploration libre ── */}
+            {!jeune && <DefJourWidget />}
+
+            {/* ── Exercices recommandés par Mira ── */}
             {profil.exercicesAssignes.filter((e) => e.statut !== "TERMINE").length > 0 && (
               <ExercicesDuJourWidget
                 exercices={profil.exercicesAssignes}
@@ -118,16 +123,11 @@ export default async function EleveDashboardPage() {
               />
             )}
 
-            {/* ── Cours de remédiation en cours ── */}
-            {profil.coursRemediation.filter((c) => c.statut !== "TERMINE").length > 0 && (
-              <CoursWidget cours={profil.coursRemediation} />
-            )}
-
             {/* ── Missions de la semaine ── */}
             <MissionsWidget />
 
-            {/* ── Aller plus loin — exploration libre (masqué pour les très jeunes) ── */}
-            {!jeune && <DefJourWidget />}
+            {/* ── Surprise parentale ── */}
+            <SurpriseCard />
 
             {profil.coursRemediation.filter((c) => c.statut === "TERMINE").length > 0 && (
               <CoursWidget cours={profil.coursRemediation.filter((c) => c.statut === "TERMINE")} />
