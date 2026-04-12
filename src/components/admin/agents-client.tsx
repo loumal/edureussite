@@ -141,6 +141,7 @@ function OngletSocial() {
   const [plateformes, setPlateformes] = useState<string[]>(["LINKEDIN"]);
   const [themes, setThemes] = useState("");
   const [resultat, setResultat] = useState("");
+  const [validationErr, setValidationErr] = useState("");
 
   const post = trpc.agents.genererPost.useMutation({ onSuccess: (d) => setResultat(d.contenu) });
   const calendrier = trpc.agents.genererCalendrier.useMutation({ onSuccess: (d) => setResultat(d.calendrier) });
@@ -150,17 +151,18 @@ function OngletSocial() {
   }
 
   function generer() {
+    setValidationErr("");
     if (mode === "POST") {
-      if (!sujet.trim()) return;
+      if (!sujet.trim()) { setValidationErr("Veuillez saisir un sujet pour le post."); return; }
       post.mutate({ plateforme: plateforme as "LINKEDIN" | "FACEBOOK" | "INSTAGRAM", sujet, ton: ton as "PROFESSIONNEL" | "INSPIRANT" | "EDUCATIF" | "PROMOTIONNEL", inclureEmoji, inclureHashtags });
     } else {
-      if (plateformes.length === 0) return;
+      if (plateformes.length === 0) { setValidationErr("Sélectionnez au moins une plateforme."); return; }
       calendrier.mutate({ periode: periode as "SEMAINE" | "MOIS", plateformes: plateformes as ("LINKEDIN" | "FACEBOOK" | "INSTAGRAM")[], themesPrioritaires: themes || undefined });
     }
   }
 
   const isPending = post.isPending || calendrier.isPending;
-  const error = post.error?.message || calendrier.error?.message;
+  const error = validationErr || post.error?.message || calendrier.error?.message;
 
   return (
     <div className="space-y-4">
@@ -231,6 +233,7 @@ function OngletVeille() {
   const [resultat, setResultat] = useState("");
   const [sources, setSources] = useState<Source[]>([]);
   const [webDispo, setWebDispo] = useState<boolean | undefined>();
+  const [validationErr, setValidationErr] = useState("");
 
   const analyseConcurrent = trpc.agents.analyserConcurrence.useMutation({
     onSuccess: (d) => { setResultat(d.analyse); setSources((d.sources ?? []) as Source[]); setWebDispo(d.webDispo); }
@@ -240,9 +243,9 @@ function OngletVeille() {
   });
 
   function generer() {
-    setSources([]); setWebDispo(undefined);
+    setValidationErr(""); setSources([]); setWebDispo(undefined);
     if (mode === "CONCURRENT") {
-      if (!concurrent.trim()) return;
+      if (!concurrent.trim()) { setValidationErr("Veuillez saisir le nom d'un concurrent."); return; }
       analyseConcurrent.mutate({ concurrent });
     } else {
       analyseTendances.mutate({ domaine: domaine as "EDTECH_QC" | "EDTECH_CA" | "EDTECH_INTERNATIONAL" | "IA_EDUCATION" | "SAAS_EDUCATION", horizon: horizon as "6_MOIS" | "1_AN" | "3_ANS" });
@@ -250,7 +253,7 @@ function OngletVeille() {
   }
 
   const isPending = analyseConcurrent.isPending || analyseTendances.isPending;
-  const error = analyseConcurrent.error?.message || analyseTendances.error?.message;
+  const error = validationErr || analyseConcurrent.error?.message || analyseTendances.error?.message;
 
   return (
     <div className="space-y-4">
@@ -314,13 +317,15 @@ function OngletMarketing() {
   const [horizonPlan, setHorizonPlan] = useState("6_MOIS");
   const [contexteConcurrentiel, setContexteConcurrentiel] = useState("");
   const [resultat, setResultat] = useState("");
+  const [validationErr, setValidationErr] = useState("");
 
   const genCopy = trpc.agents.genererCopy.useMutation({ onSuccess: (d) => setResultat(d.copy) });
   const genPlan = trpc.agents.genererPlanMarketing.useMutation({ onSuccess: (d) => setResultat(d.plan) });
 
   function generer() {
+    setValidationErr("");
     if (mode === "COPY") {
-      if (!objectif.trim()) return;
+      if (!objectif.trim()) { setValidationErr("Veuillez décrire l'objectif de la campagne."); return; }
       genCopy.mutate({
         type: typeCopy as "LANDING_PAGE" | "EMAIL_CAMPAGNE" | "TUNNEL_VENTE" | "ANNONCE_PUBLICITAIRE" | "PROPOSITION_VALEUR",
         cibleAudience: cible as "PARENTS" | "ENSEIGNANTS" | "COMMISSIONS_SCOLAIRES" | "GENERAL",
@@ -328,7 +333,7 @@ function OngletMarketing() {
         contraintes: contraintes || undefined,
       });
     } else {
-      if (!objectifCroissance.trim()) return;
+      if (!objectifCroissance.trim()) { setValidationErr("Veuillez décrire l'objectif de croissance."); return; }
       genPlan.mutate({
         objectifCroissance,
         budget: budget as "FAIBLE" | "MOYEN" | "ELEVE",
@@ -339,7 +344,7 @@ function OngletMarketing() {
   }
 
   const isPending = genCopy.isPending || genPlan.isPending;
-  const error = genCopy.error?.message || genPlan.error?.message;
+  const error = validationErr || genCopy.error?.message || genPlan.error?.message;
 
   return (
     <div className="space-y-4">
@@ -425,8 +430,10 @@ function OngletPartenariats() {
   const creerOpp = trpc.agents.creerOpportunite.useMutation({ onSuccess: () => { utils.agents.getOpportunites.invalidate(); setShowForm(false); setNewTitre(""); setNewOrg(""); setNewNotes(""); setNewEcheance(""); } });
   const updateOpp = trpc.agents.updateOpportunite.useMutation({ onSuccess: () => utils.agents.getOpportunites.invalidate() });
 
+  const [validationErr, setValidationErr] = useState("");
+
   function generer() {
-    setSources([]); setWebDispo(undefined);
+    setValidationErr(""); setSources([]); setWebDispo(undefined);
     if (mode === "RECHERCHE") {
       rechercherOpp.mutate({
         type: typeRecherche as "COMMISSION_SCOLAIRE" | "MINISTERE_QC" | "MINISTERE_CA" | "ENTREPRISE" | "UNIVERSITE" | "INTERNATIONAL" | "TOUS",
@@ -434,7 +441,9 @@ function OngletPartenariats() {
         contexte: contexteRecherche || undefined,
       });
     } else if (mode === "SOUMISSION") {
-      if (!organisation.trim() || !typePartenariat.trim() || !objectifSoumission.trim()) return;
+      if (!organisation.trim()) { setValidationErr("Veuillez indiquer l'organisation destinataire."); return; }
+      if (!typePartenariat.trim()) { setValidationErr("Veuillez décrire le type de partenariat visé."); return; }
+      if (!objectifSoumission.trim()) { setValidationErr("Veuillez décrire l'objectif du partenariat."); return; }
       genSoumission.mutate({
         opportuniteId: opportuniteSelectee,
         organisation, typePartenariat, objectifPartenariat: objectifSoumission,
@@ -444,7 +453,7 @@ function OngletPartenariats() {
   }
 
   const isPending = rechercherOpp.isPending || genSoumission.isPending;
-  const error = rechercherOpp.error?.message || genSoumission.error?.message;
+  const error = validationErr || rechercherOpp.error?.message || genSoumission.error?.message;
 
   const STATUT_LABELS: Record<string, { label: string; color: string }> = {
     DETECTEE: { label: "Détectée", color: "bg-blue-100 text-blue-700" },

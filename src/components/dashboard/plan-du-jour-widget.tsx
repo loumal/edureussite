@@ -362,51 +362,65 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
         </Card>
       )}
 
-      {/* ── Objectifs & progression ── */}
-      {objectifs.length > 0 && (
-        <Card className="p-5">
-          <CardLabel className="mb-3">📈 Ma progression</CardLabel>
-          <div className="space-y-3">
-            {objectifs.map((obj) => (
-              <div key={obj.id} className="rounded-xl border border-[var(--color-rule)] p-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-lg">{MATIERE_EMOJI[obj.matiere] ?? "📚"}</span>
-                  <span className="text-sm font-bold text-[var(--color-ink)]">
-                    {MATIERES_FR[obj.matiere] ?? obj.matiere}
-                  </span>
-                  <span className="ml-auto text-xs font-bold text-[var(--color-ink-soft)]">
-                    {Math.round(obj.scoreActuel)}% → {obj.scoreVise}%
-                  </span>
-                </div>
-                <div className="h-2 w-full rounded-full bg-[var(--color-paper-warm)] overflow-hidden mb-2">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-[var(--color-purple)] to-[var(--color-success)] transition-all duration-700"
-                    style={{ width: `${obj.progressionPct}%` }}
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-1.5 text-center">
-                  {[
-                    { label: "Ce mois", val: obj.sousObjectifs.mensuel.label },
-                    { label: "Cette semaine", val: obj.sousObjectifs.hebdo.label },
-                    { label: "Aujourd'hui", val: obj.sousObjectifs.journalier.label },
-                  ].map((item) => (
-                    <div key={item.label} className="rounded-lg bg-[var(--color-paper-warm)] p-1.5">
-                      <p className="text-[9px] uppercase tracking-wider text-[var(--color-ink-soft)] font-bold">{item.label}</p>
-                      <p className="text-[11px] font-semibold text-[var(--color-ink)] mt-0.5 leading-snug">{item.val}</p>
-                    </div>
-                  ))}
-                </div>
-                {obj.joursRestants <= 14 && (
-                  <p className="text-[10px] text-[var(--color-accent)] font-semibold mt-2">
-                    ⚡ {obj.joursRestants} jours restants !
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        </Card>
-      )}
     </div>
+  );
+}
+
+// ── Widget séparé : objectifs & progression (utilisé dans la page dashboard) ──
+export function ObjectifsProgressionWidget() {
+  const { data, isLoading } = trpc.plan.getPlanDuJour.useQuery();
+
+  if (isLoading) return (
+    <Card className="p-5 space-y-3">
+      <div className="h-4 w-36 bg-[var(--color-paper-warm)] rounded animate-pulse" />
+      {[1, 2].map((i) => <div key={i} className="h-20 bg-[var(--color-paper-warm)] rounded-xl animate-pulse" />)}
+    </Card>
+  );
+
+  if (!data?.objectifs?.length) return null;
+
+  return (
+    <Card className="p-5">
+      <CardLabel className="mb-3">📈 Ma progression</CardLabel>
+      <div className="space-y-3">
+        {data.objectifs.map((obj) => (
+          <div key={obj.id} className="rounded-xl border border-[var(--color-rule)] p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-lg">{MATIERE_EMOJI[obj.matiere] ?? "📚"}</span>
+              <span className="text-sm font-bold text-[var(--color-ink)]">
+                {MATIERES_FR[obj.matiere] ?? obj.matiere}
+              </span>
+              <span className="ml-auto text-xs font-bold text-[var(--color-ink-soft)]">
+                {Math.round(obj.scoreActuel)}% → {obj.scoreVise}%
+              </span>
+            </div>
+            <div className="h-2 w-full rounded-full bg-[var(--color-paper-warm)] overflow-hidden mb-2">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[var(--color-purple)] to-[var(--color-success)] transition-all duration-700"
+                style={{ width: `${obj.progressionPct}%` }}
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-1.5 text-center">
+              {[
+                { label: "Ce mois", val: obj.sousObjectifs.mensuel.label },
+                { label: "Cette semaine", val: obj.sousObjectifs.hebdo.label },
+                { label: "Aujourd'hui", val: obj.sousObjectifs.journalier.label },
+              ].map((item) => (
+                <div key={item.label} className="rounded-lg bg-[var(--color-paper-warm)] p-1.5">
+                  <p className="text-[9px] uppercase tracking-wider text-[var(--color-ink-soft)] font-bold">{item.label}</p>
+                  <p className="text-[11px] font-semibold text-[var(--color-ink)] mt-0.5 leading-snug">{item.val}</p>
+                </div>
+              ))}
+            </div>
+            {obj.joursRestants <= 14 && (
+              <p className="text-[10px] text-[var(--color-accent)] font-semibold mt-2">
+                ⚡ {obj.joursRestants} jours restants !
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+    </Card>
   );
 }
 

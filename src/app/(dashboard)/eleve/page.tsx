@@ -1,7 +1,7 @@
 import { api } from "@/lib/trpc/server";
 import { CheckInEmotionnelWidget } from "@/components/dashboard/check-in-widget";
 import { ExercicesDuJourWidget } from "@/components/dashboard/exercices-du-jour";
-import { PlanDuJourWidget } from "@/components/dashboard/plan-du-jour-widget";
+import { PlanDuJourWidget, ObjectifsProgressionWidget } from "@/components/dashboard/plan-du-jour-widget";
 import { ProgressionWidget } from "@/components/dashboard/progression-widget";
 import { StreakBadgesWidget } from "@/components/dashboard/streak-badges";
 import { CoursWidget } from "@/components/dashboard/cours-widget";
@@ -125,6 +125,9 @@ export default async function EleveDashboardPage() {
 
             {/* ── Missions de la semaine ── */}
             <MissionsWidget />
+
+            {/* ── Ma progression — décalée après le contenu principal ── */}
+            <ObjectifsProgressionWidget />
 
             {/* ── Surprise parentale ── */}
             <SurpriseCard />
