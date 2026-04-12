@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Card, CardLabel } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import type { Exercice, ExerciceAssigne } from "@/generated/prisma";
 
 type ExerciceAvecDetails = ExerciceAssigne & { exercice: Exercice };
@@ -33,41 +32,31 @@ interface Props {
 }
 
 export function ExercicesDuJourWidget({ exercices, modeDoux }: Props) {
+  const enAttente = exercices.filter((e) => e.statut !== "TERMINE");
+  if (enAttente.length === 0) return null;
+
   return (
-    <Card className="p-5">
-      <div className="flex items-center justify-between mb-4">
-        <CardLabel>
-          {modeDoux ? "💙 Exercices doux du jour" : "⚡ Exercices du jour"}
-        </CardLabel>
-        <span className="text-xs text-[var(--color-ink-soft)]">
-          {exercices.length} à faire
+    <Card className="p-5 border-[rgba(217,79,43,0.25)] bg-[rgba(217,79,43,0.02)]">
+      {/* En-tête — source clairement identifiée */}
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center gap-2">
+          <span className="text-base">👨‍🏫</span>
+          <CardLabel>
+            {modeDoux ? "💙 De ton professeur" : "De ton professeur"}
+          </CardLabel>
+        </div>
+        <span className="flex items-center gap-1 rounded-full bg-[rgba(217,79,43,0.1)] px-2.5 py-0.5 text-[10px] font-bold text-[var(--color-accent)]">
+          🔔 {enAttente.length} à remettre
         </span>
       </div>
+      <p className="text-[11px] text-[var(--color-ink-soft)] mb-4">
+        Ton enseignant t'a assigné {enAttente.length === 1 ? "cet exercice" : "ces exercices"} — à compléter en priorité.
+      </p>
 
-      {exercices.length === 0 ? (
-        <div className="rounded-xl bg-[var(--color-paper-warm)] p-6 text-center">
-          <div className="text-3xl mb-2">🎉</div>
-          <p className="text-sm font-semibold text-[var(--color-ink)]">
-            Tous tes exercices sont complétés !
-          </p>
-          <p className="text-xs text-[var(--color-ink-soft)] mt-1">
-            Reviens demain ou génère un nouvel exercice.
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {exercices.map((ea, i) => (
-            <ExerciceCard key={ea.id} exerciceAssigne={ea} index={i} />
-          ))}
-        </div>
-      )}
-
-      <div className="mt-4 pt-4 border-t border-[var(--color-rule)]">
-        <Link href="/eleve/exercices/nouveau">
-          <Button variant="secondary" size="sm" className="w-full">
-            + Générer un nouvel exercice
-          </Button>
-        </Link>
+      <div className="space-y-3">
+        {enAttente.map((ea, i) => (
+          <ExerciceCard key={ea.id} exerciceAssigne={ea} index={i} />
+        ))}
       </div>
     </Card>
   );
@@ -85,22 +74,22 @@ function ExerciceCard({
 
   return (
     <Link href={`/eleve/exercices/${exerciceAssigne.id}`}>
-      <div className="flex items-start gap-3 rounded-xl bg-[var(--color-paper-warm)] p-4 hover:bg-white hover:shadow-[var(--shadow-card)] transition-all group">
+      <div className="flex items-start gap-3 rounded-xl border border-[rgba(217,79,43,0.15)] bg-white p-4 hover:shadow-[var(--shadow-card)] hover:border-[rgba(217,79,43,0.3)] transition-all group">
         <div className="text-2xl mt-0.5">
           {MATIERE_EMOJI[exercice.matiere] ?? "📚"}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
-            <p className="text-sm font-semibold text-[var(--color-ink)] line-clamp-1">
+            <p className="text-sm font-semibold text-[var(--color-ink)] line-clamp-2 leading-snug">
               {exercice.titre}
             </p>
             {isPrioritaire && (
               <Badge variant="accent" className="flex-shrink-0">
-                Prioritaire
+                À faire d'abord
               </Badge>
             )}
           </div>
-          <div className="flex items-center gap-2 mt-1 flex-wrap">
+          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
             <span className="text-xs text-[var(--color-ink-soft)]">
               ~{exercice.dureeMinutes} min
             </span>
@@ -116,7 +105,7 @@ function ExerciceCard({
             )}
           </div>
         </div>
-        <div className="text-[var(--color-ink-soft)] group-hover:text-[var(--color-ink)] transition-colors">
+        <div className="text-[var(--color-ink-soft)] group-hover:text-[var(--color-accent)] transition-colors mt-0.5">
           →
         </div>
       </div>

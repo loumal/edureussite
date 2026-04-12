@@ -109,17 +109,8 @@ export default async function EleveDashboardPage() {
         <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-[2fr_1fr] lg:grid-cols-3">
           {/* Colonne principale (2/3) */}
           <div className="md:col-span-1 lg:col-span-2 space-y-4 sm:space-y-6">
-            {/* Défi du jour — masqué pour les jeunes élèves (trop complexe) */}
-            {!jeune && <DefJourWidget />}
 
-            {profil.coursRemediation.filter((c) => c.statut !== "TERMINE").length > 0 && (
-              <CoursWidget cours={profil.coursRemediation} />
-            )}
-
-            {/* Plan du jour — smart widget (plan ou exercices libres) */}
-            <PlanDuJourWidget niveauScolaire={profil.niveauScolaire} />
-
-            {/* Exercices assignés classiques (hors plan) */}
+            {/* ── NIVEAU 1 : PRIORITÉ PROF (exercices assignés) ── */}
             {profil.exercicesAssignes.filter((e) => e.statut !== "TERMINE").length > 0 && (
               <ExercicesDuJourWidget
                 exercices={profil.exercicesAssignes}
@@ -127,7 +118,18 @@ export default async function EleveDashboardPage() {
               />
             )}
 
-            {/* Missions de la semaine */}
+            {/* ── Cours de remédiation en cours ── */}
+            {profil.coursRemediation.filter((c) => c.statut !== "TERMINE").length > 0 && (
+              <CoursWidget cours={profil.coursRemediation} />
+            )}
+
+            {/* ── NIVEAU 2 : MA MISSION DU JOUR (plan personnel) ── */}
+            <PlanDuJourWidget niveauScolaire={profil.niveauScolaire} />
+
+            {/* ── NIVEAU 3 : BONUS — Défi du jour (optionnel, masqué pour les jeunes) ── */}
+            {!jeune && <DefJourWidget />}
+
+            {/* ── Missions de la semaine ── */}
             <MissionsWidget />
 
             {profil.coursRemediation.filter((c) => c.statut === "TERMINE").length > 0 && (

@@ -1,7 +1,6 @@
 "use client";
 
 import { trpc } from "@/lib/trpc/client";
-import { Card, CardLabel } from "@/components/ui/card";
 import Link from "next/link";
 
 const MATIERE_EMOJI: Record<string, string> = {
@@ -21,69 +20,69 @@ export function DefJourWidget() {
 
   if (isLoading) {
     return (
-      <Card className="p-5">
-        <div className="h-4 w-28 rounded bg-[var(--color-paper-warm)] animate-pulse mb-3" />
-        <div className="h-16 rounded-xl bg-[var(--color-paper-warm)] animate-pulse" />
-      </Card>
+      <div className="h-16 rounded-2xl bg-[var(--color-paper-warm)] animate-pulse" />
     );
   }
 
   if (!def) return null;
 
-  return (
-    <Card className="p-5 relative overflow-hidden">
-      {/* Fond gradient discret */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-50 pointer-events-none" />
-
-      <div className="relative">
-        <div className="flex items-center justify-between mb-3">
-          <CardLabel>Défi du jour</CardLabel>
-          <div className="flex items-center gap-1.5 rounded-full bg-amber-100 border border-amber-200 px-2.5 py-1">
-            <span className="text-xs">⏰</span>
-            <span className="text-[11px] font-bold text-amber-700">Aujourd&apos;hui seulement</span>
-          </div>
+  // ── Défi complété : affichage discret de victoire ──────────────────────────
+  if (def.complete) {
+    return (
+      <div className="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
+        <span className="text-xl">✅</span>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-bold text-amber-700">Défi du jour complété !</p>
+          {def.score !== null && (
+            <p className="text-xs text-amber-600 mt-0.5">Score {def.score}% · +50 XP bonus gagnés 🏆</p>
+          )}
         </div>
-
-        {def.complete ? (
-          <div className="text-center py-3">
-            <div className="text-3xl mb-1">✅</div>
-            <p className="text-sm font-bold text-[var(--color-success)]">Défi complété !</p>
-            {def.score !== null && (
-              <p className="text-xs text-[var(--color-ink-soft)] mt-1">Score : {def.score}%</p>
-            )}
-            <p className="text-xs text-amber-600 font-semibold mt-1">+{50} XP bonus gagnés 🏆</p>
-          </div>
-        ) : (
-          <>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-2xl flex-shrink-0">
-                {MATIERE_EMOJI[def.matiere] ?? "📚"}
-              </div>
-              <div>
-                <p className="text-[11px] font-bold text-amber-700 uppercase tracking-wide">
-                  {MATIERE_LABEL[def.matiere] ?? def.matiere}
-                </p>
-                <p className="text-sm font-semibold text-[var(--color-ink)] leading-snug">
-                  Maîtrise : {def.notion}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="text-lg">⭐</span>
-                <span className="text-xs font-bold text-amber-600">+{def.xpBonus} XP bonus</span>
-              </div>
-              <Link
-                href={`/eleve/exercices/nouveau?matiere=${def.matiere}&defi=true`}
-                className="rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2 transition-colors"
-              >
-                Relever le défi →
-              </Link>
-            </div>
-          </>
-        )}
       </div>
-    </Card>
+    );
+  }
+
+  // ── Défi disponible : format "bonus optionnel" ─────────────────────────────
+  return (
+    <div className="rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-4">
+      {/* En-tête — clairement positionné comme bonus */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <span className="text-base">⭐</span>
+          <span className="text-xs font-black uppercase tracking-wider text-amber-600">
+            Défi bonus du jour
+          </span>
+        </div>
+        <div className="flex items-center gap-1 rounded-full bg-amber-100 border border-amber-200 px-2.5 py-0.5">
+          <span className="text-[10px]">⏰</span>
+          <span className="text-[10px] font-bold text-amber-700">Jusqu'à minuit</span>
+        </div>
+      </div>
+
+      {/* Contenu */}
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-xl flex-shrink-0">
+          {MATIERE_EMOJI[def.matiere] ?? "📚"}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-wide text-amber-600">
+            {MATIERE_LABEL[def.matiere] ?? def.matiere}
+          </p>
+          <p className="text-sm font-semibold text-[var(--color-ink)] leading-snug line-clamp-1">
+            {def.notion}
+          </p>
+        </div>
+        <Link
+          href={`/eleve/exercices/nouveau?matiere=${def.matiere}&defi=true`}
+          className="flex-shrink-0 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3 py-2 transition-colors whitespace-nowrap"
+        >
+          +{def.xpBonus} XP →
+        </Link>
+      </div>
+
+      {/* Sous-texte motivateur */}
+      <p className="text-[10px] text-amber-600 mt-2.5 font-medium">
+        Optionnel · Gagne des XP bonus en relevant ce défi en plus de ta mission du jour
+      </p>
+    </div>
   );
 }
