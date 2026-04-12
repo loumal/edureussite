@@ -10,6 +10,20 @@ function getMondayKey(date = new Date()): string {
   d.setDate(d.getDate() + (day === 0 ? -6 : 1 - day));
   return d.toISOString().slice(0, 10);
 }
+
+// Retourne minuit heure de Montréal en UTC — pour les comparaisons Prisma
+function debutJourMontreal(): Date {
+  const dateStrMontreal = new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+  // "en-CA" donne YYYY-MM-DD — on crée minuit heure locale Montréal
+  const [y, m, d] = dateStrMontreal.split("-").map(Number);
+  // UTC offset de Montréal : EDT = -4h, EST = -5h
+  const sondage = new Date(Date.UTC(y, m - 1, d, 5, 0, 0)); // tente minuit UTC-5
+  const check = sondage.toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+  const [cy, cm, cd] = check.split("-").map(Number);
+  if (cy === y && cm === m && cd === d) return sondage;
+  // EDT : UTC-4
+  return new Date(Date.UTC(y, m - 1, d, 4, 0, 0));
+}
 import { z } from "zod";
 import { Matiere, NiveauDifficulte, NiveauScolaire, StyleApprentissage, TypeCommentaireEleve } from "@/generated/prisma";
 import { genererPlanAction } from "@/lib/ai/plan";
@@ -170,8 +184,7 @@ export const eleveRouter = createTRPCRouter({
 
     if (!profil) return { profil: null, totalExercices: 0, aFaitExerciceAujourdhui: false };
 
-    const debutJour = new Date();
-    debutJour.setHours(0, 0, 0, 0);
+    const debutJour = debutJourMontreal();
 
     const [totalExercices, exerciceAujourdhui] = await Promise.all([
       ctx.prisma.exerciceAssigne.count({ where: { eleveId: profil.id, statut: "TERMINE" } }),
@@ -476,8 +489,7 @@ export const eleveRouter = createTRPCRouter({
       select: { id: true },
     });
 
-    const debutJour = new Date();
-    debutJour.setHours(0, 0, 0, 0);
+    const debutJour = debutJourMontreal();
 
     // Fenêtre de déduplication : si une session existe déjà dans les 30 dernières
     // minutes, on la réutilise — évite les doublons sur rechargement de page.
