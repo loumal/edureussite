@@ -15,37 +15,46 @@ export function StreakDangerBanner({ streak, aFaitExerciceAujourdhui }: Props) {
   useEffect(() => {
     const h = new Date().getHours();
     setHeureActuelle(h);
-    // Afficher la bannière si : streak > 0, pas encore fait d'exercice aujourd'hui, et il est >= 17h
-    setVisible(streak > 0 && !aFaitExerciceAujourdhui && h >= 17);
+    // Visible dès qu'il y a une streak active et aucun exercice fait aujourd'hui
+    setVisible(streak > 0 && !aFaitExerciceAujourdhui);
   }, [streak, aFaitExerciceAujourdhui]);
 
   if (!visible) return null;
 
+  // Urgence si moins de 3h restantes (après 21h)
+  const urgence = heureActuelle >= 21;
+  // Calcul heures restantes jusqu'à minuit
   const heuresRestantes = 23 - heureActuelle;
-  const urgence = heureActuelle >= 21; // Rouge si < 3h restantes
+  const label = urgence
+    ? `dans ~${heuresRestantes}h !`
+    : heureActuelle >= 17
+    ? `dans ~${heuresRestantes}h !`
+    : "aujourd'hui encore !";
 
   return (
-    <div
-      className={`mb-5 rounded-2xl border px-4 py-3 flex items-center gap-3 ${
-        urgence
-          ? "bg-red-50 border-red-200"
-          : "bg-amber-50 border-amber-200"
-      }`}
-    >
-      {/* Icône animée */}
-      <div className={`text-2xl ${urgence ? "animate-bounce" : "animate-pulse"}`}>
-        {urgence ? "🚨" : "⚠️"}
+    <div className={`mb-5 flex items-center gap-3 rounded-2xl border px-4 py-3 ${
+      urgence
+        ? "bg-red-50 border-red-200"
+        : "bg-[var(--color-paper-warm)] border-[var(--color-rule)]"
+    }`}>
+      {/* Icône */}
+      <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-xl ${
+        urgence ? "bg-red-100" : "bg-amber-100"
+      }`}>
+        {urgence ? "🚨" : "🔔"}
       </div>
 
+      {/* Texte */}
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-bold ${urgence ? "text-red-700" : "text-amber-700"}`}>
-          Ta série de {streak} jour{streak > 1 ? "s" : ""} se termine dans ~{heuresRestantes}h !
+        <p className={`text-sm font-bold ${urgence ? "text-red-700" : "text-[var(--color-ink)]"}`}>
+          Ta série de {streak} jour{streak > 1 ? "s" : ""} se termine {label}
         </p>
-        <p className={`text-xs mt-0.5 ${urgence ? "text-red-600" : "text-amber-600"}`}>
+        <p className={`text-xs mt-0.5 ${urgence ? "text-red-600" : "text-[var(--color-ink-soft)]"}`}>
           1 seul exercice suffit pour la maintenir 🔥
         </p>
       </div>
 
+      {/* Bouton CTA */}
       <Link
         href="/eleve/exercices/nouveau"
         className={`flex-shrink-0 rounded-xl px-4 py-2 text-xs font-bold text-white transition-colors ${
@@ -57,9 +66,10 @@ export function StreakDangerBanner({ streak, aFaitExerciceAujourdhui }: Props) {
         Faire 1 exercice →
       </Link>
 
+      {/* Fermer */}
       <button
         onClick={() => setVisible(false)}
-        className={`flex-shrink-0 text-xs ${urgence ? "text-red-400 hover:text-red-600" : "text-amber-400 hover:text-amber-600"}`}
+        className={`flex-shrink-0 text-sm ${urgence ? "text-red-300 hover:text-red-500" : "text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]"}`}
         aria-label="Fermer"
       >
         ✕
