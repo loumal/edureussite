@@ -110,7 +110,7 @@ export default async function EleveDashboardPage() {
           {/* Colonne principale (2/3) */}
           <div className="md:col-span-1 lg:col-span-2 space-y-4 sm:space-y-6">
 
-            {/* ── NIVEAU 1 : PRIORITÉ PROF (exercices assignés) ── */}
+            {/* ── Exercices assignés (hors plan — source externe) ── */}
             {profil.exercicesAssignes.filter((e) => e.statut !== "TERMINE").length > 0 && (
               <ExercicesDuJourWidget
                 exercices={profil.exercicesAssignes}
@@ -123,14 +123,14 @@ export default async function EleveDashboardPage() {
               <CoursWidget cours={profil.coursRemediation} />
             )}
 
-            {/* ── NIVEAU 2 : MA MISSION DU JOUR (plan personnel) ── */}
+            {/* ── DÉFI DU JOUR — pièce centrale (plan personnel) ── */}
             <PlanDuJourWidget niveauScolaire={profil.niveauScolaire} />
-
-            {/* ── NIVEAU 3 : BONUS — Défi du jour (optionnel, masqué pour les jeunes) ── */}
-            {!jeune && <DefJourWidget />}
 
             {/* ── Missions de la semaine ── */}
             <MissionsWidget />
+
+            {/* ── Aller plus loin — exploration libre (masqué pour les très jeunes) ── */}
+            {!jeune && <DefJourWidget />}
 
             {profil.coursRemediation.filter((c) => c.statut === "TERMINE").length > 0 && (
               <CoursWidget cours={profil.coursRemediation.filter((c) => c.statut === "TERMINE")} />
