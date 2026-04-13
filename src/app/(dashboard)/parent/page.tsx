@@ -44,7 +44,7 @@ export default async function ParentDashboardPage({
 }: {
   searchParams: Promise<{ enfant?: string }>;
 }) {
-  const session = await requireRole(["PARENT", "SUPER_ADMIN"]);
+  const session = await requireRole(["PARENT", "ADMIN", "SUPER_ADMIN"]);
   const profilParent = await api.parent.getDashboard();
   const { enfant: enfantIdParam } = await searchParams;
 

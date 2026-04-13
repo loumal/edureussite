@@ -11,7 +11,7 @@ export default function ChangerPasswordPage() {
   const [erreur, setErreur] = useState("");
 
   const changer = trpc.auth.changerMotDePasse.useMutation({
-    onSuccess: () => router.push("/dashboard"),
+    onSuccess: () => router.push("/"),
     onError: (e) => setErreur(e.message),
   });
 
