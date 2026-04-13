@@ -18,7 +18,7 @@ const SPECIALITE_LABEL: Record<string, string> = {
 };
 
 export default async function RendezVousParentPage() {
-  await requireRole(["PARENT", "SUPER_ADMIN"]);
+  await requireRole(["PARENT", "ADMIN", "SUPER_ADMIN"]);
   const actif = await isFeatureActive(FEATURE_KEYS.SPECIALISTES);
   if (!actif) redirect("/parent");
 

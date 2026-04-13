@@ -38,7 +38,7 @@ const EXPERT_CONFIG: Record<string, { titre: string; icone: string; couleur: str
 };
 
 export default async function AccompagnementPage({ params }: Props) {
-  await requireRole(["PARENT", "SUPER_ADMIN"]);
+  await requireRole(["PARENT", "ADMIN", "SUPER_ADMIN"]);
   const { eleveId } = await params;
 
   const [profilParent, planExistant, planifEnfant, specialistesActif] = await Promise.all([

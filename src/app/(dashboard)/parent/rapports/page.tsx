@@ -42,7 +42,7 @@ export default async function RapportsPage({
 }: {
   searchParams: Promise<{ enfant?: string }>;
 }) {
-  await requireRole(["PARENT", "SUPER_ADMIN"]);
+  await requireRole(["PARENT", "ADMIN", "SUPER_ADMIN"]);
 
   const { enfant: enfantIdParam } = await searchParams;
 

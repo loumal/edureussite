@@ -133,7 +133,7 @@ async function getAlertesIntelligentes(eleves: Awaited<ReturnType<typeof api.par
 }
 
 export default async function NotificationsPage() {
-  await requireRole(["PARENT", "SUPER_ADMIN"]);
+  await requireRole(["PARENT", "ADMIN", "SUPER_ADMIN"]);
 
   const [profilParent, notifications, eleves, specialistesActif] = await Promise.all([
     api.parent.getDashboard(),
