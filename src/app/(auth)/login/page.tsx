@@ -16,6 +16,7 @@ function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
   const verified = params.get("verified") === "1";
+  const passwordReset = params.get("reset") === "1";
 
   const [mode, setMode] = useState<Mode>("choix");
 
@@ -112,6 +113,11 @@ function LoginForm() {
         {verified && (
           <div className="mb-5 rounded-lg bg-[rgba(42,124,111,0.08)] border border-[rgba(42,124,111,0.2)] p-3">
             <p className="text-sm text-[var(--color-success)] text-center font-medium">✓ Courriel vérifié — vous pouvez vous connecter</p>
+          </div>
+        )}
+        {passwordReset && (
+          <div className="mb-5 rounded-lg bg-[rgba(42,124,111,0.08)] border border-[rgba(42,124,111,0.2)] p-3">
+            <p className="text-sm text-[var(--color-success)] text-center font-medium">🔑 Mot de passe réinitialisé — connectez-vous avec votre nouveau mot de passe</p>
           </div>
         )}
         <h1 className="text-xl font-bold text-[var(--color-ink)] mb-6 text-center">Qui êtes-vous ?</h1>

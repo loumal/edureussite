@@ -41,20 +41,58 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const STATUT_CONFIG: Record<string, { label: string; color: string }> = {
-  NON_COMMENCE: { label: "À faire", color: "text-[var(--color-ink-soft)]" },
-  EN_COURS: { label: "En cours", color: "text-[var(--color-gold)]" },
-  TERMINE: { label: "Terminé", color: "text-[var(--color-success)]" },
+  NON_COMMENCE: { label: "À faire",  color: "text-[var(--color-ink-soft)]" },
+  EN_COURS:     { label: "En cours", color: "text-[var(--color-gold)]" },
+  TERMINE:      { label: "Terminé",  color: "text-[var(--color-success)]" },
+  ABANDONNE:    { label: "Abandonné",color: "text-[var(--color-accent)]" },
 };
 
-export default function HistoriqueExercicesPage() {
-  const [page, setPage] = useState(1);
+type Tri = "date_desc" | "date_asc" | "score_desc" | "score_asc";
 
-  const { data, isLoading } = trpc.exercice.getHistorique.useQuery({ page });
+const TRI_OPTIONS: { value: Tri; label: string }[] = [
+  { value: "date_desc",  label: "Plus récent" },
+  { value: "date_asc",   label: "Plus ancien" },
+  { value: "score_desc", label: "Meilleur score" },
+  { value: "score_asc",  label: "Score le plus bas" },
+];
+
+const MATIERES_OPTIONS = [
+  { value: "", label: "Toutes les matières" },
+  ...Object.entries(MATIERES_LABELS).map(([v, l]) => ({ value: v, label: `${MATIERES_EMOJI[v]} ${l}` })),
+];
+
+const STATUT_OPTIONS = [
+  { value: "",            label: "Tous les statuts" },
+  { value: "TERMINE",     label: "✅ Terminé" },
+  { value: "EN_COURS",    label: "⏳ En cours" },
+  { value: "NON_COMMENCE",label: "📋 À faire" },
+];
+
+export default function HistoriqueExercicesPage() {
+  const [page,    setPage]    = useState(1);
+  const [matiere, setMatiere] = useState("");
+  const [statut,  setStatut]  = useState("");
+  const [tri,     setTri]     = useState<Tri>("date_desc");
+
+  const { data, isLoading } = trpc.exercice.getHistorique.useQuery({
+    page,
+    matiere: (matiere || undefined) as never,
+    statut:  (statut  || undefined) as never,
+    tri,
+  });
+
+  // Reset page à 1 si filtre change
+  const handleMatiere = (v: string) => { setMatiere(v); setPage(1); };
+  const handleStatut  = (v: string) => { setStatut(v);  setPage(1); };
+  const handleTri     = (v: Tri)    => { setTri(v);     setPage(1); };
+
+  const hasFilters = matiere !== "" || statut !== "" || tri !== "date_desc";
 
   return (
     <div className="min-h-screen bg-[var(--color-paper)]">
       <div className="mx-auto max-w-3xl px-4 py-8">
-        <div className="mb-8 flex items-center justify-between">
+        {/* ── En-tête ── */}
+        <div className="mb-6 flex items-start justify-between gap-3">
           <div>
             <Link
               href="/eleve"
@@ -67,7 +105,8 @@ export default function HistoriqueExercicesPage() {
             </h1>
             {data && (
               <p className="text-sm text-[var(--color-ink-soft)] mt-1">
-                {data.total} exercice{data.total > 1 ? "s" : ""} au total
+                {data.total} exercice{data.total > 1 ? "s" : ""}
+                {hasFilters ? " (filtrés)" : " au total"}
               </p>
             )}
           </div>
@@ -76,6 +115,52 @@ export default function HistoriqueExercicesPage() {
           </Link>
         </div>
 
+        {/* ── Filtres ── */}
+        <div className="mb-5 flex flex-wrap gap-2 items-center">
+          <select
+            value={matiere}
+            onChange={(e) => handleMatiere(e.target.value)}
+            className="rounded-xl border border-[var(--color-rule)] bg-white px-3 py-1.5 text-xs font-semibold text-[var(--color-ink)] focus:border-[var(--color-ink)] focus:outline-none"
+            aria-label="Filtrer par matière"
+          >
+            {MATIERES_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+
+          <select
+            value={statut}
+            onChange={(e) => handleStatut(e.target.value)}
+            className="rounded-xl border border-[var(--color-rule)] bg-white px-3 py-1.5 text-xs font-semibold text-[var(--color-ink)] focus:border-[var(--color-ink)] focus:outline-none"
+            aria-label="Filtrer par statut"
+          >
+            {STATUT_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+
+          <select
+            value={tri}
+            onChange={(e) => handleTri(e.target.value as Tri)}
+            className="rounded-xl border border-[var(--color-rule)] bg-white px-3 py-1.5 text-xs font-semibold text-[var(--color-ink)] focus:border-[var(--color-ink)] focus:outline-none"
+            aria-label="Trier par"
+          >
+            {TRI_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+
+          {hasFilters && (
+            <button
+              onClick={() => { setMatiere(""); setStatut(""); setTri("date_desc"); setPage(1); }}
+              className="rounded-xl border border-[var(--color-rule)] bg-white px-3 py-1.5 text-xs font-semibold text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors"
+            >
+              ✕ Réinitialiser
+            </button>
+          )}
+        </div>
+
+        {/* ── Contenu ── */}
         {isLoading ? (
           <div className="space-y-3">
             {[0, 1, 2, 3].map((i) => (
@@ -87,28 +172,32 @@ export default function HistoriqueExercicesPage() {
           </div>
         ) : !data || data.items.length === 0 ? (
           <Card className="p-10 text-center">
-            <div className="text-5xl mb-4">✏️</div>
+            <div className="text-5xl mb-4">{hasFilters ? "🔍" : "✏️"}</div>
             <h2 className="text-lg font-bold text-[var(--color-ink)] mb-2">
-              Aucun exercice encore
+              {hasFilters ? "Aucun exercice pour ces filtres" : "Aucun exercice encore"}
             </h2>
             <p className="text-sm text-[var(--color-ink-soft)] mb-6">
-              Lance ton premier exercice pour commencer à progresser !
+              {hasFilters
+                ? "Essaie d'autres filtres ou réinitialise la recherche."
+                : "Lance ton premier exercice pour commencer à progresser !"}
             </p>
-            <Link href="/eleve/exercices/nouveau">
-              <Button>Générer un exercice ✨</Button>
-            </Link>
+            {hasFilters ? (
+              <Button variant="secondary" onClick={() => { setMatiere(""); setStatut(""); setTri("date_desc"); setPage(1); }}>
+                Réinitialiser les filtres
+              </Button>
+            ) : (
+              <Link href="/eleve/exercices/nouveau">
+                <Button>Générer un exercice ✨</Button>
+              </Link>
+            )}
           </Card>
         ) : (
           <>
             <div className="space-y-3">
               {data.items.map((item) => {
-                const statut = STATUT_CONFIG[item.statut] ?? {
-                  label: item.statut,
-                  color: "",
-                };
-                const score = item.score ?? null;
-
-                const href = item.exercice.type === "EPREUVE_COMPLETE"
+                const statut = STATUT_CONFIG[item.statut] ?? { label: item.statut, color: "" };
+                const score  = item.score ?? null;
+                const href   = item.exercice.type === "EPREUVE_COMPLETE"
                   ? `/eleve/exercices/epreuve/${item.id}`
                   : `/eleve/exercices/${item.id}`;
 

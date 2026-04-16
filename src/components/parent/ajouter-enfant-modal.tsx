@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FocusTrap } from "@/components/ui/focus-trap";
 import type { NiveauScolaire } from "@/generated/prisma";
 import { getNiveauxParRegion, getCycleLabel } from "@/lib/education/region-education";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const REGIONS_INFO: Record<string, { nom: string; groupe: "canada" | "francophonie" }> = {
   QC: { nom: "Québec",                    groupe: "canada" },
@@ -43,7 +45,6 @@ const REGIONS_INFO: Record<string, { nom: string; groupe: "canada" | "francophon
   DJ: { nom: "Djibouti",                  groupe: "francophonie" },
   KM: { nom: "Comores",                   groupe: "francophonie" },
 };
-import { useRouter } from "next/navigation";
 
 interface Props {
   onClose: () => void;
@@ -52,6 +53,25 @@ interface Props {
 }
 
 type Onglet = "nouveau" | "lier";
+
+function CopyBtn({ value, label }: { value: string; label: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      aria-label={`Copier ${label}`}
+      className="ml-2 rounded-lg border border-[var(--color-rule)] bg-white px-2 py-0.5 text-[11px] font-semibold text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)] transition-colors"
+    >
+      {copied ? "✓ Copié" : "Copier"}
+    </button>
+  );
+}
 
 export function AjouterEnfantModal({ onClose, multiProvince = false, provincesActives = { QC: true } }: Props) {
   const router = useRouter();
@@ -72,18 +92,33 @@ export function AjouterEnfantModal({ onClose, multiProvince = false, provincesAc
   const [codeLier, setCodeLier] = useState("");
   const [prenomLie, setPrenomLie] = useState("");
 
+  // Dirty state — pour confirmer avant de fermer
+  const isDirty = prenom !== "" || nom !== "" || motDePasse !== "" || codeLier !== "";
+  const submitted = compteInfo !== null || prenomLie !== "";
+
+  const handleClose = useCallback(() => {
+    if (isDirty && !submitted) {
+      if (!window.confirm("Fermer cette fenêtre ? Les informations saisies seront perdues.")) return;
+    }
+    onClose();
+  }, [isDirty, submitted, onClose]);
+
   const ajouter = trpc.parent.ajouterEnfant.useMutation({
     onSuccess: (data) => {
       setCompteInfo({ codeAcces: data.codeAcces, motDePasse: motDePasse });
       router.refresh();
+      toast.success(`Compte de ${prenom} créé avec succès !`);
     },
+    onError: (err) => toast.error(err.message),
   });
 
   const lier = trpc.parent.lierEnfantParCode.useMutation({
     onSuccess: (data) => {
       setPrenomLie(data.prenom);
       router.refresh();
+      toast.success(`${data.prenom} est maintenant lié(e) à votre compte !`);
     },
+    onError: (err) => toast.error(err.message),
   });
 
   const handleAjouter = (e: React.FormEvent) => {
@@ -106,7 +141,7 @@ export function AjouterEnfantModal({ onClose, multiProvince = false, provincesAc
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={handleClose}
         aria-hidden="true"
       />
 
@@ -119,7 +154,7 @@ export function AjouterEnfantModal({ onClose, multiProvince = false, provincesAc
             Ajouter un enfant
           </h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Fermer la fenêtre"
             className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)] transition-colors"
           >
@@ -162,13 +197,16 @@ export function AjouterEnfantModal({ onClose, multiProvince = false, provincesAc
                     Compte créé !
                   </h3>
                   <p className="text-sm text-[var(--color-ink-soft)] mb-5">
-                    Voici les informations de connexion de votre enfant. Notez-les bien !
+                    Voici les informations de connexion de votre enfant. Copiez-les maintenant !
                   </p>
                   <div className="rounded-xl bg-[var(--color-paper-warm)] border border-[var(--color-rule)] p-4 text-left space-y-3 mb-4">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-soft)] mb-1">
-                        Code d'accès élève
-                      </p>
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-soft)]">
+                          Code d'accès élève
+                        </p>
+                        <CopyBtn value={compteInfo.codeAcces} label="le code d'accès" />
+                      </div>
                       <p className="text-xl font-black font-mono text-[var(--color-ink)] tracking-widest">
                         {compteInfo.codeAcces}
                       </p>
@@ -177,9 +215,12 @@ export function AjouterEnfantModal({ onClose, multiProvince = false, provincesAc
                       </p>
                     </div>
                     <div className="border-t border-[var(--color-rule)] pt-3">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-soft)] mb-1">
-                        Mot de passe
-                      </p>
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-soft)]">
+                          Mot de passe
+                        </p>
+                        <CopyBtn value={compteInfo.motDePasse} label="le mot de passe" />
+                      </div>
                       <p className="text-sm font-mono font-bold text-[var(--color-ink)]">
                         {compteInfo.motDePasse}
                       </p>
@@ -317,7 +358,7 @@ export function AjouterEnfantModal({ onClose, multiProvince = false, provincesAc
                     <Button
                       type="button"
                       variant="secondary"
-                      onClick={onClose}
+                      onClick={handleClose}
                       className="flex-1"
                     >
                       Annuler
@@ -385,7 +426,7 @@ export function AjouterEnfantModal({ onClose, multiProvince = false, provincesAc
                     <Button
                       type="button"
                       variant="secondary"
-                      onClick={onClose}
+                      onClick={handleClose}
                       className="flex-1"
                     >
                       Annuler

@@ -8,6 +8,7 @@ import { IdleTimeout } from "@/components/providers/idle-timeout";
 import { ThemeProvider } from "@/components/eleve/theme-provider";
 import { ServiceWorkerRegistration } from "@/components/providers/service-worker";
 import { Analytics } from "@vercel/analytics/next";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,6 +50,13 @@ export default async function RootLayout({
             <IdleTimeout />
             <ServiceWorkerRegistration />
             <Analytics />
+            <Toaster
+              position="bottom-right"
+              toastOptions={{
+                style: { fontFamily: "var(--font-sans)", fontSize: "13px" },
+                duration: 3500,
+              }}
+            />
           </TRPCProvider>
         </SessionProvider>
       </body>

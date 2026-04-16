@@ -3,7 +3,7 @@ import { z } from "zod";
 import { generateExercice, genererFeedback, genererEpreuve, genererFeedbackEpreuve, type EpreuveGeneree } from "@/lib/ai/exercice";
 import { genererCours } from "@/lib/ai/cours";
 import { getContexteDocuments } from "@/lib/ai/contexte-documents";
-import { Matiere, TypeExercice, NiveauDifficulte } from "@/generated/prisma";
+import { Matiere, TypeExercice, NiveauDifficulte, StatutExercice } from "@/generated/prisma";
 import { waitUntil } from "@vercel/functions";
 import { detecterEtCreerSurprise } from "@/lib/surprises/detecter-jalon";
 
@@ -391,21 +391,41 @@ export const exerciceRouter = createTRPCRouter({
 
   // Historique complet des exercices
   getHistorique: protectedProcedure
-    .input(z.object({ page: z.number().min(1).default(1) }).optional())
+    .input(z.object({
+      page:    z.number().min(1).default(1),
+      matiere: z.nativeEnum(Matiere).optional(),
+      statut:  z.nativeEnum(StatutExercice).optional(),
+      tri:     z.enum(["date_desc", "date_asc", "score_desc", "score_asc"]).default("date_desc"),
+    }).optional())
     .query(async ({ ctx, input }) => {
-      const page = input?.page ?? 1;
+      const page    = input?.page ?? 1;
       const perPage = 12;
       const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
         where: { userId: ctx.user.id },
         select: { id: true },
       });
 
+      const where = {
+        eleveId: profil.id,
+        ...(input?.statut  ? { statut:  input.statut }  : {}),
+        ...(input?.matiere ? { exercice: { matiere: input.matiere } } : {}),
+      };
+
+      const orderBy = (() => {
+        switch (input?.tri) {
+          case "date_asc":   return { dateAssignation: "asc"  as const };
+          case "score_desc": return { score: "desc" as const };
+          case "score_asc":  return { score: "asc"  as const };
+          default:           return { dateAssignation: "desc" as const };
+        }
+      })();
+
       const [total, items] = await Promise.all([
-        ctx.prisma.exerciceAssigne.count({ where: { eleveId: profil.id } }),
+        ctx.prisma.exerciceAssigne.count({ where }),
         ctx.prisma.exerciceAssigne.findMany({
-          where: { eleveId: profil.id },
+          where,
           include: { exercice: true },
-          orderBy: { dateAssignation: "desc" },
+          orderBy,
           skip: (page - 1) * perPage,
           take: perPage,
         }),

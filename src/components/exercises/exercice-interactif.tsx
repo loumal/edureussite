@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { trpc } from "@/lib/trpc/client";
+import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -51,18 +52,32 @@ export function ExerciceInteractif({ assignation, exercice }: Props) {
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, []);
 
+  // Avertissement avant fermeture si réponse en cours (non soumise)
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (reponse !== null && !soumis) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [reponse, soumis]);
+
   const soumettre = trpc.exercice.soumettre.useMutation({
     onSuccess: (data) => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       setSoumis(true);
 
       if (data.objectifAtteint) {
-        // Montrer la célébration "objectif atteint" — la redirection se fait dans onClose
         setObjectifCelebration(data.objectifAtteint);
       } else {
         const delai = (data.pointsGagnes ?? 0) >= 80 ? 600 : 0;
         setTimeout(() => router.refresh(), delai);
       }
+    },
+    onError: (err) => {
+      toast.error(err.message || "Erreur lors de la soumission. Réessayez.");
     },
   });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc/client";
@@ -46,6 +46,92 @@ const TYPES: { value: TypeCommentaire; emoji: string; label: string; description
 ];
 
 type Phase = "formulaire" | "succes" | "regeneration" | "termine";
+
+// ── Composant de progression animée pendant la régénération ───────────────────
+const REGEN_ETAPES = [
+  { label: "Analyse de votre note…",              emoji: "📖", duree: 2200 },
+  { label: "Consultation de l'orthopédagogue IA…", emoji: "🧠", duree: 2800 },
+  { label: "Intégration du plan par le coach…",    emoji: "🎯", duree: 2800 },
+  { label: "Validation psychopédagogique…",        emoji: "✅", duree: 2400 },
+];
+
+function RegenProgress({ prenomEnfant }: { prenomEnfant: string }) {
+  const [etapeIdx, setEtapeIdx] = useState(0);
+  const [progress, setProgress] = useState(0);
+
+  // Avance les étapes selon leur durée
+  useEffect(() => {
+    let idx = 0;
+    const next = () => {
+      if (idx < REGEN_ETAPES.length - 1) {
+        idx++;
+        setEtapeIdx(idx);
+        setTimeout(next, REGEN_ETAPES[idx].duree);
+      }
+    };
+    const t = setTimeout(next, REGEN_ETAPES[0].duree);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Barre de progression fluide (0→95% sur ~10s, le reste se fait à la fin côté serveur)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        if (p >= 95) { clearInterval(interval); return p; }
+        const increment = p < 60 ? 1.2 : p < 85 ? 0.6 : 0.2;
+        return Math.min(95, p + increment);
+      });
+    }, 120);
+    return () => clearInterval(interval);
+  }, []);
+
+  const etape = REGEN_ETAPES[etapeIdx];
+
+  return (
+    <Card className="p-6 border-[rgba(91,79,207,0.2)] bg-[rgba(91,79,207,0.04)]">
+      <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-purple)] mb-4 text-center">
+        Mise à jour du plan de {prenomEnfant}
+      </p>
+
+      {/* Barre de progression */}
+      <div className="relative h-2 w-full rounded-full bg-[var(--color-rule)] overflow-hidden mb-5">
+        <div
+          className="h-full rounded-full bg-[var(--color-purple)] transition-all duration-300"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+
+      {/* Étape courante */}
+      <div className="flex items-center gap-3 rounded-xl bg-white border border-[rgba(91,79,207,0.15)] px-4 py-3 mb-4 transition-all">
+        <span className="text-2xl flex-shrink-0">{etape.emoji}</span>
+        <p className="text-sm font-semibold text-[var(--color-ink)]">{etape.label}</p>
+        <div className="ml-auto flex gap-0.5">
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className="h-1.5 w-1.5 rounded-full bg-[var(--color-purple)]"
+              style={{ animation: `bounce 0.9s ease-in-out ${i * 0.18}s infinite` }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Étapes passées */}
+      <div className="space-y-1.5">
+        {REGEN_ETAPES.slice(0, etapeIdx).map((e, i) => (
+          <div key={i} className="flex items-center gap-2 px-1">
+            <span className="text-[var(--color-success)] text-sm">✓</span>
+            <p className="text-xs text-[var(--color-ink-soft)]">{e.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <p className="text-[11px] text-[var(--color-ink-soft)] text-center mt-4 leading-relaxed">
+        L'IA intègre votre note et recalcule le plan d'accompagnement — cela prend ~15 secondes.
+      </p>
+    </Card>
+  );
+}
 
 interface Props {
   eleveId: string;
@@ -203,35 +289,7 @@ export function CommentaireParentForm({ eleveId, prenomEnfant, onSuccess }: Prop
 
   // ── Phase régénération en cours ───────────────────────────────────────────
   if (phase === "regeneration") {
-    return (
-      <Card className="p-6 border-[rgba(91,79,207,0.2)] bg-[rgba(91,79,207,0.04)]">
-        <div className="flex flex-col items-center gap-4 py-2">
-          <div className="flex items-center gap-3">
-            <svg className="h-6 w-6 animate-spin text-[var(--color-purple)]" viewBox="0 0 24 24" fill="none">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-            </svg>
-            <p className="text-sm font-bold text-[var(--color-purple)]">
-              Mise à jour des plans en cours…
-            </p>
-          </div>
-          <p className="text-xs text-[var(--color-ink-soft)] text-center leading-relaxed max-w-sm">
-            L'équipe d'experts IA — orthopédagogue, coach, psychoneurologue, conseiller en
-            éducation et enseignant — intègre vos nouvelles informations et recalcule le plan
-            d'accompagnement pour {prenomEnfant}.
-          </p>
-          <div className="flex gap-1 mt-1">
-            {[0, 1, 2].map((i) => (
-              <span
-                key={i}
-                className="h-2 w-2 rounded-full bg-[var(--color-purple)]"
-                style={{ animation: `bounce 1s ease-in-out ${i * 0.15}s infinite` }}
-              />
-            ))}
-          </div>
-        </div>
-      </Card>
-    );
+    return <RegenProgress prenomEnfant={prenomEnfant} />;
   }
 
   // ── Phase terminée ────────────────────────────────────────────────────────

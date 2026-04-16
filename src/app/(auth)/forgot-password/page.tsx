@@ -192,7 +192,7 @@ export default function ForgotPasswordPage() {
               <p className="text-sm text-[var(--color-ink-soft)] mb-6">
                 Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.
               </p>
-              <Button onClick={() => router.push("/login")} size="lg" className="w-full">
+              <Button onClick={() => router.push("/login?reset=1")} size="lg" className="w-full">
                 Se connecter
               </Button>
             </div>
