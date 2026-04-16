@@ -686,9 +686,21 @@ export default async function PlanPage() {
                 </h2>
                 <div className="flex flex-wrap gap-1.5">
                   {notionsMaitrisees.map((n) => (
-                    <span key={n.notion} className="flex items-center gap-1 rounded-full bg-green-50 border border-green-200 px-2.5 py-1 text-[11px] font-semibold text-green-700">
-                      ✓ {n.notion.replace(/_/g, " ")}
-                    </span>
+                    <div key={n.notion} className="flex items-center gap-1 rounded-full bg-green-50 border border-green-200 px-2.5 py-1">
+                      <span className="text-[11px] font-semibold text-green-700">
+                        ✓ {n.notion.replace(/_/g, " ")}
+                      </span>
+                      <a
+                        href={`/api/certificat/${n.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-1 text-[10px] font-bold text-green-600 hover:text-green-800 underline underline-offset-1"
+                        title="Télécharger le certificat"
+                        aria-label={`Certificat pour ${n.notion.replace(/_/g, " ")}`}
+                      >
+                        🏅
+                      </a>
+                    </div>
                   ))}
                 </div>
               </section>

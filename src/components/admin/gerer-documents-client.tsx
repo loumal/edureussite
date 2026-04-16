@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getNiveauxParRegion, getMatieresParRegion, getCycleLabel } from "@/lib/education/region-education";
 
 const TYPES = [
   { value: "RECHERCHE_SCIENTIFIQUE", label: "Recherche scientifique" },
@@ -15,53 +16,49 @@ const TYPES = [
   { value: "AUTRE", label: "Autre document" },
 ] as const;
 
-const MATIERES = [
-  { value: "FRANCAIS", label: "Français" },
-  { value: "MATHEMATIQUES", label: "Mathématiques" },
-  { value: "SCIENCES", label: "Sciences" },
-  { value: "UNIVERS_SOCIAL", label: "Univers social" },
-  { value: "ANGLAIS", label: "Anglais" },
-  { value: "ARTS", label: "Arts" },
-  { value: "ETHIQUE", label: "Éthique" },
-  { value: "EDUCATION_PHYSIQUE", label: "Éd. physique" },
-] as const;
-
-const NIVEAUX_PRIMAIRE = [
-  { value: "PRIMAIRE_1", label: "1re année" },
-  { value: "PRIMAIRE_2", label: "2e année" },
-  { value: "PRIMAIRE_3", label: "3e année" },
-  { value: "PRIMAIRE_4", label: "4e année" },
-  { value: "PRIMAIRE_5", label: "5e année" },
-  { value: "PRIMAIRE_6", label: "6e année" },
-] as const;
-
-const NIVEAUX_SECONDAIRE = [
-  { value: "SECONDAIRE_1", label: "Sec. 1" },
-  { value: "SECONDAIRE_2", label: "Sec. 2" },
-  { value: "SECONDAIRE_3", label: "Sec. 3" },
-  { value: "SECONDAIRE_4", label: "Sec. 4" },
-  { value: "SECONDAIRE_5", label: "Sec. 5" },
-] as const;
 
 type TypeDoc = typeof TYPES[number]["value"];
-type MatiereVal = typeof MATIERES[number]["value"];
-type NiveauVal = typeof NIVEAUX_PRIMAIRE[number]["value"] | typeof NIVEAUX_SECONDAIRE[number]["value"];
+type MatiereVal = string;
+type NiveauVal = string;
 type SaisieMode = "texte" | "fichier";
 
-const PROVINCES_ACTIVES_INFO: Record<string, { nom: string; langue: string }> = {
-  QC: { nom: "Québec",                        langue: "FR" },
-  ON: { nom: "Ontario",                        langue: "EN" },
-  BC: { nom: "Colombie-Britannique",           langue: "EN" },
-  AB: { nom: "Alberta",                        langue: "EN" },
-  SK: { nom: "Saskatchewan",                   langue: "EN" },
-  MB: { nom: "Manitoba",                       langue: "EN" },
-  NB: { nom: "Nouveau-Brunswick",              langue: "FR/EN" },
-  NS: { nom: "Nouvelle-Écosse",                langue: "EN" },
-  PE: { nom: "Île-du-Prince-Édouard",          langue: "EN" },
-  NL: { nom: "Terre-Neuve-et-Labrador",        langue: "EN" },
-  YT: { nom: "Yukon",                          langue: "EN" },
-  NT: { nom: "Territoires du Nord-Ouest",      langue: "EN" },
-  NU: { nom: "Nunavut",                        langue: "EN" },
+const REGIONS_INFO: Record<string, { nom: string; langue: string; groupe: "canada" | "francophonie" }> = {
+  // Canada
+  QC: { nom: "Québec",                        langue: "FR",    groupe: "canada" },
+  ON: { nom: "Ontario",                        langue: "EN",    groupe: "canada" },
+  BC: { nom: "Colombie-Britannique",           langue: "EN",    groupe: "canada" },
+  AB: { nom: "Alberta",                        langue: "EN",    groupe: "canada" },
+  SK: { nom: "Saskatchewan",                   langue: "EN",    groupe: "canada" },
+  MB: { nom: "Manitoba",                       langue: "EN",    groupe: "canada" },
+  NB: { nom: "Nouveau-Brunswick",              langue: "FR/EN", groupe: "canada" },
+  NS: { nom: "Nouvelle-Écosse",                langue: "EN",    groupe: "canada" },
+  PE: { nom: "Île-du-Prince-Édouard",          langue: "EN",    groupe: "canada" },
+  NL: { nom: "Terre-Neuve-et-Labrador",        langue: "EN",    groupe: "canada" },
+  YT: { nom: "Yukon",                          langue: "EN",    groupe: "canada" },
+  NT: { nom: "Territoires du Nord-Ouest",      langue: "EN",    groupe: "canada" },
+  NU: { nom: "Nunavut",                        langue: "EN",    groupe: "canada" },
+  // France
+  FR: { nom: "France",                         langue: "FR",    groupe: "francophonie" },
+  // Afrique francophone
+  CI: { nom: "Côte d'Ivoire",                  langue: "FR",    groupe: "francophonie" },
+  SN: { nom: "Sénégal",                        langue: "FR",    groupe: "francophonie" },
+  CM: { nom: "Cameroun",                       langue: "FR",    groupe: "francophonie" },
+  BF: { nom: "Burkina Faso",                   langue: "FR",    groupe: "francophonie" },
+  ML: { nom: "Mali",                           langue: "FR",    groupe: "francophonie" },
+  BJ: { nom: "Bénin",                          langue: "FR",    groupe: "francophonie" },
+  TG: { nom: "Togo",                           langue: "FR",    groupe: "francophonie" },
+  GA: { nom: "Gabon",                          langue: "FR",    groupe: "francophonie" },
+  CD: { nom: "R.D. Congo",                     langue: "FR",    groupe: "francophonie" },
+  CG: { nom: "Congo-Brazzaville",              langue: "FR",    groupe: "francophonie" },
+  GN: { nom: "Guinée",                         langue: "FR",    groupe: "francophonie" },
+  MG: { nom: "Madagascar",                     langue: "FR",    groupe: "francophonie" },
+  NE: { nom: "Niger",                          langue: "FR",    groupe: "francophonie" },
+  TD: { nom: "Tchad",                          langue: "FR",    groupe: "francophonie" },
+  CF: { nom: "Rép. Centrafricaine",            langue: "FR",    groupe: "francophonie" },
+  RW: { nom: "Rwanda",                         langue: "FR",    groupe: "francophonie" },
+  BI: { nom: "Burundi",                        langue: "FR",    groupe: "francophonie" },
+  DJ: { nom: "Djibouti",                       langue: "FR",    groupe: "francophonie" },
+  KM: { nom: "Comores",                        langue: "FR",    groupe: "francophonie" },
 };
 
 interface DocumentExistant {
@@ -107,8 +104,6 @@ export function GererDocumentsClient({ mode = "ajouter", document: doc, multiPro
   const [niveaux, setNiveaux] = useState<NiveauVal[]>((doc?.niveaux ?? []) as NiveauVal[]);
   const [actif, setActif] = useState(doc?.actif ?? true);
   const [province, setProvince] = useState(doc?.province ?? "QC");
-  const [matiereLibre, setMatiereLibre] = useState(doc?.matiereLibre ?? "");
-  const [niveauLibre, setNiveauLibre] = useState(doc?.niveauLibre ?? "");
 
   const [fichierNom, setFichierNom] = useState<string>("");
   const [extractionErreur, setExtractionErreur] = useState<string>("");
@@ -120,7 +115,7 @@ export function GererDocumentsClient({ mode = "ajouter", document: doc, multiPro
     if (mode === "ajouter") {
       setTitre(""); setContenu(""); setSource(""); setAuteurs(""); setAnnee(""); setMotsClesStr("");
       setMatieres([]); setNiveaux([]); setFichierNom(""); setExtractionErreur("");
-      setSaisieMode("texte"); setProvince("QC"); setMatiereLibre(""); setNiveauLibre("");
+      setSaisieMode("texte"); setProvince("QC");
     }
     setOpen(false);
   };
@@ -135,7 +130,11 @@ export function GererDocumentsClient({ mode = "ajouter", document: doc, multiPro
 
   const motsCles = motsClesStr.split(",").map(s => s.trim()).filter(Boolean);
 
-  const isHorsQC = multiProvince && province !== "QC";
+  const NIVEAUX_LOC = getNiveauxParRegion(province);
+  const MATIERES_LOC = getMatieresParRegion(province);
+  const cycleLabels = getCycleLabel(province);
+  const primaireNiveaux = NIVEAUX_LOC.filter((n) => n.cycle === cycleLabels.primaire || n.cycle === "Primaire" || n.cycle === "Elementary");
+  const secondaireNiveaux = NIVEAUX_LOC.filter((n) => !primaireNiveaux.includes(n));
 
   const handleSubmit = () => {
     const provinceVal = multiProvince ? province as never : "QC" as never;
@@ -143,23 +142,19 @@ export function GererDocumentsClient({ mode = "ajouter", document: doc, multiPro
       ajouter.mutate({
         titre, type, contenu,
         source: source || undefined, auteurs: auteurs || undefined, annee: annee ? Number(annee) : undefined,
-        motsCles,
-        matieres: isHorsQC ? [] : matieres,
-        niveaux: isHorsQC ? [] : niveaux,
+        motsCles, matieres: matieres as never, niveaux: niveaux as never,
         province: provinceVal,
-        matiereLibre: isHorsQC ? (matiereLibre || undefined) : undefined,
-        niveauLibre: isHorsQC ? (niveauLibre || undefined) : undefined,
+        matiereLibre: undefined,
+        niveauLibre: undefined,
       });
     } else if (doc) {
       modifier.mutate({
         id: doc.id, titre, contenu,
         source: source || undefined, auteurs: auteurs || undefined, annee: annee ? Number(annee) : undefined,
-        motsCles,
-        matieres: isHorsQC ? [] : matieres,
-        niveaux: isHorsQC ? [] : niveaux,
+        motsCles, matieres: matieres as never, niveaux: niveaux as never,
         actif, province: provinceVal,
-        matiereLibre: isHorsQC ? (matiereLibre || undefined) : null,
-        niveauLibre: isHorsQC ? (niveauLibre || undefined) : null,
+        matiereLibre: null,
+        niveauLibre: null,
       });
     }
   };
@@ -232,14 +227,14 @@ export function GererDocumentsClient({ mode = "ajouter", document: doc, multiPro
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label={mode === "ajouter" ? "Ajouter un document" : "Modifier le document"}>
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)} aria-hidden="true" />
       <div className="relative w-full max-w-2xl rounded-2xl bg-white shadow-xl overflow-y-auto max-h-[90vh]">
         <div className="flex items-center justify-between border-b border-[var(--color-rule)] px-6 py-4">
           <h2 className="text-lg font-black text-[var(--color-ink)]">
             {mode === "ajouter" ? "Ajouter un document" : "Modifier le document"}
           </h2>
-          <button onClick={() => setOpen(false)} className="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]">✕</button>
+          <button onClick={() => setOpen(false)} aria-label="Fermer" className="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]">✕</button>
         </div>
 
         <div className="p-6 space-y-4">
@@ -260,115 +255,114 @@ export function GererDocumentsClient({ mode = "ajouter", document: doc, multiPro
             </select>
           </div>
 
-          {/* Province — visible seulement si l'expansion multi-province est activée */}
+          {/* Région ciblée — visible seulement si l'expansion internationale est activée */}
           {multiProvince && (
             <div>
               <label className="block text-xs font-medium text-[var(--color-ink-soft)] mb-1">
-                🇨🇦 Province ciblée *
+                🌍 Région / Pays ciblé(e) *
               </label>
               <select
                 value={province}
                 onChange={(e) => setProvince(e.target.value)}
                 className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm focus:border-[var(--color-ink)] focus:outline-none"
               >
-                {Object.entries(PROVINCES_ACTIVES_INFO)
-                  .filter(([code]) => provincesActives[code])
-                  .map(([code, info]) => (
-                    <option key={code} value={code}>{code} — {info.nom} ({info.langue})</option>
-                  ))}
+                {(() => {
+                  const canada = Object.entries(REGIONS_INFO).filter(([code, r]) => r.groupe === "canada" && provincesActives[code]);
+                  const franco = Object.entries(REGIONS_INFO).filter(([code, r]) => r.groupe === "francophonie" && provincesActives[code]);
+                  return (
+                    <>
+                      {canada.length > 0 && (
+                        <optgroup label="🇨🇦 Canada">
+                          {canada.map(([code, info]) => (
+                            <option key={code} value={code}>{code} — {info.nom} ({info.langue})</option>
+                          ))}
+                        </optgroup>
+                      )}
+                      {franco.length > 0 && (
+                        <optgroup label="🌍 France & Afrique francophone">
+                          {franco.map(([code, info]) => (
+                            <option key={code} value={code}>{code} — {info.nom} ({info.langue})</option>
+                          ))}
+                        </optgroup>
+                      )}
+                    </>
+                  );
+                })()}
               </select>
             </div>
           )}
 
-          {/* Matières ciblées — QC : grille enum / autres provinces : texte libre */}
-          {isHorsQC ? (
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-[var(--color-ink-soft)] mb-1">
-                  Matière (texte libre)
-                </label>
-                <Input value={matiereLibre} onChange={(e) => setMatiereLibre(e.target.value)} placeholder="Ex: Science 9, Language Arts…" />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-[var(--color-ink-soft)] mb-1">
-                  Niveau scolaire (texte libre)
-                </label>
-                <Input value={niveauLibre} onChange={(e) => setNiveauLibre(e.target.value)} placeholder="Ex: Grade 9, Grade 4…" />
-              </div>
+          {/* Matières ciblées */}
+          <div>
+            <label className="block text-xs font-medium text-[var(--color-ink-soft)] mb-2">
+              Matières ciblées
+              <span className="ml-2 font-normal opacity-70">(laisser vide = toutes les matières)</span>
+            </label>
+            <div className="grid grid-cols-4 gap-1.5">
+              {MATIERES_LOC.map((m) => (
+                <button
+                  key={m.value}
+                  type="button"
+                  onClick={() => setMatieres(prev => toggleItem(prev, m.value))}
+                  className={`rounded-lg border px-2 py-1.5 text-xs font-medium transition-colors text-left ${
+                    matieres.includes(m.value)
+                      ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white"
+                      : "border-[var(--color-rule)] bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:border-[var(--color-ink-soft)]"
+                  }`}
+                >
+                  {m.emoji} {m.label}
+                </button>
+              ))}
             </div>
-          ) : (
-            <>
+          </div>
+
+          {/* Niveaux scolaires ciblés */}
+          <div>
+            <label className="block text-xs font-medium text-[var(--color-ink-soft)] mb-2">
+              Niveaux scolaires ciblés
+              <span className="ml-2 font-normal opacity-70">(laisser vide = tous les niveaux)</span>
+            </label>
+            <div className="space-y-2">
               <div>
-                <label className="block text-xs font-medium text-[var(--color-ink-soft)] mb-2">
-                  Matières ciblées
-                  <span className="ml-2 font-normal opacity-70">(laisser vide = toutes les matières)</span>
-                </label>
-                <div className="grid grid-cols-4 gap-1.5">
-                  {MATIERES.map((m) => (
+                <p className="text-[11px] text-[var(--color-ink-soft)] mb-1 font-medium uppercase tracking-wide">{cycleLabels.primaire}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {primaireNiveaux.map((n) => (
                     <button
-                      key={m.value}
+                      key={n.value}
                       type="button"
-                      onClick={() => setMatieres(prev => toggleItem(prev, m.value as MatiereVal))}
-                      className={`rounded-lg border px-2 py-1.5 text-xs font-medium transition-colors text-left ${
-                        matieres.includes(m.value as MatiereVal)
+                      onClick={() => setNiveaux(prev => toggleItem(prev, n.value))}
+                      className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
+                        niveaux.includes(n.value)
                           ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white"
                           : "border-[var(--color-rule)] bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:border-[var(--color-ink-soft)]"
                       }`}
                     >
-                      {m.label}
+                      {n.label}
                     </button>
                   ))}
                 </div>
               </div>
-
               <div>
-                <label className="block text-xs font-medium text-[var(--color-ink-soft)] mb-2">
-                  Niveaux scolaires ciblés
-                  <span className="ml-2 font-normal opacity-70">(laisser vide = tous les niveaux)</span>
-                </label>
-                <div className="space-y-2">
-                  <div>
-                    <p className="text-[11px] text-[var(--color-ink-soft)] mb-1 font-medium uppercase tracking-wide">Primaire</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {NIVEAUX_PRIMAIRE.map((n) => (
-                        <button
-                          key={n.value}
-                          type="button"
-                          onClick={() => setNiveaux(prev => toggleItem(prev, n.value as NiveauVal))}
-                          className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
-                            niveaux.includes(n.value as NiveauVal)
-                              ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white"
-                              : "border-[var(--color-rule)] bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:border-[var(--color-ink-soft)]"
-                          }`}
-                        >
-                          {n.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-[11px] text-[var(--color-ink-soft)] mb-1 font-medium uppercase tracking-wide">Secondaire</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {NIVEAUX_SECONDAIRE.map((n) => (
-                        <button
-                          key={n.value}
-                          type="button"
-                          onClick={() => setNiveaux(prev => toggleItem(prev, n.value as NiveauVal))}
-                          className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
-                            niveaux.includes(n.value as NiveauVal)
-                              ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white"
-                              : "border-[var(--color-rule)] bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:border-[var(--color-ink-soft)]"
-                          }`}
-                        >
-                          {n.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                <p className="text-[11px] text-[var(--color-ink-soft)] mb-1 font-medium uppercase tracking-wide">{cycleLabels.secondaire}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {secondaireNiveaux.map((n) => (
+                    <button
+                      key={n.value}
+                      type="button"
+                      onClick={() => setNiveaux(prev => toggleItem(prev, n.value))}
+                      className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
+                        niveaux.includes(n.value)
+                          ? "border-[var(--color-ink)] bg-[var(--color-ink)] text-white"
+                          : "border-[var(--color-rule)] bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:border-[var(--color-ink-soft)]"
+                      }`}
+                    >
+                      {n.label}
+                    </button>
+                  ))}
                 </div>
               </div>
-            </>
-          )}
+            </div>
+          </div>
 
           <div className="grid grid-cols-3 gap-3">
             <div className="col-span-2">

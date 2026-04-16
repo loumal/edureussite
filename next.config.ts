@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 // ── Content-Security-Policy ───────────────────────────────────────────────────
 // Les APIs IA (Anthropic, ElevenLabs, Deepgram) sont appelées côté serveur
@@ -56,6 +57,12 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      // Photos de spécialistes (URLs arbitraires soumises par les utilisateurs)
+      { protocol: "https", hostname: "**" },
+    ],
+  },
   async headers() {
     return [
       {
@@ -66,4 +73,15 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  // Organisation et projet Sentry (à renseigner dans les variables d'environnement)
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+
+  // Upload des source maps uniquement en CI/CD, sans exposer les sources en prod
+  silent: true,
+  sourcemaps: { disable: true },
+
+  // Désactiver le tunnel Sentry (route /monitoring) pour simplifier le CSP
+  disableLogger: true,
+});

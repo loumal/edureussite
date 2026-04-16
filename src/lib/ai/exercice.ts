@@ -16,19 +16,28 @@ function extractJSON(text: string): string {
   // 1. Nettoyage des fences markdown (``` ou ```json)
   let cleaned = text.replace(/^```(?:json)?\r?\n?/, "").replace(/\r?\n?```$/, "").trim();
 
-  // 2. Si ça parse déjà, parfait
-  try { JSON.parse(cleaned); return cleaned; } catch { /* continue */ }
+  // 2. Sanitize backslashes invalides en JSON (ex: notation LaTeX \pi, \sqrt, \cdot → \\pi, \\sqrt, \\cdot)
+  //    Les séquences valides JSON (\", \\, \/, \b, \f, \n, \r, \t, \uXXXX) sont conservées.
+  const sanitizeBackslashes = (s: string) =>
+    s.replace(/\\([^"\\/bfnrtu])/g, "\\\\$1");
 
-  // 3. Extraire le premier objet JSON complet { ... } dans le texte brut
+  // 3. Si ça parse déjà (avec ou sans sanitize), parfait
+  try { JSON.parse(cleaned); return cleaned; } catch { /* continue */ }
+  const sanitized = sanitizeBackslashes(cleaned);
+  try { JSON.parse(sanitized); return sanitized; } catch { /* continue */ }
+
+  // 4. Extraire le premier objet JSON complet { ... } dans le texte brut
   const start = text.indexOf("{");
   const end   = text.lastIndexOf("}");
   if (start !== -1 && end > start) {
     const candidate = text.slice(start, end + 1);
     try { JSON.parse(candidate); return candidate; } catch { /* continue */ }
+    const candidateSanitized = sanitizeBackslashes(candidate);
+    try { JSON.parse(candidateSanitized); return candidateSanitized; } catch { /* continue */ }
   }
 
-  // 4. Retourner le texte nettoyé (le parse suivant lèvera l'erreur explicite)
-  return cleaned;
+  // 5. Retourner le texte nettoyé (le parse suivant lèvera l'erreur explicite)
+  return sanitized;
 }
 import { type SectionAnalysee, formaterContexteModele } from "./epreuve";
 
@@ -125,6 +134,8 @@ const NIVEAUX_LABELS: Record<NiveauScolaire, string> = {
   SECONDAIRE_3: "3e secondaire (14-15 ans)",
   SECONDAIRE_4: "4e secondaire (15-16 ans)",
   SECONDAIRE_5: "5e secondaire (16-17 ans)",
+  SECONDAIRE_6: "6e secondaire / 1ère (17-18 ans)",
+  SECONDAIRE_7: "Terminale (18 ans)",
 };
 
 const MATIERES_LABELS: Record<Matiere, string> = {
@@ -259,7 +270,8 @@ RÈGLES ABSOLUES :
 3. Français québécois authentique (expressions, contextes locaux)
 4. Niveau de langage adapté à l'âge exact
 5. Jamais de contenu anxiogène ni stigmatisant
-6. Réponds UNIQUEMENT avec un JSON valide, sans markdown`;
+6. Réponds UNIQUEMENT avec un JSON valide, sans markdown
+7. ⚠️ MATHÉMATIQUES — CRITIQUE : Utilise UNIQUEMENT les symboles Unicode pour les maths. JAMAIS de notation LaTeX (\\frac, \\sqrt, \\pi, \\times, etc.) qui brise le JSON. Exemples : × ÷ √ π ≤ ≥ ≠ ² ³ α β ≈ ∞ — écris les fractions sous forme "a/b", les puissances sous forme "x²", les racines sous forme "√x".`;
 
   const modeDouxNote = (etatEmotionnel === "STRESSE" || etatEmotionnel === "TRISTE" || etatEmotionnel === "FATIGUE")
     ? "\n⚠️ MODE DOUCEUR ACTIVÉ : L'élève est fatigué/stressé/triste. Exercice plus court, ton extra doux, difficulté réduite."
@@ -305,10 +317,12 @@ Chaque type de contenu peut inclure un tableau optionnel "visuels" contenant des
 
 DÉCLENCHE un visuel dans ces situations :
 - Mention de points avec coordonnées (A(x,y)) → type "plan_cartesien"
-- Calcul de périmètre, aire, volume d'une figure → type "figure_geometrique"
+- Calcul de périmètre, aire, volume d'une figure 2D → type "figure_geometrique"
+- Exercice sur des solides géométriques (cube, cylindre, cône, etc.) → type "solide_3d" ou "solides_multiples"
 - Table de valeurs, x→y, tableau de données → type "tableau"
 - Comparaison de quantités, fréquences, statistiques → type "graphique_barres"
 - Évolution dans le temps, suite de valeurs → type "graphique_lignes"
+- ⚠️ OBLIGATOIRE : Pour tout exercice mentionnant "Solide A", "Solide B", etc. → utilise TOUJOURS "solides_multiples"
 
 SCHÉMAS VISUELS :
 
@@ -346,7 +360,33 @@ SCHÉMAS VISUELS :
     "question": "Calcule l'aire"
   }
 ]
-Formes disponibles : "rectangle", "triangle_rectangle", "triangle_equilateral", "cercle", "parallelogramme", "trapeze"
+Formes 2D disponibles : "rectangle", "triangle_rectangle", "triangle_equilateral", "cercle", "parallelogramme", "trapeze"
+
+"visuels": [
+  {
+    "type": "solide_3d",
+    "titre": "Cylindre",
+    "nom": "Cylindre A",
+    "forme": "cylindre",
+    "dimensions": {"rayon": 4, "hauteur": 10},
+    "etiquettes": ["r = 4 cm", "h = 10 cm"]
+  }
+]
+Solides disponibles (type "solide_3d") : "cube" (cote), "pave_droit" (largeur, hauteur, profondeur), "cylindre" (rayon, hauteur), "cone" (rayon, hauteur), "pyramide_carree" (base, hauteur), "prisme_triangulaire" (base, hauteur_triangle, longueur), "sphere" (rayon)
+
+"visuels": [
+  {
+    "type": "solides_multiples",
+    "titre": "Les solides de l'exercice",
+    "solides": [
+      {"nom": "Solide A", "forme": "cylindre",          "dimensions": {"rayon": 3, "hauteur": 8}},
+      {"nom": "Solide B", "forme": "cone",               "dimensions": {"rayon": 4, "hauteur": 7}},
+      {"nom": "Solide C", "forme": "cube",               "dimensions": {"cote": 5}},
+      {"nom": "Solide D", "forme": "pave_droit",         "dimensions": {"largeur": 6, "hauteur": 4, "profondeur": 3}},
+      {"nom": "Solide E", "forme": "prisme_triangulaire","dimensions": {"base": 5, "hauteur_triangle": 4, "longueur": 9}}
+    ]
+  }
+]
 
 "visuels": [
   {
@@ -476,12 +516,17 @@ RÉPONDS avec ce JSON exact :
   const response = await anthropic.messages.create(
     {
       model: "claude-sonnet-4-6",
-      max_tokens: 2000,
+      max_tokens: 4096,
       system: systemPrompt,
       messages: [{ role: "user", content: userPrompt }],
     },
-    { timeout: 55000 } // 55s timeout — en dessous du maxDuration Vercel (120s) pour 2 appels possibles
+    { timeout: 55000 }
   );
+
+  // Détecter une réponse tronquée (max_tokens atteint avant la fin du JSON)
+  if (response.stop_reason === "max_tokens") {
+    throw new Error("Nous avons retourné une réponse invalide. Veuillez réessayer.");
+  }
 
   const text = response.content[0].type === "text" ? response.content[0].text : "";
   const cleaned = extractJSON(text);
@@ -535,7 +580,7 @@ RÉPONDS avec ce JSON exact :
       const retry = await anthropic.messages.create(
         {
           model: "claude-sonnet-4-6",
-          max_tokens: 2000,
+          max_tokens: 4096,
           system: systemPrompt,
           messages: [
             { role: "user", content: userPrompt },
@@ -573,11 +618,11 @@ RÉPONDS avec ce JSON exact :
           correctionAttendue: retryParsed.correctionAttendue,
         };
       } catch {
-        throw new Error("L'IA a retourné une réponse invalide. Veuillez réessayer.");
+        throw new Error("Nous avons retourné une réponse invalide. Veuillez réessayer.");
       }
     }
 
-    throw new Error("L'IA a retourné une réponse invalide. Veuillez réessayer.");
+    throw new Error("Nous avons retourné une réponse invalide. Veuillez réessayer.");
   }
 }
 
@@ -711,38 +756,83 @@ Génère une correction pédagogique complète, structurée et orientante. JSON 
   try {
     return JSON.parse(cleaned);
   } catch {
+    // Fallback enrichi — utilise les données réelles de l'exercice
+    const reponseEleveStr = typeof reponseEleve === "string"
+      ? reponseEleve
+      : reponseEleve != null ? JSON.stringify(reponseEleve) : "aucune réponse fournie";
+    const correctionStr = correctionAttendue != null
+      ? (typeof correctionAttendue === "string" ? correctionAttendue : JSON.stringify(correctionAttendue))
+      : "";
+    const competences = exercice.competencesPFEQ?.join(", ") || "compétences du PFEQ";
+    const verbesAction = ["calcule", "identifie", "détermine", "explique", "compare", "trouve", "résous", "complète", "écris", "indique", "nomme"];
+    const consigneLower = exercice.consigne.toLowerCase();
+    const verbeDetecte = verbesAction.find((v) => consigneLower.includes(v));
+    const typeFR: Record<string, string> = {
+      QCM: "question à choix multiple", TEXTE_TROUS: "texte à trous",
+      QUESTION_OUVERTE: "question ouverte", PROBLEME_MATHEMATIQUE: "problème mathématique",
+      LECTURE_COMPREHENSION: "question de lecture", MISE_EN_SITUATION: "mise en situation",
+    };
+
     return {
       score: 50,
       correct: false,
       mention: "En progression",
-      ceQueJaiReussi: "Tu as fait l'effort de répondre — c'est la première étape essentielle de tout apprentissage !",
+      ceQueJaiReussi: `Tu as complété cet exercice de ${typeFR[exercice.type] ?? exercice.type} — c'est un effort réel qui compte. La persévérance est la clé du progrès !`,
       diagnosticErreur: {
         typeErreur: "lacune_conceptuelle",
-        explication: "Il est difficile de déterminer précisément la nature de l'erreur sans analyse complète. Reprends la notion avec ton enseignant(e).",
-        frequence: "Ce type d'erreur est courant en phase d'apprentissage d'une nouvelle notion.",
+        explication: `L'exercice portait sur : "${exercice.consigne.slice(0, 200)}". Ton raisonnement a besoin d'être ajusté sur un ou plusieurs points — voyons ça ensemble.`,
+        frequence: "Ce type d'erreur est très courant en phase d'apprentissage d'une nouvelle notion. Même les élèves forts font cette erreur la première fois.",
       },
       correctionDetaillee: {
-        etape1: { titre: "Comprendre la tâche", explication: "Relis attentivement la consigne en soulignant les mots-clés.", conseil: "Prends le temps de lire deux fois avant de commencer — repère ce qu'on te demande de faire exactement." },
-        etape2: { titre: "La notion à maîtriser", explication: "Identifie quelle notion du cours s'applique ici.", rappelTheorique: "Consulte tes notes de cours ou ton manuel pour retrouver la règle ou la formule liée à cet exercice." },
-        etape3: { titre: "Démarche de résolution pas à pas", explication: "1. Identifie les données → 2. Choisis la bonne stratégie → 3. Applique la méthode étape par étape → 4. Formule ta réponse clairement.", solution: "Relis la correction avec ton enseignant(e) pour voir la démarche complète.", erreurEleve: "Ta réponse nécessite quelques ajustements — c'est tout à fait normal à ce stade de l'apprentissage." },
-        etape4: { titre: "Comment vérifier ma réponse", explication: "Relis ta réponse en te demandant : est-ce que ça répond exactement à ce qui était demandé ? Ma démarche est-elle visible et logique ?" },
+        etape1: {
+          titre: "Comprendre la tâche",
+          explication: `On te demandait de ${verbeDetecte ? `"${verbeDetecte}"` : "répondre à"} ce qui suit :\n\n"${exercice.consigne}"\n\n${reponseEleveStr ? `Ta réponse : "${reponseEleveStr}".` : ""}`,
+          conseil: `Le mot-clé de cette consigne${verbeDetecte ? ` est "${verbeDetecte}"` : ""} — ce verbe te dit exactement quel type de raisonnement est attendu. Souligne-le avant de commencer à répondre.`,
+        },
+        etape2: {
+          titre: "La notion à maîtriser",
+          explication: `Cet exercice de ${exercice.matiere} évalue les compétences suivantes : ${competences}.`,
+          rappelTheorique: correctionStr
+            ? `Ce qui était attendu : ${correctionStr}\n\nPour maîtriser ce type de question, il faut comprendre la notion sous-jacente et savoir l'appliquer dans des situations variées.`
+            : `Pour ce type d'exercice (${typeFR[exercice.type] ?? exercice.type}), tu dois maîtriser la notion clé du cours et savoir l'appliquer dans des situations similaires. Repère dans ta consigne les indices qui te disent quelle règle ou formule utiliser.`,
+        },
+        etape3: {
+          titre: "Démarche de résolution pas à pas",
+          explication: `Voici la démarche en ${exercice.type === "PROBLEME_MATHEMATIQUE" ? "5" : "4"} étapes pour ce type d'exercice :`,
+          solution: exercice.type === "PROBLEME_MATHEMATIQUE"
+            ? `1. Lire l'énoncé et souligner les données numériques\n2. Identifier ce qu'on cherche (la question principale)\n3. Choisir l'opération ou la formule appropriée\n4. Effectuer le calcul étape par étape\n5. Vérifier l'unité et reformuler la réponse\n\nRéponse attendue : ${correctionStr || "voir la correction complète avec ton enseignant(e)"}`
+            : `1. Lis l'énoncé en soulignant les mots-clés\n2. Identifie ce que la question te demande précisément\n3. Rappelle-toi la règle ou notion du cours qui s'applique\n4. Applique la méthode et formule ta réponse\n\nRéponse attendue : ${correctionStr || "voir la correction complète avec ton enseignant(e)"}`,
+          erreurEleve: reponseEleveStr
+            ? `Ta réponse : "${reponseEleveStr}".\n${correctionStr ? `Réponse attendue : "${correctionStr}".\n` : ""}Identifie à quelle étape ton raisonnement a divergé — souvent c'est à l'étape 2 (identifier ce qu'on cherche) ou à l'étape 3 (choisir la bonne méthode).`
+            : undefined,
+        },
+        etape4: {
+          titre: "Comment vérifier ma réponse",
+          explication: exercice.type === "PROBLEME_MATHEMATIQUE"
+            ? "Pour vérifier un calcul : refais-le en sens inverse. Exemple : si tu as divisé, remultiplie pour retrouver le nombre de départ. Si tu as additionné, soustrais pour vérifier. Enfin, vérifie que l'unité de ta réponse correspond à ce qui était demandé."
+            : "Pour vérifier ta réponse : relis la question, puis ta réponse, et pose-toi la question : 'Est-ce que ma réponse répond EXACTEMENT à ce qui était demandé ?' Vérifie aussi que tu n'as pas omis une partie de la question.",
+        },
       },
       strategieAntiRepetition: {
-        reflexeAConstruire: "Avant de répondre, demande-toi toujours : 'Quelle notion ai-je apprise qui s'applique ici ?'",
-        piegeAEviter: "Ne jamais répondre sans avoir identifié la notion clé visée par la question.",
-        exerciceDeRenforcement: "Refais 2-3 exercices similaires sur cette notion pour l'ancrer solidement.",
+        reflexeAConstruire: `Avant de répondre à ce type de question (${typeFR[exercice.type] ?? exercice.type}), prends 10 secondes pour identifier : (1) ce qu'on te demande, (2) quelle notion du cours s'applique, (3) quel est ton plan de résolution.`,
+        piegeAEviter: "Ne jamais commencer à répondre sans avoir identifié la notion clé et le type de raisonnement attendu.",
+        exerciceDeRenforcement: `Refais 2-3 exercices du même type sur cette notion en ${exercice.matiere} pour ancrer la méthode.`,
       },
       questionsReflexion: [
-        "Avec tes propres mots, qu'est-ce que cette question te demandait de faire ?",
-        "À quel moment penses-tu que ton raisonnement a pris une autre direction ?",
-        "Dans ta vie de tous les jours, où pourrais-tu utiliser cette notion ?",
+        `Avec tes propres mots, qu'est-ce que cette question te demandait de faire exactement ?`,
+        `À quel moment de la résolution penses-tu que ton raisonnement a pris une autre direction ?`,
+        `Comment expliqueras-tu cette notion à un(e) ami(e) si on te le demandait ?`,
       ],
-      methodeOfficielle: "Consulte ton enseignant(e) pour revoir la méthode officielle enseignée en classe pour ce type de question.",
-      lienPFEQ: "Cet exercice développe des compétences importantes du PFEQ. Demande à ton enseignant(e) quelle compétence précise est ciblée.",
-      astuceMemoire: "Crée ta propre astuce en associant cette notion à quelque chose que tu aimes — ça aide vraiment à mémoriser !",
-      exempleSimilaire: { enonce: "Cherche un exercice similaire dans ton manuel pour pratiquer.", solution: "", pourquoi: "La pratique régulière est la clé pour ne plus faire cette erreur." },
-      encouragement: "Chaque erreur est une occasion d'apprendre quelque chose de nouveau. T'es capable d'y arriver !",
-      prochainePiste: "Reprends cette notion avec ton enseignant(e) et refais des exercices similaires pour consolider ta compréhension.",
+      methodeOfficielle: `Pour ce type d'exercice en ${exercice.matiere} : identifie les données → choisis la bonne approche → applique la méthode étape par étape → vérifie que ta réponse répond à ce qui était demandé. C'est la démarche de résolution de problèmes enseignée dans les écoles québécoises (PFEQ/MEES).`,
+      lienPFEQ: `Cet exercice développe : ${competences}. Ces compétences sont au cœur du Programme de formation de l'école québécoise.`,
+      astuceMemoire: `Associe cette notion à quelque chose de concret dans ta vie — si tu aimes le sport, imagine comment ce concept s'appliquerait dans une situation de jeu. Si tu aimes les jeux vidéo, invente un exemple en lien avec eux. Ça aide vraiment à mémoriser !`,
+      exempleSimilaire: {
+        enonce: `Cherche dans ton manuel un exercice du même type (${typeFR[exercice.type] ?? exercice.type}) sur cette notion. Refais-le en suivant la démarche en 4 étapes ci-dessus.`,
+        solution: "",
+        pourquoi: "La pratique répétée avec la bonne démarche est ce qui transforme une difficulté en maîtrise.",
+      },
+      encouragement: `Chaque erreur est une information précieuse sur ce qu'il reste à consolider. T'es capable de maîtriser cette notion — il suffit de la reprendre méthodiquement, une étape à la fois !`,
+      prochainePiste: `Refais des exercices similaires en appliquant la démarche en 4 étapes. Si tu bloques encore à la même étape, c'est le signal que cette notion mérite une révision ciblée.`,
     };
   }
 }
@@ -915,7 +1005,7 @@ GÉNÈRE cette épreuve en JSON exact :
     return JSON.parse(cleaned) as EpreuveGeneree;
   } catch (e) {
     console.error("[genererEpreuve] JSON invalide :", e, "\nTexte brut :", text.slice(0, 500));
-    throw new Error("L'IA a retourné une épreuve invalide. Veuillez réessayer.");
+    throw new Error("Nous avons retourné une épreuve invalide. Veuillez réessayer.");
   }
 }
 

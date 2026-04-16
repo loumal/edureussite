@@ -1,5 +1,5 @@
 import { anthropic } from "./client";
-import type { Matiere, NiveauScolaire, StyleApprentissage } from "@/generated/prisma";
+import type { NiveauScolaire, StyleApprentissage } from "@/generated/prisma";
 
 // ─── Types exportés ──────────────────────────────────────────────────────────
 
@@ -13,9 +13,11 @@ export interface EtapeLecon {
   numero: number;
   titre: string;
   lienAvecErreur: string;       // Quelle erreur de l'élève cette étape corrige
-  explication: string;           // L'explication claire du concept
+  explication: string;           // L'explication claire du concept (peut contenir [FIGURE:xxx])
   analogie: string;              // Toujours dans l'univers de l'élève
-  demonstration: string;         // Résolution pas à pas, numérotée
+  figureCode?: string;           // Code SVG optionnel ex: "trapeze", "arbre_proba" (sans crochets)
+  demonstration: string;         // Résolution pas à pas, numérotée (peut contenir [FIGURE:xxx])
+  methodeQC?: string;            // Méthode pédagogique québécoise utilisée
   pointCle: string;              // La chose la plus importante à retenir
   checkpoint: string;            // Question courte à tenter avant de passer
   checkpointReponse: string;     // Réponse attendue au checkpoint
@@ -88,6 +90,8 @@ const NIVEAUX_LABELS: Record<NiveauScolaire, string> = {
   SECONDAIRE_1: "1re secondaire", SECONDAIRE_2: "2e secondaire",
   SECONDAIRE_3: "3e secondaire", SECONDAIRE_4: "4e secondaire",
   SECONDAIRE_5: "5e secondaire",
+  SECONDAIRE_6: "6e secondaire / 1ère",
+  SECONDAIRE_7: "Terminale",
 };
 
 const MATIERES_LABELS: Record<string, string> = {
@@ -193,30 +197,69 @@ Réponse de l'élève : ${JSON.stringify(e.reponseEleve)}
 Erreurs et difficultés détectées : ${erreurs}`;
   }).join("\n\n---\n\n");
 
-  const systemPrompt = `Tu es un orthopédagogue et coach scolaire d'élite, spécialisé en pédagogie québécoise (PFEQ/MEES).
+  const systemPrompt = `Tu es un orthopédagogue et enseignant-ressource d'élite, spécialisé en pédagogie québécoise (Programme de formation de l'école québécoise — PFEQ/MEES).
 Ta conviction profonde : il n'existe pas d'enfant incapable — il existe des explications qui n'ont pas encore trouvé leur chemin.
 Tu combines trois rôles en un :
 1. COACH : tu encourages, tu motives, tu crois en l'élève avec une conviction absolue
 2. ENSEIGNANT : tu expliques avec clarté, précision et progression, une idée à la fois
 3. GUIDE : tu amènes l'élève à découvrir par lui-même, pas à mémoriser passivement
 
-ADAPTATIONS OBLIGATOIRES selon le profil :
+━━━ ADAPTATIONS OBLIGATOIRES SELON LE PROFIL ━━━
 ${adaptations.length > 0 ? adaptations.join("\n") : "Aucune adaptation spéciale — niveau standard"}
 
-RÈGLES DE TON :
+━━━ ALIGNEMENT PFEQ OBLIGATOIRE ━━━
+Chaque étape doit s'appuyer sur les compétences et domaines du PFEQ :
+• Mathématiques primaire : résoudre des situations-problèmes, raisonner, communiquer (progression des apprentissages MEQ)
+• Mathématiques secondaire : démarche de résolution de problèmes en 5 étapes (comprendre, planifier, appliquer, vérifier, communiquer)
+• Français : compétences en lecture (dégager sens, réagir), en écriture (cohérence, syntaxe)
+• Sciences : démarche scientifique et technologique, liens STIM
+• Pour chaque étape, indique dans "methodeQC" la méthode pédagogique québécoise explicitement utilisée, ex :
+  - "Modèle CPA (Concret-Pictural-Abstrait) — MEQ"
+  - "Démarche de résolution de problèmes en 5 étapes — PFEQ"
+  - "Approche par situations-problèmes — PFEQ"
+  - "Stratégie des 3 lectures — MEQ"
+  - "Protocole de correction en 4 temps — MEQ"
+  - "Modelage interactif (Think-Aloud) — pratiques efficaces MEES"
+  - "Enseignement explicite — modèle Rosenshine-MEQ"
+
+━━━ FIGURES PÉDAGOGIQUES VISUELLES ━━━
+Quand la notion est visuelle (géométrie, probabilités, fractions, graphiques, angles), insère obligatoirement
+une figure en plaçant le code dans le champ "figureCode" de l'étape concernée.
+Codes disponibles (utilise EXACTEMENT ces codes, jamais d'approximation) :
+  2D : carre | rectangle | triangle_rectangle | triangle | cercle
+       trapeze | losange | parallelogramme | triangle_isocele | triangle_equilateral
+       pentagone | hexagone | heptagone | octogone | quadrilateres
+  3D : cube | pave | pyramide | cone | cylindre | sphere | prisme
+  Proba : arbre_proba | tableau_proba | venn
+  Fractions : fraction_1_2 | fraction_1_3 | fraction_2_3 | fraction_1_4 | fraction_3_4
+              fraction_cercle_1_2 | fraction_cercle_1_3 | fraction_cercle_1_4 | fraction_cercle_3_4
+  Nombres : droite_numerique | axes
+  Angles : angle_droit | angle_aigu | angle_obtus
+Si la figure exacte n'est pas dans cette liste → laisse "figureCode" vide ou absent. Ne jamais approximer.
+
+━━━ LANGUE ET NIVEAU D'ÂGE ━━━
+Adapte obligatoirement le vocabulaire et la syntaxe au niveau scolaire :
+• Primaire 1-3 : phrases de max 10 mots, vocabulaire quotidien, beaucoup d'images concrètes
+• Primaire 4-6 : phrases courtes, exemples du quotidien, max 2 idées par paragraphe
+• Secondaire 1-2 : ton plus mature mais accessible, analogies culturelles modernes
+• Secondaire 3-5 : langage précis, terminologie disciplinaire correcte, nuances
+
+━━━ RÈGLES DE TON ━━━
 - Jamais condescendant, jamais de "tu aurais dû savoir"
 - Toujours : "Voici comment on va voir ça ensemble"
 - Quand une notion est difficile : "C'est normal, voici pourquoi même des adultes trouvent ça difficile parfois"
 - Mentionner le prénom de l'élève dans les exemples et encouragements
 - Utiliser les intérêts de l'élève OBLIGATOIREMENT dans les analogies
 
-MÉTHODE PÉDAGOGIQUE (pour chaque étape de la leçon) :
+━━━ MÉTHODE PÉDAGOGIQUE PAR ÉTAPE (séquence obligatoire) ━━━
 1. Partir de l'erreur concrète de l'élève → montrer ce qui s'est passé (sans jugement)
-2. Expliquer le concept → une idée, en mots simples
-3. Analogie → dans l'univers de l'élève (sport, jeu, série préférée)
-4. Démonstration → résolution numérotée pas à pas avec les vrais calculs/mots
-5. Point clé → "La chose à retenir en 1 phrase"
-6. Checkpoint → mini-question pour que l'élève vérifie lui-même s'il a compris, AVEC la bonne réponse et son explication
+2. Expliquer le concept → une idée, en mots simples adaptés à l'âge
+3. Figure visuelle → si la notion s'y prête (géométrie, fractions, stats), placer le "figureCode" approprié
+4. Analogie → dans l'univers de l'élève (sport, jeu, série préférée)
+5. Démonstration → résolution numérotée pas à pas avec les VRAIS calculs, chaque micro-étape visible
+6. Méthode QC → nomme explicitement la méthode enseignée à l'école québécoise dans "methodeQC"
+7. Point clé → "À retenir : la chose la plus importante en 1 phrase"
+8. Checkpoint → mini-question vérifiable en 30 secondes, avec réponse complète et explication
 
 Réponds UNIQUEMENT avec du JSON valide, sans markdown.`;
 
@@ -250,15 +293,17 @@ Réponds avec ce JSON exact :
   "lecon": [
     {
       "numero": 1,
-      "titre": "Titre court de cette étape (ex: 'Comprendre ce qu'est vraiment un pourcentage')",
-      "lienAvecErreur": "En 1-2 phrases : quelle erreur spécifique cette étape corrige, et comment",
-      "explication": "Explication claire et simple du concept, une idée à la fois. Phrases courtes. Adapté à ${NIVEAUX_LABELS[profil.niveauScolaire]}. Pas de jargon sans définition. Commencer par 'ce que tu dois savoir, c'est que...'",
-      "analogie": "Analogie dans l'univers de ${profil.prenom} (${univers}). Formuler ainsi : 'C'est exactement comme quand [situation de l'univers de l'élève]...' — rendre le concept CONCRET et MÉMORABLE",
-      "demonstration": "Résolution PAS À PAS avec les vrais calculs/mots, chaque micro-étape numérotée :\n1. [première micro-étape avec le calcul explicite]\n2. [deuxième micro-étape]\n3. [etc.]\nRéponse finale : [la réponse complète]",
-      "pointCle": "La chose la plus importante à retenir, en 1 phrase courte et mémorable — commencer par 'À retenir : ...'",
-      "checkpoint": "Question courte et simple que ${profil.prenom} peut tenter maintenant pour vérifier sa compréhension. Doit être résolvable en 30 secondes avec ce qui vient d'être appris.",
-      "checkpointReponse": "La réponse complète au checkpoint, avec les calculs si nécessaire",
-      "checkpointExplication": "En 2-3 phrases : pourquoi c'est la bonne réponse, en reliant à ce qu'on vient d'apprendre dans cette étape"
+      "titre": "Titre court et clair de cette étape (ex: 'Comprendre ce qu'est vraiment un pourcentage')",
+      "lienAvecErreur": "En 1-2 phrases : quelle erreur spécifique cette étape corrige, et comment elle va la corriger",
+      "explication": "Explication claire et complète du concept — adaptée au niveau ${NIVEAUX_LABELS[profil.niveauScolaire]}. Plusieurs phrases, une idée progressive à la fois. Pas de jargon sans définition immédiate. Commence par 'Ce que tu dois savoir, c'est que...' Inclus des exemples concrets avec des vrais chiffres ou vrais mots.",
+      "figureCode": "Code figure si visuellement utile (ex: 'trapeze', 'arbre_proba', 'fraction_cercle_1_2') — sinon chaîne vide",
+      "analogie": "Analogie dans l'univers de ${profil.prenom} (${univers}). Formuler : 'C'est exactement comme quand [situation concrète de son univers]...' Rendre le concept MÉMORABLE et ÉMOTIONNELLEMENT ancré.",
+      "demonstration": "Résolution PAS À PAS avec les VRAIS calculs/mots, chaque micro-étape numérotée et expliquée :\n1. [première micro-étape — expliquer POURQUOI on fait ça]\n2. [deuxième micro-étape — calcul ou manipulation explicite]\n3. [troisième micro-étape]\n4. [etc. — autant d'étapes que nécessaire pour que tout soit visible]\nRéponse finale : [réponse complète, bien formulée]",
+      "methodeQC": "Méthode pédagogique québécoise utilisée (ex: 'Démarche de résolution de problèmes en 5 étapes — PFEQ', 'Modèle CPA — MEQ', 'Enseignement explicite — MEES')",
+      "pointCle": "La chose la plus importante à retenir, en 1 phrase courte et mémorable — commence obligatoirement par 'À retenir : ...'",
+      "checkpoint": "Question courte et précise que ${profil.prenom} peut tenter maintenant pour vérifier sa compréhension. Résolvable en 30 secondes avec ce qui vient d'être appris. Doit être un vrai problème (avec un calcul ou un choix), pas une question de mémorisation.",
+      "checkpointReponse": "La réponse COMPLÈTE au checkpoint, avec tous les calculs visibles si nécessaire",
+      "checkpointExplication": "En 2-3 phrases : pourquoi c'est la bonne réponse, en reliant explicitement à ce qu'on vient d'apprendre dans cette étape"
     }
   ],
   "astucesMnemotechniques": [
@@ -302,7 +347,7 @@ CONTRAINTES OBLIGATOIRES :
 
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-6",
-    max_tokens: 8000,
+    max_tokens: 12000,
     system: systemPrompt,
     messages: [{ role: "user", content: userPrompt }],
   });

@@ -4,30 +4,56 @@ import { useState } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { FocusTrap } from "@/components/ui/focus-trap";
 import type { NiveauScolaire } from "@/generated/prisma";
-import { useRouter } from "next/navigation";
+import { getNiveauxParRegion, getCycleLabel } from "@/lib/education/region-education";
 
-const NIVEAUX: { value: NiveauScolaire; label: string }[] = [
-  { value: "PRIMAIRE_1", label: "1re année primaire" },
-  { value: "PRIMAIRE_2", label: "2e année primaire" },
-  { value: "PRIMAIRE_3", label: "3e année primaire" },
-  { value: "PRIMAIRE_4", label: "4e année primaire" },
-  { value: "PRIMAIRE_5", label: "5e année primaire" },
-  { value: "PRIMAIRE_6", label: "6e année primaire" },
-  { value: "SECONDAIRE_1", label: "Secondaire 1" },
-  { value: "SECONDAIRE_2", label: "Secondaire 2" },
-  { value: "SECONDAIRE_3", label: "Secondaire 3" },
-  { value: "SECONDAIRE_4", label: "Secondaire 4" },
-  { value: "SECONDAIRE_5", label: "Secondaire 5" },
-];
+const REGIONS_INFO: Record<string, { nom: string; groupe: "canada" | "francophonie" }> = {
+  QC: { nom: "Québec",                    groupe: "canada" },
+  ON: { nom: "Ontario",                   groupe: "canada" },
+  BC: { nom: "Colombie-Britannique",      groupe: "canada" },
+  AB: { nom: "Alberta",                   groupe: "canada" },
+  SK: { nom: "Saskatchewan",              groupe: "canada" },
+  MB: { nom: "Manitoba",                  groupe: "canada" },
+  NB: { nom: "Nouveau-Brunswick",         groupe: "canada" },
+  NS: { nom: "Nouvelle-Écosse",           groupe: "canada" },
+  PE: { nom: "Île-du-Prince-Édouard",     groupe: "canada" },
+  NL: { nom: "Terre-Neuve-et-Labrador",   groupe: "canada" },
+  YT: { nom: "Yukon",                     groupe: "canada" },
+  NT: { nom: "Territoires du Nord-Ouest", groupe: "canada" },
+  NU: { nom: "Nunavut",                   groupe: "canada" },
+  FR: { nom: "France",                    groupe: "francophonie" },
+  CI: { nom: "Côte d'Ivoire",             groupe: "francophonie" },
+  SN: { nom: "Sénégal",                   groupe: "francophonie" },
+  CM: { nom: "Cameroun",                  groupe: "francophonie" },
+  BF: { nom: "Burkina Faso",              groupe: "francophonie" },
+  ML: { nom: "Mali",                      groupe: "francophonie" },
+  BJ: { nom: "Bénin",                     groupe: "francophonie" },
+  TG: { nom: "Togo",                      groupe: "francophonie" },
+  GA: { nom: "Gabon",                     groupe: "francophonie" },
+  CD: { nom: "R.D. Congo",                groupe: "francophonie" },
+  CG: { nom: "Congo-Brazzaville",         groupe: "francophonie" },
+  GN: { nom: "Guinée",                    groupe: "francophonie" },
+  MG: { nom: "Madagascar",                groupe: "francophonie" },
+  NE: { nom: "Niger",                     groupe: "francophonie" },
+  TD: { nom: "Tchad",                     groupe: "francophonie" },
+  CF: { nom: "Rép. Centrafricaine",       groupe: "francophonie" },
+  RW: { nom: "Rwanda",                    groupe: "francophonie" },
+  BI: { nom: "Burundi",                   groupe: "francophonie" },
+  DJ: { nom: "Djibouti",                  groupe: "francophonie" },
+  KM: { nom: "Comores",                   groupe: "francophonie" },
+};
+import { useRouter } from "next/navigation";
 
 interface Props {
   onClose: () => void;
+  multiProvince?: boolean;
+  provincesActives?: Record<string, boolean>;
 }
 
 type Onglet = "nouveau" | "lier";
 
-export function AjouterEnfantModal({ onClose }: Props) {
+export function AjouterEnfantModal({ onClose, multiProvince = false, provincesActives = { QC: true } }: Props) {
   const router = useRouter();
   const [onglet, setOnglet] = useState<Onglet>("nouveau");
 
@@ -37,6 +63,9 @@ export function AjouterEnfantModal({ onClose }: Props) {
   const [niveau, setNiveau] = useState<NiveauScolaire>("PRIMAIRE_1");
   const [ecole, setEcole] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
+  const [province, setProvince] = useState("QC");
+  const NIVEAUX = getNiveauxParRegion(province);
+  const cycleLabels = getCycleLabel(province);
   const [compteInfo, setCompteInfo] = useState<{ codeAcces: string; motDePasse: string } | null>(null);
 
   // Formulaire lier
@@ -59,7 +88,7 @@ export function AjouterEnfantModal({ onClose }: Props) {
 
   const handleAjouter = (e: React.FormEvent) => {
     e.preventDefault();
-    ajouter.mutate({ prenom, nom, niveauScolaire: niveau, ecole: ecole || undefined, motDePasse });
+    ajouter.mutate({ prenom, nom, niveauScolaire: niveau, ecole: ecole || undefined, motDePasse, province: province as never });
   };
 
   const handleLier = (e: React.FormEvent) => {
@@ -68,22 +97,30 @@ export function AjouterEnfantModal({ onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-titre-enfant"
+    >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Modal */}
+      <FocusTrap>
       <div className="relative w-full max-w-md rounded-2xl bg-white shadow-[var(--shadow-elevated)] animate-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[var(--color-rule)] px-6 py-4">
-          <h2 className="text-lg font-black text-[var(--color-ink)]">
+          <h2 id="modal-titre-enfant" className="text-lg font-black text-[var(--color-ink)]">
             Ajouter un enfant
           </h2>
           <button
             onClick={onClose}
+            aria-label="Fermer la fenêtre"
             className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)] transition-colors"
           >
             ✕
@@ -193,11 +230,20 @@ export function AjouterEnfantModal({ onClose }: Props) {
                       onChange={(e) => setNiveau(e.target.value as NiveauScolaire)}
                       className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:border-[var(--color-ink)] focus:outline-none"
                     >
-                      {NIVEAUX.map((n) => (
-                        <option key={n.value} value={n.value}>
-                          {n.label}
-                        </option>
-                      ))}
+                      {(() => {
+                        const primaireNiveaux = NIVEAUX.filter((n) => n.cycle === cycleLabels.primaire || n.cycle === "Primaire" || n.cycle === "Elementary");
+                        const secondaireNiveaux = NIVEAUX.filter((n) => !primaireNiveaux.includes(n));
+                        return (
+                          <>
+                            <optgroup label={cycleLabels.primaire}>
+                              {primaireNiveaux.map((n) => <option key={n.value} value={n.value}>{n.label}</option>)}
+                            </optgroup>
+                            <optgroup label={cycleLabels.secondaire}>
+                              {secondaireNiveaux.map((n) => <option key={n.value} value={n.value}>{n.label}</option>)}
+                            </optgroup>
+                          </>
+                        );
+                      })()}
                     </select>
                   </div>
 
@@ -211,6 +257,38 @@ export function AjouterEnfantModal({ onClose }: Props) {
                       placeholder="École primaire des Érables"
                     />
                   </div>
+
+                  {multiProvince && (
+                    <div>
+                      <label className="block text-xs font-medium text-[var(--color-ink-soft)] mb-1.5">
+                        🌍 Région / Pays *
+                      </label>
+                      <select
+                        value={province}
+                        onChange={(e) => { setProvince(e.target.value); setNiveau(getNiveauxParRegion(e.target.value)[0]?.value as NiveauScolaire ?? "PRIMAIRE_1"); }}
+                        className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:border-[var(--color-ink)] focus:outline-none"
+                      >
+                        {(() => {
+                          const canada = Object.entries(REGIONS_INFO).filter(([code, r]) => r.groupe === "canada" && provincesActives[code]);
+                          const franco = Object.entries(REGIONS_INFO).filter(([code, r]) => r.groupe === "francophonie" && provincesActives[code]);
+                          return (
+                            <>
+                              {canada.length > 0 && (
+                                <optgroup label="🇨🇦 Canada">
+                                  {canada.map(([code, r]) => <option key={code} value={code}>{r.nom}</option>)}
+                                </optgroup>
+                              )}
+                              {franco.length > 0 && (
+                                <optgroup label="🌍 France & Afrique francophone">
+                                  {franco.map(([code, r]) => <option key={code} value={code}>{r.nom}</option>)}
+                                </optgroup>
+                              )}
+                            </>
+                          );
+                        })()}
+                      </select>
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-xs font-medium text-[var(--color-ink-soft)] mb-1.5">
@@ -326,6 +404,7 @@ export function AjouterEnfantModal({ onClose }: Props) {
           )}
         </div>
       </div>
+      </FocusTrap>
     </div>
   );
 }

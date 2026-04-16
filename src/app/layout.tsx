@@ -6,6 +6,8 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/lib/auth/config";
 import { IdleTimeout } from "@/components/providers/idle-timeout";
 import { ThemeProvider } from "@/components/eleve/theme-provider";
+import { ServiceWorkerRegistration } from "@/components/providers/service-worker";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,10 +15,16 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ÉduRéussite QC — Réussite pour chaque élève",
+  title: "ÉduRéussite — Réussite pour chaque élève",
   description:
-    "Plateforme éducative adaptative pour élèves québécois du primaire et du secondaire. IA personnalisée, alignée sur le PFEQ.",
+    "Plateforme éducative adaptative pour élèves du primaire et du secondaire. IA personnalisée, alignée sur le curriculum local.",
   keywords: ["éducation", "québec", "primaire", "secondaire", "PFEQ", "IA", "apprentissage"],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "ÉduRéussite",
+  },
   icons: {
     icon: "/icon",
     apple: "/apple-icon",
@@ -39,6 +47,8 @@ export default async function RootLayout({
               {children}
             </ThemeProvider>
             <IdleTimeout />
+            <ServiceWorkerRegistration />
+            <Analytics />
           </TRPCProvider>
         </SessionProvider>
       </body>

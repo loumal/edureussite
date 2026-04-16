@@ -19,6 +19,10 @@
     {
       "path": "/api/cron/veille-hebdo",
       "schedule": "58 3 * * 6"
+    },
+    {
+      "path": "/api/cron/rapport-hebdo",
+      "schedule": "0 8 * * 1"
     }
   ]
 }

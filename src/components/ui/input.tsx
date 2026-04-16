@@ -12,6 +12,11 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, hint, id, type, ...props }, ref) => {
     const inputId = id ?? label?.toLowerCase().replace(/\s+/g, "-");
+    const errorId = inputId ? `${inputId}-error` : undefined;
+    const hintId = inputId ? `${inputId}-hint` : undefined;
+    const describedBy = [error ? errorId : null, hint && !error ? hintId : null]
+      .filter(Boolean)
+      .join(" ") || undefined;
     const isPassword = type === "password";
     const [visible, setVisible] = useState(false);
 
@@ -20,6 +25,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         id={inputId}
         ref={ref}
         type={isPassword ? (visible ? "text" : "password") : type}
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={describedBy}
         className={cn(
           "h-10 w-full rounded-[var(--radius-md)] border bg-white px-3.5 text-sm text-[var(--color-ink)] outline-none transition-all placeholder:text-[var(--color-ink-soft)]/50",
           isPassword && "pr-10",
@@ -66,8 +73,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         ) : (
           inputEl
         )}
-        {hint && !error && <p className="text-xs text-[var(--color-ink-soft)]">{hint}</p>}
-        {error && <p className="text-xs text-[var(--color-accent)]">{error}</p>}
+        {hint && !error && <p id={hintId} className="text-xs text-[var(--color-ink-soft)]">{hint}</p>}
+        {error && <p id={errorId} role="alert" className="text-xs text-[var(--color-accent)]">{error}</p>}
       </div>
     );
   }

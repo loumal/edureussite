@@ -1,0 +1,43 @@
+{
+  "name": "ÉduRéussite",
+  "short_name": "ÉduRéussite",
+  "description": "Plateforme éducative IA personnalisée — primaire au secondaire",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF8F5",
+  "theme_color": "#1A1A1A",
+  "orientation": "portrait-primary",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "/icon",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tableau de bord élève"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Mon tableau de bord",
+      "short_name": "Dashboard",
+      "url": "/eleve",
+      "description": "Accéder à mon espace élève"
+    },
+    {
+      "name": "Nouvel exercice",
+      "short_name": "Exercice",
+      "url": "/eleve/exercices/nouveau",
+      "description": "Générer un nouvel exercice IA"
+    }
+  ]
+}

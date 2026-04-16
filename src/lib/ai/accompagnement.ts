@@ -106,6 +106,8 @@ const NIVEAUX_LABELS: Record<NiveauScolaire, string> = {
   SECONDAIRE_3: "3e secondaire",
   SECONDAIRE_4: "4e secondaire",
   SECONDAIRE_5: "5e secondaire",
+  SECONDAIRE_6: "6e secondaire / 1ère",
+  SECONDAIRE_7: "Terminale",
 };
 
 const MATIERES_LABELS: Record<string, string> = {

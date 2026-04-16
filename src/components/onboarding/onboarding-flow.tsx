@@ -55,9 +55,10 @@ interface ProfilExistant {
 interface OnboardingFlowProps {
   etapeInitiale: number;
   profilExistant?: ProfilExistant;
+  province?: string;
 }
 
-export function OnboardingFlow({ etapeInitiale, profilExistant }: OnboardingFlowProps) {
+export function OnboardingFlow({ etapeInitiale, profilExistant, province = "QC" }: OnboardingFlowProps) {
   const [etape, setEtape] = useState(Math.min(etapeInitiale, 4)); // max step 4 on load
   const [erreur, setErreur] = useState<string | null>(null);
   const [data, setData] = useState<OnboardingData>({
@@ -199,7 +200,7 @@ export function OnboardingFlow({ etapeInitiale, profilExistant }: OnboardingFlow
       {/* Étape active */}
       <div className="w-full max-w-lg animate-fade-in">
         {etape === 0 && (
-          <StepIdentite data={data} onNext={handleNext} />
+          <StepIdentite data={data} onNext={handleNext} province={province} />
         )}
         {etape === 1 && (
           <StepStyleApprentissage
@@ -213,6 +214,7 @@ export function OnboardingFlow({ etapeInitiale, profilExistant }: OnboardingFlow
             data={data}
             onNext={handleNext}
             onBack={() => setEtape(1)}
+            province={province}
           />
         )}
         {etape === 3 && (

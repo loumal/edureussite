@@ -6,27 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import type { OnboardingData } from "../onboarding-flow";
 import type { NiveauScolaire } from "@/generated/prisma";
-
-const NIVEAUX: { value: NiveauScolaire; label: string; cycle: string }[] = [
-  { value: "PRIMAIRE_1", label: "1re année", cycle: "Primaire" },
-  { value: "PRIMAIRE_2", label: "2e année", cycle: "Primaire" },
-  { value: "PRIMAIRE_3", label: "3e année", cycle: "Primaire" },
-  { value: "PRIMAIRE_4", label: "4e année", cycle: "Primaire" },
-  { value: "PRIMAIRE_5", label: "5e année", cycle: "Primaire" },
-  { value: "PRIMAIRE_6", label: "6e année", cycle: "Primaire" },
-  { value: "SECONDAIRE_1", label: "1re secondaire", cycle: "Secondaire" },
-  { value: "SECONDAIRE_2", label: "2e secondaire", cycle: "Secondaire" },
-  { value: "SECONDAIRE_3", label: "3e secondaire", cycle: "Secondaire" },
-  { value: "SECONDAIRE_4", label: "4e secondaire", cycle: "Secondaire" },
-  { value: "SECONDAIRE_5", label: "5e secondaire", cycle: "Secondaire" },
-];
+import { getNiveauxParRegion, getCycleLabel } from "@/lib/education/region-education";
 
 interface Props {
   data: OnboardingData;
   onNext: (data: Partial<OnboardingData>) => void;
+  province?: string;
 }
 
-export function StepIdentite({ data, onNext }: Props) {
+export function StepIdentite({ data, onNext, province = "QC" }: Props) {
   const [prenom, setPrenom] = useState(data.prenom);
   const [nom, setNom] = useState(data.nom);
   const [niveauScolaire, setNiveauScolaire] = useState<NiveauScolaire | "">(
@@ -34,6 +22,9 @@ export function StepIdentite({ data, onNext }: Props) {
   );
   const [ecole, setEcole] = useState(data.ecole);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const NIVEAUX = getNiveauxParRegion(province);
+  const cycleLabels = getCycleLabel(province);
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -51,8 +42,8 @@ export function StepIdentite({ data, onNext }: Props) {
     onNext({ prenom, nom, niveauScolaire: niveauScolaire as NiveauScolaire, ecole });
   };
 
-  const primaireNiveaux = NIVEAUX.filter((n) => n.cycle === "Primaire");
-  const secondaireNiveaux = NIVEAUX.filter((n) => n.cycle === "Secondaire");
+  const primaireNiveaux = NIVEAUX.filter((n) => n.cycle === cycleLabels.primaire || n.cycle === "Primaire" || n.cycle === "Elementary");
+  const secondaireNiveaux = NIVEAUX.filter((n) => !primaireNiveaux.includes(n));
 
   return (
     <Card className="p-8">
@@ -93,13 +84,13 @@ export function StepIdentite({ data, onNext }: Props) {
           <div className="space-y-3">
             <div>
               <p className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-soft)]">
-                Primaire
+                {cycleLabels.primaire}
               </p>
               <div className="flex flex-wrap gap-2">
                 {primaireNiveaux.map((n) => (
                   <button
                     key={n.value}
-                    onClick={() => setNiveauScolaire(n.value)}
+                    onClick={() => setNiveauScolaire(n.value as NiveauScolaire)}
                     className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-all ${
                       niveauScolaire === n.value
                         ? "bg-[var(--color-ink)] text-white scale-105"
@@ -113,13 +104,13 @@ export function StepIdentite({ data, onNext }: Props) {
             </div>
             <div>
               <p className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-soft)]">
-                Secondaire
+                {cycleLabels.secondaire}
               </p>
               <div className="flex flex-wrap gap-2">
                 {secondaireNiveaux.map((n) => (
                   <button
                     key={n.value}
-                    onClick={() => setNiveauScolaire(n.value)}
+                    onClick={() => setNiveauScolaire(n.value as NiveauScolaire)}
                     className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-all ${
                       niveauScolaire === n.value
                         ? "bg-[var(--color-ink)] text-white scale-105"

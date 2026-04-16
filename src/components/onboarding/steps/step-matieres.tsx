@@ -5,25 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { OnboardingData } from "../onboarding-flow";
 import type { Matiere } from "@/generated/prisma";
-
-const MATIERES: { value: Matiere; emoji: string; label: string }[] = [
-  { value: "FRANCAIS", emoji: "📖", label: "Français" },
-  { value: "MATHEMATIQUES", emoji: "🔢", label: "Maths" },
-  { value: "SCIENCES", emoji: "🔬", label: "Sciences" },
-  { value: "UNIVERS_SOCIAL", emoji: "🌍", label: "Univers social" },
-  { value: "ARTS", emoji: "🎨", label: "Arts" },
-  { value: "ANGLAIS", emoji: "🇨🇦", label: "Anglais" },
-  { value: "EDUCATION_PHYSIQUE", emoji: "⚽", label: "Éducation physique" },
-  { value: "ETHIQUE", emoji: "💭", label: "Éthique" },
-];
+import { getMatieresParRegion } from "@/lib/education/region-education";
 
 interface Props {
   data: OnboardingData;
   onNext: (data: Partial<OnboardingData>) => void;
   onBack: () => void;
+  province?: string;
 }
 
-export function StepMatieres({ data, onNext, onBack }: Props) {
+export function StepMatieres({ data, onNext, onBack, province = "QC" }: Props) {
+  const MATIERES = getMatieresParRegion(province);
   const [preferees, setPreferees] = useState<Matiere[]>(data.matieresPreferees);
   const [redoutees, setRedoutees] = useState<Matiere[]>(data.matieresRedoutees);
 
@@ -63,9 +55,9 @@ export function StepMatieres({ data, onNext, onBack }: Props) {
           {MATIERES.map((m) => (
             <button
               key={m.value}
-              onClick={() => togglePreferee(m.value)}
+              onClick={() => togglePreferee(m.value as Matiere)}
               className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
-                preferees.includes(m.value)
+                preferees.includes(m.value as Matiere)
                   ? "bg-[var(--color-success)] text-white"
                   : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:bg-white"
               }`}
@@ -85,9 +77,9 @@ export function StepMatieres({ data, onNext, onBack }: Props) {
           {MATIERES.map((m) => (
             <button
               key={m.value}
-              onClick={() => toggleRedoutee(m.value)}
+              onClick={() => toggleRedoutee(m.value as Matiere)}
               className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
-                redoutees.includes(m.value)
+                redoutees.includes(m.value as Matiere)
                   ? "bg-[var(--color-accent)] text-white"
                   : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:bg-white"
               }`}

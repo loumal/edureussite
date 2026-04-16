@@ -10,18 +10,24 @@ export default async function OnboardingPage() {
     redirect("/");
   }
 
-  const profil = await prisma.profilEleve.findUnique({
-    where: { userId: session.user.id },
-    select: {
-      onboardingComplete: true,
-      onboardingEtape: true,
-      prenom: true,
-      nom: true,
-      niveauScolaire: true,
-      ecole: true,
-      parents: { select: { id: true }, take: 1 },
-    },
-  });
+  const [profil, user] = await Promise.all([
+    prisma.profilEleve.findUnique({
+      where: { userId: session.user.id },
+      select: {
+        onboardingComplete: true,
+        onboardingEtape: true,
+        prenom: true,
+        nom: true,
+        niveauScolaire: true,
+        ecole: true,
+        parents: { select: { id: true }, take: 1 },
+      },
+    }),
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { province: true },
+    }),
+  ]);
 
   if (profil?.onboardingComplete) {
     redirect("/eleve");
@@ -40,6 +46,7 @@ export default async function OnboardingPage() {
       <OnboardingFlow
         etapeInitiale={profil?.onboardingEtape ?? 0}
         profilExistant={profilExistant}
+        province={user?.province ?? "QC"}
       />
     </div>
   );
