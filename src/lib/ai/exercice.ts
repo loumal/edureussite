@@ -860,6 +860,7 @@ export async function genererEpreuve({
   niveauActuel,
   dureeMinutes = 45,
   difficulteChoisie,
+  modeleReference,
 }: {
   profil: ProfilComplet;
   matiere: Matiere;
@@ -867,19 +868,40 @@ export async function genererEpreuve({
   niveauActuel: NiveauDifficulte;
   dureeMinutes?: number;
   difficulteChoisie?: NiveauDifficulte;
+  modeleReference?: {
+    titre: string;
+    styleGeneral: string;
+    niveauLangue: string;
+    competencesGlobales?: string[];
+    consignesGenerales?: string;
+    sections: { titre: string; ordre: number; typeQuestions: string; points: number; nbQuestions: number; consignesSpecifiques?: string | null }[];
+  };
 }): Promise<EpreuveGeneree> {
   const difficulteVoulue = difficulteChoisie ?? niveauActuel;
   const profilNarratif = construireProfilNarratif(profil);
 
-  const systemPrompt = `Tu es un concepteur d'épreuves expert en pédagogie québécoise, spécialisé dans le Programme de formation de l'école québécoise (PFEQ) du MEES.
-
-Tu crées des ÉPREUVES COMPLÈTES structurées exactement comme celles du Ministère de l'Éducation du Québec (MEES) :
-
-STRUCTURE D'UNE ÉPREUVE QUÉBÉCOISE :
+  // Build structure description from admin model if available
+  const structureModele = modeleReference
+    ? `MODÈLE D'ÉPREUVE MINISTÉRIEL DE RÉFÉRENCE (source: "${modeleReference.titre}") :
+Style général : ${modeleReference.styleGeneral}
+Niveau de langue : ${modeleReference.niveauLangue}
+${modeleReference.competencesGlobales?.length ? `Compétences visées : ${modeleReference.competencesGlobales.join(", ")}` : ""}
+${modeleReference.consignesGenerales ? `Consignes générales : ${modeleReference.consignesGenerales}` : ""}
+Structure des parties (RESPECTER IMPÉRATIVEMENT) :
+${modeleReference.sections.map((s) =>
+  `• Partie ${s.ordre} — ${s.titre} (${s.points} pts, ${s.nbQuestions} questions, type: ${s.typeQuestions})${s.consignesSpecifiques ? ` — ${s.consignesSpecifiques}` : ""}`
+).join("\n")}`
+    : `STRUCTURE D'UNE ÉPREUVE QUÉBÉCOISE :
 1. MISE EN SITUATION : Contexte narratif riche, ancré dans l'univers de l'élève, qui donne du sens à toutes les questions
 2. PARTIE 1 — Connaissance et compréhension (questions courtes, QCM) : vérifier la mémorisation des notions
 3. PARTIE 2 — Application et analyse : exercices nécessitant l'application des notions dans des situations nouvelles
-4. PARTIE 3 — Situation complexe : problème ouvert ou tâche complexe nécessitant synthèse et raisonnement
+4. PARTIE 3 — Situation complexe : problème ouvert ou tâche complexe nécessitant synthèse et raisonnement`;
+
+  const systemPrompt = `Tu es un concepteur d'épreuves expert en pédagogie québécoise, spécialisé dans le Programme de formation de l'école québécoise (PFEQ) du MEES.
+
+Tu crées des ÉPREUVES COMPLÈTES structurées exactement comme celles du Ministère de l'Éducation du Québec (MEES).
+
+${structureModele}
 
 RÈGLES :
 - Toutes les questions découlent de la mise en situation (cohérence narrative)
@@ -900,7 +922,9 @@ PARAMÈTRES DE L'ÉPREUVE :
 - Durée : ${dureeMinutes} minutes
 - Notions PFEQ à évaluer (OBLIGATOIRE de les couvrir toutes) :
 ${notionsStr}
-
+${modeleReference ? `
+CONTRAINTE DE STRUCTURE : Reproduire fidèlement la structure du modèle ministériel "${modeleReference.titre}" avec ses ${modeleReference.sections.length} parties, le style "${modeleReference.styleGeneral}" et le niveau de langue "${modeleReference.niveauLangue}".
+` : ""}
 INSTRUCTIONS DE PERSONNALISATION :
 - La mise en situation doit être entièrement ancrée dans l'univers de ${profil.prenom} (ses sports, médias, passions)
 - Toutes les questions doivent découler naturellement de cette mise en situation

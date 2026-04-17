@@ -33,10 +33,28 @@ export const exerciceRouter = createTRPCRouter({
       const niveauMatiere = profil.niveauxMatieres[0];
       const dernierCheckIn = profil.checkIns[0];
 
-      const contexteDocuments = await getContexteDocuments(ctx.prisma, {
-        matiere: input.matiere,
-        niveauScolaire: profil.niveauScolaire,
-      });
+      const [contexteDocuments, modelesValides] = await Promise.all([
+        getContexteDocuments(ctx.prisma, {
+          matiere: input.matiere,
+          niveauScolaire: profil.niveauScolaire,
+        }),
+        ctx.prisma.modeleEpreuve.findMany({
+          where: { valide: true, matiere: input.matiere, niveauScolaire: profil.niveauScolaire },
+          include: { sections: { orderBy: { ordre: "asc" } } },
+          orderBy: [{ annee: "desc" }, { createdAt: "desc" }],
+          take: 1,
+        }),
+      ]);
+
+      // Sélectionner le modèle de référence et la section la plus proche du type demandé
+      const modeleChoisi = modelesValides[0] ?? null;
+      const structureAnalysee = modeleChoisi?.structureAnalysee as {
+        styleGeneral: string; niveauLangue: string; sections: { typeQuestion: string }[];
+      } | null;
+
+      const sectionChoisie = structureAnalysee?.sections.find(
+        (s) => !input.type || s.typeQuestion === input.type
+      ) ?? structureAnalysee?.sections[0] ?? null;
 
       let exerciceData;
       try {
@@ -65,6 +83,13 @@ export const exerciceRouter = createTRPCRouter({
           contexteDocuments: contexteDocuments || undefined,
           difficulteChoisie: input.difficulteChoisie,
           lacunes: niveauMatiere?.lacunes?.length ? niveauMatiere.lacunes : undefined,
+          modeleReference: modeleChoisi && structureAnalysee ? {
+            titre: modeleChoisi.titre,
+            styleGeneral: structureAnalysee.styleGeneral,
+            niveauLangue: structureAnalysee.niveauLangue,
+            sections: modeleChoisi.sections as never,
+          } : undefined,
+          sectionReference: sectionChoisie as never ?? undefined,
         });
       } catch (aiError) {
         console.error(`[generer] Échec génération exercice pour élève ${profil.id} (${profil.prenom}), matière ${input.matiere}:`, aiError);
@@ -468,6 +493,21 @@ export const exerciceRouter = createTRPCRouter({
 
       const niveauMatiere = profil.niveauxMatieres[0];
 
+      const modelesValidesEpreuve = await ctx.prisma.modeleEpreuve.findMany({
+        where: { valide: true, matiere: input.matiere, niveauScolaire: profil.niveauScolaire },
+        include: { sections: { orderBy: { ordre: "asc" } } },
+        orderBy: [{ annee: "desc" }, { createdAt: "desc" }],
+        take: 1,
+      });
+      const modeleChoisiEpreuve = modelesValidesEpreuve[0] ?? null;
+      const structureAnalyseeEpreuve = modeleChoisiEpreuve?.structureAnalysee as {
+        styleGeneral: string;
+        niveauLangue: string;
+        competencesGlobales?: string[];
+        consignesGenerales?: string;
+        sections: { typeQuestion: string; titre?: string; points?: number }[];
+      } | null;
+
       let epreuveData;
       try {
         epreuveData = await genererEpreuve({
@@ -491,6 +531,14 @@ export const exerciceRouter = createTRPCRouter({
           niveauActuel: niveauMatiere?.niveau ?? "ATTENDU",
           dureeMinutes: input.dureeMinutes,
           difficulteChoisie: input.difficulteChoisie,
+          modeleReference: modeleChoisiEpreuve && structureAnalyseeEpreuve ? {
+            titre: modeleChoisiEpreuve.titre,
+            styleGeneral: structureAnalyseeEpreuve.styleGeneral,
+            niveauLangue: structureAnalyseeEpreuve.niveauLangue,
+            competencesGlobales: structureAnalyseeEpreuve.competencesGlobales,
+            consignesGenerales: structureAnalyseeEpreuve.consignesGenerales,
+            sections: modeleChoisiEpreuve.sections as never,
+          } : undefined,
         });
       } catch (aiError) {
         console.error(`[genererEpreuve] Échec pour élève ${profil.id} (${profil.prenom}), matière ${input.matiere}:`, aiError);
