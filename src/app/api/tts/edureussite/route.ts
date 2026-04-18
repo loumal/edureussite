@@ -5,6 +5,13 @@ import { logEduReussiteTTS } from "@/lib/api-usage/logger";
 const TTS_API_URL = process.env.EDUREUSSITE_TTS_URL;
 const TTS_API_KEY = process.env.EDUREUSSITE_TTS_KEY;
 
+// Voix chaleureuse et humanisée
+const VOICE_PARAMS = {
+  rate: "-8%",   // légèrement plus lent = plus posé, plus chaleureux
+  pitch: "+8%",  // ton légèrement plus haut = plus expressif, plus sympatique
+  volume: "+5%", // présence légèrement plus affirmée
+};
+
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
@@ -17,7 +24,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { text, language = "fr" } = body;
+    const { text, language } = body;
+    const lang: "fr" | "en" = language === "en" ? "en" : "fr";
 
     if (typeof text !== "string" || !text.trim() || text.length > 2000) {
       return NextResponse.json({ error: "Texte invalide" }, { status: 400 });
@@ -33,10 +41,8 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         text: trimmed,
-        language: language === "en" ? "en" : "fr",
-        rate: "+0%",
-        pitch: "+0Hz",
-        volume: "+0%",
+        language: lang,
+        ...VOICE_PARAMS,
       }),
     });
 

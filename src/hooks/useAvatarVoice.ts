@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 
 interface Options {
   voiceId: string;
+  language?: "fr" | "en";
   onStart?: () => void;
   onEnd?: () => void;
 }
@@ -32,19 +33,20 @@ export function unlockAudio() {
   } catch { /* ignore si AudioContext non dispo */ }
 }
 
-// Fallback TTS natif si ElevenLabs échoue
-function browserSpeak(text: string, onStart?: () => void, onEnd?: () => void): void {
+// Fallback TTS natif si l'API échoue
+function browserSpeak(text: string, language: "fr" | "en", onStart?: () => void, onEnd?: () => void): void {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) { onEnd?.(); return; }
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = "fr-CA";
+  utter.lang = language === "en" ? "en-CA" : "fr-CA";
   utter.rate = 0.92;
   utter.pitch = 1.05;
   const trySetVoice = () => {
     const voices = window.speechSynthesis.getVoices();
-    const v = voices.find((v) => v.lang === "fr-CA")
-      ?? voices.find((v) => v.lang === "fr-FR")
-      ?? voices.find((v) => v.lang.startsWith("fr"));
+    const lang = language === "en" ? "en-CA" : "fr-CA";
+    const fallbackLang = language === "en" ? "en" : "fr";
+    const v = voices.find((v) => v.lang === lang)
+      ?? voices.find((v) => v.lang.startsWith(fallbackLang));
     if (v) utter.voice = v;
   };
   trySetVoice();
@@ -60,7 +62,7 @@ function browserSpeak(text: string, onStart?: () => void, onEnd?: () => void): v
   window.speechSynthesis.speak(utter);
 }
 
-export function useAvatarVoice({ voiceId, onStart, onEnd }: Options): Return {
+export function useAvatarVoice({ voiceId, language = "fr", onStart, onEnd }: Options): Return {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const usingFallbackRef = useRef(false);
@@ -87,10 +89,10 @@ export function useAvatarVoice({ voiceId, onStart, onEnd }: Options): Return {
       const res = await fetch("/api/avatar/speak", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, voiceId }),
+        body: JSON.stringify({ text, voiceId, language }),
       });
 
-      if (!res.ok) throw new Error(`ElevenLabs ${res.status}`);
+      if (!res.ok) throw new Error(`TTS ${res.status}`);
 
       const arrayBuffer = await res.arrayBuffer();
 
@@ -125,11 +127,12 @@ export function useAvatarVoice({ voiceId, onStart, onEnd }: Options): Return {
       onStart?.();
       browserSpeak(
         text,
+        language,
         undefined,
         () => { setIsSpeaking(false); usingFallbackRef.current = false; onEnd?.(); }
       );
     }
-  }, [voiceId, stop, onStart, onEnd]);
+  }, [voiceId, language, stop, onStart, onEnd]);
 
   return { speak, stop, isSpeaking, isLoading };
 }

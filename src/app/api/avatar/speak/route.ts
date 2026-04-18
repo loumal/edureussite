@@ -9,7 +9,14 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 const EDUREUSSITE_TTS_URL = process.env.EDUREUSSITE_TTS_URL;
 const EDUREUSSITE_TTS_KEY = process.env.EDUREUSSITE_TTS_KEY;
 
-const VOICE_SETTINGS = {
+// Voix chaleureuse et humanisée — légèrement plus lente, ton naturellement plus haut
+const RUNPOD_VOICE_PARAMS = {
+  rate: "-8%",   // légèrement plus lent = plus posé, plus chaleureux
+  pitch: "+8%",  // ton légèrement plus haut = plus expressif, plus sympatique
+  volume: "+5%", // présence légèrement plus affirmée
+};
+
+const ELEVENLABS_VOICE_SETTINGS = {
   stability: 0.38,
   similarity_boost: 0.80,
   style: 0.55,
@@ -24,7 +31,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { text, voiceId } = body;
+    const { text, voiceId, language } = body;
+    const lang: "fr" | "en" = language === "en" ? "en" : "fr";
 
     if (typeof text !== "string" || !text.trim() || text.length > 2000) {
       return NextResponse.json({ error: "Texte invalide" }, { status: 400 });
@@ -46,9 +54,9 @@ export async function POST(req: NextRequest) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "tts-1",        // tts-1 = ~2× plus rapide que tts-1-hd, latence réduite
+          model: "tts-1",
           input: trimmed,
-          voice: "nova",
+          voice: lang === "en" ? "nova" : "nova",
           response_format: "mp3",
         }),
       });
@@ -58,10 +66,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
       }
 
-      // Logger avant de streamer (on connaît les chars, pas besoin du buffer)
       logOpenAITTS({ characters: trimmed.length, userId: session.user.id });
 
-      // Streamer directement sans buffériser côté serveur
       return new NextResponse(response.body, {
         status: 200,
         headers: {
@@ -72,7 +78,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // ── Edureussite RunPod TTS ────────────────────────────────────────────────
+    // ── Edureussite RunPod TTS (edge-tts bilingue) ────────────────────────────
     if (provider === "EDUREUSSITE_RUNPOD") {
       if (!EDUREUSSITE_TTS_URL || !EDUREUSSITE_TTS_KEY) {
         return NextResponse.json({ error: "Edureussite TTS non configuré" }, { status: 503 });
@@ -86,10 +92,8 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           text: trimmed,
-          language: "fr",
-          rate: "+0%",
-          pitch: "+0Hz",
-          volume: "+0%",
+          language: lang,
+          ...RUNPOD_VOICE_PARAMS,
         }),
       });
 
@@ -129,7 +133,7 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           text: trimmed,
           model_id: "eleven_turbo_v2_5",
-          voice_settings: VOICE_SETTINGS,
+          voice_settings: ELEVENLABS_VOICE_SETTINGS,
         }),
       }
     );
@@ -139,10 +143,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
     }
 
-    // Logger avant de streamer
     logElevenLabsTTS({ characters: trimmed.length, userId: session.user.id });
 
-    // Streamer directement sans buffériser côté serveur
     return new NextResponse(response.body, {
       status: 200,
       headers: {
