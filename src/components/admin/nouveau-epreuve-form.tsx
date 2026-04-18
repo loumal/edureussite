@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -38,7 +38,10 @@ const SOURCES = [
   { value: "AUTRE", label: "Autre" },
 ];
 
-type Etape = "meta" | "contenu" | "analyse" | "sections" | "confirmation";
+const ACCEPTED_EXTENSIONS = [".pdf", ".docx", ".doc", ".txt"];
+const ACCEPTED_MIME = "application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword,text/plain";
+
+type Etape = "meta" | "upload" | "sections";
 
 interface StructureAnalysee {
   titre: string;
@@ -62,51 +65,96 @@ interface StructureAnalysee {
   }[];
 }
 
+function fileIcon(name: string): string {
+  const ext = name.split(".").pop()?.toLowerCase();
+  if (ext === "pdf") return "📄";
+  if (ext === "docx" || ext === "doc") return "📝";
+  return "📃";
+}
+
+function formatSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} o`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} Ko`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} Mo`;
+}
+
 export function NouveauEpreuveForm() {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [etape, setEtape] = useState<Etape>("meta");
   const [erreur, setErreur] = useState<string | null>(null);
 
-  // Champs méta
+  // Méta
   const [matiere, setMatiere] = useState<Matiere | "">("");
   const [niveauScolaire, setNiveauScolaire] = useState<NiveauScolaire | "">("");
   const [source, setSource] = useState<SourceEpreuve>("MEES_OFFICIEL");
   const [annee, setAnnee] = useState("");
 
-  // Contenu brut
-  const [contenu, setContenu] = useState("");
+  // Upload
+  const [fichierNom, setFichierNom] = useState<string | null>(null);
+  const [fichierTaille, setFichierTaille] = useState<number>(0);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [enCours, setEnCours] = useState(false);
+  const [etapeAnalyse, setEtapeAnalyse] = useState<"extraction" | "analyse" | null>(null);
+  const [contenuExtrait, setContenuExtrait] = useState("");
 
   // Structure analysée
   const [structure, setStructure] = useState<StructureAnalysee | null>(null);
   const [titreOverride, setTitreOverride] = useState("");
-
-  const analyser = trpc.admin.analyserEpreuve.useMutation({
-    onSuccess: (data) => {
-      setStructure(data as StructureAnalysee);
-      setTitreOverride(data.titre);
-      setEtape("sections");
-      setErreur(null);
-    },
-    onError: (err) => setErreur(err.message),
-  });
 
   const creer = trpc.admin.creerEpreuve.useMutation({
     onSuccess: (data) => router.push(`/admin/epreuves/${data.id}`),
     onError: (err) => setErreur(err.message),
   });
 
-  const handleAnalyser = () => {
+  const handleFichier = useCallback(async (file: File) => {
+    const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+    if (!ACCEPTED_EXTENSIONS.includes(`.${ext}`)) {
+      setErreur("Format non supporté. Utilisez PDF, Word (.docx) ou texte (.txt).");
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      setErreur("Fichier trop volumineux (max 20 Mo).");
+      return;
+    }
     if (!matiere || !niveauScolaire) {
-      setErreur("Sélectionne la matière et le niveau avant d'analyser.");
+      setErreur("Veuillez d'abord sélectionner la matière et le niveau.");
       return;
     }
-    if (contenu.trim().length < 50) {
-      setErreur("Le contenu doit faire au moins 50 caractères.");
-      return;
-    }
+
+    setFichierNom(file.name);
+    setFichierTaille(file.size);
     setErreur(null);
-    analyser.mutate({ contenu, matiere, niveauScolaire });
-  };
+    setEnCours(true);
+    setEtapeAnalyse("extraction");
+
+    const fd = new FormData();
+    fd.append("fichier", file);
+    fd.append("matiere", matiere);
+    fd.append("niveauScolaire", niveauScolaire);
+
+    try {
+      // Brief delay so the "extraction" label is visible
+      await new Promise((r) => setTimeout(r, 400));
+      setEtapeAnalyse("analyse");
+
+      const res = await fetch("/api/admin/analyser-epreuve-doc", { method: "POST", body: fd });
+      const data = await res.json() as { structure?: StructureAnalysee; contenuExtrait?: string; nomFichier?: string; error?: string };
+
+      if (!res.ok) throw new Error(data.error ?? "Erreur d'analyse");
+
+      setContenuExtrait(data.contenuExtrait ?? "");
+      setStructure(data.structure!);
+      setTitreOverride(data.structure!.titre);
+      setEtape("sections");
+    } catch (err) {
+      setErreur(err instanceof Error ? err.message : "Erreur inattendue. Réessayez.");
+      setFichierNom(null);
+    } finally {
+      setEnCours(false);
+      setEtapeAnalyse(null);
+    }
+  }, [matiere, niveauScolaire]);
 
   const handleCreer = () => {
     if (!structure || !matiere || !niveauScolaire) return;
@@ -117,7 +165,7 @@ export function NouveauEpreuveForm() {
       source,
       annee: annee ? parseInt(annee) : undefined,
       description: structure.description,
-      contenuOriginal: contenu,
+      contenuOriginal: contenuExtrait || undefined,
       structureAnalysee: structure as never,
       totalPoints: structure.totalPoints,
       dureeMinutes: structure.dureeMinutes,
@@ -125,33 +173,32 @@ export function NouveauEpreuveForm() {
     });
   };
 
+  const ETAPES_LABELS = ["Métadonnées", "Document", "Structure"];
+  const etapeIdx = etape === "meta" ? 0 : etape === "upload" ? 1 : 2;
+
   return (
     <div className="space-y-6">
       {/* Indicateur d'étapes */}
       <div className="flex items-center gap-2">
-        {(["meta", "contenu", "sections", "confirmation"] as Etape[]).map((e, i) => {
-          const labels = ["Métadonnées", "Contenu", "Structure", "Confirmation"];
-          const current = ["meta", "contenu", "sections", "confirmation"].indexOf(etape);
-          return (
-            <div key={e} className="flex items-center gap-2">
-              <div
-                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
-                  i < current
-                    ? "bg-[var(--color-success)] text-white"
-                    : i === current
-                    ? "bg-[var(--color-ink)] text-white"
-                    : "bg-[var(--color-rule)] text-[var(--color-ink-soft)]"
-                }`}
-              >
-                {i < current ? "✓" : i + 1}
-              </div>
-              <span className={`text-xs hidden sm:inline ${i === current ? "font-semibold text-[var(--color-ink)]" : "text-[var(--color-ink-soft)]"}`}>
-                {labels[i]}
-              </span>
-              {i < 3 && <div className="h-0.5 w-6 bg-[var(--color-rule)]" />}
+        {ETAPES_LABELS.map((label, i) => (
+          <div key={label} className="flex items-center gap-2">
+            <div
+              className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
+                i < etapeIdx
+                  ? "bg-[var(--color-success)] text-white"
+                  : i === etapeIdx
+                  ? "bg-[var(--color-ink)] text-white"
+                  : "bg-[var(--color-rule)] text-[var(--color-ink-soft)]"
+              }`}
+            >
+              {i < etapeIdx ? "✓" : i + 1}
             </div>
-          );
-        })}
+            <span className={`text-xs hidden sm:inline ${i === etapeIdx ? "font-semibold text-[var(--color-ink)]" : "text-[var(--color-ink-soft)]"}`}>
+              {label}
+            </span>
+            {i < 2 && <div className="h-0.5 w-6 bg-[var(--color-rule)]" />}
+          </div>
+        ))}
       </div>
 
       {erreur && (
@@ -167,56 +214,42 @@ export function NouveauEpreuveForm() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">
-                Matière *
-              </label>
+              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Matière *</label>
               <select
                 value={matiere}
                 onChange={(e) => setMatiere(e.target.value as Matiere)}
                 className="w-full rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]"
               >
                 <option value="">Sélectionner…</option>
-                {MATIERES.map((m) => (
-                  <option key={m.value} value={m.value}>{m.label}</option>
-                ))}
+                {MATIERES.map((m) => <option key={m.value} value={m.value}>{m.label}</option>)}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">
-                Niveau scolaire *
-              </label>
+              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Niveau scolaire *</label>
               <select
                 value={niveauScolaire}
                 onChange={(e) => setNiveauScolaire(e.target.value as NiveauScolaire)}
                 className="w-full rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]"
               >
                 <option value="">Sélectionner…</option>
-                {NIVEAUX.map((n) => (
-                  <option key={n.value} value={n.value}>{n.label}</option>
-                ))}
+                {NIVEAUX.map((n) => <option key={n.value} value={n.value}>{n.label}</option>)}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">
-                Source
-              </label>
+              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Source</label>
               <select
                 value={source}
                 onChange={(e) => setSource(e.target.value as SourceEpreuve)}
                 className="w-full rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]"
               >
-                {SOURCES.map((s) => (
-                  <option key={s.value} value={s.value}>{s.label}</option>
-                ))}
+                {SOURCES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">
-                Année (optionnel)
-              </label>
+              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Année (optionnel)</label>
               <input
                 type="number"
                 value={annee}
@@ -232,12 +265,9 @@ export function NouveauEpreuveForm() {
           <Button
             variant="primary"
             onClick={() => {
-              if (!matiere || !niveauScolaire) {
-                setErreur("Matière et niveau requis.");
-                return;
-              }
+              if (!matiere || !niveauScolaire) { setErreur("Matière et niveau requis."); return; }
               setErreur(null);
-              setEtape("contenu");
+              setEtape("upload");
             }}
           >
             Suivant →
@@ -245,51 +275,116 @@ export function NouveauEpreuveForm() {
         </div>
       )}
 
-      {/* Étape 2 — Contenu brut */}
-      {etape === "contenu" && (
-        <div className="rounded-2xl border border-[var(--color-rule)] bg-white p-6 space-y-4">
-          <h2 className="font-bold text-[var(--color-ink)]">2. Contenu de l'épreuve</h2>
-          <p className="text-xs text-[var(--color-ink-soft)]">
-            Collez le texte de l'épreuve. Claude extraira uniquement la structure — les questions
-            originales ne seront pas stockées dans les exercices générés.
-          </p>
-
-          <textarea
-            value={contenu}
-            onChange={(e) => setContenu(e.target.value)}
-            placeholder="Collez ici le contenu de l'épreuve (texte, sections, consignes, barème…)"
-            rows={16}
-            className="w-full rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)] font-mono resize-y"
-          />
-
-          <p className="text-xs text-[var(--color-ink-soft)]">
-            {contenu.length} caractère{contenu.length > 1 ? "s" : ""}
-          </p>
-
-          <div className="flex gap-3">
-            <Button variant="secondary" onClick={() => setEtape("meta")}>
-              ← Retour
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleAnalyser}
-              disabled={analyser.isPending}
-            >
-              {analyser.isPending ? "Analyse en cours…" : "✨ Analyser la structure"}
-            </Button>
+      {/* Étape 2 — Upload du document */}
+      {etape === "upload" && (
+        <div className="rounded-2xl border border-[var(--color-rule)] bg-white p-6 space-y-5">
+          <div>
+            <h2 className="font-bold text-[var(--color-ink)]">2. Déposer l'épreuve</h2>
+            <p className="text-xs text-[var(--color-ink-soft)] mt-1">
+              Claude extraira uniquement la structure — les questions originales ne seront pas stockées dans les exercices générés.
+            </p>
           </div>
 
-          {analyser.isPending && (
-            <div className="rounded-xl bg-[rgba(42,124,111,0.06)] border border-[rgba(42,124,111,0.2)] p-4 text-center">
-              <div className="text-2xl mb-2 animate-pulse">🔬</div>
-              <p className="text-sm font-semibold text-[var(--color-ink)]">
-                Claude analyse la structure…
-              </p>
-              <p className="text-xs text-[var(--color-ink-soft)] mt-1">
-                Identification des sections, types de questions, barème, compétences PFEQ
-              </p>
+          {/* Zone drag & drop */}
+          {!enCours && !fichierNom && (
+            <div
+              onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+              onDragLeave={() => setIsDragOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsDragOver(false);
+                const file = e.dataTransfer.files[0];
+                if (file) handleFichier(file);
+              }}
+              onClick={() => fileInputRef.current?.click()}
+              className={`relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed p-10 text-center cursor-pointer transition-all
+                ${isDragOver
+                  ? "border-[var(--color-ink)] bg-[var(--color-paper-warm)]"
+                  : "border-[var(--color-rule)] hover:border-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]"
+                }`}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept={ACCEPTED_MIME}
+                className="sr-only"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleFichier(file);
+                  e.target.value = "";
+                }}
+              />
+              <div className="text-5xl select-none">📁</div>
+              <div>
+                <p className="font-semibold text-sm text-[var(--color-ink)]">
+                  Glisser-déposer ou cliquer pour choisir
+                </p>
+                <p className="text-xs text-[var(--color-ink-soft)] mt-1">
+                  PDF, Word (.docx) ou texte (.txt) · max 20 Mo
+                </p>
+              </div>
+              <div className="flex gap-2 mt-1">
+                {["PDF", "DOCX", "TXT"].map((fmt) => (
+                  <span key={fmt} className="rounded-full border border-[var(--color-rule)] px-2.5 py-0.5 text-xs font-semibold text-[var(--color-ink-soft)]">
+                    {fmt}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
+
+          {/* Analyse en cours */}
+          {enCours && (
+            <div className="rounded-2xl border border-[var(--color-rule)] bg-[var(--color-paper-warm)] p-6">
+              {/* Fichier sélectionné */}
+              <div className="flex items-center gap-3 mb-5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-[var(--color-rule)] text-xl flex-shrink-0">
+                  {fichierNom ? fileIcon(fichierNom) : "📄"}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-[var(--color-ink)] truncate">{fichierNom}</p>
+                  <p className="text-xs text-[var(--color-ink-soft)]">{formatSize(fichierTaille)}</p>
+                </div>
+              </div>
+
+              {/* Étapes de progression */}
+              <div className="space-y-3">
+                <EtapeProgression
+                  label="Lecture du document"
+                  etat={etapeAnalyse === "extraction" ? "actif" : "fait"}
+                />
+                <EtapeProgression
+                  label="Analyse de la structure par Claude"
+                  etat={etapeAnalyse === "analyse" ? "actif" : etapeAnalyse === null ? "attente" : "attente"}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Fichier uploadé avec succès (état transitoire avant navigation) */}
+          {!enCours && fichierNom && etape === "upload" && (
+            <div className="flex items-center gap-3 rounded-2xl border border-[var(--color-rule)] bg-[var(--color-paper-warm)] p-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-[var(--color-rule)] text-xl flex-shrink-0">
+                {fileIcon(fichierNom)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-[var(--color-ink)] truncate">{fichierNom}</p>
+                <p className="text-xs text-[var(--color-ink-soft)]">{formatSize(fichierTaille)}</p>
+              </div>
+              <button
+                onClick={() => { setFichierNom(null); setErreur(null); }}
+                className="text-xs text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors ml-2 flex-shrink-0"
+              >
+                Changer
+              </button>
+            </div>
+          )}
+
+          <div className="flex gap-3">
+            <Button variant="secondary" onClick={() => setEtape("meta")} disabled={enCours}>
+              ← Retour
+            </Button>
+          </div>
         </div>
       )}
 
@@ -297,17 +392,23 @@ export function NouveauEpreuveForm() {
       {etape === "sections" && structure && (
         <div className="rounded-2xl border border-[var(--color-rule)] bg-white p-6 space-y-5">
           <div className="flex items-start justify-between">
-            <h2 className="font-bold text-[var(--color-ink)]">3. Structure extraite par Claude</h2>
-            <span className="rounded-full bg-[rgba(42,124,111,0.1)] px-2 py-0.5 text-xs font-semibold text-[var(--color-success)]">
+            <div>
+              <h2 className="font-bold text-[var(--color-ink)]">3. Structure extraite par Claude</h2>
+              {fichierNom && (
+                <div className="flex items-center gap-2 mt-1.5">
+                  <span className="text-base">{fileIcon(fichierNom)}</span>
+                  <span className="text-xs text-[var(--color-ink-soft)] truncate max-w-[200px]">{fichierNom}</span>
+                </div>
+              )}
+            </div>
+            <span className="rounded-full bg-[rgba(42,124,111,0.1)] px-2 py-0.5 text-xs font-semibold text-[var(--color-success)] flex-shrink-0">
               ✓ Aucun contenu copié
             </span>
           </div>
 
           {/* Titre éditable */}
           <div>
-            <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">
-              Titre du modèle
-            </label>
+            <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Titre du modèle</label>
             <input
               type="text"
               value={titreOverride}
@@ -332,39 +433,28 @@ export function NouveauEpreuveForm() {
             </div>
           </div>
 
-          {/* Description */}
           <div>
             <p className="text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Description</p>
             <p className="text-sm text-[var(--color-ink)]">{structure.description}</p>
           </div>
 
-          {/* Style */}
           <div>
             <p className="text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Style général</p>
             <p className="text-sm text-[var(--color-ink)]">{structure.styleGeneral}</p>
           </div>
 
-          {/* Sections */}
           <div>
             <p className="text-xs font-semibold text-[var(--color-ink-soft)] mb-2">Sections détectées</p>
             <div className="space-y-3">
               {structure.sections.map((s, i) => (
                 <div key={i} className="rounded-xl border border-[var(--color-rule)] p-3">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold text-[var(--color-ink)]">
-                      {s.ordre}. {s.titre}
-                    </p>
-                    <span className="text-xs text-[var(--color-ink-soft)]">
-                      {s.nombreQuestions} q. · {s.pointsTotal} pts
-                    </span>
+                    <p className="text-sm font-semibold text-[var(--color-ink)]">{s.ordre}. {s.titre}</p>
+                    <span className="text-xs text-[var(--color-ink-soft)]">{s.nombreQuestions} q. · {s.pointsTotal} pts</span>
                   </div>
-                  <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">
-                    {s.typeQuestion} · {s.difficulte}
-                  </p>
+                  <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">{s.typeQuestion} · {s.difficulte}</p>
                   {s.competencesPFEQ.length > 0 && (
-                    <p className="text-xs text-[var(--color-success)] mt-1">
-                      PFEQ : {s.competencesPFEQ.join(", ")}
-                    </p>
+                    <p className="text-xs text-[var(--color-success)] mt-1">PFEQ : {s.competencesPFEQ.join(", ")}</p>
                   )}
                 </div>
               ))}
@@ -372,18 +462,49 @@ export function NouveauEpreuveForm() {
           </div>
 
           <div className="flex gap-3">
-            <Button variant="secondary" onClick={() => setEtape("contenu")}>
-              ← Modifier le contenu
-            </Button>
             <Button
-              variant="primary"
-              onClick={handleCreer}
-              disabled={creer.isPending}
+              variant="secondary"
+              onClick={() => { setEtape("upload"); setFichierNom(null); setStructure(null); setErreur(null); }}
             >
+              ← Changer le document
+            </Button>
+            <Button variant="primary" onClick={handleCreer} disabled={creer.isPending}>
               {creer.isPending ? "Sauvegarde…" : "✅ Sauvegarder le modèle"}
             </Button>
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+function EtapeProgression({ label, etat }: { label: string; etat: "attente" | "actif" | "fait" }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all ${
+        etat === "fait"
+          ? "bg-[var(--color-success)] text-white"
+          : etat === "actif"
+          ? "bg-[var(--color-ink)] text-white"
+          : "bg-[var(--color-rule)] text-[var(--color-ink-soft)]"
+      }`}>
+        {etat === "fait" ? "✓" : etat === "actif" ? (
+          <span className="inline-block animate-spin text-[10px]">◌</span>
+        ) : "·"}
+      </div>
+      <span className={`text-sm ${etat === "actif" ? "font-semibold text-[var(--color-ink)]" : etat === "fait" ? "text-[var(--color-success)]" : "text-[var(--color-ink-soft)]"}`}>
+        {label}
+      </span>
+      {etat === "actif" && (
+        <span className="flex gap-0.5 ml-1">
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-ink)] opacity-75"
+              style={{ animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }}
+            />
+          ))}
+        </span>
       )}
     </div>
   );
