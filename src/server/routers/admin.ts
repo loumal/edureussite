@@ -924,23 +924,26 @@ export const adminRouter = createTRPCRouter({
     }),
 
   // ── Suivi budgétaire des APIs ─────────────────────────────────────────────
-  // Clé DB : api_budget:{nom} → JSON { montantUSD, datePaiement }
-  // Groupes : ElevenLabs, Anthropic, Deepgram, Resend
+  // Clé DB : api_budget:{nom} → JSON { montantUSD, datePaiement, creditsTotal? }
+  // Quand creditsTotal est défini (ex: ElevenLabs 500 000 crédits) :
+  //   consomme = (chars_TTS / creditsTotal) × montantUSD  ← calcul exact par crédits
+  // Sinon : consomme = sum(coutUSD) des logs (fallback estimation par taux)
 
   getApiBudgets: adminProcedure.query(async ({ ctx }) => {
-    const GROUPES: Record<string, string[]> = {
-      ElevenLabs: ["ELEVENLABS_TTS", "ELEVENLABS_STT"],
-      Anthropic:  ["CLAUDE_MIRA", "CLAUDE_EXERCICE", "CLAUDE_DOCUMENT", "CLAUDE_ANALYSE"],
-      Deepgram:   ["DEEPGRAM_STT", "DEEPGRAM_TTS"],
-      OpenAI:     ["OPENAI_TTS"],
-      Resend:     ["RESEND"],
+    // services[] + creditsService = service dont on lit les `characters` pour calcul crédits
+    const GROUPES: Record<string, { services: string[]; creditsService?: string }> = {
+      ElevenLabs: { services: ["ELEVENLABS_TTS", "ELEVENLABS_STT"], creditsService: "ELEVENLABS_TTS" },
+      Anthropic:  { services: ["CLAUDE_MIRA", "CLAUDE_EXERCICE", "CLAUDE_DOCUMENT", "CLAUDE_ANALYSE"] },
+      Deepgram:   { services: ["DEEPGRAM_STT", "DEEPGRAM_TTS"] },
+      OpenAI:     { services: ["OPENAI_TTS"] },
+      Resend:     { services: ["RESEND"] },
     };
 
     // Lire les budgets configurés
     const params = await ctx.prisma.parametreApp.findMany({
       where: { cle: { startsWith: "api_budget:" } },
     });
-    const budgetMap: Record<string, { montantUSD: number; datePaiement: string }> = {};
+    const budgetMap: Record<string, { montantUSD: number; datePaiement: string; creditsTotal?: number }> = {};
     for (const p of params) {
       const nom = p.cle.replace("api_budget:", "");
       try { budgetMap[nom] = JSON.parse(p.valeur); } catch { /* skip */ }
@@ -951,30 +954,52 @@ export const adminRouter = createTRPCRouter({
       where: { sessions: { some: {} } },
     });
 
-    // Calculer la consommation et la projection pour chaque groupe
     const now = new Date();
     const resultats = await Promise.all(
-      Object.entries(GROUPES).map(async ([nom, services]) => {
+      Object.entries(GROUPES).map(async ([nom, groupe]) => {
         const budget = budgetMap[nom];
         const datePaiement = budget ? new Date(budget.datePaiement) : null;
         const montantUSD = budget?.montantUSD ?? null;
+        const creditsTotal = budget?.creditsTotal ?? null;
 
-        // Consommation depuis la date de paiement
         const whereDate = datePaiement ? { gte: datePaiement } : { gte: new Date(0) };
-        const agg = await ctx.prisma.apiUsageLog.aggregate({
-          where: {
-            service: { in: services as never[] },
-            createdAt: whereDate,
-          },
-          _sum: { coutUSD: true },
-          _count: true,
-        });
-        const consomme = agg._sum.coutUSD ?? 0;
 
-        // Consommation par élève
+        let consomme: number;
+        let creditsUtilises: number | null = null;
+
+        if (creditsTotal && montantUSD && groupe.creditsService) {
+          // ── Calcul basé sur les crédits : exact, indépendant du taux estimé ──
+          // TTS : (crédits consommés / crédits total) × montant payé
+          const ttsAgg = await ctx.prisma.apiUsageLog.aggregate({
+            where: { service: groupe.creditsService as never, createdAt: whereDate },
+            _sum: { characters: true },
+          });
+          const ttsChars = ttsAgg._sum.characters ?? 0;
+          creditsUtilises = ttsChars;
+          const ttsCost = (ttsChars / creditsTotal) * montantUSD;
+
+          // Services hors-crédits du même groupe (ex: STT facturé séparément)
+          const autresServices = groupe.services.filter((s) => s !== groupe.creditsService);
+          let autresCout = 0;
+          if (autresServices.length > 0) {
+            const autresAgg = await ctx.prisma.apiUsageLog.aggregate({
+              where: { service: { in: autresServices as never[] }, createdAt: whereDate },
+              _sum: { coutUSD: true },
+            });
+            autresCout = autresAgg._sum.coutUSD ?? 0;
+          }
+          consomme = ttsCost + autresCout;
+        } else {
+          // ── Calcul par somme des coûts estimés (comportement original) ──
+          const agg = await ctx.prisma.apiUsageLog.aggregate({
+            where: { service: { in: groupe.services as never[] }, createdAt: whereDate },
+            _sum: { coutUSD: true },
+          });
+          consomme = agg._sum.coutUSD ?? 0;
+        }
+
         const coutParEleve = elevesActifs > 0 ? consomme / elevesActifs : 0;
 
-        // Projection
         let joursRestants: number | null = null;
         let dateEpuisement: string | null = null;
         let moyenneParJour: number | null = null;
@@ -999,6 +1024,8 @@ export const adminRouter = createTRPCRouter({
           nom,
           montantUSD,
           datePaiement: datePaiement?.toISOString() ?? null,
+          creditsTotal,
+          creditsUtilises,
           consommeUSD: Math.round(consomme * 100) / 100,
           moyenneParJourUSD: moyenneParJour !== null ? Math.round(moyenneParJour * 10000) / 10000 : null,
           joursRestants: joursRestants !== null ? Math.round(joursRestants * 10) / 10 : null,
@@ -1016,10 +1043,15 @@ export const adminRouter = createTRPCRouter({
       nom: z.string().min(1).max(50),
       montantUSD: z.number().positive(),
       datePaiement: z.string().datetime(),
+      creditsTotal: z.number().positive().optional(), // ex: 500000 pour ElevenLabs Indie
     }))
     .mutation(async ({ ctx, input }) => {
       const cle = `api_budget:${input.nom}`;
-      const valeur = JSON.stringify({ montantUSD: input.montantUSD, datePaiement: input.datePaiement });
+      const valeur = JSON.stringify({
+        montantUSD: input.montantUSD,
+        datePaiement: input.datePaiement,
+        ...(input.creditsTotal ? { creditsTotal: input.creditsTotal } : {}),
+      });
       await ctx.prisma.parametreApp.upsert({
         where: { cle },
         create: { cle, valeur },

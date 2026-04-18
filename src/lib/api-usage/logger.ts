@@ -6,9 +6,11 @@ import { ApiService } from "@/generated/prisma";
 const CLAUDE_INPUT_PER_TOKEN  = 3 / 1_000_000;   // $3 / 1M tokens
 const CLAUDE_OUTPUT_PER_TOKEN = 15 / 1_000_000;  // $15 / 1M tokens
 
-// ElevenLabs Starter (~$5/mois, 30K chars inclus ensuite ~$0.30/1000 chars)
-const EL_TTS_PER_CHAR = 0.30 / 1_000;  // $0.30 / 1000 chars
-const EL_STT_PER_SEC  = 0.40 / 3_600;  // $0.40 / heure
+// ElevenLabs : tarif calculé sur le plan Indie/Business ($99/500 000 crédits).
+// Le taux exact est recalculé dynamiquement côté admin quand creditsTotal est configuré —
+// ce taux sert uniquement de fallback pour les groupes sans crédits configurés.
+const EL_TTS_PER_CHAR = 0.198 / 1_000; // $0.198 / 1000 chars (~$99 / 500K crédits)
+const EL_STT_PER_SEC  = 0.40 / 3_600;  // $0.40 / heure (facturé séparément des crédits)
 
 // Deepgram Nova-3 STT : $0.0043 / minute
 const DEEPGRAM_STT_PER_SEC = 0.0043 / 60;
