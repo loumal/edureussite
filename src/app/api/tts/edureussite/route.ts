@@ -5,12 +5,30 @@ import { logEduReussiteTTS } from "@/lib/api-usage/logger";
 const TTS_API_URL = process.env.EDUREUSSITE_TTS_URL;
 const TTS_API_KEY = process.env.EDUREUSSITE_TTS_KEY;
 
-// Voix chaleureuse et humanisée
+// Voix chaleureuse et humanisée — pitch en Hz obligatoire pour edge-tts
 const VOICE_PARAMS = {
-  rate: "-8%",   // légèrement plus lent = plus posé, plus chaleureux
-  pitch: "+8%",  // ton légèrement plus haut = plus expressif, plus sympatique
+  rate: "-5%",   // légèrement plus lent = plus posé, plus chaleureux
+  pitch: "+3Hz", // ton légèrement plus haut = plus expressif, sympatique
   volume: "+5%", // présence légèrement plus affirmée
 };
+
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/#{1,6}\s+/g, "")
+    .replace(/\*\*(.+?)\*\*/g, "$1")
+    .replace(/\*(.+?)\*/g, "$1")
+    .replace(/__(.+?)__/g, "$1")
+    .replace(/_(.+?)_/g, "$1")
+    .replace(/`{1,3}[^`]*`{1,3}/g, "")
+    .replace(/\[(.+?)\]\(.*?\)/g, "$1")
+    .replace(/^[-*+]\s+/gm, "")
+    .replace(/^\d+\.\s+/gm, "")
+    .replace(/^>\s+/gm, "")
+    .replace(/\n{2,}/g, ". ")
+    .replace(/\n/g, ", ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -31,7 +49,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Texte invalide" }, { status: 400 });
     }
 
-    const trimmed = text.trim();
+    const clean = stripMarkdown(text.trim());
 
     const response = await fetch(`${TTS_API_URL}/generate`, {
       method: "POST",
@@ -40,7 +58,7 @@ export async function POST(req: NextRequest) {
         "x-api-key": TTS_API_KEY,
       },
       body: JSON.stringify({
-        text: trimmed,
+        text: clean,
         language: lang,
         ...VOICE_PARAMS,
       }),
@@ -51,7 +69,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
     }
 
-    logEduReussiteTTS({ characters: trimmed.length, userId: session.user.id });
+    logEduReussiteTTS({ characters: clean.length, userId: session.user.id });
 
     return new NextResponse(response.body, {
       status: 200,

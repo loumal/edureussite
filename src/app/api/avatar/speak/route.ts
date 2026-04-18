@@ -9,10 +9,10 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 const EDUREUSSITE_TTS_URL = process.env.EDUREUSSITE_TTS_URL;
 const EDUREUSSITE_TTS_KEY = process.env.EDUREUSSITE_TTS_KEY;
 
-// Voix chaleureuse et humanisée — légèrement plus lente, ton naturellement plus haut
+// Voix chaleureuse et humanisée — pitch en Hz obligatoire pour edge-tts
 const RUNPOD_VOICE_PARAMS = {
-  rate: "-8%",   // légèrement plus lent = plus posé, plus chaleureux
-  pitch: "+8%",  // ton légèrement plus haut = plus expressif, plus sympatique
+  rate: "-5%",   // légèrement plus lent = plus posé, plus chaleureux
+  pitch: "+3Hz", // ton légèrement plus haut = plus expressif, sympatique
   volume: "+5%", // présence légèrement plus affirmée
 };
 
@@ -22,6 +22,28 @@ const ELEVENLABS_VOICE_SETTINGS = {
   style: 0.55,
   use_speaker_boost: true,
 };
+
+/**
+ * Nettoie le markdown pour que edge-tts ne lise pas les symboles bruts.
+ * Sans ce nettoyage, "**bonjour**" → la voix lit "astérisque astérisque bonjour..."
+ */
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/#{1,6}\s+/g, "")           // titres # ## ###
+    .replace(/\*\*(.+?)\*\*/g, "$1")     // **gras**
+    .replace(/\*(.+?)\*/g, "$1")         // *italique*
+    .replace(/__(.+?)__/g, "$1")         // __gras__
+    .replace(/_(.+?)_/g, "$1")           // _italique_
+    .replace(/`{1,3}[^`]*`{1,3}/g, "")  // `code` ou ```bloc```
+    .replace(/\[(.+?)\]\(.*?\)/g, "$1") // [liens](url)
+    .replace(/^[-*+]\s+/gm, "")         // listes à puces
+    .replace(/^\d+\.\s+/gm, "")         // listes numérotées
+    .replace(/^>\s+/gm, "")             // citations >
+    .replace(/\n{2,}/g, ". ")           // double saut → pause naturelle
+    .replace(/\n/g, ", ")               // simple saut → virgule
+    .replace(/\s{2,}/g, " ")            // espaces multiples
+    .trim();
+}
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -56,7 +78,7 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           model: "tts-1",
           input: trimmed,
-          voice: lang === "en" ? "nova" : "nova",
+          voice: "nova",
           response_format: "mp3",
         }),
       });
@@ -84,6 +106,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Edureussite TTS non configuré" }, { status: 503 });
       }
 
+      const clean = stripMarkdown(trimmed);
+
       const response = await fetch(`${EDUREUSSITE_TTS_URL}/generate`, {
         method: "POST",
         headers: {
@@ -91,7 +115,7 @@ export async function POST(req: NextRequest) {
           "x-api-key": EDUREUSSITE_TTS_KEY,
         },
         body: JSON.stringify({
-          text: trimmed,
+          text: clean,
           language: lang,
           ...RUNPOD_VOICE_PARAMS,
         }),
@@ -102,7 +126,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
       }
 
-      logEduReussiteTTS({ characters: trimmed.length, userId: session.user.id });
+      logEduReussiteTTS({ characters: clean.length, userId: session.user.id });
 
       return new NextResponse(response.body, {
         status: 200,
