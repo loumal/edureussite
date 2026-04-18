@@ -136,6 +136,26 @@ export function logOpenAITTS(params: {
     .catch(() => {});
 }
 
+// Edureussite RunPod TTS : self-hosted edge-tts, cost is RunPod compute (near-zero per char)
+const EDUREUSSITE_TTS_PER_CHAR = 0;
+
+export function logEduReussiteTTS(params: {
+  characters: number;
+  userId?: string | null;
+}) {
+  const coutUSD = params.characters * EDUREUSSITE_TTS_PER_CHAR;
+  prisma.apiUsageLog
+    .create({
+      data: {
+        service: ApiService.EDUREUSSITE_TTS,
+        characters: params.characters,
+        coutUSD,
+        userId: params.userId ?? undefined,
+      },
+    })
+    .catch(() => {});
+}
+
 export function logResend(params?: { userId?: string | null }) {
   prisma.apiUsageLog
     .create({

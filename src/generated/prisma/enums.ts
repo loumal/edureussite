@@ -34,7 +34,27 @@ export const Province = {
   NL: 'NL',
   YT: 'YT',
   NT: 'NT',
-  NU: 'NU'
+  NU: 'NU',
+  FR: 'FR',
+  CI: 'CI',
+  SN: 'SN',
+  CM: 'CM',
+  BF: 'BF',
+  ML: 'ML',
+  BJ: 'BJ',
+  TG: 'TG',
+  GA: 'GA',
+  CD: 'CD',
+  CG: 'CG',
+  GN: 'GN',
+  MG: 'MG',
+  NE: 'NE',
+  TD: 'TD',
+  CF: 'CF',
+  RW: 'RW',
+  BI: 'BI',
+  DJ: 'DJ',
+  KM: 'KM'
 } as const
 
 export type Province = (typeof Province)[keyof typeof Province]
@@ -69,7 +89,9 @@ export const NiveauScolaire = {
   SECONDAIRE_2: 'SECONDAIRE_2',
   SECONDAIRE_3: 'SECONDAIRE_3',
   SECONDAIRE_4: 'SECONDAIRE_4',
-  SECONDAIRE_5: 'SECONDAIRE_5'
+  SECONDAIRE_5: 'SECONDAIRE_5',
+  SECONDAIRE_6: 'SECONDAIRE_6',
+  SECONDAIRE_7: 'SECONDAIRE_7'
 } as const
 
 export type NiveauScolaire = (typeof NiveauScolaire)[keyof typeof NiveauScolaire]
@@ -281,6 +303,7 @@ export const ApiService = {
   DEEPGRAM_STT: 'DEEPGRAM_STT',
   DEEPGRAM_TTS: 'DEEPGRAM_TTS',
   OPENAI_TTS: 'OPENAI_TTS',
+  EDUREUSSITE_TTS: 'EDUREUSSITE_TTS',
   RESEND: 'RESEND'
 } as const
 

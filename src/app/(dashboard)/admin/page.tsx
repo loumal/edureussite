@@ -290,6 +290,7 @@ const SERVICE_LABELS: Record<string, { label: string; emoji: string; unite: (s: 
   CLAUDE_ANALYSE:  { label: "Claude · Analyse épreuve", emoji: "🔍", unite: (s) => `${((s.inputTokens + s.outputTokens) / 1000).toFixed(1)}K tokens` },
   ELEVENLABS_TTS:  { label: "ElevenLabs · Voix Mira",  emoji: "🔊", unite: (s) => `${s.characters.toLocaleString()} caractères` },
   OPENAI_TTS:      { label: "OpenAI · Voix Mira",      emoji: "⚡", unite: (s) => `${s.characters.toLocaleString()} caractères` },
+  EDUREUSSITE_TTS: { label: "RunPod · Voix Mira",      emoji: "🏠", unite: (s) => `${s.characters.toLocaleString()} caractères` },
   ELEVENLABS_STT:  { label: "ElevenLabs · Micro",       emoji: "🎤", unite: (s) => `~${Math.round(s.audioSecs / 60)} min audio` },
   DEEPGRAM_STT:    { label: "Deepgram · Micro",         emoji: "⚡", unite: (s) => `~${Math.round(s.audioSecs / 60)} min audio` },
   RESEND:          { label: "Resend · Courriels",        emoji: "📧", unite: (s) => `${s.emails} courriel${s.emails > 1 ? "s" : ""}` },

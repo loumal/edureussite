@@ -271,3 +271,28 @@ export type AgentLog = Prisma.AgentLogModel
  * Opportunités de partenariat détectées ou saisies manuellement
  */
 export type OpportunitePartenariat = Prisma.OpportunitePartenariatModel
+/**
+ * Model CompteSocial
+ * Comptes sociaux connectés pour publication directe
+ */
+export type CompteSocial = Prisma.CompteSocialModel
+/**
+ * Model PublicationSociale
+ * Publications sociales (brouillons, planifiées, publiées)
+ */
+export type PublicationSociale = Prisma.PublicationSocialeModel
+/**
+ * Model PersonaMarketing
+ * Personas marketing — profils cibles de l'application
+ */
+export type PersonaMarketing = Prisma.PersonaMarketingModel
+/**
+ * Model StrategieMarketing
+ * Stratégie marketing — plan de pointe avec tendances et concurrence
+ */
+export type StrategieMarketing = Prisma.StrategieMarketingModel
+/**
+ * Model CampagneEmail
+ * Campagnes email marketing
+ */
+export type CampagneEmail = Prisma.CampagneEmailModel

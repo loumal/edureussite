@@ -19,6 +19,7 @@ enum Role {
 }
 
 enum Province {
+  // Canada
   QC
   ON
   BC
@@ -32,6 +33,28 @@ enum Province {
   YT
   NT
   NU
+  // France
+  FR
+  // Afrique francophone
+  CI
+  SN
+  CM
+  BF
+  ML
+  BJ
+  TG
+  GA
+  CD
+  CG
+  GN
+  MG
+  NE
+  TD
+  CF
+  RW
+  BI
+  DJ
+  KM
 }
 
 enum LangueInterface {
@@ -58,6 +81,8 @@ enum NiveauScolaire {
   SECONDAIRE_3
   SECONDAIRE_4
   SECONDAIRE_5
+  SECONDAIRE_6  // France/Afrique : 1ère | Canada EN : Grade 12
+  SECONDAIRE_7  // France/Afrique : Terminale
 }
 
 enum StyleApprentissage {
@@ -217,6 +242,9 @@ model User {
   opportunitesPartenariat OpportunitePartenariat[] @relation("OpportunitesPartenariat")
   comptesSociaux        CompteSocial[]       @relation("ComptesSociaux")
   publicationsSociales  PublicationSociale[] @relation("PublicationsSociales")
+  campagnesEmail        CampagneEmail[]      @relation("CampagnesEmail")
+  personasMarketing     PersonaMarketing[]   @relation("PersonasMarketing")
+  strategiesMarketing   StrategieMarketing[] @relation("StrategiesMarketing")
 
   @@map("users")
 }
@@ -1019,6 +1047,7 @@ enum ApiService {
   DEEPGRAM_STT
   DEEPGRAM_TTS
   OPENAI_TTS
+  EDUREUSSITE_TTS
   RESEND
 }
 
@@ -1207,4 +1236,56 @@ model PublicationSociale {
   @@index([statut])
   @@index([planifieLe])
   @@map("publications_sociales")
+}
+
+/// Personas marketing — profils cibles de l'application
+model PersonaMarketing {
+  id        String   @id @default(cuid())
+  contenu   String   @db.Text
+  version   Int      @default(1)
+  adminId   String
+  admin     User     @relation("PersonasMarketing", fields: [adminId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([adminId])
+  @@map("personas_marketing")
+}
+
+/// Stratégie marketing — plan de pointe avec tendances et concurrence
+model StrategieMarketing {
+  id        String   @id @default(cuid())
+  contenu   String   @db.Text
+  version   Int      @default(1)
+  adminId   String
+  admin     User     @relation("StrategiesMarketing", fields: [adminId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([adminId])
+  @@map("strategies_marketing")
+}
+
+/// Campagnes email marketing
+model CampagneEmail {
+  id            String   @id @default(cuid())
+  titre         String
+  objet         String
+  htmlContenu   String   @db.Text
+  textContenu   String   @db.Text
+  typeEvenement String   @default("INFORMATION") // INFORMATION | MISE_A_JOUR | FETE | PROMO | AUTRE
+  destinataires Json     // { type: "ALL"|"ROLE"|"USER", roles?: string[], userId?: string }
+  statut        String   @default("BROUILLON") // BROUILLON | PLANIFIE | ENVOYE | ERREUR
+  planifieLe    DateTime?
+  envoyeLe      DateTime?
+  nbEnvoyes     Int      @default(0)
+  adminId       String
+  admin         User     @relation("CampagnesEmail", fields: [adminId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([adminId])
+  @@index([statut])
+  @@index([planifieLe])
+  @@map("campagnes_email")
 }

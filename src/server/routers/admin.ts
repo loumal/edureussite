@@ -856,11 +856,14 @@ export const adminRouter = createTRPCRouter({
 
   getTtsProvider: superAdminProcedure.query(async ({ ctx }) => {
     const param = await ctx.prisma.parametreApp.findUnique({ where: { cle: "config_tts_provider" } });
-    return { provider: (param?.valeur === "OPENAI" ? "OPENAI" : "ELEVENLABS") as "ELEVENLABS" | "OPENAI" };
+    const v = param?.valeur;
+    return {
+      provider: (v === "OPENAI" ? "OPENAI" : v === "EDUREUSSITE_RUNPOD" ? "EDUREUSSITE_RUNPOD" : "ELEVENLABS") as "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD",
+    };
   }),
 
   setTtsProvider: superAdminProcedure
-    .input(z.object({ provider: z.enum(["ELEVENLABS", "OPENAI"]) }))
+    .input(z.object({ provider: z.enum(["ELEVENLABS", "OPENAI", "EDUREUSSITE_RUNPOD"]) }))
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.parametreApp.upsert({
         where: { cle: "config_tts_provider" },

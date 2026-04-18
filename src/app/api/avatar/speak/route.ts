@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/config";
-import { logElevenLabsTTS, logOpenAITTS } from "@/lib/api-usage/logger";
+import { logElevenLabsTTS, logOpenAITTS, logEduReussiteTTS } from "@/lib/api-usage/logger";
 import { getTtsProvider } from "@/lib/features";
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY!;
 const ELEVENLABS_BASE = "https://api.elevenlabs.io/v1";
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
+const EDUREUSSITE_TTS_URL = process.env.EDUREUSSITE_TTS_URL;
+const EDUREUSSITE_TTS_KEY = process.env.EDUREUSSITE_TTS_KEY;
 
 const VOICE_SETTINGS = {
   stability: 0.38,
@@ -60,6 +62,44 @@ export async function POST(req: NextRequest) {
       logOpenAITTS({ characters: trimmed.length, userId: session.user.id });
 
       // Streamer directement sans buffériser côté serveur
+      return new NextResponse(response.body, {
+        status: 200,
+        headers: {
+          "Content-Type": "audio/mpeg",
+          "Cache-Control": "no-store",
+          "X-Content-Type-Options": "nosniff",
+        },
+      });
+    }
+
+    // ── Edureussite RunPod TTS ────────────────────────────────────────────────
+    if (provider === "EDUREUSSITE_RUNPOD") {
+      if (!EDUREUSSITE_TTS_URL || !EDUREUSSITE_TTS_KEY) {
+        return NextResponse.json({ error: "Edureussite TTS non configuré" }, { status: 503 });
+      }
+
+      const response = await fetch(`${EDUREUSSITE_TTS_URL}/generate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": EDUREUSSITE_TTS_KEY,
+        },
+        body: JSON.stringify({
+          text: trimmed,
+          language: "fr",
+          rate: "-5%",
+          pitch: "+5Hz",
+          volume: "+10%",
+        }),
+      });
+
+      if (!response.ok) {
+        console.error("Edureussite TTS error:", response.status, await response.text());
+        return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
+      }
+
+      logEduReussiteTTS({ characters: trimmed.length, userId: session.user.id });
+
       return new NextResponse(response.body, {
         status: 200,
         headers: {

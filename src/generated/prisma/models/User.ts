@@ -273,6 +273,11 @@ export type UserWhereInput = {
   securityLogs?: Prisma.SecurityLogListRelationFilter
   agentLogs?: Prisma.AgentLogListRelationFilter
   opportunitesPartenariat?: Prisma.OpportunitePartenariatListRelationFilter
+  comptesSociaux?: Prisma.CompteSocialListRelationFilter
+  publicationsSociales?: Prisma.PublicationSocialeListRelationFilter
+  campagnesEmail?: Prisma.CampagneEmailListRelationFilter
+  personasMarketing?: Prisma.PersonaMarketingListRelationFilter
+  strategiesMarketing?: Prisma.StrategieMarketingListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -302,6 +307,11 @@ export type UserOrderByWithRelationInput = {
   securityLogs?: Prisma.SecurityLogOrderByRelationAggregateInput
   agentLogs?: Prisma.AgentLogOrderByRelationAggregateInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatOrderByRelationAggregateInput
+  comptesSociaux?: Prisma.CompteSocialOrderByRelationAggregateInput
+  publicationsSociales?: Prisma.PublicationSocialeOrderByRelationAggregateInput
+  campagnesEmail?: Prisma.CampagneEmailOrderByRelationAggregateInput
+  personasMarketing?: Prisma.PersonaMarketingOrderByRelationAggregateInput
+  strategiesMarketing?: Prisma.StrategieMarketingOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -334,6 +344,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   securityLogs?: Prisma.SecurityLogListRelationFilter
   agentLogs?: Prisma.AgentLogListRelationFilter
   opportunitesPartenariat?: Prisma.OpportunitePartenariatListRelationFilter
+  comptesSociaux?: Prisma.CompteSocialListRelationFilter
+  publicationsSociales?: Prisma.PublicationSocialeListRelationFilter
+  campagnesEmail?: Prisma.CampagneEmailListRelationFilter
+  personasMarketing?: Prisma.PersonaMarketingListRelationFilter
+  strategiesMarketing?: Prisma.StrategieMarketingListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -405,6 +420,11 @@ export type UserCreateInput = {
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -434,6 +454,11 @@ export type UserUncheckedCreateInput = {
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserUpdateInput = {
@@ -463,6 +488,11 @@ export type UserUpdateInput = {
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -492,6 +522,11 @@ export type UserUncheckedUpdateInput = {
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -804,6 +839,76 @@ export type UserUpdateOneRequiredWithoutOpportunitesPartenariatNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOpportunitesPartenariatInput, Prisma.UserUpdateWithoutOpportunitesPartenariatInput>, Prisma.UserUncheckedUpdateWithoutOpportunitesPartenariatInput>
 }
 
+export type UserCreateNestedOneWithoutComptesSociauxInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutComptesSociauxInput, Prisma.UserUncheckedCreateWithoutComptesSociauxInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutComptesSociauxInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutComptesSociauxNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutComptesSociauxInput, Prisma.UserUncheckedCreateWithoutComptesSociauxInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutComptesSociauxInput
+  upsert?: Prisma.UserUpsertWithoutComptesSociauxInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutComptesSociauxInput, Prisma.UserUpdateWithoutComptesSociauxInput>, Prisma.UserUncheckedUpdateWithoutComptesSociauxInput>
+}
+
+export type UserCreateNestedOneWithoutPublicationsSocialesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPublicationsSocialesInput, Prisma.UserUncheckedCreateWithoutPublicationsSocialesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPublicationsSocialesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPublicationsSocialesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPublicationsSocialesInput, Prisma.UserUncheckedCreateWithoutPublicationsSocialesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPublicationsSocialesInput
+  upsert?: Prisma.UserUpsertWithoutPublicationsSocialesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPublicationsSocialesInput, Prisma.UserUpdateWithoutPublicationsSocialesInput>, Prisma.UserUncheckedUpdateWithoutPublicationsSocialesInput>
+}
+
+export type UserCreateNestedOneWithoutPersonasMarketingInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPersonasMarketingInput, Prisma.UserUncheckedCreateWithoutPersonasMarketingInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPersonasMarketingInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPersonasMarketingNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPersonasMarketingInput, Prisma.UserUncheckedCreateWithoutPersonasMarketingInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPersonasMarketingInput
+  upsert?: Prisma.UserUpsertWithoutPersonasMarketingInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPersonasMarketingInput, Prisma.UserUpdateWithoutPersonasMarketingInput>, Prisma.UserUncheckedUpdateWithoutPersonasMarketingInput>
+}
+
+export type UserCreateNestedOneWithoutStrategiesMarketingInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStrategiesMarketingInput, Prisma.UserUncheckedCreateWithoutStrategiesMarketingInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStrategiesMarketingInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutStrategiesMarketingNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStrategiesMarketingInput, Prisma.UserUncheckedCreateWithoutStrategiesMarketingInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStrategiesMarketingInput
+  upsert?: Prisma.UserUpsertWithoutStrategiesMarketingInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStrategiesMarketingInput, Prisma.UserUpdateWithoutStrategiesMarketingInput>, Prisma.UserUncheckedUpdateWithoutStrategiesMarketingInput>
+}
+
+export type UserCreateNestedOneWithoutCampagnesEmailInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCampagnesEmailInput, Prisma.UserUncheckedCreateWithoutCampagnesEmailInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCampagnesEmailInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCampagnesEmailNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCampagnesEmailInput, Prisma.UserUncheckedCreateWithoutCampagnesEmailInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCampagnesEmailInput
+  upsert?: Prisma.UserUpsertWithoutCampagnesEmailInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCampagnesEmailInput, Prisma.UserUpdateWithoutCampagnesEmailInput>, Prisma.UserUncheckedUpdateWithoutCampagnesEmailInput>
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   email: string
@@ -830,6 +935,11 @@ export type UserCreateWithoutAccountsInput = {
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -858,6 +968,11 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -902,6 +1017,11 @@ export type UserUpdateWithoutAccountsInput = {
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -930,6 +1050,11 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -958,6 +1083,11 @@ export type UserCreateWithoutSessionsInput = {
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -986,6 +1116,11 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1030,6 +1165,11 @@ export type UserUpdateWithoutSessionsInput = {
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1058,6 +1198,11 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutProfilEleveInput = {
@@ -1086,6 +1231,11 @@ export type UserCreateWithoutProfilEleveInput = {
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutProfilEleveInput = {
@@ -1114,6 +1264,11 @@ export type UserUncheckedCreateWithoutProfilEleveInput = {
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutProfilEleveInput = {
@@ -1158,6 +1313,11 @@ export type UserUpdateWithoutProfilEleveInput = {
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilEleveInput = {
@@ -1186,6 +1346,11 @@ export type UserUncheckedUpdateWithoutProfilEleveInput = {
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutProfilParentInput = {
@@ -1214,6 +1379,11 @@ export type UserCreateWithoutProfilParentInput = {
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutProfilParentInput = {
@@ -1242,6 +1412,11 @@ export type UserUncheckedCreateWithoutProfilParentInput = {
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutProfilParentInput = {
@@ -1286,6 +1461,11 @@ export type UserUpdateWithoutProfilParentInput = {
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilParentInput = {
@@ -1314,6 +1494,11 @@ export type UserUncheckedUpdateWithoutProfilParentInput = {
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutProfilEnseignantInput = {
@@ -1342,6 +1527,11 @@ export type UserCreateWithoutProfilEnseignantInput = {
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutProfilEnseignantInput = {
@@ -1370,6 +1560,11 @@ export type UserUncheckedCreateWithoutProfilEnseignantInput = {
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutProfilEnseignantInput = {
@@ -1414,6 +1609,11 @@ export type UserUpdateWithoutProfilEnseignantInput = {
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilEnseignantInput = {
@@ -1442,6 +1642,11 @@ export type UserUncheckedUpdateWithoutProfilEnseignantInput = {
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutNotificationsEnvoyeesInput = {
@@ -1470,6 +1675,11 @@ export type UserCreateWithoutNotificationsEnvoyeesInput = {
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsEnvoyeesInput = {
@@ -1498,6 +1708,11 @@ export type UserUncheckedCreateWithoutNotificationsEnvoyeesInput = {
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsEnvoyeesInput = {
@@ -1531,6 +1746,11 @@ export type UserCreateWithoutNotificationsRecuesInput = {
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsRecuesInput = {
@@ -1559,6 +1779,11 @@ export type UserUncheckedCreateWithoutNotificationsRecuesInput = {
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsRecuesInput = {
@@ -1603,6 +1828,11 @@ export type UserUpdateWithoutNotificationsEnvoyeesInput = {
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsEnvoyeesInput = {
@@ -1631,6 +1861,11 @@ export type UserUncheckedUpdateWithoutNotificationsEnvoyeesInput = {
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUpsertWithoutNotificationsRecuesInput = {
@@ -1670,6 +1905,11 @@ export type UserUpdateWithoutNotificationsRecuesInput = {
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsRecuesInput = {
@@ -1698,6 +1938,11 @@ export type UserUncheckedUpdateWithoutNotificationsRecuesInput = {
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutSpecialisteInput = {
@@ -1726,6 +1971,11 @@ export type UserCreateWithoutSpecialisteInput = {
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutSpecialisteInput = {
@@ -1754,6 +2004,11 @@ export type UserUncheckedCreateWithoutSpecialisteInput = {
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutSpecialisteInput = {
@@ -1798,6 +2053,11 @@ export type UserUpdateWithoutSpecialisteInput = {
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSpecialisteInput = {
@@ -1826,6 +2086,11 @@ export type UserUncheckedUpdateWithoutSpecialisteInput = {
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutSecurityLogsInput = {
@@ -1854,6 +2119,11 @@ export type UserCreateWithoutSecurityLogsInput = {
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutSecurityLogsInput = {
@@ -1882,6 +2152,11 @@ export type UserUncheckedCreateWithoutSecurityLogsInput = {
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutSecurityLogsInput = {
@@ -1926,6 +2201,11 @@ export type UserUpdateWithoutSecurityLogsInput = {
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSecurityLogsInput = {
@@ -1954,6 +2234,11 @@ export type UserUncheckedUpdateWithoutSecurityLogsInput = {
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutAgentLogsInput = {
@@ -1982,6 +2267,11 @@ export type UserCreateWithoutAgentLogsInput = {
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutAgentLogsInput = {
@@ -2010,6 +2300,11 @@ export type UserUncheckedCreateWithoutAgentLogsInput = {
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutAgentLogsInput = {
@@ -2054,6 +2349,11 @@ export type UserUpdateWithoutAgentLogsInput = {
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAgentLogsInput = {
@@ -2082,6 +2382,11 @@ export type UserUncheckedUpdateWithoutAgentLogsInput = {
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 export type UserCreateWithoutOpportunitesPartenariatInput = {
@@ -2110,6 +2415,11 @@ export type UserCreateWithoutOpportunitesPartenariatInput = {
   notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
 }
 
 export type UserUncheckedCreateWithoutOpportunitesPartenariatInput = {
@@ -2138,6 +2448,11 @@ export type UserUncheckedCreateWithoutOpportunitesPartenariatInput = {
   notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
   securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
   agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
 }
 
 export type UserCreateOrConnectWithoutOpportunitesPartenariatInput = {
@@ -2182,6 +2497,11 @@ export type UserUpdateWithoutOpportunitesPartenariatInput = {
   notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOpportunitesPartenariatInput = {
@@ -2210,6 +2530,751 @@ export type UserUncheckedUpdateWithoutOpportunitesPartenariatInput = {
   notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
   securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
   agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
+}
+
+export type UserCreateWithoutComptesSociauxInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
+}
+
+export type UserUncheckedCreateWithoutComptesSociauxInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveUncheckedCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentUncheckedCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteUncheckedCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
+}
+
+export type UserCreateOrConnectWithoutComptesSociauxInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutComptesSociauxInput, Prisma.UserUncheckedCreateWithoutComptesSociauxInput>
+}
+
+export type UserUpsertWithoutComptesSociauxInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutComptesSociauxInput, Prisma.UserUncheckedUpdateWithoutComptesSociauxInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutComptesSociauxInput, Prisma.UserUncheckedCreateWithoutComptesSociauxInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutComptesSociauxInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutComptesSociauxInput, Prisma.UserUncheckedUpdateWithoutComptesSociauxInput>
+}
+
+export type UserUpdateWithoutComptesSociauxInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
+}
+
+export type UserUncheckedUpdateWithoutComptesSociauxInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUncheckedUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUncheckedUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUncheckedUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
+}
+
+export type UserCreateWithoutPublicationsSocialesInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
+}
+
+export type UserUncheckedCreateWithoutPublicationsSocialesInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveUncheckedCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentUncheckedCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteUncheckedCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
+}
+
+export type UserCreateOrConnectWithoutPublicationsSocialesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPublicationsSocialesInput, Prisma.UserUncheckedCreateWithoutPublicationsSocialesInput>
+}
+
+export type UserUpsertWithoutPublicationsSocialesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPublicationsSocialesInput, Prisma.UserUncheckedUpdateWithoutPublicationsSocialesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPublicationsSocialesInput, Prisma.UserUncheckedCreateWithoutPublicationsSocialesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPublicationsSocialesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPublicationsSocialesInput, Prisma.UserUncheckedUpdateWithoutPublicationsSocialesInput>
+}
+
+export type UserUpdateWithoutPublicationsSocialesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPublicationsSocialesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUncheckedUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUncheckedUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUncheckedUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
+}
+
+export type UserCreateWithoutPersonasMarketingInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
+}
+
+export type UserUncheckedCreateWithoutPersonasMarketingInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveUncheckedCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentUncheckedCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteUncheckedCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
+}
+
+export type UserCreateOrConnectWithoutPersonasMarketingInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPersonasMarketingInput, Prisma.UserUncheckedCreateWithoutPersonasMarketingInput>
+}
+
+export type UserUpsertWithoutPersonasMarketingInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPersonasMarketingInput, Prisma.UserUncheckedUpdateWithoutPersonasMarketingInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPersonasMarketingInput, Prisma.UserUncheckedCreateWithoutPersonasMarketingInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPersonasMarketingInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPersonasMarketingInput, Prisma.UserUncheckedUpdateWithoutPersonasMarketingInput>
+}
+
+export type UserUpdateWithoutPersonasMarketingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPersonasMarketingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUncheckedUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUncheckedUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUncheckedUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
+}
+
+export type UserCreateWithoutStrategiesMarketingInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+}
+
+export type UserUncheckedCreateWithoutStrategiesMarketingInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveUncheckedCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentUncheckedCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteUncheckedCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+}
+
+export type UserCreateOrConnectWithoutStrategiesMarketingInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutStrategiesMarketingInput, Prisma.UserUncheckedCreateWithoutStrategiesMarketingInput>
+}
+
+export type UserUpsertWithoutStrategiesMarketingInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutStrategiesMarketingInput, Prisma.UserUncheckedUpdateWithoutStrategiesMarketingInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutStrategiesMarketingInput, Prisma.UserUncheckedCreateWithoutStrategiesMarketingInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutStrategiesMarketingInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutStrategiesMarketingInput, Prisma.UserUncheckedUpdateWithoutStrategiesMarketingInput>
+}
+
+export type UserUpdateWithoutStrategiesMarketingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+}
+
+export type UserUncheckedUpdateWithoutStrategiesMarketingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUncheckedUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUncheckedUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUncheckedUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  campagnesEmail?: Prisma.CampagneEmailUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+}
+
+export type UserCreateWithoutCampagnesEmailInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingCreateNestedManyWithoutAdminInput
+}
+
+export type UserUncheckedCreateWithoutCampagnesEmailInput = {
+  id?: string
+  email: string
+  emailVerified?: Date | string | null
+  name?: string | null
+  image?: string | null
+  password?: string | null
+  role?: $Enums.Role
+  province?: $Enums.Province
+  langueInterface?: $Enums.LangueInterface
+  suspended?: boolean
+  suspendedAt?: Date | string | null
+  suspendedRaison?: string | null
+  forcePasswordReset?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  profilEleve?: Prisma.ProfilEleveUncheckedCreateNestedOneWithoutUserInput
+  profilParent?: Prisma.ProfilParentUncheckedCreateNestedOneWithoutUserInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedCreateNestedOneWithoutUserInput
+  specialiste?: Prisma.SpecialisteUncheckedCreateNestedOneWithoutUserInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedCreateNestedManyWithoutExpediteurInput
+  notificationsRecues?: Prisma.NotificationUncheckedCreateNestedManyWithoutDestinataireInput
+  securityLogs?: Prisma.SecurityLogUncheckedCreateNestedManyWithoutUserInput
+  agentLogs?: Prisma.AgentLogUncheckedCreateNestedManyWithoutAdminInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedCreateNestedManyWithoutAdminInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedCreateNestedManyWithoutAdminInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedCreateNestedManyWithoutAdminInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedCreateNestedManyWithoutAdminInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedCreateNestedManyWithoutAdminInput
+}
+
+export type UserCreateOrConnectWithoutCampagnesEmailInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCampagnesEmailInput, Prisma.UserUncheckedCreateWithoutCampagnesEmailInput>
+}
+
+export type UserUpsertWithoutCampagnesEmailInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCampagnesEmailInput, Prisma.UserUncheckedUpdateWithoutCampagnesEmailInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCampagnesEmailInput, Prisma.UserUncheckedCreateWithoutCampagnesEmailInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCampagnesEmailInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCampagnesEmailInput, Prisma.UserUncheckedUpdateWithoutCampagnesEmailInput>
+}
+
+export type UserUpdateWithoutCampagnesEmailInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUpdateManyWithoutAdminNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCampagnesEmailInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
+  langueInterface?: Prisma.EnumLangueInterfaceFieldUpdateOperationsInput | $Enums.LangueInterface
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendedRaison?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  forcePasswordReset?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  profilEleve?: Prisma.ProfilEleveUncheckedUpdateOneWithoutUserNestedInput
+  profilParent?: Prisma.ProfilParentUncheckedUpdateOneWithoutUserNestedInput
+  profilEnseignant?: Prisma.ProfilEnseignantUncheckedUpdateOneWithoutUserNestedInput
+  specialiste?: Prisma.SpecialisteUncheckedUpdateOneWithoutUserNestedInput
+  notificationsEnvoyees?: Prisma.NotificationUncheckedUpdateManyWithoutExpediteurNestedInput
+  notificationsRecues?: Prisma.NotificationUncheckedUpdateManyWithoutDestinataireNestedInput
+  securityLogs?: Prisma.SecurityLogUncheckedUpdateManyWithoutUserNestedInput
+  agentLogs?: Prisma.AgentLogUncheckedUpdateManyWithoutAdminNestedInput
+  opportunitesPartenariat?: Prisma.OpportunitePartenariatUncheckedUpdateManyWithoutAdminNestedInput
+  comptesSociaux?: Prisma.CompteSocialUncheckedUpdateManyWithoutAdminNestedInput
+  publicationsSociales?: Prisma.PublicationSocialeUncheckedUpdateManyWithoutAdminNestedInput
+  personasMarketing?: Prisma.PersonaMarketingUncheckedUpdateManyWithoutAdminNestedInput
+  strategiesMarketing?: Prisma.StrategieMarketingUncheckedUpdateManyWithoutAdminNestedInput
 }
 
 
@@ -2225,6 +3290,11 @@ export type UserCountOutputType = {
   securityLogs: number
   agentLogs: number
   opportunitesPartenariat: number
+  comptesSociaux: number
+  publicationsSociales: number
+  campagnesEmail: number
+  personasMarketing: number
+  strategiesMarketing: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2235,6 +3305,11 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   securityLogs?: boolean | UserCountOutputTypeCountSecurityLogsArgs
   agentLogs?: boolean | UserCountOutputTypeCountAgentLogsArgs
   opportunitesPartenariat?: boolean | UserCountOutputTypeCountOpportunitesPartenariatArgs
+  comptesSociaux?: boolean | UserCountOutputTypeCountComptesSociauxArgs
+  publicationsSociales?: boolean | UserCountOutputTypeCountPublicationsSocialesArgs
+  campagnesEmail?: boolean | UserCountOutputTypeCountCampagnesEmailArgs
+  personasMarketing?: boolean | UserCountOutputTypeCountPersonasMarketingArgs
+  strategiesMarketing?: boolean | UserCountOutputTypeCountStrategiesMarketingArgs
 }
 
 /**
@@ -2296,6 +3371,41 @@ export type UserCountOutputTypeCountOpportunitesPartenariatArgs<ExtArgs extends 
   where?: Prisma.OpportunitePartenariatWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountComptesSociauxArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CompteSocialWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPublicationsSocialesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PublicationSocialeWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCampagnesEmailArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CampagneEmailWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPersonasMarketingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PersonaMarketingWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountStrategiesMarketingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StrategieMarketingWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2324,6 +3434,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   securityLogs?: boolean | Prisma.User$securityLogsArgs<ExtArgs>
   agentLogs?: boolean | Prisma.User$agentLogsArgs<ExtArgs>
   opportunitesPartenariat?: boolean | Prisma.User$opportunitesPartenariatArgs<ExtArgs>
+  comptesSociaux?: boolean | Prisma.User$comptesSociauxArgs<ExtArgs>
+  publicationsSociales?: boolean | Prisma.User$publicationsSocialesArgs<ExtArgs>
+  campagnesEmail?: boolean | Prisma.User$campagnesEmailArgs<ExtArgs>
+  personasMarketing?: boolean | Prisma.User$personasMarketingArgs<ExtArgs>
+  strategiesMarketing?: boolean | Prisma.User$strategiesMarketingArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2394,6 +3509,11 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   securityLogs?: boolean | Prisma.User$securityLogsArgs<ExtArgs>
   agentLogs?: boolean | Prisma.User$agentLogsArgs<ExtArgs>
   opportunitesPartenariat?: boolean | Prisma.User$opportunitesPartenariatArgs<ExtArgs>
+  comptesSociaux?: boolean | Prisma.User$comptesSociauxArgs<ExtArgs>
+  publicationsSociales?: boolean | Prisma.User$publicationsSocialesArgs<ExtArgs>
+  campagnesEmail?: boolean | Prisma.User$campagnesEmailArgs<ExtArgs>
+  personasMarketing?: boolean | Prisma.User$personasMarketingArgs<ExtArgs>
+  strategiesMarketing?: boolean | Prisma.User$strategiesMarketingArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2413,6 +3533,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     securityLogs: Prisma.$SecurityLogPayload<ExtArgs>[]
     agentLogs: Prisma.$AgentLogPayload<ExtArgs>[]
     opportunitesPartenariat: Prisma.$OpportunitePartenariatPayload<ExtArgs>[]
+    comptesSociaux: Prisma.$CompteSocialPayload<ExtArgs>[]
+    publicationsSociales: Prisma.$PublicationSocialePayload<ExtArgs>[]
+    campagnesEmail: Prisma.$CampagneEmailPayload<ExtArgs>[]
+    personasMarketing: Prisma.$PersonaMarketingPayload<ExtArgs>[]
+    strategiesMarketing: Prisma.$StrategieMarketingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2835,6 +3960,11 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   securityLogs<T extends Prisma.User$securityLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$securityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SecurityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   agentLogs<T extends Prisma.User$agentLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$agentLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   opportunitesPartenariat<T extends Prisma.User$opportunitesPartenariatArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$opportunitesPartenariatArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OpportunitePartenariatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  comptesSociaux<T extends Prisma.User$comptesSociauxArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$comptesSociauxArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompteSocialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  publicationsSociales<T extends Prisma.User$publicationsSocialesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$publicationsSocialesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationSocialePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campagnesEmail<T extends Prisma.User$campagnesEmailArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$campagnesEmailArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampagneEmailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  personasMarketing<T extends Prisma.User$personasMarketingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$personasMarketingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PersonaMarketingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  strategiesMarketing<T extends Prisma.User$strategiesMarketingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$strategiesMarketingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StrategieMarketingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3513,6 +4643,126 @@ export type User$opportunitesPartenariatArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.OpportunitePartenariatScalarFieldEnum | Prisma.OpportunitePartenariatScalarFieldEnum[]
+}
+
+/**
+ * User.comptesSociaux
+ */
+export type User$comptesSociauxArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CompteSocial
+   */
+  select?: Prisma.CompteSocialSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CompteSocial
+   */
+  omit?: Prisma.CompteSocialOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompteSocialInclude<ExtArgs> | null
+  where?: Prisma.CompteSocialWhereInput
+  orderBy?: Prisma.CompteSocialOrderByWithRelationInput | Prisma.CompteSocialOrderByWithRelationInput[]
+  cursor?: Prisma.CompteSocialWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CompteSocialScalarFieldEnum | Prisma.CompteSocialScalarFieldEnum[]
+}
+
+/**
+ * User.publicationsSociales
+ */
+export type User$publicationsSocialesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PublicationSociale
+   */
+  select?: Prisma.PublicationSocialeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PublicationSociale
+   */
+  omit?: Prisma.PublicationSocialeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PublicationSocialeInclude<ExtArgs> | null
+  where?: Prisma.PublicationSocialeWhereInput
+  orderBy?: Prisma.PublicationSocialeOrderByWithRelationInput | Prisma.PublicationSocialeOrderByWithRelationInput[]
+  cursor?: Prisma.PublicationSocialeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PublicationSocialeScalarFieldEnum | Prisma.PublicationSocialeScalarFieldEnum[]
+}
+
+/**
+ * User.campagnesEmail
+ */
+export type User$campagnesEmailArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CampagneEmail
+   */
+  select?: Prisma.CampagneEmailSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CampagneEmail
+   */
+  omit?: Prisma.CampagneEmailOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CampagneEmailInclude<ExtArgs> | null
+  where?: Prisma.CampagneEmailWhereInput
+  orderBy?: Prisma.CampagneEmailOrderByWithRelationInput | Prisma.CampagneEmailOrderByWithRelationInput[]
+  cursor?: Prisma.CampagneEmailWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CampagneEmailScalarFieldEnum | Prisma.CampagneEmailScalarFieldEnum[]
+}
+
+/**
+ * User.personasMarketing
+ */
+export type User$personasMarketingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PersonaMarketing
+   */
+  select?: Prisma.PersonaMarketingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PersonaMarketing
+   */
+  omit?: Prisma.PersonaMarketingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PersonaMarketingInclude<ExtArgs> | null
+  where?: Prisma.PersonaMarketingWhereInput
+  orderBy?: Prisma.PersonaMarketingOrderByWithRelationInput | Prisma.PersonaMarketingOrderByWithRelationInput[]
+  cursor?: Prisma.PersonaMarketingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PersonaMarketingScalarFieldEnum | Prisma.PersonaMarketingScalarFieldEnum[]
+}
+
+/**
+ * User.strategiesMarketing
+ */
+export type User$strategiesMarketingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StrategieMarketing
+   */
+  select?: Prisma.StrategieMarketingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StrategieMarketing
+   */
+  omit?: Prisma.StrategieMarketingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StrategieMarketingInclude<ExtArgs> | null
+  where?: Prisma.StrategieMarketingWhereInput
+  orderBy?: Prisma.StrategieMarketingOrderByWithRelationInput | Prisma.StrategieMarketingOrderByWithRelationInput[]
+  cursor?: Prisma.StrategieMarketingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StrategieMarketingScalarFieldEnum | Prisma.StrategieMarketingScalarFieldEnum[]
 }
 
 /**

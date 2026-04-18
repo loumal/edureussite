@@ -96,7 +96,12 @@ export const ModelName = {
   PlanifNotionEleve: 'PlanifNotionEleve',
   DisponibiliteEleve: 'DisponibiliteEleve',
   AgentLog: 'AgentLog',
-  OpportunitePartenariat: 'OpportunitePartenariat'
+  OpportunitePartenariat: 'OpportunitePartenariat',
+  CompteSocial: 'CompteSocial',
+  PublicationSociale: 'PublicationSociale',
+  PersonaMarketing: 'PersonaMarketing',
+  StrategieMarketing: 'StrategieMarketing',
+  CampagneEmail: 'CampagneEmail'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -848,6 +853,85 @@ export const OpportunitePartenariatScalarFieldEnum = {
 } as const
 
 export type OpportunitePartenariatScalarFieldEnum = (typeof OpportunitePartenariatScalarFieldEnum)[keyof typeof OpportunitePartenariatScalarFieldEnum]
+
+
+export const CompteSocialScalarFieldEnum = {
+  id: 'id',
+  plateforme: 'plateforme',
+  nomCompte: 'nomCompte',
+  pageId: 'pageId',
+  accessToken: 'accessToken',
+  tokenExpire: 'tokenExpire',
+  actif: 'actif',
+  adminId: 'adminId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompteSocialScalarFieldEnum = (typeof CompteSocialScalarFieldEnum)[keyof typeof CompteSocialScalarFieldEnum]
+
+
+export const PublicationSocialeScalarFieldEnum = {
+  id: 'id',
+  compteId: 'compteId',
+  contenu: 'contenu',
+  sujet: 'sujet',
+  typeContenu: 'typeContenu',
+  statut: 'statut',
+  planifieLe: 'planifieLe',
+  publieLe: 'publieLe',
+  postId: 'postId',
+  erreur: 'erreur',
+  adminId: 'adminId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PublicationSocialeScalarFieldEnum = (typeof PublicationSocialeScalarFieldEnum)[keyof typeof PublicationSocialeScalarFieldEnum]
+
+
+export const PersonaMarketingScalarFieldEnum = {
+  id: 'id',
+  contenu: 'contenu',
+  version: 'version',
+  adminId: 'adminId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PersonaMarketingScalarFieldEnum = (typeof PersonaMarketingScalarFieldEnum)[keyof typeof PersonaMarketingScalarFieldEnum]
+
+
+export const StrategieMarketingScalarFieldEnum = {
+  id: 'id',
+  contenu: 'contenu',
+  version: 'version',
+  adminId: 'adminId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StrategieMarketingScalarFieldEnum = (typeof StrategieMarketingScalarFieldEnum)[keyof typeof StrategieMarketingScalarFieldEnum]
+
+
+export const CampagneEmailScalarFieldEnum = {
+  id: 'id',
+  titre: 'titre',
+  objet: 'objet',
+  htmlContenu: 'htmlContenu',
+  textContenu: 'textContenu',
+  typeEvenement: 'typeEvenement',
+  destinataires: 'destinataires',
+  statut: 'statut',
+  planifieLe: 'planifieLe',
+  envoyeLe: 'envoyeLe',
+  nbEnvoyes: 'nbEnvoyes',
+  adminId: 'adminId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CampagneEmailScalarFieldEnum = (typeof CampagneEmailScalarFieldEnum)[keyof typeof CampagneEmailScalarFieldEnum]
 
 
 export const SortOrder = {

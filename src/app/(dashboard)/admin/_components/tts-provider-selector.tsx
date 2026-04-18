@@ -4,6 +4,8 @@ import { useState } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils/cn";
 
+type TtsProvider = "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD";
+
 const PROVIDERS = [
   {
     id: "ELEVENLABS" as const,
@@ -19,10 +21,17 @@ const PROVIDERS = [
     cout: "TTS $0,015/1000 chars (20× moins cher)",
     detail: "Voix « nova » en français · même clé API que Claude",
   },
+  {
+    id: "EDUREUSSITE_RUNPOD" as const,
+    label: "Edureussite RunPod",
+    emoji: "🏠",
+    cout: "TTS auto-hébergé · coût RunPod uniquement",
+    detail: "edge-tts · fr-FR-DeniseNeural · infrastructure propriétaire",
+  },
 ];
 
-export function TtsProviderSelector({ initialProvider }: { initialProvider: "ELEVENLABS" | "OPENAI" }) {
-  const [selected, setSelected] = useState<"ELEVENLABS" | "OPENAI">(initialProvider);
+export function TtsProviderSelector({ initialProvider }: { initialProvider: TtsProvider }) {
+  const [selected, setSelected] = useState<TtsProvider>(initialProvider);
   const [saved, setSaved] = useState(false);
 
   const set = trpc.admin.setTtsProvider.useMutation({
@@ -32,7 +41,7 @@ export function TtsProviderSelector({ initialProvider }: { initialProvider: "ELE
     },
   });
 
-  function handleChange(provider: "ELEVENLABS" | "OPENAI") {
+  function handleChange(provider: TtsProvider) {
     setSelected(provider);
     set.mutate({ provider });
   }
