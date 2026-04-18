@@ -34,9 +34,9 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         text: trimmed,
         language: language === "en" ? "en" : "fr",
-        rate: "-5%",
-        pitch: "+5Hz",
-        volume: "+10%",
+        rate: "+0%",
+        pitch: "+0Hz",
+        volume: "+0%",
       }),
     });
 
