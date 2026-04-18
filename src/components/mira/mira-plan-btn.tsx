@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { useAvatarVoice, unlockAudio } from "@/hooks/useAvatarVoice";
 import { MIRA } from "@/lib/avatarVoices";
+import { stripFigureTags } from "@/components/mira/mira-figures";
 import {
   EnseignantIaBubble,
   ThinkingBubble,
@@ -110,6 +111,7 @@ function MiraPlanPanel({ planContext, onClose }: MiraPlanPanelProps) {
           prenom: ctx.prenom,
           niveauLabel: ctx.niveauLabel,
           profilExtra: ctx.profilExtra,
+          diagnosticContext: ctx.diagnosticContext,
           mode: "plan",
           planContext: {
             notionActive: planContext.notionActive,
@@ -123,11 +125,12 @@ function MiraPlanPanel({ planContext, onClose }: MiraPlanPanelProps) {
 
       const data = await res.json();
       const reply: string = data.message ?? "Je n'ai pas bien compris. Tu peux répéter ?";
+      const lang: "fr" | "en" = data.lang === "en" ? "en" : "fr";
 
       const assistantMsg: Message = { id: (Date.now() + 1).toString(), role: "assistant", content: reply };
       setMessages((prev) => [...prev, assistantMsg]);
       saveMessage.mutate({ role: "assistant", content: reply });
-      if (!isMuted) speak(reply);
+      if (!isMuted) speak(stripFigureTags(reply), lang);
     } catch {
       setMessages((prev) => [
         ...prev,

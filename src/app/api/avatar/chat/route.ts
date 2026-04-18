@@ -104,6 +104,37 @@ Utilise des phrases complètes et naturelles.
 Varie tes formules d'encouragement pour qu'elles sonnent toujours sincères.
 Tu ne révèles jamais que tu es une IA générale. Tu es Mira, enseignante IA d'ÉduRéussite QC.`;
 
+// ── Bloc mode enseignement de l'anglais ──────────────────────────────────────
+
+const STYLE_VOCAL_ANGLAIS = `═══ MODE ENSEIGNEMENT DE L'ANGLAIS LANGUE SECONDE ═══
+The subject of this session is English as a second language (ESL).
+YOU SPEAK PRIMARILY IN ENGLISH so the student is immersed in the language.
+
+Rules:
+- Your explanations, questions, and encouragements are in ENGLISH — simple, warm, adapted to the student's level.
+- You may briefly switch to FRENCH only to clarify a complex grammar rule or to reassure a discouraged student.
+- Correct errors gently: always show the correct form naturally. Example: "Good try! We say 'I am going', not 'I go'. Can you repeat that?"
+- Work on vocabulary, grammar, pronunciation (describe sounds orally), and comprehension.
+- For pronunciation: describe how to pronounce with phonetic tips. Example: "Say 'the' — the tip of your tongue touches your teeth."
+- Use immersion: start in English, guide the student to understand through context.
+- Celebrate every English sentence the student produces, even if imperfect.
+
+VOCAL STYLE FOR ENGLISH TTS:
+Your responses are spoken naturally in English — warm, friendly, encouraging.
+No markdown whatsoever. Natural complete sentences only.
+Keep responses short: 3 to 5 sentences maximum, adapted for listening.`;
+
+// ── Détection de la matière Anglais ─────────────────────────────────────────
+
+function isAnglaisMatiere(
+  subjectContext?: string,
+  planContext?: { matiere?: string }
+): boolean {
+  if (planContext?.matiere === "ANGLAIS") return true;
+  const ctx = (subjectContext ?? "").toLowerCase();
+  return ctx.includes("anglais") || ctx.includes("english") || ctx.includes("esl") || ctx.includes("langue seconde");
+}
+
 // ── Bloc diagnostic pédagogique ───────────────────────────────────────────────
 
 function buildDiagnosticBloc(prenom: string, diagnostic: string): string {
@@ -406,6 +437,8 @@ export async function POST(req: NextRequest) {
     const prenomNorm = prenom ?? "l'élève";
     const niveauNorm = niveauLabel ?? "niveau scolaire non précisé";
     const premierSessionBloc = isFirstSession ? "\n\n" + buildPremierSessionBloc(prenomNorm) : "";
+    const isAnglais = isAnglaisMatiere(subjectContext, planContext);
+    const anglaisBloc = isAnglais ? "\n\n" + STYLE_VOCAL_ANGLAIS : "";
 
     const systemPrompt = (mode === "plan" && planContext
       ? buildPlanSystemPrompt({
@@ -429,7 +462,7 @@ export async function POST(req: NextRequest) {
           subjectContext: subjectContext ?? "matière non précisée",
           profilExtra,
           diagnosticContext,
-        })) + premierSessionBloc;
+        })) + premierSessionBloc + anglaisBloc;
 
     const response = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
@@ -450,7 +483,7 @@ export async function POST(req: NextRequest) {
       userId: session.user.id,
     });
 
-    return NextResponse.json({ message: reply });
+    return NextResponse.json({ message: reply, lang: isAnglais ? "en" : "fr" });
   } catch (error) {
     console.error("Avatar chat error:", error);
     return NextResponse.json(

@@ -10,7 +10,7 @@ interface Options {
 }
 
 interface Return {
-  speak: (text: string) => Promise<void>;
+  speak: (text: string, overrideLang?: "fr" | "en") => Promise<void>;
   stop: () => void;
   isSpeaking: boolean;
   isLoading: boolean;
@@ -80,7 +80,7 @@ export function useAvatarVoice({ voiceId, language = "fr", onStart, onEnd }: Opt
     setIsLoading(false);
   }, []);
 
-  const speak = useCallback(async (text: string) => {
+  const speak = useCallback(async (text: string, overrideLang?: "fr" | "en") => {
     if (!text.trim()) return;
     stop();
     setIsLoading(true);
@@ -89,7 +89,7 @@ export function useAvatarVoice({ voiceId, language = "fr", onStart, onEnd }: Opt
       const res = await fetch("/api/avatar/speak", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, voiceId, language }),
+        body: JSON.stringify({ text, voiceId, language: overrideLang ?? language }),
       });
 
       if (!res.ok) throw new Error(`TTS ${res.status}`);
@@ -127,7 +127,7 @@ export function useAvatarVoice({ voiceId, language = "fr", onStart, onEnd }: Opt
       onStart?.();
       browserSpeak(
         text,
-        language,
+        overrideLang ?? language,
         undefined,
         () => { setIsSpeaking(false); usingFallbackRef.current = false; onEnd?.(); }
       );

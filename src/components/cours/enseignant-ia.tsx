@@ -10,6 +10,7 @@ import {
   ThinkingBubble,
   type Message,
 } from "./enseignant-ia-bubble";
+import { stripFigureTags } from "@/components/mira/mira-figures";
 import {
   useSessionTimer,
   SessionTimerBadge,
@@ -63,6 +64,7 @@ export function EnseignantIA({
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const saveUsage = trpc.eleve.saveMiraUsage.useMutation();
+  const { data: miraCtx } = trpc.eleve.getMiraLibreContext.useQuery();
   const timer = useSessionTimer(miraSecsAlreadyUsed, miraSecsMax);
 
   const { speak, stop, isSpeaking, isLoading } = useAvatarVoice({
@@ -131,16 +133,18 @@ export function EnseignantIA({
             niveauLabel,
             subjectContext,
             profilExtra,
+            diagnosticContext: miraCtx?.diagnosticContext,
           }),
         });
 
         const data = await res.json();
         const reply: string = data.message ?? "Je n'ai pas bien compris. Tu peux répéter ?";
+        const lang: "fr" | "en" = data.lang === "en" ? "en" : "fr";
 
         const assistantMsg: Message = { id: crypto.randomUUID(), role: "assistant", content: reply };
         setMessages((prev) => [...prev, assistantMsg]);
 
-        if (!isMuted) await speak(reply);
+        if (!isMuted) await speak(stripFigureTags(reply), lang);
       } catch {
         const errMsg: Message = {
           id: crypto.randomUUID(),
