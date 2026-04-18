@@ -108,6 +108,39 @@ export async function POST(req: NextRequest) {
 
       const clean = stripMarkdown(trimmed);
 
+      // Pour l'anglais : OpenAI TTS nova — voix native, accent naturel
+      // edge-tts en-CA-ClaraNeural n'est pas assez naturel pour l'enseignement ESL
+      if (lang === "en" && OPENAI_API_KEY) {
+        const enResponse = await fetch("https://api.openai.com/v1/audio/speech", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "tts-1-hd",  // HD pour l'anglais = meilleure qualité accent natif
+            input: clean,
+            voice: "nova",
+            response_format: "mp3",
+          }),
+        });
+
+        if (enResponse.ok) {
+          logOpenAITTS({ characters: clean.length, userId: session.user.id });
+          return new NextResponse(enResponse.body, {
+            status: 200,
+            headers: {
+              "Content-Type": "audio/mpeg",
+              "Cache-Control": "no-store",
+              "X-Content-Type-Options": "nosniff",
+            },
+          });
+        }
+        // Si OpenAI échoue, on tombe sur RunPod en fallback
+        console.warn("OpenAI TTS fallback to RunPod for English");
+      }
+
+      // Français (ou fallback anglais) : RunPod edge-tts
       const response = await fetch(`${EDUREUSSITE_TTS_URL}/generate`, {
         method: "POST",
         headers: {
