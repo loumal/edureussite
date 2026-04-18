@@ -23,6 +23,10 @@
     {
       "path": "/api/cron/rapport-hebdo",
       "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/cron/onboarding-sequence",
+      "schedule": "5 9 * * *"
     }
   ]
 }

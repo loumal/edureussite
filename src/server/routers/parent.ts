@@ -1,6 +1,9 @@
 import { createTRPCRouter, protectedProcedure, aiProcedure } from "@/lib/trpc/init";
 import { z } from "zod";
-import { Matiere, NiveauScolaire, TypeCommentaireParent } from "@/generated/prisma";
+import { Matiere, NiveauScolaire, Province, TypeCommentaireParent } from "@/generated/prisma";
+
+// Territoires dont la langue d'interface est le français
+const FR_LANGUE = new Set<string>(["QC","NB","FR","CI","SN","CM","BF","ML","BJ","TG","GA","CD","CG","GN","MG","NE","TD","CF","RW","BI","DJ","KM"]);
 import { getNotionById } from "@/lib/pfeq/notions";
 import bcrypt from "bcryptjs";
 import { genererPlanAccompagnement } from "@/lib/ai/accompagnement";
@@ -80,6 +83,7 @@ export const parentRouter = createTRPCRouter({
         niveauScolaire: z.nativeEnum(NiveauScolaire),
         ecole: z.string().max(100).optional(),
         motDePasse: motDePasseSchema,
+        province: z.nativeEnum(Province).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -98,12 +102,15 @@ export const parentRouter = createTRPCRouter({
       const suffixe = (await import("crypto")).randomInt(100000, 999999).toString();
       const codeAcces = `${input.prenom}-${suffixe}`;
 
+      const province = input.province ?? "QC";
       const user = await ctx.prisma.user.create({
         data: {
           email,
           password: hashed,
           name: `${input.prenom} ${input.nom}`,
           role: "ELEVE",
+          province,
+          langueInterface: FR_LANGUE.has(province) ? "FR" : "EN",
           emailVerified: new Date(), // pas de vérification email pour les élèves
         },
       });
@@ -589,6 +596,144 @@ export const parentRouter = createTRPCRouter({
         parSemaine,
         objectifs: eleve.objectifsNotes,
         aUnPlan: notionsTotal > 0,
+      };
+    }),
+
+  // ── Courbe de progression détaillée ─────────────────────────────────────────
+  getProgressionDetaille: protectedProcedure
+    .input(z.object({ eleveId: z.string().min(1).max(128) }))
+    .query(async ({ ctx, input }) => {
+      const parent = await ctx.prisma.profilParent.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true },
+      });
+      await assertParentDeEleve(ctx.prisma as unknown as PrismaClient, parent.id, input.eleveId);
+
+      const il12sem = new Date(Date.now() - 84 * 24 * 60 * 60 * 1000); // 12 semaines
+
+      const [eleve, exercices] = await Promise.all([
+        ctx.prisma.profilEleve.findUniqueOrThrow({
+          where: { id: input.eleveId },
+          select: { prenom: true, niveauScolaire: true, createdAt: true },
+        }),
+        ctx.prisma.exerciceAssigne.findMany({
+          where: { eleveId: input.eleveId, statut: "TERMINE", dateFin: { gte: il12sem } },
+          include: { exercice: { select: { matiere: true, titre: true } } },
+          orderBy: { dateFin: "asc" },
+        }),
+      ]);
+
+      const MATIERES_LABELS: Record<string, string> = {
+        FRANCAIS: "Français", MATHEMATIQUES: "Mathématiques", SCIENCES: "Sciences",
+        UNIVERS_SOCIAL: "Univers social", ARTS: "Arts", ANGLAIS: "Anglais",
+        EDUCATION_PHYSIQUE: "Éd. physique", ETHIQUE: "Éthique",
+      };
+
+      // Grouper par semaine ISO (lundi = début)
+      function getSemaineKey(date: Date): string {
+        const d = new Date(date);
+        d.setHours(0, 0, 0, 0);
+        const day = d.getDay() || 7; // 0→7 pour dimanche
+        d.setDate(d.getDate() - (day - 1)); // reculer au lundi
+        return d.toISOString().slice(0, 10);
+      }
+
+      const parSemaine: Record<string, { scores: number[]; parMatiere: Record<string, number[]>; debut: string }> = {};
+      for (const ex of exercices) {
+        if (ex.score === null || !ex.dateFin) continue;
+        const key = getSemaineKey(ex.dateFin);
+        if (!parSemaine[key]) parSemaine[key] = { scores: [], parMatiere: {}, debut: key };
+        parSemaine[key].scores.push(ex.score);
+        const m = ex.exercice.matiere;
+        if (!parSemaine[key].parMatiere[m]) parSemaine[key].parMatiere[m] = [];
+        parSemaine[key].parMatiere[m].push(ex.score);
+      }
+
+      const semainesTriees = Object.keys(parSemaine).sort();
+      const semainesData = semainesTriees.map((key) => {
+        const s = parSemaine[key];
+        const scoreMoyen = s.scores.reduce((a, b) => a + b, 0) / s.scores.length;
+        const parMatiere: Record<string, number> = {};
+        for (const [m, scores] of Object.entries(s.parMatiere)) {
+          parMatiere[m] = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+        }
+        return {
+          semaine: key,
+          scoreMoyen: Math.round(scoreMoyen),
+          nbExercices: s.scores.length,
+          parMatiere,
+        };
+      });
+
+      // Comparaison avant/après : première moitié vs deuxième moitié
+      const tousScores = exercices.filter((e) => e.score !== null).map((e) => e.score as number);
+      let comparaison: { avant: number; apres: number; delta: number } | null = null;
+      if (tousScores.length >= 6) {
+        const coupe = Math.floor(tousScores.length / 2);
+        const avant = Math.round(tousScores.slice(0, coupe).reduce((a, b) => a + b, 0) / coupe);
+        const apres = Math.round(tousScores.slice(-coupe).reduce((a, b) => a + b, 0) / coupe);
+        comparaison = { avant, apres, delta: apres - avant };
+      }
+
+      // Top 3 maîtrisées / à travailler par matière
+      const parMatiereTout: Record<string, number[]> = {};
+      for (const ex of exercices) {
+        if (ex.score === null) continue;
+        if (!parMatiereTout[ex.exercice.matiere]) parMatiereTout[ex.exercice.matiere] = [];
+        parMatiereTout[ex.exercice.matiere].push(ex.score);
+      }
+
+      const matiereStats = Object.entries(parMatiereTout)
+        .filter(([, s]) => s.length >= 2)
+        .map(([m, s]) => ({
+          matiere: m,
+          label: MATIERES_LABELS[m] ?? m,
+          scoreMoyen: Math.round(s.reduce((a, b) => a + b, 0) / s.length),
+          nbExercices: s.length,
+        }))
+        .sort((a, b) => b.scoreMoyen - a.scoreMoyen);
+
+      const top3Maitrisees = matiereStats.slice(0, 3);
+      const top3ATravail = [...matiereStats].sort((a, b) => a.scoreMoyen - b.scoreMoyen).slice(0, 3);
+
+      // Données résumé cette semaine
+      const debutSemaine = new Date();
+      debutSemaine.setHours(0, 0, 0, 0);
+      debutSemaine.setDate(debutSemaine.getDate() - (debutSemaine.getDay() || 7) + 1);
+
+      const exercicesCetteSemaine = exercices.filter(
+        (e) => e.dateFin && new Date(e.dateFin) >= debutSemaine
+      );
+      const tempsMinutesSemaine = Math.round(
+        exercicesCetteSemaine.reduce((acc, e) => acc + (e.tempsSecondes ?? 0), 0) / 60
+      );
+      const scoresSemaine = exercicesCetteSemaine.filter((e) => e.score !== null).map((e) => e.score as number);
+      const scoreMoyenSemaine = scoresSemaine.length > 0
+        ? Math.round(scoresSemaine.reduce((a, b) => a + b, 0) / scoresSemaine.length)
+        : null;
+
+      // Narratif auto-généré
+      const heures = Math.floor(tempsMinutesSemaine / 60);
+      const minutes = tempsMinutesSemaine % 60;
+      const tempsLabel = heures > 0 ? `${heures}h${minutes > 0 ? String(minutes).padStart(2, "0") : ""}` : `${minutes} min`;
+      const matiereProgressLabel = comparaison && matiereStats.length > 0
+        ? ` Il progresse de ${comparaison.delta > 0 ? "+" : ""}${comparaison.delta}% par rapport à ses débuts en ${matiereStats[0].label}.`
+        : "";
+      const narratif = `Cette semaine, ${eleve.prenom} a travaillé ${tempsLabel} et complété ${exercicesCetteSemaine.length} exercice${exercicesCetteSemaine.length !== 1 ? "s" : ""}${scoreMoyenSemaine !== null ? ` avec un score moyen de ${scoreMoyenSemaine}%` : ""}.${matiereProgressLabel}`;
+
+      return {
+        eleve: { prenom: eleve.prenom, niveauScolaire: eleve.niveauScolaire, createdAt: eleve.createdAt.toISOString() },
+        semainesData,
+        comparaison,
+        top3Maitrisees,
+        top3ATravail,
+        narratif,
+        semaineCourante: {
+          exercices: exercicesCetteSemaine.length,
+          tempsMinutes: tempsMinutesSemaine,
+          scoreMoyen: scoreMoyenSemaine,
+        },
+        totalExercices: tousScores.length,
       };
     }),
 });
