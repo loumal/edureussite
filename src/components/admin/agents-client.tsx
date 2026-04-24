@@ -934,8 +934,418 @@ function OngletVeille() {
 
 // ─── Onglet Marketing & Growth ────────────────────────────────────────────────
 
+// ─── Marketing — Onglet Personas ─────────────────────────────────────────────
+
+function MarketingPersonasTab() {
+  const utils = trpc.useUtils();
+  const { data: persona, isLoading } = trpc.agents.getPersona.useQuery();
+  const genPersona = trpc.agents.genererPersona.useMutation({
+    onSuccess: () => utils.agents.getPersona.invalidate(),
+  });
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-bold text-[var(--color-ink)]">Personas marketing</p>
+          <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">Les 4 profils cibles clés d&apos;ÉduRéussite QC, générés par l&apos;IA.</p>
+        </div>
+        <button
+          onClick={() => genPersona.mutate()}
+          disabled={genPersona.isPending}
+          className="flex items-center gap-1.5 rounded-xl bg-[var(--color-ink)] px-4 py-2 text-xs font-bold text-white hover:opacity-90 disabled:opacity-50 transition-opacity"
+        >
+          {genPersona.isPending ? "Génération…" : persona ? "↺ Actualiser" : "✦ Générer"}
+        </button>
+      </div>
+
+      {genPersona.error && <ErreurMsg msg={genPersona.error.message} />}
+
+      {isLoading ? (
+        <p className="text-xs text-[var(--color-ink-soft)]">Chargement…</p>
+      ) : persona ? (
+        <div className="rounded-xl border border-[var(--color-rule)] bg-white overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--color-rule)] bg-[var(--color-paper-warm)]">
+            <span className="text-xs font-bold text-[var(--color-ink-soft)] uppercase tracking-wide">Personas v{persona.version}</span>
+            <span className="text-[10px] text-[var(--color-ink-soft)]">{new Date(persona.updatedAt).toLocaleDateString("fr-CA")}</span>
+          </div>
+          <div className="px-4 py-4 text-sm text-[var(--color-ink)] whitespace-pre-wrap leading-relaxed max-h-[600px] overflow-y-auto">
+            {persona.contenu}
+          </div>
+        </div>
+      ) : (
+        <div className="rounded-xl border border-dashed border-[var(--color-rule)] bg-[var(--color-paper-warm)] p-8 text-center">
+          <p className="text-3xl mb-3">👥</p>
+          <p className="text-sm font-semibold text-[var(--color-ink)]">Aucun persona défini</p>
+          <p className="text-xs text-[var(--color-ink-soft)] mt-1">Cliquez sur &quot;Générer&quot; pour créer les profils cibles de l&apos;application.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Marketing — Onglet Stratégie ─────────────────────────────────────────────
+
+function MarketingStrategieTab() {
+  const utils = trpc.useUtils();
+  const [contexte, setContexte] = useState("");
+  const { data: strategie, isLoading } = trpc.agents.getStrategie.useQuery();
+  const actualiser = trpc.agents.actualiserStrategie.useMutation({
+    onSuccess: () => { utils.agents.getStrategie.invalidate(); setContexte(""); },
+  });
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <p className="text-sm font-bold text-[var(--color-ink)]">Stratégie marketing de pointe</p>
+        <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">Générée avec données web en temps réel — concurrence, tendances IA, marché EdTech 2025.</p>
+      </div>
+
+      <TextareaField
+        label="Contexte additionnel (optionnel)"
+        value={contexte}
+        onChange={setContexte}
+        placeholder="Ex: lancement d'une nouvelle fonctionnalité, campagne de rentrée scolaire…"
+        rows={2}
+      />
+
+      <button
+        onClick={() => actualiser.mutate({ contexteAdditionnel: contexte || undefined })}
+        disabled={actualiser.isPending}
+        className="w-full rounded-xl bg-[var(--color-ink)] py-2.5 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 transition-opacity"
+      >
+        {actualiser.isPending ? "Actualisation en cours…" : strategie ? "↺ Actualiser la stratégie" : "✦ Générer la stratégie"}
+      </button>
+
+      {actualiser.error && <ErreurMsg msg={actualiser.error.message} />}
+
+      {isLoading ? (
+        <p className="text-xs text-[var(--color-ink-soft)]">Chargement…</p>
+      ) : strategie ? (
+        <div className="rounded-xl border border-[var(--color-rule)] bg-white overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--color-rule)] bg-[var(--color-paper-warm)]">
+            <span className="text-xs font-bold text-[var(--color-ink-soft)] uppercase tracking-wide">Stratégie v{strategie.version}</span>
+            <span className="text-[10px] text-[var(--color-ink-soft)]">{new Date(strategie.updatedAt).toLocaleDateString("fr-CA", { day: "numeric", month: "long", year: "numeric" })}</span>
+          </div>
+          <div className="px-4 py-4 text-sm text-[var(--color-ink)] whitespace-pre-wrap leading-relaxed max-h-[600px] overflow-y-auto">
+            {strategie.contenu}
+          </div>
+        </div>
+      ) : (
+        <div className="rounded-xl border border-dashed border-[var(--color-rule)] bg-[var(--color-paper-warm)] p-8 text-center">
+          <p className="text-3xl mb-3">📈</p>
+          <p className="text-sm font-semibold text-[var(--color-ink)]">Aucune stratégie générée</p>
+          <p className="text-xs text-[var(--color-ink-soft)] mt-1">Cliquez sur &quot;Générer&quot; pour créer votre plan marketing de pointe.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Marketing — Onglet Campagnes ─────────────────────────────────────────────
+
+const THEME_CAMPAGNE: Record<string, { label: string; emoji: string; color: string }> = {
+  INFORMATION: { label: "Information",      emoji: "ℹ️",  color: "bg-blue-100 text-blue-700" },
+  MISE_A_JOUR: { label: "Mise à jour",      emoji: "🚀", color: "bg-purple-100 text-purple-700" },
+  FETE:        { label: "Occasion spéciale",emoji: "🎉", color: "bg-amber-100 text-amber-700" },
+  PROMO:       { label: "Offre spéciale",   emoji: "🌟", color: "bg-green-100 text-green-700" },
+  AUTRE:       { label: "Message",          emoji: "✉️",  color: "bg-gray-100 text-gray-600" },
+};
+
+const STATUT_CAMPAGNE: Record<string, { label: string; color: string }> = {
+  BROUILLON: { label: "Brouillon", color: "bg-gray-100 text-gray-600" },
+  PLANIFIE:  { label: "Planifié",  color: "bg-amber-100 text-amber-700" },
+  ENVOYE:    { label: "Envoyé ✓",  color: "bg-green-100 text-green-700" },
+  ERREUR:    { label: "Erreur",    color: "bg-red-100 text-red-600" },
+};
+
+function MarketingCampagnesTab() {
+  const utils = trpc.useUtils();
+  const [vue, setVue] = useState<"LISTE" | "COMPOSER">("LISTE");
+
+  // Composer
+  const [typeEvenement, setTypeEvenement] = useState("INFORMATION");
+  const [destinatairesType, setDestinatairesType] = useState<"ALL" | "ROLE" | "USER">("ALL");
+  const [rolesSelectionnes, setRolesSelectionnes] = useState<string[]>([]);
+  const [rechercheEmail, setRechercheEmail] = useState("");
+  const [userSelectionne, setUserSelectionne] = useState<{ id: string; email: string; name: string | null } | null>(null);
+  const [sujet, setSujet] = useState("");
+  const [contexteEmail, setContexteEmail] = useState("");
+  const [titreCampagne, setTitreCampagne] = useState("");
+  const [objetGenere, setObjetGenere] = useState("");
+  const [htmlGenere, setHtmlGenere] = useState("");
+  const [planifieLe, setPlanifieLe] = useState("");
+  const [erreur, setErreur] = useState("");
+
+  const { data: campagnes, isLoading } = trpc.agents.getCampagnes.useQuery();
+  const { data: utilisateurs } = trpc.agents.getUsersPourCampagne.useQuery(
+    { type: destinatairesType, roles: rolesSelectionnes, rechercheEmail: rechercheEmail || undefined },
+    { enabled: destinatairesType !== "ALL" }
+  );
+  const genEmail = trpc.agents.genererEmailMarketing.useMutation({
+    onSuccess: (d) => { setObjetGenere(d.objet); setHtmlGenere(d.htmlContenu); if (!titreCampagne) setTitreCampagne(d.objet); },
+  });
+  const sauvegarder = trpc.agents.sauvegarderCampagne.useMutation({
+    onSuccess: () => { utils.agents.getCampagnes.invalidate(); resetForm(); setVue("LISTE"); },
+  });
+  const envoyer = trpc.agents.envoyerCampagne.useMutation({
+    onSuccess: () => utils.agents.getCampagnes.invalidate(),
+  });
+  const supprimer = trpc.agents.supprimerCampagne.useMutation({
+    onSuccess: () => utils.agents.getCampagnes.invalidate(),
+  });
+
+  function resetForm() {
+    setSujet(""); setContexteEmail(""); setTitreCampagne(""); setObjetGenere(""); setHtmlGenere("");
+    setPlanifieLe(""); setErreur(""); setDestinatairesType("ALL"); setRolesSelectionnes([]); setRechercheEmail(""); setUserSelectionne(null);
+  }
+
+  function toggleRole(r: string) {
+    setRolesSelectionnes((prev) => prev.includes(r) ? prev.filter((x) => x !== r) : [...prev, r]);
+  }
+
+  function handleGenerer() {
+    setErreur("");
+    if (!sujet.trim()) { setErreur("Veuillez indiquer un sujet."); return; }
+    if (!contexteEmail.trim()) { setErreur("Veuillez décrire le contexte du message."); return; }
+    const destLabel = destinatairesType === "ALL" ? "tous les utilisateurs"
+      : destinatairesType === "ROLE" ? rolesSelectionnes.join(", ") || "rôles sélectionnés"
+      : userSelectionne?.email ?? "utilisateur";
+    genEmail.mutate({ typeEvenement: typeEvenement as "INFORMATION" | "MISE_A_JOUR" | "FETE" | "PROMO" | "AUTRE", destinataires: destLabel, sujet, contexte: contexteEmail });
+  }
+
+  function handleSauvegarder(statut?: "PLANIFIE") {
+    setErreur("");
+    if (!titreCampagne.trim()) { setErreur("Veuillez donner un titre à la campagne."); return; }
+    if (!objetGenere.trim() || !htmlGenere.trim()) { setErreur("Veuillez d'abord générer le contenu de l'email."); return; }
+    if (statut === "PLANIFIE" && !planifieLe) { setErreur("Veuillez choisir une date d'envoi pour la planification."); return; }
+    const destinataires: { type: "ALL" | "ROLE" | "USER"; roles?: string[]; userId?: string; userEmail?: string } = {
+      type: destinatairesType,
+      roles: destinatairesType === "ROLE" ? rolesSelectionnes : undefined,
+      userEmail: destinatairesType === "USER" ? (userSelectionne?.email ?? rechercheEmail) : undefined,
+    };
+    sauvegarder.mutate({
+      titre: titreCampagne, objet: objetGenere, htmlContenu: htmlGenere,
+      textContenu: htmlGenere.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+      typeEvenement, destinataires,
+      planifieLe: statut === "PLANIFIE" ? planifieLe : undefined,
+    });
+  }
+
+  const ROLES_DISPO = [
+    { value: "ELEVE", label: "Élèves" },
+    { value: "PARENT", label: "Parents" },
+    { value: "ENSEIGNANT", label: "Enseignants" },
+    { value: "SPECIALISTE", label: "Spécialistes" },
+    { value: "ADMIN", label: "Admins" },
+    { value: "SUPER_ADMIN", label: "Super Admins" },
+  ];
+
+  if (vue === "COMPOSER") return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <button onClick={() => { resetForm(); setVue("LISTE"); }} className="text-xs text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] transition-colors">← Retour</button>
+        <p className="text-sm font-bold text-[var(--color-ink)]">Composer une campagne</p>
+      </div>
+
+      {/* Type d'événement */}
+      <div>
+        <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-2">Type d&apos;événement</label>
+        <div className="flex gap-2 flex-wrap">
+          {Object.entries(THEME_CAMPAGNE).map(([k, v]) => (
+            <button key={k} onClick={() => setTypeEvenement(k)}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${typeEvenement === k ? "bg-[var(--color-ink)] text-white" : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]"}`}>
+              {v.emoji} {v.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Destinataires */}
+      <div className="space-y-2">
+        <label className="block text-xs font-semibold text-[var(--color-ink-soft)]">Destinataires</label>
+        <div className="flex gap-2">
+          {(["ALL", "ROLE", "USER"] as const).map((t) => (
+            <button key={t} onClick={() => setDestinatairesType(t)}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${destinatairesType === t ? "bg-[var(--color-ink)] text-white" : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]"}`}>
+              {t === "ALL" ? "Tous les utilisateurs" : t === "ROLE" ? "Par rôle" : "Utilisateur précis"}
+            </button>
+          ))}
+        </div>
+        {destinatairesType === "ROLE" && (
+          <div className="flex gap-2 flex-wrap pt-1">
+            {ROLES_DISPO.map((r) => (
+              <button key={r.value} onClick={() => toggleRole(r.value)}
+                className={`rounded-lg px-3 py-1 text-xs font-semibold transition-colors border ${rolesSelectionnes.includes(r.value) ? "bg-[var(--color-ink)] text-white border-[var(--color-ink)]" : "bg-white text-[var(--color-ink-soft)] border-[var(--color-rule)] hover:text-[var(--color-ink)]"}`}>
+                {r.label}
+              </button>
+            ))}
+          </div>
+        )}
+        {destinatairesType === "USER" && (
+          <div className="space-y-2">
+            <input value={rechercheEmail} onChange={(e) => setRechercheEmail(e.target.value)}
+              placeholder="Rechercher par email…"
+              className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]" />
+            {utilisateurs?.users && utilisateurs.users.length > 0 && (
+              <div className="rounded-xl border border-[var(--color-rule)] overflow-hidden">
+                {utilisateurs.users.map((u) => (
+                  <button key={u.id} onClick={() => setUserSelectionne({ id: u.id, email: u.email, name: u.name })}
+                    className={`w-full flex items-center gap-3 px-3 py-2 text-left text-xs transition-colors hover:bg-[var(--color-paper-warm)] ${userSelectionne?.id === u.id ? "bg-[var(--color-paper-warm)] font-semibold" : ""}`}>
+                    <span className="font-medium text-[var(--color-ink)] truncate">{u.email}</span>
+                    <span className="ml-auto text-[var(--color-ink-soft)] flex-shrink-0">{u.role}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            {userSelectionne && (
+              <div className="flex items-center gap-2 rounded-lg bg-green-50 border border-green-200 px-3 py-2">
+                <span className="text-green-600 text-xs">✓</span>
+                <span className="text-xs font-semibold text-green-700">{userSelectionne.email}</span>
+                <button onClick={() => setUserSelectionne(null)} className="ml-auto text-green-500 text-xs hover:text-green-700">✕</button>
+              </div>
+            )}
+          </div>
+        )}
+        {destinatairesType !== "USER" && utilisateurs && (
+          <p className="text-[11px] text-[var(--color-ink-soft)]">{utilisateurs.total} destinataire{utilisateurs.total > 1 ? "s" : ""} correspondant{utilisateurs.total > 1 ? "s" : ""}</p>
+        )}
+      </div>
+
+      {/* Contenu */}
+      <TextareaField label="Sujet / Thème de l'email" value={sujet} onChange={setSujet} placeholder="Ex: Rentrée scolaire 2025 — nouvelles fonctionnalités IA…" rows={1} />
+      <TextareaField label="Contexte / Message à communiquer" value={contexteEmail} onChange={setContexteEmail} placeholder="Ex: Nous venons de lancer le mode voix avec Mira, notre IA audio. Expliquer les bénéfices pour les élèves dyslexiques…" rows={3} />
+
+      <button onClick={handleGenerer} disabled={genEmail.isPending}
+        className="w-full rounded-xl bg-[var(--color-ink)] py-2.5 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 transition-opacity">
+        {genEmail.isPending ? "Génération du contenu…" : "✦ Générer le contenu avec l'IA"}
+      </button>
+
+      {erreur && <ErreurMsg msg={erreur} />}
+      {genEmail.error && <ErreurMsg msg={genEmail.error.message} />}
+
+      {/* Prévisualisation du contenu généré */}
+      {objetGenere && (
+        <div className="rounded-xl border border-[var(--color-rule)] overflow-hidden">
+          <div className="px-4 py-2.5 border-b border-[var(--color-rule)] bg-[var(--color-paper-warm)]">
+            <p className="text-xs font-bold text-[var(--color-ink-soft)] uppercase tracking-wide">Contenu généré — modifiable</p>
+          </div>
+          <div className="p-4 space-y-3">
+            <div>
+              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Objet de l&apos;email</label>
+              <input value={objetGenere} onChange={(e) => setObjetGenere(e.target.value)}
+                className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Corps HTML (modifiable)</label>
+              <textarea value={htmlGenere} onChange={(e) => setHtmlGenere(e.target.value)} rows={8}
+                className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-xs font-mono text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)] resize-none" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Titre + Planification */}
+      {objetGenere && (
+        <div className="space-y-3 rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper-warm)] p-4">
+          <div>
+            <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Titre interne de la campagne</label>
+            <input value={titreCampagne} onChange={(e) => setTitreCampagne(e.target.value)} placeholder="Ex: Rentrée 2025 — parents"
+              className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]" />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Planifier l&apos;envoi (optionnel)</label>
+            <input type="datetime-local" value={planifieLe} onChange={(e) => setPlanifieLe(e.target.value)}
+              className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]" />
+          </div>
+          <div className="flex gap-2 pt-1">
+            <button onClick={() => handleSauvegarder()} disabled={sauvegarder.isPending}
+              className="flex-1 rounded-xl border border-[var(--color-rule)] bg-white py-2.5 text-xs font-bold text-[var(--color-ink)] hover:bg-[var(--color-paper-warm)] disabled:opacity-50 transition-colors">
+              {sauvegarder.isPending ? "Sauvegarde…" : "Sauvegarder brouillon"}
+            </button>
+            {planifieLe && (
+              <button onClick={() => handleSauvegarder("PLANIFIE")} disabled={sauvegarder.isPending}
+                className="flex-1 rounded-xl bg-amber-500 py-2.5 text-xs font-bold text-white hover:opacity-90 disabled:opacity-50 transition-opacity">
+                📅 Planifier l&apos;envoi
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-bold text-[var(--color-ink)]">Campagnes email</p>
+          <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">{campagnes?.length ?? 0} campagne{(campagnes?.length ?? 0) > 1 ? "s" : ""}</p>
+        </div>
+        <button onClick={() => setVue("COMPOSER")}
+          className="rounded-xl bg-[var(--color-ink)] px-4 py-2 text-xs font-bold text-white hover:opacity-90 transition-opacity">
+          + Nouvelle campagne
+        </button>
+      </div>
+
+      {isLoading ? (
+        <p className="text-xs text-[var(--color-ink-soft)]">Chargement…</p>
+      ) : !campagnes?.length ? (
+        <div className="rounded-xl border border-dashed border-[var(--color-rule)] bg-[var(--color-paper-warm)] p-8 text-center">
+          <p className="text-3xl mb-3">📧</p>
+          <p className="text-sm font-semibold text-[var(--color-ink)]">Aucune campagne</p>
+          <p className="text-xs text-[var(--color-ink-soft)] mt-1">Créez votre première campagne email.</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {campagnes.map((c) => {
+            const theme = THEME_CAMPAGNE[c.typeEvenement] ?? THEME_CAMPAGNE.AUTRE;
+            const statut = STATUT_CAMPAGNE[c.statut] ?? { label: c.statut, color: "bg-gray-100 text-gray-600" };
+            return (
+              <div key={c.id} className="rounded-xl border border-[var(--color-rule)] bg-white p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${theme.color}`}>{theme.emoji} {theme.label}</span>
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${statut.color}`}>{statut.label}</span>
+                    </div>
+                    <p className="text-sm font-semibold text-[var(--color-ink)] truncate">{c.titre}</p>
+                    <p className="text-xs text-[var(--color-ink-soft)] truncate mt-0.5">{c.objet}</p>
+                    <div className="flex items-center gap-3 mt-1.5 text-[10px] text-[var(--color-ink-soft)]">
+                      {c.nbEnvoyes > 0 && <span>📤 {c.nbEnvoyes} envoi{c.nbEnvoyes > 1 ? "s" : ""}</span>}
+                      {c.planifieLe && c.statut === "PLANIFIE" && <span>📅 {new Date(c.planifieLe).toLocaleDateString("fr-CA")}</span>}
+                      {c.envoyeLe && <span>✓ {new Date(c.envoyeLe).toLocaleDateString("fr-CA")}</span>}
+                      <span>{new Date(c.createdAt).toLocaleDateString("fr-CA")}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {c.statut !== "ENVOYE" && (
+                      <button
+                        onClick={() => { if (confirm(`Envoyer "${c.titre}" maintenant ?`)) envoyer.mutate({ campagneId: c.id }); }}
+                        disabled={envoyer.isPending}
+                        className="rounded-lg bg-[var(--color-success)] px-3 py-1.5 text-xs font-bold text-white hover:opacity-90 disabled:opacity-50 transition-opacity">
+                        {envoyer.isPending ? "…" : "Envoyer"}
+                      </button>
+                    )}
+                    <button onClick={() => { if (confirm("Supprimer cette campagne ?")) supprimer.mutate({ campagneId: c.id }); }}
+                      className="rounded-lg border border-[var(--color-rule)] px-3 py-1.5 text-xs text-[var(--color-ink-soft)] hover:text-red-600 hover:border-red-300 transition-colors">
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Onglet Marketing (5 onglets) ─────────────────────────────────────────────
+
 function OngletMarketing() {
-  const [mode, setMode] = useState<"COPY" | "PLAN">("COPY");
+  const [mode, setMode] = useState<"PERSONAS" | "STRATEGIE" | "COPY" | "PLAN" | "CAMPAGNES">("PERSONAS");
   const [typeCopy, setTypeCopy] = useState("LANDING_PAGE");
   const [cible, setCible] = useState("PARENTS");
   const [objectif, setObjectif] = useState("");
@@ -974,18 +1384,30 @@ function OngletMarketing() {
   const isPending = genCopy.isPending || genPlan.isPending;
   const error = validationErr || genCopy.error?.message || genPlan.error?.message;
 
+  const TABS = [
+    { id: "PERSONAS",  label: "Personas" },
+    { id: "STRATEGIE", label: "Stratégie" },
+    { id: "COPY",      label: "Copy" },
+    { id: "PLAN",      label: "Plan croissance" },
+    { id: "CAMPAGNES", label: "Campagnes email" },
+  ] as const;
+
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
-        {["COPY", "PLAN"].map((m) => (
-          <button key={m} onClick={() => { setMode(m as "COPY" | "PLAN"); setResultat(""); }}
-            className={`rounded-lg px-4 py-1.5 text-xs font-bold transition-colors ${mode === m ? "bg-[var(--color-ink)] text-white" : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]"}`}>
-            {m === "COPY" ? "Copy marketing" : "Plan de croissance"}
+      <div className="flex gap-1.5 flex-wrap">
+        {TABS.map((t) => (
+          <button key={t.id} onClick={() => { setMode(t.id); setResultat(""); }}
+            className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${mode === t.id ? "bg-[var(--color-ink)] text-white" : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]"}`}>
+            {t.label}
           </button>
         ))}
       </div>
 
-      {mode === "COPY" ? (
+      {mode === "PERSONAS"  && <MarketingPersonasTab />}
+      {mode === "STRATEGIE" && <MarketingStrategieTab />}
+      {mode === "CAMPAGNES" && <MarketingCampagnesTab />}
+
+      {mode === "COPY" && (
         <div className="space-y-3">
           <SelectField label="Type de contenu" value={typeCopy} onChange={setTypeCopy} options={[
             { value: "LANDING_PAGE", label: "Page d'atterrissage" },
@@ -1000,8 +1422,13 @@ function OngletMarketing() {
           ]} />
           <TextareaField label="Objectif de la campagne" value={objectif} onChange={setObjectif} placeholder="Ex: convaincre les parents d'inscrire leur enfant à la période de rentrée…" rows={2} />
           <TextareaField label="Contraintes (optionnel)" value={contraintes} onChange={setContraintes} placeholder="Ex: pas mentionner les prix, focus sur le TDAH…" rows={2} />
+          <BoutonGenerer onClick={generer} pending={isPending} label="Générer le copy" />
+          {error && <ErreurMsg msg={error} />}
+          {resultat && <ResultatCard titre={`Copy : ${typeCopy}`} contenu={resultat} onCopier={() => {}} />}
         </div>
-      ) : (
+      )}
+
+      {mode === "PLAN" && (
         <div className="space-y-3">
           <TextareaField label="Objectif de croissance" value={objectifCroissance} onChange={setObjectifCroissance} placeholder="Ex: atteindre 500 familles actives d'ici 6 mois dans la région de Montréal…" rows={2} />
           <SelectField label="Budget mensuel" value={budget} onChange={setBudget} options={[
@@ -1013,12 +1440,11 @@ function OngletMarketing() {
             { value: "3_MOIS", label: "3 mois" }, { value: "6_MOIS", label: "6 mois" }, { value: "1_AN", label: "1 an" },
           ]} />
           <TextareaField label="Contexte concurrentiel (optionnel)" value={contexteConcurrentiel} onChange={setContexteConcurrentiel} placeholder="Ex: Alloprof vient de lancer une app mobile gratuite…" rows={2} />
+          <BoutonGenerer onClick={generer} pending={isPending} label="Générer le plan" />
+          {error && <ErreurMsg msg={error} />}
+          {resultat && <ResultatCard titre={`Plan marketing ${horizonPlan}`} contenu={resultat} onCopier={() => {}} />}
         </div>
       )}
-
-      <BoutonGenerer onClick={generer} pending={isPending} label={mode === "COPY" ? "Générer le copy" : "Générer le plan"} />
-      {error && <ErreurMsg msg={error} />}
-      {resultat && <ResultatCard titre={mode === "COPY" ? `Copy : ${typeCopy}` : `Plan marketing ${horizonPlan}`} contenu={resultat} onCopier={() => {}} />}
     </div>
   );
 }

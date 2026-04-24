@@ -56,21 +56,30 @@ export async function analyserStructureEpreuve(input: {
   contenu: string;
   matiere: Matiere;
   niveauScolaire: NiveauScolaire;
+  typeModele?: "EPREUVE_COMPLETE" | "CONSOLIDATION";
 }): Promise<StructureEpreuve> {
+  const isConsolidation = input.typeModele === "CONSOLIDATION";
+
   const systemPrompt = `Tu es un expert en évaluation pédagogique québécoise, spécialisé dans le Programme de formation de l'école québécoise (PFEQ) du MEES.
 
-Ta mission : analyser la STRUCTURE d'une épreuve fournie par un administrateur pédagogique et en extraire un modèle réutilisable.
+Ta mission : analyser la STRUCTURE d'${isConsolidation ? "une consolidation (mini-composition ciblant une notion précise)" : "une épreuve"} fournie par un administrateur pédagogique et en extraire un modèle réutilisable.
 
-RÈGLES ABSOLUES :
+${isConsolidation ? `UNE CONSOLIDATION est une mini-composition faite après l'enseignement d'une notion. Elle est :
+- Courte (15–30 min)
+- Ciblée sur 1 à 3 notions précises du PFEQ
+- Composée de 1 à 3 sections complémentaires
+- Utilisée comme évaluation formative pour valider la compréhension avant de passer à la suite
+
+` : ""}RÈGLES ABSOLUES :
 1. Tu analyses uniquement la STRUCTURE (format, types de questions, répartition des points, compétences ciblées)
 2. Tu NE reproduis JAMAIS le contenu exact des questions — uniquement leur forme
 3. Pour "exempleQuestion", crée un exemple ORIGINAL illustrant le TYPE de question, jamais copié
 4. Aligne chaque section sur les compétences PFEQ officielles
 5. Réponds UNIQUEMENT avec un JSON valide, sans markdown ni explication`;
 
-  const userPrompt = `Analyse la structure de cette épreuve de ${MATIERES_LABELS[input.matiere]} pour ${NIVEAUX_LABELS[input.niveauScolaire]}.
+  const userPrompt = `Analyse la structure de ${isConsolidation ? "cette consolidation" : "cette épreuve"} de ${MATIERES_LABELS[input.matiere]} pour ${NIVEAUX_LABELS[input.niveauScolaire]}.
 
-ÉPREUVE À ANALYSER :
+DOCUMENT À ANALYSER :
 ---
 ${input.contenu}
 ---

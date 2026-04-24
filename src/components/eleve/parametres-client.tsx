@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { Card } from "@/components/ui/card";
+import { getNiveauxParRegion, getMatieresParRegion, getCycleLabel } from "@/lib/education/region-education";
 
 /* ── Types ── */
 type Profil = {
@@ -24,23 +25,10 @@ type Profil = {
   personnalite: unknown;
   objectifScolaire: string | null;
   dateNaissance: Date | null;
+  province: string;
 };
 
-/* ── Constantes ── */
-const NIVEAUX = [
-  { value: "PRIMAIRE_1", label: "1re année primaire" },
-  { value: "PRIMAIRE_2", label: "2e année primaire" },
-  { value: "PRIMAIRE_3", label: "3e année primaire" },
-  { value: "PRIMAIRE_4", label: "4e année primaire" },
-  { value: "PRIMAIRE_5", label: "5e année primaire" },
-  { value: "PRIMAIRE_6", label: "6e année primaire" },
-  { value: "SECONDAIRE_1", label: "Secondaire 1" },
-  { value: "SECONDAIRE_2", label: "Secondaire 2" },
-  { value: "SECONDAIRE_3", label: "Secondaire 3" },
-  { value: "SECONDAIRE_4", label: "Secondaire 4" },
-  { value: "SECONDAIRE_5", label: "Secondaire 5" },
-];
-
+/* ── Constantes (styles / centres / etc. restent fixes) ── */
 const STYLES = [
   { value: "VISUEL", emoji: "👀", label: "Visuel — j'apprends en voyant" },
   { value: "AUDITIF", emoji: "👂", label: "Auditif — j'apprends en écoutant" },
@@ -48,16 +36,6 @@ const STYLES = [
   { value: "LECTURE_ECRITURE", emoji: "✍️", label: "Lecture/Écriture — j'apprends en lisant et écrivant" },
 ];
 
-const MATIERES = [
-  { value: "FRANCAIS", emoji: "✏️", label: "Français" },
-  { value: "MATHEMATIQUES", emoji: "🔢", label: "Mathématiques" },
-  { value: "SCIENCES", emoji: "🔬", label: "Sciences" },
-  { value: "UNIVERS_SOCIAL", emoji: "🌍", label: "Univers social" },
-  { value: "ARTS", emoji: "🎨", label: "Arts" },
-  { value: "ETHIQUE", emoji: "🤝", label: "Éthique" },
-  { value: "ANGLAIS", emoji: "🗣️", label: "Anglais" },
-  { value: "EDUCATION_PHYSIQUE", emoji: "🏃", label: "Éducation physique" },
-];
 
 const CENTRES_INTERET = [
   { value: "SOCCER", emoji: "⚽", label: "Soccer" },
@@ -170,6 +148,10 @@ export function ParametresClient({ profil }: { profil: Profil }) {
     setTimeout(() => setSaved(false), 3000);
   };
 
+  const province = profil.province ?? "QC";
+  const NIVEAUX = getNiveauxParRegion(province);
+  const MATIERES = getMatieresParRegion(province);
+  const cycleLabels = getCycleLabel(province);
   const matieresPref = profil.matieresPreferees as string[];
   const matieresRedou = profil.matieresRedoutees as string[];
   const centresInteret = profil.centresInteret as string[];
@@ -200,7 +182,16 @@ export function ParametresClient({ profil }: { profil: Profil }) {
           <Field label="Niveau scolaire *">
             <select value={niveau} onChange={(e) => setNiveau(e.target.value)} className={INPUT}>
               <option value="">— Choisir —</option>
-              {NIVEAUX.map((n) => <option key={n.value} value={n.value}>{n.label}</option>)}
+              {(() => {
+                const primaire = NIVEAUX.filter((n) => n.cycle === cycleLabels.primaire || n.cycle === "Primaire" || n.cycle === "Elementary");
+                const secondaire = NIVEAUX.filter((n) => n.cycle !== cycleLabels.primaire && n.cycle !== "Primaire" && n.cycle !== "Elementary");
+                return (
+                  <>
+                    {primaire.length > 0 && <optgroup label={cycleLabels.primaire}>{primaire.map((n) => <option key={n.value} value={n.value}>{n.label}</option>)}</optgroup>}
+                    {secondaire.length > 0 && <optgroup label={cycleLabels.secondaire}>{secondaire.map((n) => <option key={n.value} value={n.value}>{n.label}</option>)}</optgroup>}
+                  </>
+                );
+              })()}
             </select>
           </Field>
           <Field label="École (facultatif)">

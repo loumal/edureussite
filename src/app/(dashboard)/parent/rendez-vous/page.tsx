@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { requireRole } from "@/lib/auth/utils";
 import { api } from "@/lib/trpc/server";
 import { Card, CardLabel } from "@/components/ui/card";
@@ -70,9 +71,11 @@ export default async function RendezVousParentPage() {
                 <Card key={rdv.id} className="p-5">
                   <div className="flex items-start gap-4">
                     {rdv.specialiste.photo ? (
-                      <img
+                      <Image
                         src={rdv.specialiste.photo}
                         alt=""
+                        width={48}
+                        height={48}
                         className="h-12 w-12 rounded-xl object-cover flex-shrink-0"
                       />
                     ) : (

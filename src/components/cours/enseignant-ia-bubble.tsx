@@ -1,5 +1,7 @@
 "use client";
 
+import { parseMiraMessage, MiraFigure } from "@/components/mira/mira-figures";
+
 export interface Message {
   id: string;
   role: "user" | "assistant";
@@ -15,18 +17,18 @@ interface Props {
 export function EnseignantIaBubble({ message, primaryColor, prenom }: Props) {
   const isAssistant = message.role === "assistant";
 
+  // Pour les messages de Mira, parser les balises [FIGURE:xxx]
+  const segments = isAssistant ? parseMiraMessage(message.content) : null;
+  const hasFigures = segments?.some((s) => s.type === "figure") ?? false;
+
   return (
     <div className={`flex ${isAssistant ? "justify-start" : "justify-end"}`}>
       <div
-        style={
-          isAssistant
-            ? { borderLeftColor: primaryColor }
-            : undefined
-        }
-        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words ${
+        style={isAssistant ? { borderLeftColor: primaryColor } : undefined}
+        className={`${hasFigures ? "max-w-[95%]" : "max-w-[85%]"} rounded-2xl px-4 py-3 text-sm leading-relaxed break-words ${
           isAssistant
             ? "bg-white text-[var(--color-ink)] rounded-tl-sm shadow-sm border-l-[3px]"
-            : "bg-[var(--color-ink)] text-white rounded-tr-sm"
+            : "bg-[var(--color-ink)] text-white rounded-tr-sm whitespace-pre-wrap"
         }`}
       >
         {!isAssistant && (
@@ -34,7 +36,15 @@ export function EnseignantIaBubble({ message, primaryColor, prenom }: Props) {
             {prenom}
           </p>
         )}
-        {message.content}
+
+        {isAssistant && segments
+          ? segments.map((seg, i) =>
+              seg.type === "figure"
+                ? <MiraFigure key={i} type={seg.figType} />
+                : <span key={i} className="whitespace-pre-wrap">{seg.content}</span>
+            )
+          : message.content
+        }
       </div>
     </div>
   );

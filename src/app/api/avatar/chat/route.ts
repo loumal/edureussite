@@ -99,6 +99,7 @@ const STYLE_VOCAL = `═══ STYLE POUR LA SYNTHÈSE VOCALE ═══
 Tu parles en français québécois naturel et chaleureux.
 Tes réponses sont formulées pour sonner à l'oral, pas à l'écrit.
 Absolument aucun markdown : pas de *, pas de **, pas de ##, pas de tirets, pas de listes numérotées.
+JAMAIS d'URLs, de liens ou d'adresses web — ils seraient lus à voix haute comme du bruit.
 Seule exception autorisée : la balise [FIGURE:type] pour insérer des figures pédagogiques.
 Utilise des phrases complètes et naturelles.
 Varie tes formules d'encouragement pour qu'elles sonnent toujours sincères.
@@ -122,17 +123,34 @@ Rules:
 VOCAL STYLE FOR ENGLISH TTS:
 Your responses are spoken naturally in English — warm, friendly, encouraging.
 No markdown whatsoever. Natural complete sentences only.
+NEVER include URLs, hyperlinks, or website addresses — they will be read aloud as noise.
 Keep responses short: 3 to 5 sentences maximum, adapted for listening.`;
 
 // ── Détection de la matière Anglais ─────────────────────────────────────────
 
 function isAnglaisMatiere(
   subjectContext?: string,
-  planContext?: { matiere?: string }
+  planContext?: { matiere?: string },
+  message?: string,
+  history?: Array<{ role: string; content: string }>
 ): boolean {
   if (planContext?.matiere === "ANGLAIS") return true;
   const ctx = (subjectContext ?? "").toLowerCase();
-  return ctx.includes("anglais") || ctx.includes("english") || ctx.includes("esl") || ctx.includes("langue seconde");
+  if (ctx.includes("anglais") || ctx.includes("english") || ctx.includes("esl") || ctx.includes("langue seconde")) return true;
+  // Détection dynamique dans le message courant
+  const msg = (message ?? "").toLowerCase();
+  if (
+    msg.includes("anglais") || msg.includes("english") ||
+    msg.includes("en anglais") || msg.includes("speak english") ||
+    msg.includes("learn english") || msg.includes("practice english") ||
+    msg.includes("aide moi en anglais") || msg.includes("help me with english")
+  ) return true;
+  // Détection dans les 4 derniers échanges (session déjà en cours en anglais)
+  if (Array.isArray(history) && history.length > 0) {
+    const recent = history.slice(-4).map((m) => m.content.toLowerCase()).join(" ");
+    if (recent.includes("anglais") || recent.includes("english") || recent.includes("esl")) return true;
+  }
+  return false;
 }
 
 // ── Bloc diagnostic pédagogique ───────────────────────────────────────────────
@@ -248,6 +266,7 @@ Déroulement obligatoire au début de la conversation :
 Si l'élève ne sait pas par où commencer, propose des exemples concrets selon son niveau :
 - Mathématiques : fractions, pourcentages, algèbre, probabilités, géométrie
 - Français : grammaire, conjugaison, rédaction, lecture
+- Anglais (langue seconde) : vocabulaire, grammaire, conversation, prononciation
 - Sciences : matière et énergie, corps humain, écosystèmes
 - Univers social : géographie, histoire du Québec, citoyenneté
 
@@ -437,7 +456,7 @@ export async function POST(req: NextRequest) {
     const prenomNorm = prenom ?? "l'élève";
     const niveauNorm = niveauLabel ?? "niveau scolaire non précisé";
     const premierSessionBloc = isFirstSession ? "\n\n" + buildPremierSessionBloc(prenomNorm) : "";
-    const isAnglais = isAnglaisMatiere(subjectContext, planContext);
+    const isAnglais = isAnglaisMatiere(subjectContext, planContext, message, history);
     const anglaisBloc = isAnglais ? "\n\n" + STYLE_VOCAL_ANGLAIS : "";
 
     const systemPrompt = (mode === "plan" && planContext

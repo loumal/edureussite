@@ -79,14 +79,26 @@ export default async function EpreuveDetailPage({ params }: PageParams) {
               href="/admin/epreuves"
               className="text-xs text-[var(--color-ink-soft)] hover:underline mb-2 inline-block"
             >
-              ← Bibliothèque d'épreuves
+              ← Bibliothèque de modèles
             </Link>
-            <h1 className="text-2xl font-black text-[var(--color-ink)]">{epreuve.titre}</h1>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-2xl font-black text-[var(--color-ink)]">{epreuve.titre}</h1>
+              {(epreuve as { typeModele?: string }).typeModele === "CONSOLIDATION" ? (
+                <span className="rounded-full bg-[rgba(91,79,207,0.12)] px-2.5 py-0.5 text-xs font-semibold text-[var(--color-purple)]">
+                  📝 Consolidation
+                </span>
+              ) : (
+                <span className="rounded-full bg-[var(--color-paper-warm)] border border-[var(--color-rule)] px-2.5 py-0.5 text-xs font-semibold text-[var(--color-ink-soft)]">
+                  📋 Épreuve complète
+                </span>
+              )}
+            </div>
             <p className="text-sm text-[var(--color-ink-soft)] mt-1">
               {MATIERE_LABEL[epreuve.matiere] ?? epreuve.matiere} ·{" "}
               {epreuve.niveauScolaire.replace(/_/g, " ")} ·{" "}
               {SOURCE_LABEL[epreuve.source] ?? epreuve.source}
               {epreuve.annee ? ` · ${epreuve.annee}` : ""}
+              {(epreuve as { notion?: string }).notion ? ` · Notion : ${(epreuve as { notion?: string }).notion}` : ""}
             </p>
           </div>
 
@@ -111,6 +123,20 @@ export default async function EpreuveDetailPage({ params }: PageParams) {
             <Card className="p-4">
               <CardLabel className="mb-3">Informations</CardLabel>
               <dl className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <dt className="text-[var(--color-ink-soft)]">Type</dt>
+                  <dd className="font-semibold text-[var(--color-ink)]">
+                    {(epreuve as { typeModele?: string }).typeModele === "CONSOLIDATION" ? "Consolidation" : "Épreuve complète"}
+                  </dd>
+                </div>
+                {(epreuve as { notion?: string }).notion && (
+                  <div className="flex justify-between">
+                    <dt className="text-[var(--color-ink-soft)]">Notion</dt>
+                    <dd className="font-semibold text-[var(--color-purple)] text-right max-w-[150px]">
+                      {(epreuve as { notion?: string }).notion}
+                    </dd>
+                  </div>
+                )}
                 {epreuve.totalPoints && (
                   <div className="flex justify-between">
                     <dt className="text-[var(--color-ink-soft)]">Total points</dt>

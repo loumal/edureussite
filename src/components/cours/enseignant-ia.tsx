@@ -156,7 +156,9 @@ export function EnseignantIA({
         setIsThinking(false);
       }
     },
-    [isThinking, sessionEnded, timer.isExpired, messages, prenom, niveauLabel, subjectContext, profilExtra, stop, speak, isMuted]
+    // speak/stop sont stables (useCallback sans deps changeantes) — pas besoin de les inclure
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isThinking, sessionEnded, timer.isExpired, messages, prenom, niveauLabel, subjectContext, profilExtra, isMuted]
   );
 
   // Ref stable pour éviter le stale closure dans recognition.onresult
@@ -197,7 +199,8 @@ export function EnseignantIA({
     } catch {
       // Non bloquant
     }
-  }, [timer, stop, speak, isMuted, messages, prenom, subjectContext]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timer, isMuted, messages, prenom, subjectContext]);
 
   const handleKey = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {

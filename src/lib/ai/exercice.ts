@@ -438,12 +438,13 @@ TYPE PROBLEME_MATHEMATIQUE :
 "contenu": {
   "miseEnSituation": "Le contexte narratif motivant (2-3 phrases)",
   "donnees": ["Donnée 1 complète", "Donnée 2 complète", "Donnée 3 complète"],
-  "question": "La question à résoudre, formulée clairement",
+  "question": "La question de synthèse finale — DOIT être une question directe demandant un résultat numérique unique. Ex: 'Quelle est l'aire totale de la figure en cm²?' ou 'Combien de litres de peinture faut-il acheter?'. L'élève doit pouvoir remplir un seul champ numérique ('Ma réponse finale') en réponse à cette question.",
   "unite": "l'unité de la réponse (ex: m², km, $, min)",
   "avecDemarche": true,
-  "etapesGuidees": ["Étape 1 : identifier...", "Étape 2 : calculer..."],
+  "etapesGuidees": ["Étape 1 : identifier...", "Étape 2 : calculer... (ces étapes GUIDENT vers la réponse finale — elles ne remplacent pas la question)"],
   "visuels": [ /* OBLIGATOIRE si points/figures/données — voir schémas visuels ci-dessus */ ]
 }
+⚠️ CRITIQUE PROBLEME_MATHEMATIQUE : Le champ \"question\" est CE QUE L'ÉLÈVE DOIT RÉPONDRE dans le champ \"Ma réponse finale\". Si l'exercice comporte des étapes guidées, elles mènent toutes vers cette question finale. Ne jamais laisser la question ambiguë ou ouverte — elle doit toujours appeler une réponse numérique précise.
 
 TYPE LECTURE_COMPREHENSION :
 "contenu": {

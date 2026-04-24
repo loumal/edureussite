@@ -15,11 +15,43 @@ const ROLES: { value: RegisterRole; emoji: string; label: string; desc: string }
   { value: "ENSEIGNANT", emoji: "👩‍🏫", label: "Enseignant(e)", desc: "Je suis l'enseignant(e)" },
 ];
 
-const PROVINCES_LABEL: Record<string, string> = {
-  QC: "Québec", ON: "Ontario", BC: "Colombie-Britannique", AB: "Alberta",
-  SK: "Saskatchewan", MB: "Manitoba", NB: "Nouveau-Brunswick", NS: "Nouvelle-Écosse",
-  PE: "Île-du-Prince-Édouard", NL: "Terre-Neuve-et-Labrador",
-  YT: "Yukon", NT: "Territoires du Nord-Ouest", NU: "Nunavut",
+const REGIONS_INFO: Record<string, { label: string; groupe: "canada" | "francophonie" }> = {
+  // Canada
+  QC: { label: "Québec",                    groupe: "canada" },
+  ON: { label: "Ontario",                   groupe: "canada" },
+  BC: { label: "Colombie-Britannique",      groupe: "canada" },
+  AB: { label: "Alberta",                   groupe: "canada" },
+  SK: { label: "Saskatchewan",              groupe: "canada" },
+  MB: { label: "Manitoba",                  groupe: "canada" },
+  NB: { label: "Nouveau-Brunswick",         groupe: "canada" },
+  NS: { label: "Nouvelle-Écosse",           groupe: "canada" },
+  PE: { label: "Île-du-Prince-Édouard",     groupe: "canada" },
+  NL: { label: "Terre-Neuve-et-Labrador",   groupe: "canada" },
+  YT: { label: "Yukon",                     groupe: "canada" },
+  NT: { label: "Territoires du Nord-Ouest", groupe: "canada" },
+  NU: { label: "Nunavut",                   groupe: "canada" },
+  // France
+  FR: { label: "France",                    groupe: "francophonie" },
+  // Afrique francophone
+  CI: { label: "Côte d'Ivoire",             groupe: "francophonie" },
+  SN: { label: "Sénégal",                   groupe: "francophonie" },
+  CM: { label: "Cameroun",                  groupe: "francophonie" },
+  BF: { label: "Burkina Faso",              groupe: "francophonie" },
+  ML: { label: "Mali",                      groupe: "francophonie" },
+  BJ: { label: "Bénin",                     groupe: "francophonie" },
+  TG: { label: "Togo",                      groupe: "francophonie" },
+  GA: { label: "Gabon",                     groupe: "francophonie" },
+  CD: { label: "R.D. Congo",                groupe: "francophonie" },
+  CG: { label: "Congo-Brazzaville",         groupe: "francophonie" },
+  GN: { label: "Guinée",                    groupe: "francophonie" },
+  MG: { label: "Madagascar",                groupe: "francophonie" },
+  NE: { label: "Niger",                     groupe: "francophonie" },
+  TD: { label: "Tchad",                     groupe: "francophonie" },
+  CF: { label: "Rép. Centrafricaine",       groupe: "francophonie" },
+  RW: { label: "Rwanda",                    groupe: "francophonie" },
+  BI: { label: "Burundi",                   groupe: "francophonie" },
+  DJ: { label: "Djibouti",                  groupe: "francophonie" },
+  KM: { label: "Comores",                   groupe: "francophonie" },
 };
 
 export default function RegisterPage() {
@@ -232,18 +264,31 @@ export default function RegisterPage() {
                 {multiProvince && (
                   <div>
                     <label className="block text-xs font-medium text-[var(--color-ink-soft)] mb-1">
-                      🇨🇦 Province
+                      🌍 Région / Province
                     </label>
                     <select
                       value={province}
                       onChange={(e) => setProvince(e.target.value)}
                       className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm focus:border-[var(--color-ink)] focus:outline-none"
                     >
-                      {Object.entries(PROVINCES_LABEL)
-                        .filter(([code]) => provincesActives[code])
-                        .map(([code, label]) => (
-                          <option key={code} value={code}>{label}</option>
-                        ))}
+                      {(() => {
+                        const canada = Object.entries(REGIONS_INFO).filter(([code, r]) => r.groupe === "canada" && provincesActives[code]);
+                        const franco = Object.entries(REGIONS_INFO).filter(([code, r]) => r.groupe === "francophonie" && provincesActives[code]);
+                        return (
+                          <>
+                            {canada.length > 0 && (
+                              <optgroup label="🇨🇦 Canada">
+                                {canada.map(([code, r]) => <option key={code} value={code}>{r.label}</option>)}
+                              </optgroup>
+                            )}
+                            {franco.length > 0 && (
+                              <optgroup label="🌍 France & Afrique francophone">
+                                {franco.map(([code, r]) => <option key={code} value={code}>{r.label}</option>)}
+                              </optgroup>
+                            )}
+                          </>
+                        );
+                      })()}
                     </select>
                   </div>
                 )}

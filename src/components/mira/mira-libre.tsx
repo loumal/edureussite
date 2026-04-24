@@ -169,7 +169,8 @@ function MiraLibrePanel({ onClose }: MiraLibrePanelProps) {
     } finally {
       setIsThinking(false);
     }
-  }, [ctx, isThinking, isMuted, messages, timer, speak, stop, saveMessage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ctx, isThinking, isMuted, messages, timer, saveMessage]);
 
   // Toujours garder le ref à jour avec la dernière version de sendMessage
   useEffect(() => { sendMessageRef.current = sendMessage; }, [sendMessage]);

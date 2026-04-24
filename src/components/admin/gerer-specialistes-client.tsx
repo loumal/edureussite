@@ -50,12 +50,12 @@ export function GererSpecialistesClient() {
   return (
     <>
       {/* Backdrop */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)} />
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Nouveau spécialiste">
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)} aria-hidden="true" />
         <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-xl overflow-y-auto max-h-[90vh]">
           <div className="flex items-center justify-between border-b border-[var(--color-rule)] px-6 py-4">
             <h2 className="text-lg font-black text-[var(--color-ink)]">Nouveau spécialiste</h2>
-            <button onClick={() => setOpen(false)} className="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]">✕</button>
+            <button onClick={() => setOpen(false)} aria-label="Fermer" className="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]">✕</button>
           </div>
 
           <div className="p-6 space-y-4">

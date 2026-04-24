@@ -739,6 +739,13 @@ export type EnumSourceEpreuveFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumSourceEpreuveFilter<$PrismaModel> | $Enums.SourceEpreuve
 }
 
+export type EnumTypeModeleEpreuveFilter<$PrismaModel = never> = {
+  equals?: $Enums.TypeModeleEpreuve | Prisma.EnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  in?: $Enums.TypeModeleEpreuve[] | Prisma.ListEnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TypeModeleEpreuve[] | Prisma.ListEnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTypeModeleEpreuveFilter<$PrismaModel> | $Enums.TypeModeleEpreuve
+}
+
 export type EnumSourceEpreuveWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.SourceEpreuve | Prisma.EnumSourceEpreuveFieldRefInput<$PrismaModel>
   in?: $Enums.SourceEpreuve[] | Prisma.ListEnumSourceEpreuveFieldRefInput<$PrismaModel>
@@ -747,6 +754,16 @@ export type EnumSourceEpreuveWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumSourceEpreuveFilter<$PrismaModel>
   _max?: Prisma.NestedEnumSourceEpreuveFilter<$PrismaModel>
+}
+
+export type EnumTypeModeleEpreuveWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TypeModeleEpreuve | Prisma.EnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  in?: $Enums.TypeModeleEpreuve[] | Prisma.ListEnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TypeModeleEpreuve[] | Prisma.ListEnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTypeModeleEpreuveWithAggregatesFilter<$PrismaModel> | $Enums.TypeModeleEpreuve
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTypeModeleEpreuveFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTypeModeleEpreuveFilter<$PrismaModel>
 }
 
 export type EnumTypeMissionFilter<$PrismaModel = never> = {
@@ -1462,6 +1479,13 @@ export type NestedEnumSourceEpreuveFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumSourceEpreuveFilter<$PrismaModel> | $Enums.SourceEpreuve
 }
 
+export type NestedEnumTypeModeleEpreuveFilter<$PrismaModel = never> = {
+  equals?: $Enums.TypeModeleEpreuve | Prisma.EnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  in?: $Enums.TypeModeleEpreuve[] | Prisma.ListEnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TypeModeleEpreuve[] | Prisma.ListEnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTypeModeleEpreuveFilter<$PrismaModel> | $Enums.TypeModeleEpreuve
+}
+
 export type NestedEnumSourceEpreuveWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.SourceEpreuve | Prisma.EnumSourceEpreuveFieldRefInput<$PrismaModel>
   in?: $Enums.SourceEpreuve[] | Prisma.ListEnumSourceEpreuveFieldRefInput<$PrismaModel>
@@ -1470,6 +1494,16 @@ export type NestedEnumSourceEpreuveWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumSourceEpreuveFilter<$PrismaModel>
   _max?: Prisma.NestedEnumSourceEpreuveFilter<$PrismaModel>
+}
+
+export type NestedEnumTypeModeleEpreuveWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TypeModeleEpreuve | Prisma.EnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  in?: $Enums.TypeModeleEpreuve[] | Prisma.ListEnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TypeModeleEpreuve[] | Prisma.ListEnumTypeModeleEpreuveFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTypeModeleEpreuveWithAggregatesFilter<$PrismaModel> | $Enums.TypeModeleEpreuve
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTypeModeleEpreuveFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTypeModeleEpreuveFilter<$PrismaModel>
 }
 
 export type NestedEnumTypeMissionFilter<$PrismaModel = never> = {

@@ -57,7 +57,7 @@ export function StepComplete({ prenom }: { prenom: string }) {
         Ton profil est prêt, {prenom} !
       </h2>
       <p className="text-[var(--color-ink-soft)] mb-8 max-w-sm">
-        L'IA construit ton plan d'apprentissage personnalisé…
+        Nous construisons ton plan d'apprentissage personnalisé…
       </p>
 
       {/* Progression de la génération */}

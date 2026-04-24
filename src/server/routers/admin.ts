@@ -9,7 +9,7 @@ function getMondayKey(date = new Date()): string {
 }
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { Matiere, NiveauScolaire, TypeExercice, NiveauDifficulte, SourceEpreuve, TypeDocument, Province } from "@/generated/prisma";
+import { Matiere, NiveauScolaire, TypeExercice, NiveauDifficulte, SourceEpreuve, TypeDocument, Province, TypeModeleEpreuve } from "@/generated/prisma";
 import { analyserStructureEpreuve } from "@/lib/ai/epreuve";
 import { logSecurityEvent } from "@/lib/security/log";
 import { ApiService } from "@/generated/prisma";
@@ -41,12 +41,13 @@ export const adminRouter = createTRPCRouter({
 
     const semaineDerniere = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-    const [totalEleves, totalEnseignants, totalParents, totalEpreuves, epreuvesRecentes, totalSpecialistes, totalDocuments, totalAdmins, nouveauxCetteSemaine] =
+    const [totalEleves, totalEnseignants, totalParents, totalEpreuves, totalConsolidations, epreuvesRecentes, totalSpecialistes, totalDocuments, totalAdmins, nouveauxCetteSemaine] =
       await Promise.all([
         ctx.prisma.user.count({ where: { role: "ELEVE" } }),
         ctx.prisma.user.count({ where: { role: "ENSEIGNANT" } }),
         ctx.prisma.user.count({ where: { role: "PARENT" } }),
-        ctx.prisma.modeleEpreuve.count(),
+        ctx.prisma.modeleEpreuve.count({ where: { typeModele: "EPREUVE_COMPLETE" } }),
+        ctx.prisma.modeleEpreuve.count({ where: { typeModele: "CONSOLIDATION" } }),
         ctx.prisma.modeleEpreuve.findMany({
           orderBy: { createdAt: "desc" },
           take: 5,
@@ -58,7 +59,7 @@ export const adminRouter = createTRPCRouter({
         isSuperAdmin ? ctx.prisma.user.count({ where: { createdAt: { gte: semaineDerniere } } }) : Promise.resolve(0),
       ]);
 
-    return { totalEleves, totalEnseignants, totalParents, totalEpreuves, epreuvesRecentes, totalSpecialistes, totalDocuments, totalAdmins, nouveauxCetteSemaine };
+    return { totalEleves, totalEnseignants, totalParents, totalEpreuves, totalConsolidations, epreuvesRecentes, totalSpecialistes, totalDocuments, totalAdmins, nouveauxCetteSemaine };
   }),
 
   // ── Lister les modèles d'épreuves ────────────────────────────────────────
@@ -68,6 +69,7 @@ export const adminRouter = createTRPCRouter({
         matiere: z.nativeEnum(Matiere).optional(),
         niveauScolaire: z.nativeEnum(NiveauScolaire).optional(),
         valide: z.boolean().optional(),
+        typeModele: z.nativeEnum(TypeModeleEpreuve).optional(),
         page: z.number().min(1).default(1),
       }).optional()
     )
@@ -79,6 +81,7 @@ export const adminRouter = createTRPCRouter({
         ...(input?.matiere ? { matiere: input.matiere } : {}),
         ...(input?.niveauScolaire ? { niveauScolaire: input.niveauScolaire } : {}),
         ...(input?.valide !== undefined ? { valide: input.valide } : {}),
+        ...(input?.typeModele ? { typeModele: input.typeModele } : {}),
       };
 
       const [items, total] = await Promise.all([
@@ -112,6 +115,7 @@ export const adminRouter = createTRPCRouter({
         contenu: z.string().min(50, "Le contenu doit faire au moins 50 caractères"),
         matiere: z.nativeEnum(Matiere),
         niveauScolaire: z.nativeEnum(NiveauScolaire),
+        typeModele: z.nativeEnum(TypeModeleEpreuve).optional(),
       })
     )
     .mutation(async ({ input }) => {
@@ -119,6 +123,7 @@ export const adminRouter = createTRPCRouter({
         contenu: input.contenu,
         matiere: input.matiere,
         niveauScolaire: input.niveauScolaire,
+        typeModele: input.typeModele,
       });
     }),
 
@@ -136,6 +141,8 @@ export const adminRouter = createTRPCRouter({
         structureAnalysee: z.any().optional(),
         totalPoints: z.number().optional(),
         dureeMinutes: z.number().optional(),
+        typeModele: z.nativeEnum(TypeModeleEpreuve).default("EPREUVE_COMPLETE"),
+        notion: z.string().optional(),
         sections: z.array(
           z.object({
             ordre: z.number(),
@@ -858,12 +865,12 @@ export const adminRouter = createTRPCRouter({
     const param = await ctx.prisma.parametreApp.findUnique({ where: { cle: "config_tts_provider" } });
     const v = param?.valeur;
     return {
-      provider: (v === "OPENAI" ? "OPENAI" : v === "EDUREUSSITE_RUNPOD" ? "EDUREUSSITE_RUNPOD" : "ELEVENLABS") as "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD",
+      provider: (v === "OPENAI" ? "OPENAI" : v === "EDUREUSSITE_RUNPOD" ? "EDUREUSSITE_RUNPOD" : v === "EDGE_GRATUIT" ? "EDGE_GRATUIT" : "ELEVENLABS") as "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD" | "EDGE_GRATUIT",
     };
   }),
 
   setTtsProvider: superAdminProcedure
-    .input(z.object({ provider: z.enum(["ELEVENLABS", "OPENAI", "EDUREUSSITE_RUNPOD"]) }))
+    .input(z.object({ provider: z.enum(["ELEVENLABS", "OPENAI", "EDUREUSSITE_RUNPOD", "EDGE_GRATUIT"]) }))
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.parametreApp.upsert({
         where: { cle: "config_tts_provider" },

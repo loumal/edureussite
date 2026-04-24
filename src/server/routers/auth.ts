@@ -3,6 +3,8 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { Role, Province } from "@/generated/prisma";
 import { createOtp, verifyOtp } from "@/lib/auth/otp";
+
+const FR_LANGUE = new Set<string>(["QC","NB","FR","CI","SN","CM","BF","ML","BJ","TG","GA","CD","CG","GN","MG","NE","TD","CF","RW","BI","DJ","KM"]);
 import { sendOtpEmail } from "@/lib/email/send-otp";
 import { sendResetNotifParent } from "@/lib/email/send-reset-notif-parent";
 import { TRPCError } from "@trpc/server";
@@ -56,7 +58,7 @@ export const authRouter = createTRPCRouter({
           name: `${input.prenom} ${input.nom}`,
           role: input.role,
           province: input.province,
-          langueInterface: input.province === "QC" || input.province === "NB" ? "FR" : "EN",
+          langueInterface: FR_LANGUE.has(input.province) ? "FR" : "EN",
         },
       });
 
@@ -272,8 +274,7 @@ export const authRouter = createTRPCRouter({
     const multiProvince = flags["feature:multi_province"] === "true";
 
     const provincesActives: Record<string, boolean> = {};
-    const PROVINCE_CODES = ["QC","ON","BC","AB","SK","MB","NB","NS","PE","NL","YT","NT","NU"];
-    for (const code of PROVINCE_CODES) {
+    for (const code of Object.values(Province)) {
       provincesActives[code] = code === "QC" ? true : (flags[`feature:province_active:${code}`] === "true");
     }
 

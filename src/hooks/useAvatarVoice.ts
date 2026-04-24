@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 
 interface Options {
   voiceId: string;
@@ -16,25 +16,11 @@ interface Return {
   isLoading: boolean;
 }
 
-// ── AudioContext partagé — une fois resumed, reste actif toute la session ────
-let sharedCtx: AudioContext | null = null;
-let currentSource: AudioBufferSourceNode | null = null;
-
-function getCtx(): AudioContext {
-  if (!sharedCtx) sharedCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-  return sharedCtx;
-}
-
-// Appeler depuis n'importe quel clic utilisateur pour déverrouiller l'audio
 export function unlockAudio() {
-  try {
-    const ctx = getCtx();
-    if (ctx.state === "suspended") ctx.resume().catch(() => {});
-  } catch { /* ignore si AudioContext non dispo */ }
+  // <audio> ne nécessite pas de déverrouillage AudioContext
 }
 
-// Fallback TTS natif si l'API échoue
-function browserSpeak(text: string, language: "fr" | "en", onStart?: () => void, onEnd?: () => void): void {
+function browserSpeak(text: string, language: "fr" | "en", onEnd?: () => void): void {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) { onEnd?.(); return; }
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
@@ -43,20 +29,14 @@ function browserSpeak(text: string, language: "fr" | "en", onStart?: () => void,
   utter.pitch = 1.05;
   const trySetVoice = () => {
     const voices = window.speechSynthesis.getVoices();
-    const lang = language === "en" ? "en-CA" : "fr-CA";
-    const fallbackLang = language === "en" ? "en" : "fr";
-    const v = voices.find((v) => v.lang === lang)
-      ?? voices.find((v) => v.lang.startsWith(fallbackLang));
+    const v = voices.find((v) => v.lang === (language === "en" ? "en-CA" : "fr-CA"))
+      ?? voices.find((v) => v.lang.startsWith(language === "en" ? "en" : "fr"));
     if (v) utter.voice = v;
   };
   trySetVoice();
   if (window.speechSynthesis.getVoices().length === 0) {
-    window.speechSynthesis.onvoiceschanged = () => {
-      trySetVoice();
-      window.speechSynthesis.onvoiceschanged = null;
-    };
+    window.speechSynthesis.onvoiceschanged = () => { trySetVoice(); window.speechSynthesis.onvoiceschanged = null; };
   }
-  utter.onstart = () => onStart?.();
   utter.onend = () => onEnd?.();
   utter.onerror = () => onEnd?.();
   window.speechSynthesis.speak(utter);
@@ -65,24 +45,69 @@ function browserSpeak(text: string, language: "fr" | "en", onStart?: () => void,
 export function useAvatarVoice({ voiceId, language = "fr", onStart, onEnd }: Options): Return {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Refs par instance — isolation complète entre composants
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const blobUrlRef = useRef<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
   const usingFallbackRef = useRef(false);
 
-  const stop = useCallback(() => {
-    if (currentSource) {
-      try { currentSource.stop(); } catch { /* déjà arrêté */ }
-      currentSource = null;
+  const onStartRef = useRef(onStart);
+  const onEndRef = useRef(onEnd);
+  useEffect(() => { onStartRef.current = onStart; }, [onStart]);
+  useEffect(() => { onEndRef.current = onEnd; }, [onEnd]);
+
+  const revokeBlobUrl = useCallback(() => {
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+      blobUrlRef.current = null;
     }
+  }, []);
+
+  useEffect(() => {
+    audioRef.current = new Audio();
+    return () => {
+      abortRef.current?.abort();
+      audioRef.current?.pause();
+      audioRef.current = null;
+      revokeBlobUrl();
+      if (usingFallbackRef.current && typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [revokeBlobUrl]);
+
+  const stop = useCallback(() => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = "";
+    }
+    revokeBlobUrl();
     if (usingFallbackRef.current && typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     }
     usingFallbackRef.current = false;
     setIsSpeaking(false);
     setIsLoading(false);
-  }, []);
+  }, [revokeBlobUrl]);
 
   const speak = useCallback(async (text: string, overrideLang?: "fr" | "en") => {
     if (!text.trim()) return;
-    stop();
+
+    // Annule tout ce qui est en cours sur cette instance
+    abortRef.current?.abort();
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
+    revokeBlobUrl();
+    if (usingFallbackRef.current && typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+    usingFallbackRef.current = false;
+    setIsSpeaking(false);
+
+    const abort = new AbortController();
+    abortRef.current = abort;
     setIsLoading(true);
 
     try {
@@ -90,49 +115,62 @@ export function useAvatarVoice({ voiceId, language = "fr", onStart, onEnd }: Opt
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text, voiceId, language: overrideLang ?? language }),
+        signal: abort.signal,
       });
 
+      if (abort.signal.aborted) return;
       if (!res.ok) throw new Error(`TTS ${res.status}`);
 
-      const arrayBuffer = await res.arrayBuffer();
+      // Blob URL — rapide, fiable, aucun décodage manuel
+      const blob = await res.blob();
+      if (abort.signal.aborted) return;
 
-      // AudioContext évite les restrictions autoplay — il reste actif après le 1er unlock
-      const ctx = getCtx();
-      if (ctx.state === "suspended") {
-        try { await ctx.resume(); } catch { /* ignore */ }
-      }
+      revokeBlobUrl();
+      const url = URL.createObjectURL(blob);
+      blobUrlRef.current = url;
 
-      const audioBuffer = await ctx.decodeAudioData(arrayBuffer.slice(0));
-      const source = ctx.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(ctx.destination);
-      currentSource = source;
+      const audio = audioRef.current;
+      if (!audio || abort.signal.aborted) { revokeBlobUrl(); return; }
 
-      source.onended = () => {
-        if (currentSource === source) currentSource = null;
-        setIsSpeaking(false);
-        onEnd?.();
+      audio.src = url;
+
+      audio.onplaying = () => {
+        if (!abort.signal.aborted) {
+          setIsLoading(false);
+          setIsSpeaking(true);
+          onStartRef.current?.();
+        }
       };
 
-      setIsLoading(false);
-      setIsSpeaking(true);
-      onStart?.();
-      source.start(0);
+      audio.onended = () => {
+        revokeBlobUrl();
+        setIsSpeaking(false);
+        onEndRef.current?.();
+      };
 
-    } catch {
-      // Fallback TTS natif (voix navigateur)
+      audio.onerror = () => {
+        revokeBlobUrl();
+        setIsLoading(false);
+        setIsSpeaking(false);
+        onEndRef.current?.();
+      };
+
+      await audio.play();
+
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === "AbortError") return;
+      revokeBlobUrl();
       setIsLoading(false);
       usingFallbackRef.current = true;
       setIsSpeaking(true);
-      onStart?.();
-      browserSpeak(
-        text,
-        overrideLang ?? language,
-        undefined,
-        () => { setIsSpeaking(false); usingFallbackRef.current = false; onEnd?.(); }
-      );
+      onStartRef.current?.();
+      browserSpeak(text, overrideLang ?? language, () => {
+        setIsSpeaking(false);
+        usingFallbackRef.current = false;
+        onEndRef.current?.();
+      });
     }
-  }, [voiceId, language, stop, onStart, onEnd]);
+  }, [voiceId, language, revokeBlobUrl]);
 
   return { speak, stop, isSpeaking, isLoading };
 }

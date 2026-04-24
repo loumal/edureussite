@@ -69,6 +69,7 @@ export async function POST(req: NextRequest) {
   const fichier = formData.get("fichier") as File | null;
   const matiereRaw = formData.get("matiere") as string | null;
   const niveauRaw = formData.get("niveauScolaire") as string | null;
+  const typeModeleRaw = formData.get("typeModele") as string | null;
 
   if (!fichier) return NextResponse.json({ error: "Aucun fichier reçu." }, { status: 400 });
   if (!matiereRaw || !VALID_MATIERES.has(matiereRaw)) return NextResponse.json({ error: "Matière invalide." }, { status: 400 });
@@ -76,6 +77,7 @@ export async function POST(req: NextRequest) {
 
   const matiere = matiereRaw as Matiere;
   const niveauScolaire = niveauRaw as NiveauScolaire;
+  const typeModele = typeModeleRaw === "CONSOLIDATION" ? "CONSOLIDATION" : "EPREUVE_COMPLETE" as const;
 
   if (fichier.size > MAX_SIZE_BYTES) {
     return NextResponse.json({ error: "Fichier trop volumineux (max 20 Mo)." }, { status: 400 });
@@ -103,7 +105,7 @@ export async function POST(req: NextRequest) {
     if (isPDF) {
       // Use Claude's native PDF document API — best quality, single API call
       const base64 = buffer.toString("base64");
-      const result = await analyserPDFAvecClaude(base64, matiere, niveauScolaire);
+      const result = await analyserPDFAvecClaude(base64, matiere, niveauScolaire, typeModele);
       structure = result.structure;
       contenuExtrait = result.contenuExtrait;
     } else if (isDOCX) {
@@ -116,13 +118,13 @@ export async function POST(req: NextRequest) {
           { status: 422 }
         );
       }
-      structure = await analyserStructureEpreuve({ contenu: contenuExtrait, matiere, niveauScolaire });
+      structure = await analyserStructureEpreuve({ contenu: contenuExtrait, matiere, niveauScolaire, typeModele });
     } else {
       contenuExtrait = buffer.toString("utf-8").trim();
       if (contenuExtrait.length < 50) {
         return NextResponse.json({ error: "Le fichier texte semble vide." }, { status: 422 });
       }
-      structure = await analyserStructureEpreuve({ contenu: contenuExtrait, matiere, niveauScolaire });
+      structure = await analyserStructureEpreuve({ contenu: contenuExtrait, matiere, niveauScolaire, typeModele });
     }
 
     return NextResponse.json({ structure, contenuExtrait, nomFichier: fichier.name });
@@ -136,20 +138,25 @@ export async function POST(req: NextRequest) {
 async function analyserPDFAvecClaude(
   base64: string,
   matiere: Matiere,
-  niveauScolaire: NiveauScolaire
+  niveauScolaire: NiveauScolaire,
+  typeModele: "EPREUVE_COMPLETE" | "CONSOLIDATION" = "EPREUVE_COMPLETE"
 ): Promise<{ structure: Awaited<ReturnType<typeof analyserStructureEpreuve>>; contenuExtrait: string }> {
+  const isConsolidation = typeModele === "CONSOLIDATION";
+
   const systemPrompt = `Tu es un expert en évaluation pédagogique québécoise, spécialisé dans le Programme de formation de l'école québécoise (PFEQ) du MEES.
 
-Ta mission : analyser la STRUCTURE d'une épreuve fournie en PDF et en extraire un modèle réutilisable.
+Ta mission : analyser la STRUCTURE d'${isConsolidation ? "une consolidation (mini-composition ciblant une notion précise)" : "une épreuve"} fournie en PDF et en extraire un modèle réutilisable.
 
-RÈGLES ABSOLUES :
+${isConsolidation ? `UNE CONSOLIDATION est une mini-composition faite après l'enseignement d'une notion. Elle est courte (15–30 min), ciblée sur 1 à 3 notions précises du PFEQ, et composée de 1 à 3 sections.
+
+` : ""}RÈGLES ABSOLUES :
 1. Tu analyses uniquement la STRUCTURE (format, types de questions, répartition des points, compétences ciblées)
 2. Tu NE reproduis JAMAIS le contenu exact des questions — uniquement leur forme
 3. Pour "exempleQuestion", crée un exemple ORIGINAL illustrant le TYPE de question, jamais copié
 4. Aligne chaque section sur les compétences PFEQ officielles
 5. Réponds UNIQUEMENT avec un JSON valide, sans markdown ni explication`;
 
-  const userPrompt = `Analyse la structure de cette épreuve de ${MATIERES_LABELS[matiere]} pour ${NIVEAUX_LABELS[niveauScolaire]}.
+  const userPrompt = `Analyse la structure de ${isConsolidation ? "cette consolidation" : "cette épreuve"} de ${MATIERES_LABELS[matiere]} pour ${NIVEAUX_LABELS[niveauScolaire]}.
 
 RÉPONDS avec ce JSON exact :
 {

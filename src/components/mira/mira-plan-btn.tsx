@@ -139,7 +139,8 @@ function MiraPlanPanel({ planContext, onClose }: MiraPlanPanelProps) {
     } finally {
       setIsThinking(false);
     }
-  }, [ctx, isThinking, isMuted, messages, planContext, timer, speak, stop, saveMessage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ctx, isThinking, isMuted, messages, planContext, timer, saveMessage]);
 
   useEffect(() => { sendMessageRef.current = sendMessage; }, [sendMessage]);
 

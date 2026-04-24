@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { requireRole } from "@/lib/auth/utils";
 import { api } from "@/lib/trpc/server";
 import { Card, CardLabel } from "@/components/ui/card";
@@ -115,9 +116,11 @@ export default async function SpecialistesPage() {
                     {/* Avatar */}
                     <div className="flex-shrink-0">
                       {s.photo ? (
-                        <img
+                        <Image
                           src={s.photo}
                           alt={`${s.prenom} ${s.nom}`}
+                          width={64}
+                          height={64}
                           className="h-16 w-16 rounded-2xl object-cover"
                         />
                       ) : (

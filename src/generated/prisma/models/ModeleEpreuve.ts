@@ -50,6 +50,8 @@ export type ModeleEpreuveMinAggregateOutputType = {
   totalPoints: number | null
   dureeMinutes: number | null
   valide: boolean | null
+  typeModele: $Enums.TypeModeleEpreuve | null
+  notion: string | null
   uploadePar: string | null
   province: $Enums.Province | null
   matiereLibre: string | null
@@ -70,6 +72,8 @@ export type ModeleEpreuveMaxAggregateOutputType = {
   totalPoints: number | null
   dureeMinutes: number | null
   valide: boolean | null
+  typeModele: $Enums.TypeModeleEpreuve | null
+  notion: string | null
   uploadePar: string | null
   province: $Enums.Province | null
   matiereLibre: string | null
@@ -91,6 +95,8 @@ export type ModeleEpreuveCountAggregateOutputType = {
   totalPoints: number
   dureeMinutes: number
   valide: number
+  typeModele: number
+  notion: number
   uploadePar: number
   province: number
   matiereLibre: number
@@ -125,6 +131,8 @@ export type ModeleEpreuveMinAggregateInputType = {
   totalPoints?: true
   dureeMinutes?: true
   valide?: true
+  typeModele?: true
+  notion?: true
   uploadePar?: true
   province?: true
   matiereLibre?: true
@@ -145,6 +153,8 @@ export type ModeleEpreuveMaxAggregateInputType = {
   totalPoints?: true
   dureeMinutes?: true
   valide?: true
+  typeModele?: true
+  notion?: true
   uploadePar?: true
   province?: true
   matiereLibre?: true
@@ -166,6 +176,8 @@ export type ModeleEpreuveCountAggregateInputType = {
   totalPoints?: true
   dureeMinutes?: true
   valide?: true
+  typeModele?: true
+  notion?: true
   uploadePar?: true
   province?: true
   matiereLibre?: true
@@ -274,6 +286,8 @@ export type ModeleEpreuveGroupByOutputType = {
   totalPoints: number | null
   dureeMinutes: number | null
   valide: boolean
+  typeModele: $Enums.TypeModeleEpreuve
+  notion: string | null
   uploadePar: string | null
   province: $Enums.Province
   matiereLibre: string | null
@@ -318,6 +332,8 @@ export type ModeleEpreuveWhereInput = {
   totalPoints?: Prisma.IntNullableFilter<"ModeleEpreuve"> | number | null
   dureeMinutes?: Prisma.IntNullableFilter<"ModeleEpreuve"> | number | null
   valide?: Prisma.BoolFilter<"ModeleEpreuve"> | boolean
+  typeModele?: Prisma.EnumTypeModeleEpreuveFilter<"ModeleEpreuve"> | $Enums.TypeModeleEpreuve
+  notion?: Prisma.StringNullableFilter<"ModeleEpreuve"> | string | null
   uploadePar?: Prisma.StringNullableFilter<"ModeleEpreuve"> | string | null
   province?: Prisma.EnumProvinceFilter<"ModeleEpreuve"> | $Enums.Province
   matiereLibre?: Prisma.StringNullableFilter<"ModeleEpreuve"> | string | null
@@ -340,6 +356,8 @@ export type ModeleEpreuveOrderByWithRelationInput = {
   totalPoints?: Prisma.SortOrderInput | Prisma.SortOrder
   dureeMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
   valide?: Prisma.SortOrder
+  typeModele?: Prisma.SortOrder
+  notion?: Prisma.SortOrderInput | Prisma.SortOrder
   uploadePar?: Prisma.SortOrderInput | Prisma.SortOrder
   province?: Prisma.SortOrder
   matiereLibre?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -365,6 +383,8 @@ export type ModeleEpreuveWhereUniqueInput = Prisma.AtLeast<{
   totalPoints?: Prisma.IntNullableFilter<"ModeleEpreuve"> | number | null
   dureeMinutes?: Prisma.IntNullableFilter<"ModeleEpreuve"> | number | null
   valide?: Prisma.BoolFilter<"ModeleEpreuve"> | boolean
+  typeModele?: Prisma.EnumTypeModeleEpreuveFilter<"ModeleEpreuve"> | $Enums.TypeModeleEpreuve
+  notion?: Prisma.StringNullableFilter<"ModeleEpreuve"> | string | null
   uploadePar?: Prisma.StringNullableFilter<"ModeleEpreuve"> | string | null
   province?: Prisma.EnumProvinceFilter<"ModeleEpreuve"> | $Enums.Province
   matiereLibre?: Prisma.StringNullableFilter<"ModeleEpreuve"> | string | null
@@ -387,6 +407,8 @@ export type ModeleEpreuveOrderByWithAggregationInput = {
   totalPoints?: Prisma.SortOrderInput | Prisma.SortOrder
   dureeMinutes?: Prisma.SortOrderInput | Prisma.SortOrder
   valide?: Prisma.SortOrder
+  typeModele?: Prisma.SortOrder
+  notion?: Prisma.SortOrderInput | Prisma.SortOrder
   uploadePar?: Prisma.SortOrderInput | Prisma.SortOrder
   province?: Prisma.SortOrder
   matiereLibre?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -416,6 +438,8 @@ export type ModeleEpreuveScalarWhereWithAggregatesInput = {
   totalPoints?: Prisma.IntNullableWithAggregatesFilter<"ModeleEpreuve"> | number | null
   dureeMinutes?: Prisma.IntNullableWithAggregatesFilter<"ModeleEpreuve"> | number | null
   valide?: Prisma.BoolWithAggregatesFilter<"ModeleEpreuve"> | boolean
+  typeModele?: Prisma.EnumTypeModeleEpreuveWithAggregatesFilter<"ModeleEpreuve"> | $Enums.TypeModeleEpreuve
+  notion?: Prisma.StringNullableWithAggregatesFilter<"ModeleEpreuve"> | string | null
   uploadePar?: Prisma.StringNullableWithAggregatesFilter<"ModeleEpreuve"> | string | null
   province?: Prisma.EnumProvinceWithAggregatesFilter<"ModeleEpreuve"> | $Enums.Province
   matiereLibre?: Prisma.StringNullableWithAggregatesFilter<"ModeleEpreuve"> | string | null
@@ -437,6 +461,8 @@ export type ModeleEpreuveCreateInput = {
   totalPoints?: number | null
   dureeMinutes?: number | null
   valide?: boolean
+  typeModele?: $Enums.TypeModeleEpreuve
+  notion?: string | null
   uploadePar?: string | null
   province?: $Enums.Province
   matiereLibre?: string | null
@@ -459,6 +485,8 @@ export type ModeleEpreuveUncheckedCreateInput = {
   totalPoints?: number | null
   dureeMinutes?: number | null
   valide?: boolean
+  typeModele?: $Enums.TypeModeleEpreuve
+  notion?: string | null
   uploadePar?: string | null
   province?: $Enums.Province
   matiereLibre?: string | null
@@ -481,6 +509,8 @@ export type ModeleEpreuveUpdateInput = {
   totalPoints?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dureeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  typeModele?: Prisma.EnumTypeModeleEpreuveFieldUpdateOperationsInput | $Enums.TypeModeleEpreuve
+  notion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadePar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
   matiereLibre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -503,6 +533,8 @@ export type ModeleEpreuveUncheckedUpdateInput = {
   totalPoints?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dureeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  typeModele?: Prisma.EnumTypeModeleEpreuveFieldUpdateOperationsInput | $Enums.TypeModeleEpreuve
+  notion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadePar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
   matiereLibre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -525,6 +557,8 @@ export type ModeleEpreuveCreateManyInput = {
   totalPoints?: number | null
   dureeMinutes?: number | null
   valide?: boolean
+  typeModele?: $Enums.TypeModeleEpreuve
+  notion?: string | null
   uploadePar?: string | null
   province?: $Enums.Province
   matiereLibre?: string | null
@@ -546,6 +580,8 @@ export type ModeleEpreuveUpdateManyMutationInput = {
   totalPoints?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dureeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  typeModele?: Prisma.EnumTypeModeleEpreuveFieldUpdateOperationsInput | $Enums.TypeModeleEpreuve
+  notion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadePar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
   matiereLibre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -567,6 +603,8 @@ export type ModeleEpreuveUncheckedUpdateManyInput = {
   totalPoints?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dureeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  typeModele?: Prisma.EnumTypeModeleEpreuveFieldUpdateOperationsInput | $Enums.TypeModeleEpreuve
+  notion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadePar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
   matiereLibre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -588,6 +626,8 @@ export type ModeleEpreuveCountOrderByAggregateInput = {
   totalPoints?: Prisma.SortOrder
   dureeMinutes?: Prisma.SortOrder
   valide?: Prisma.SortOrder
+  typeModele?: Prisma.SortOrder
+  notion?: Prisma.SortOrder
   uploadePar?: Prisma.SortOrder
   province?: Prisma.SortOrder
   matiereLibre?: Prisma.SortOrder
@@ -614,6 +654,8 @@ export type ModeleEpreuveMaxOrderByAggregateInput = {
   totalPoints?: Prisma.SortOrder
   dureeMinutes?: Prisma.SortOrder
   valide?: Prisma.SortOrder
+  typeModele?: Prisma.SortOrder
+  notion?: Prisma.SortOrder
   uploadePar?: Prisma.SortOrder
   province?: Prisma.SortOrder
   matiereLibre?: Prisma.SortOrder
@@ -634,6 +676,8 @@ export type ModeleEpreuveMinOrderByAggregateInput = {
   totalPoints?: Prisma.SortOrder
   dureeMinutes?: Prisma.SortOrder
   valide?: Prisma.SortOrder
+  typeModele?: Prisma.SortOrder
+  notion?: Prisma.SortOrder
   uploadePar?: Prisma.SortOrder
   province?: Prisma.SortOrder
   matiereLibre?: Prisma.SortOrder
@@ -655,6 +699,10 @@ export type ModeleEpreuveScalarRelationFilter = {
 
 export type EnumSourceEpreuveFieldUpdateOperationsInput = {
   set?: $Enums.SourceEpreuve
+}
+
+export type EnumTypeModeleEpreuveFieldUpdateOperationsInput = {
+  set?: $Enums.TypeModeleEpreuve
 }
 
 export type ModeleEpreuveCreateNestedOneWithoutSectionsInput = {
@@ -684,6 +732,8 @@ export type ModeleEpreuveCreateWithoutSectionsInput = {
   totalPoints?: number | null
   dureeMinutes?: number | null
   valide?: boolean
+  typeModele?: $Enums.TypeModeleEpreuve
+  notion?: string | null
   uploadePar?: string | null
   province?: $Enums.Province
   matiereLibre?: string | null
@@ -705,6 +755,8 @@ export type ModeleEpreuveUncheckedCreateWithoutSectionsInput = {
   totalPoints?: number | null
   dureeMinutes?: number | null
   valide?: boolean
+  typeModele?: $Enums.TypeModeleEpreuve
+  notion?: string | null
   uploadePar?: string | null
   province?: $Enums.Province
   matiereLibre?: string | null
@@ -742,6 +794,8 @@ export type ModeleEpreuveUpdateWithoutSectionsInput = {
   totalPoints?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dureeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  typeModele?: Prisma.EnumTypeModeleEpreuveFieldUpdateOperationsInput | $Enums.TypeModeleEpreuve
+  notion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadePar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
   matiereLibre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -763,6 +817,8 @@ export type ModeleEpreuveUncheckedUpdateWithoutSectionsInput = {
   totalPoints?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dureeMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  typeModele?: Prisma.EnumTypeModeleEpreuveFieldUpdateOperationsInput | $Enums.TypeModeleEpreuve
+  notion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadePar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   province?: Prisma.EnumProvinceFieldUpdateOperationsInput | $Enums.Province
   matiereLibre?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -815,6 +871,8 @@ export type ModeleEpreuveSelect<ExtArgs extends runtime.Types.Extensions.Interna
   totalPoints?: boolean
   dureeMinutes?: boolean
   valide?: boolean
+  typeModele?: boolean
+  notion?: boolean
   uploadePar?: boolean
   province?: boolean
   matiereLibre?: boolean
@@ -838,6 +896,8 @@ export type ModeleEpreuveSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   totalPoints?: boolean
   dureeMinutes?: boolean
   valide?: boolean
+  typeModele?: boolean
+  notion?: boolean
   uploadePar?: boolean
   province?: boolean
   matiereLibre?: boolean
@@ -859,6 +919,8 @@ export type ModeleEpreuveSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   totalPoints?: boolean
   dureeMinutes?: boolean
   valide?: boolean
+  typeModele?: boolean
+  notion?: boolean
   uploadePar?: boolean
   province?: boolean
   matiereLibre?: boolean
@@ -880,6 +942,8 @@ export type ModeleEpreuveSelectScalar = {
   totalPoints?: boolean
   dureeMinutes?: boolean
   valide?: boolean
+  typeModele?: boolean
+  notion?: boolean
   uploadePar?: boolean
   province?: boolean
   matiereLibre?: boolean
@@ -888,7 +952,7 @@ export type ModeleEpreuveSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ModeleEpreuveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "titre" | "matiere" | "niveauScolaire" | "source" | "annee" | "description" | "contenuOriginal" | "structureAnalysee" | "totalPoints" | "dureeMinutes" | "valide" | "uploadePar" | "province" | "matiereLibre" | "niveauLibre" | "createdAt" | "updatedAt", ExtArgs["result"]["modeleEpreuve"]>
+export type ModeleEpreuveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "titre" | "matiere" | "niveauScolaire" | "source" | "annee" | "description" | "contenuOriginal" | "structureAnalysee" | "totalPoints" | "dureeMinutes" | "valide" | "typeModele" | "notion" | "uploadePar" | "province" | "matiereLibre" | "niveauLibre" | "createdAt" | "updatedAt", ExtArgs["result"]["modeleEpreuve"]>
 export type ModeleEpreuveInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sections?: boolean | Prisma.ModeleEpreuve$sectionsArgs<ExtArgs>
   _count?: boolean | Prisma.ModeleEpreuveCountOutputTypeDefaultArgs<ExtArgs>
@@ -914,6 +978,8 @@ export type $ModeleEpreuvePayload<ExtArgs extends runtime.Types.Extensions.Inter
     totalPoints: number | null
     dureeMinutes: number | null
     valide: boolean
+    typeModele: $Enums.TypeModeleEpreuve
+    notion: string | null
     uploadePar: string | null
     province: $Enums.Province
     matiereLibre: string | null
@@ -1356,6 +1422,8 @@ export interface ModeleEpreuveFieldRefs {
   readonly totalPoints: Prisma.FieldRef<"ModeleEpreuve", 'Int'>
   readonly dureeMinutes: Prisma.FieldRef<"ModeleEpreuve", 'Int'>
   readonly valide: Prisma.FieldRef<"ModeleEpreuve", 'Boolean'>
+  readonly typeModele: Prisma.FieldRef<"ModeleEpreuve", 'TypeModeleEpreuve'>
+  readonly notion: Prisma.FieldRef<"ModeleEpreuve", 'String'>
   readonly uploadePar: Prisma.FieldRef<"ModeleEpreuve", 'String'>
   readonly province: Prisma.FieldRef<"ModeleEpreuve", 'Province'>
   readonly matiereLibre: Prisma.FieldRef<"ModeleEpreuve", 'String'>

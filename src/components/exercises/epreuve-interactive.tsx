@@ -36,6 +36,8 @@ interface CorrectionQuestion {
   methodeOfficielle?: string;
   competencePFEQ?: string;
   astuceMemoire?: string;
+  strategieAntiRepetition?: string;
+  diagnosticErreur?: { typeErreur: string; explication: string };
 }
 
 interface FeedbackEpreuve {
@@ -248,13 +250,13 @@ function jouerSonNotification() {
 ══════════════════════════════════════════════════════════════ */
 
 const MESSAGES_CORRECTION = [
-  { emoji: "🔍", texte: "L'IA lit tes réponses attentivement…" },
-  { emoji: "🧮", texte: "Elle calcule tes points un par un…" },
-  { emoji: "📚", texte: "Elle consulte ses livres de mathématiques…" },
-  { emoji: "🤔", texte: "Elle réfléchit très fort pour toi…" },
-  { emoji: "✏️", texte: "Elle prépare tes commentaires personnalisés…" },
-  { emoji: "🎯", texte: "Elle vérifie chaque réponse avec soin…" },
-  { emoji: "💡", texte: "Elle cherche des conseils juste pour toi…" },
+  { emoji: "🔍", texte: "Nous lisons tes réponses attentivement…" },
+  { emoji: "🧮", texte: "Nous calculons tes points un par un…" },
+  { emoji: "📚", texte: "Nous consultons nos livres de mathématiques…" },
+  { emoji: "🤔", texte: "Nous réfléchissons très fort pour toi…" },
+  { emoji: "✏️", texte: "Nous préparons tes commentaires personnalisés…" },
+  { emoji: "🎯", texte: "Nous vérifions chaque réponse avec soin…" },
+  { emoji: "💡", texte: "Nous cherchons des conseils juste pour toi…" },
   { emoji: "🌟", texte: "La correction sera bientôt prête…" },
 ];
 
@@ -504,6 +506,111 @@ function FeedbackEpreuvePanel({
   );
 }
 
+/* ── Construit les étapes fallback à partir des données réelles de la question ── */
+function buildFallbackEtapes(
+  question: QuestionEpreuve,
+  bonne: boolean,
+  reponseEleve: string | undefined,
+  texteReponseAttendue: string,
+): EtapeCorrection[] {
+  const criteres: string[] = Array.isArray(question.criteresCorrection)
+    ? question.criteresCorrection.filter(Boolean)
+    : [];
+
+  // ── Étape 1 : Comprendre la tâche ─────────────────────────────────────────
+  // Extrait le verbe d'action de l'énoncé
+  const verbesAction = ["calcule", "identifie", "détermine", "explique", "compare", "trouve", "résous", "complète", "écris", "indique", "nomme", "classe", "ordonne", "associe", "choisis", "justifie", "démontre"];
+  const enonceLower = question.enonce.toLowerCase();
+  const verbeDetecte = verbesAction.find((v) => enonceLower.startsWith(v) || enonceLower.includes(` ${v} `) || enonceLower.includes(`${v} `));
+
+  let explicationTache: string;
+  if (question.type === "QCM" && question.choix) {
+    const choixTextes = question.choix.map((c) => `${c.lettre}) ${c.texte}`).join(" | ");
+    explicationTache = bonne
+      ? `On te demandait de choisir la bonne réponse parmi 4 options.\n\nÉnoncé : "${question.enonce}"\n\nOptions proposées : ${choixTextes}\n\nTu as bien identifié que la réponse est : ${texteReponseAttendue}. `
+      : `On te demandait de choisir la bonne réponse parmi 4 options.\n\nÉnoncé : "${question.enonce}"\n\nOptions proposées : ${choixTextes}\n\nLa réponse attendue était : ${texteReponseAttendue}.`;
+  } else {
+    explicationTache = bonne
+      ? `On te demandait de ${verbeDetecte ? `"${verbeDetecte}"` : "répondre à"} ce qui suit : "${question.enonce}"\n\nTu as bien répondu ! La réponse attendue était : ${texteReponseAttendue}.`
+      : `On te demandait de ${verbeDetecte ? `"${verbeDetecte}"` : "répondre à"} ce qui suit : "${question.enonce}"\n\nLa réponse attendue était : ${texteReponseAttendue}.\nTa réponse : "${reponseEleve ?? "aucune réponse"}".`;
+  }
+  const conseil1 = verbeDetecte
+    ? `Le verbe "${verbeDetecte}" dans l'énoncé est ton indicateur principal — il te dit exactement quelle opération ou quel type de réponse est attendu. Souligne-le avant de commencer.`
+    : "Souligne les mots-clés de l'énoncé (les données, les nombres, le verbe d'action) avant de commencer à répondre.";
+
+  // ── Étape 2 : La notion à maîtriser ──────────────────────────────────────
+  // Utilise les critères de correction pour expliquer la notion, pas juste "consulte tes notes"
+  let notionExplication: string;
+  let rappelTheorique: string;
+
+  if (criteres.length > 0) {
+    notionExplication = bonne
+      ? "Voici la notion qui s'applique ici et pourquoi ta réponse est juste :"
+      : "Voici la notion exacte que cette question évalue — lis chaque point attentivement :";
+    rappelTheorique = criteres.map((c, i) => `${i + 1}. ${c}`).join("\n");
+  } else if (question.type === "QCM" && question.choix) {
+    const bonneOption = question.choix.find(
+      (c) => c.lettre.toUpperCase() === question.reponseAttendue.trim().toUpperCase()
+    );
+    notionExplication = "Voici pourquoi chaque option est correcte ou incorrecte :";
+    rappelTheorique = question.choix.map((c) => {
+      const estCorrecte = c.lettre.toUpperCase() === question.reponseAttendue.trim().toUpperCase();
+      return `${c.lettre}) ${c.texte} — ${estCorrecte ? "✓ CORRECTE" : "✗ incorrecte"}`;
+    }).join("\n") + (bonneOption ? `\n\nLa bonne réponse est "${bonneOption.texte}" car c'est ce que demande l'énoncé.` : "");
+  } else {
+    notionExplication = "La notion évaluée dans cette question :";
+    rappelTheorique = `Réponse attendue : ${texteReponseAttendue}\n\nPour maîtriser ce type de question, il faut comprendre le concept derrière l'énoncé et savoir appliquer la méthode appropriée.`;
+  }
+
+  // ── Étape 3 : Démarche pas à pas ─────────────────────────────────────────
+  let demarcheExplication: string;
+  let solution: string;
+  let erreurEleve: string | undefined;
+
+  if (question.type === "QCM" && question.choix) {
+    demarcheExplication = bonne
+      ? "Voici le raisonnement pas à pas pour confirmer la bonne réponse :\n1. Lis l'énoncé et identifie ce qu'on te demande\n2. Lis chaque option une à une\n3. Élimine les options qui ne correspondent pas à l'énoncé\n4. Vérifie que l'option choisie répond exactement à la question"
+      : "Voici comment raisonner pas à pas pour trouver la bonne réponse :\n1. Lis l'énoncé : \"" + question.enonce + "\"\n2. Lis chaque option une à une et demande-toi si elle répond à l'énoncé\n3. Élimine les options qui contredisent l'énoncé ou qui ne correspondent pas\n4. La bonne option est celle qui correspond le mieux à ce qui est demandé";
+    solution = `La bonne réponse est : ${texteReponseAttendue}`;
+    erreurEleve = !bonne && reponseEleve
+      ? `Tu as répondu "${reponseEleve}". La réponse correcte est "${texteReponseAttendue}". Relis les deux options et compare-les à l'énoncé — la différence est là.`
+      : undefined;
+  } else {
+    demarcheExplication = bonne
+      ? `Tu as bien répondu ! Voici la démarche complète pour être certain(e) de comprendre :\n1. Lire et comprendre ce qui est demandé dans : "${question.enonce.slice(0, 120)}..."\n2. Identifier les données disponibles dans l'énoncé\n3. Choisir la bonne méthode ou formule\n4. Appliquer la méthode étape par étape\n5. Formuler clairement la réponse`
+      : `Voici la démarche pas à pas pour arriver à la bonne réponse :\n1. Lire : "${question.enonce.slice(0, 120)}..."\n2. Identifier ce qu'on nous donne et ce qu'on cherche\n3. Choisir la méthode appropriée selon la notion en jeu\n4. Appliquer chaque étape de la résolution\n5. Réponse finale : ${texteReponseAttendue}`;
+    solution = `Réponse correcte : ${texteReponseAttendue}`;
+    erreurEleve = !bonne && reponseEleve
+      ? `Ta réponse : "${reponseEleve}"\nRéponse attendue : "${texteReponseAttendue}"\n\nIdentifie à quelle étape ton raisonnement a divergé — c'est souvent à l'étape 2 (identification des données) ou 3 (choix de la méthode).`
+      : undefined;
+  }
+
+  // ── Étape 4 : Vérification ────────────────────────────────────────────────
+  const verificationExplication = (() => {
+    switch (question.type) {
+      case "QCM":
+        return "Pour vérifier un QCM : relis l'énoncé, puis lis la réponse choisie comme si c'était une affirmation complète. Pose-toi la question : \"Est-ce que cette option répond exactement à ce qui est demandé ?\" Si oui, tu peux valider.";
+      case "PROBLEME":
+        return "Pour vérifier un problème : remplace ta réponse dans l'énoncé et vérifie que ça a du sens. Si c'est un calcul, refais-le en sens inverse. Exemple : si tu as divisé, remultiplie pour retrouver le nombre de départ.";
+      case "REPONSE_COURTE":
+        return "Pour vérifier une réponse courte : relis la question et ta réponse ensemble. Vérifie que tu réponds exactement à ce qui était demandé (pas trop, pas trop peu) et que tes mots correspondent à la bonne terminologie.";
+      case "DEVELOPPEMENT":
+        return "Pour vérifier un développement : vérifie (1) que tu as répondu à toutes les parties de la question, (2) que ta démarche est visible et logique, (3) que ta conclusion répond directement à la question posée.";
+      default:
+        return bonne
+          ? "Tu peux confirmer ta réponse en relisant la question et en vérifiant que ta réponse y répond directement et complètement."
+          : "Pour vérifier : relis ta réponse en te demandant si elle répond exactement à ce qui était demandé. Si c'est un calcul, refais-le différemment. Si c'est une explication, vérifie que chaque affirmation est justifiée.";
+    }
+  })();
+
+  return [
+    { titre: "Comprendre la tâche", explication: explicationTache, conseil: conseil1 },
+    { titre: "La notion à maîtriser", explication: notionExplication, rappelTheorique },
+    { titre: "Démarche de résolution pas à pas", explication: demarcheExplication, solution, erreurEleve },
+    { titre: "Comment vérifier ma réponse", explication: verificationExplication },
+  ] as EtapeCorrection[];
+}
+
 /* ── Réévaluation locale fiable (pour anciens feedbacks sans étapes) ── */
 function evaluerBonneReponse(question: QuestionEpreuve, reponse: string | undefined): boolean {
   if (!reponse || reponse.trim() === "") return false;
@@ -563,36 +670,7 @@ function QuestionCorrection({
   // Toujours générer des étapes — même pour les bonnes réponses (renforcer la compréhension)
   const etapes: EtapeCorrection[] = correction?.etapes?.length
     ? correction.etapes
-    : ([
-        {
-          titre: "Comprendre la tâche",
-          explication: bonne
-            ? `On te demandait : ${question.enonce} — Tu as bien répondu ! Voici ce qui était attendu : ${texteReponseAttendue}.`
-            : `On te demandait : ${question.enonce} — La réponse attendue était : ${texteReponseAttendue}. Voyons ensemble comment y arriver.`,
-          conseil: "Repère les mots-clés dans la question (les nombres, les verbes d'action, ce qu'on te demande de trouver) avant de répondre.",
-        },
-        {
-          titre: "Mobiliser ses connaissances",
-          explication: "Voici la règle ou la notion à maîtriser pour répondre à ce type de question :",
-          rappelTheorique: criteresTexte,
-        },
-        {
-          titre: "Démarche de résolution pas à pas",
-          explication: bonne
-            ? "Tu as trouvé la bonne réponse ! Voici la démarche complète pour être sûr(e) de comprendre :"
-            : "Voici comment raisonner pour arriver à la bonne réponse :",
-          solution: texteReponseAttendue,
-          erreurEleve: !bonne && reponseEleve
-            ? `Ta réponse : "${reponseEleve}". La réponse attendue : "${texteReponseAttendue}". Vérifie chaque étape de ton raisonnement pour trouver où ça a déraillé.`
-            : undefined,
-        },
-        {
-          titre: "Vérification",
-          explication: bonne
-            ? "Pour t'assurer que ta réponse est correcte : relis la question et vérifie que ta réponse y répond exactement. Si c'est un calcul, refais-le à l'envers pour confirmer."
-            : "Pour vérifier une réponse de ce type : relis la question, remplace ta réponse dans l'énoncé et demande-toi si ça a du sens. Si c'est un calcul, refais-le différemment et compare.",
-        },
-      ] as EtapeCorrection[]);
+    : buildFallbackEtapes(question, bonne, reponseEleve, texteReponseAttendue);
 
   // Incorrecte → 1re étape ouverte automatiquement ; correcte → accordéon fermé (consulter si voulu)
   const [etapeOuverte, setEtapeOuverte] = useState<number | null>(
@@ -772,6 +850,35 @@ function QuestionCorrection({
               </div>
             </div>
           )}
+
+          {/* ── Leçon à retenir ── résumé consolidé par question */}
+          {(() => {
+            const rappel = etapes.find((e) => e.rappelTheorique)?.rappelTheorique;
+            const strategie = correction?.strategieAntiRepetition;
+            if (!rappel && !strategie) return null;
+            return (
+              <div className="mx-5 my-4 rounded-2xl bg-[var(--color-ink)] overflow-hidden">
+                <div className="px-4 pt-4 pb-0">
+                  <p className="text-xs font-bold uppercase tracking-wider text-white/60">
+                    📚 Leçon à retenir — question {numero}
+                  </p>
+                </div>
+                {rappel && (
+                  <div className="px-4 py-3">
+                    <p className="text-sm font-semibold text-white leading-relaxed">{rappel}</p>
+                  </div>
+                )}
+                {strategie && (
+                  <div className="mx-4 mb-4 rounded-xl bg-white/10 px-4 py-2.5">
+                    <p className="text-[10px] font-bold text-[rgba(255,255,255,0.6)] uppercase tracking-wide mb-1">
+                      Réflexe à construire
+                    </p>
+                    <p className="text-xs text-white/90 leading-relaxed">{strategie}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
         </div>
       )}

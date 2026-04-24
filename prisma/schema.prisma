@@ -69,6 +69,11 @@ enum SourceEpreuve {
   AUTRE
 }
 
+enum TypeModeleEpreuve {
+  EPREUVE_COMPLETE
+  CONSOLIDATION
+}
+
 enum NiveauScolaire {
   PRIMAIRE_1
   PRIMAIRE_2
@@ -954,11 +959,13 @@ model ModeleEpreuve {
   structureAnalysee Json?         // structure extraite par Claude
   totalPoints       Int?
   dureeMinutes      Int?
-  valide            Boolean        @default(false)
-  uploadePar        String?        // userId du super admin
-  province          Province       @default(QC)
-  matiereLibre      String?        // ex: "Science 9" pour provinces hors QC
-  niveauLibre       String?        // ex: "Grade 9" pour provinces hors QC
+  valide            Boolean           @default(false)
+  typeModele        TypeModeleEpreuve @default(EPREUVE_COMPLETE)
+  notion            String?           // notion ciblée (ex: "fractions", "aires") — pour les consolidations
+  uploadePar        String?           // userId du super admin
+  province          Province          @default(QC)
+  matiereLibre      String?           // ex: "Science 9" pour provinces hors QC
+  niveauLibre       String?           // ex: "Grade 9" pour provinces hors QC
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1048,6 +1055,7 @@ enum ApiService {
   DEEPGRAM_TTS
   OPENAI_TTS
   EDUREUSSITE_TTS
+  EDGE_GRATUIT_TTS
   RESEND
 }
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/config";
-import { logElevenLabsTTS, logOpenAITTS, logEduReussiteTTS } from "@/lib/api-usage/logger";
+import { logElevenLabsTTS, logOpenAITTS, logEduReussiteTTS, logEdgeGratuitTTS } from "@/lib/api-usage/logger";
+import { generateEdgeGratuitAudio } from "@/lib/tts/edge-gratuit";
 import { getTtsProvider } from "@/lib/features";
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY!;
@@ -9,12 +10,12 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 const EDUREUSSITE_TTS_URL = process.env.EDUREUSSITE_TTS_URL;
 const EDUREUSSITE_TTS_KEY = process.env.EDUREUSSITE_TTS_KEY;
 
-// Voix chaleureuse et humanisée — pitch en Hz obligatoire pour edge-tts
+// RunPod — aligné sur EDGE_GRATUIT : cheerful, rate -8%, pitch +10% FR / +8% EN auto-détecté
 const RUNPOD_VOICE_PARAMS = {
-  rate: "-5%",   // légèrement plus lent = plus posé, plus chaleureux
-  pitch: "+3Hz", // ton légèrement plus haut = plus expressif, sympatique
-  volume: "+5%", // présence légèrement plus affirmée
+  rate: "-8%",
+  pitch: "+10%", // RunPod API v8 convertit automatiquement en +8% pour l'anglais
 };
+
 
 const ELEVENLABS_VOICE_SETTINGS = {
   stability: 0.38,
@@ -36,6 +37,10 @@ function stripMarkdown(text: string): string {
     .replace(/_(.+?)_/g, "$1")           // _italique_
     .replace(/`{1,3}[^`]*`{1,3}/g, "")  // `code` ou ```bloc```
     .replace(/\[(.+?)\]\(.*?\)/g, "$1") // [liens](url)
+    .replace(/\S+\s*[:=]\s*https?:\/\/\S+/g, "")  // label = http://... (ex: MSTP=http://...)
+    .replace(/\S+\s*[:=]\s*www\.\S+/g, "")        // label = www....
+    .replace(/https?:\/\/\S+/g, "")               // URLs brutes http(s)://...
+    .replace(/www\.\S+/g, "")                     // URLs www....
     .replace(/^[-*+]\s+/gm, "")         // listes à puces
     .replace(/^\d+\.\s+/gm, "")         // listes numérotées
     .replace(/^>\s+/gm, "")             // citations >
@@ -61,6 +66,7 @@ export async function POST(req: NextRequest) {
     }
 
     const trimmed = text.trim();
+    const clean = stripMarkdown(trimmed);
     const provider = await getTtsProvider();
 
     // ── OpenAI TTS ────────────────────────────────────────────────────────────
@@ -77,7 +83,7 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           model: "tts-1",
-          input: trimmed,
+          input: clean,
           voice: "nova",
           response_format: "mp3",
         }),
@@ -88,7 +94,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
       }
 
-      logOpenAITTS({ characters: trimmed.length, userId: session.user.id });
+      logOpenAITTS({ characters: clean.length, userId: session.user.id });
 
       return new NextResponse(response.body, {
         status: 200,
@@ -106,28 +112,24 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Edureussite TTS non configuré" }, { status: 503 });
       }
 
-      const clean = stripMarkdown(trimmed);
-
-      // Pour l'anglais : OpenAI TTS nova — voix native, accent naturel
-      // edge-tts en-CA-ClaraNeural n'est pas assez naturel pour l'enseignement ESL
+      // Anglais → OpenAI tts-1-hd nova : accent natif américain, bien meilleur que JennyNeural
       if (lang === "en" && OPENAI_API_KEY) {
-        const enResponse = await fetch("https://api.openai.com/v1/audio/speech", {
+        const enRes = await fetch("https://api.openai.com/v1/audio/speech", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${OPENAI_API_KEY}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "tts-1-hd",  // HD pour l'anglais = meilleure qualité accent natif
+            model: "tts-1-hd",
             input: clean,
             voice: "nova",
             response_format: "mp3",
           }),
         });
-
-        if (enResponse.ok) {
+        if (enRes.ok) {
           logOpenAITTS({ characters: clean.length, userId: session.user.id });
-          return new NextResponse(enResponse.body, {
+          return new NextResponse(enRes.body, {
             status: 200,
             headers: {
               "Content-Type": "audio/mpeg",
@@ -136,39 +138,70 @@ export async function POST(req: NextRequest) {
             },
           });
         }
-        // Si OpenAI échoue, on tombe sur RunPod en fallback
-        console.warn("OpenAI TTS fallback to RunPod for English");
+        console.warn("OpenAI TTS indisponible, fallback RunPod JennyNeural");
       }
 
-      // Français (ou fallback anglais) : RunPod edge-tts
-      const response = await fetch(`${EDUREUSSITE_TTS_URL}/generate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": EDUREUSSITE_TTS_KEY,
-        },
-        body: JSON.stringify({
-          text: clean,
-          language: lang,
-          ...RUNPOD_VOICE_PARAMS,
-        }),
-      });
+      // Français (ou fallback anglais) → RunPod DeniseNeural (timeout 12 s)
+      const runpodAbort = new AbortController();
+      const runpodTimeout = setTimeout(() => runpodAbort.abort(), 5_000);
 
-      if (!response.ok) {
-        console.error("Edureussite TTS error:", response.status, await response.text());
+      try {
+        const response = await fetch(`${EDUREUSSITE_TTS_URL}/generate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": EDUREUSSITE_TTS_KEY,
+          },
+          body: JSON.stringify({
+            text: clean,
+            language: lang,
+            ...RUNPOD_VOICE_PARAMS,
+          }),
+          signal: runpodAbort.signal,
+        });
+        clearTimeout(runpodTimeout);
+
+        if (!response.ok) throw new Error(`RunPod ${response.status}`);
+
+        logEduReussiteTTS({ characters: clean.length, userId: session.user.id });
+        return new NextResponse(response.body, {
+          status: 200,
+          headers: { "Content-Type": "audio/mpeg", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" },
+        });
+      } catch (runpodErr) {
+        clearTimeout(runpodTimeout);
+        console.warn("RunPod TTS indisponible, fallback EDGE_GRATUIT:", runpodErr instanceof Error ? runpodErr.message : runpodErr);
+        // Fallback automatique vers EDGE_GRATUIT (Vercel, scale illimité)
+        try {
+          const audioBuffer = await generateEdgeGratuitAudio(clean, lang);
+          logEdgeGratuitTTS({ characters: clean.length, userId: session.user.id });
+          return new NextResponse(new Uint8Array(audioBuffer), {
+            status: 200,
+            headers: { "Content-Type": "audio/mpeg", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" },
+          });
+        } catch {
+          return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
+        }
+      }
+    }
+
+    // ── Edge Gratuit TTS (msedge-tts sur Vercel, gratuit) ────────────────────
+    if (provider === "EDGE_GRATUIT") {
+      try {
+        const audioBuffer = await generateEdgeGratuitAudio(clean, lang);
+        logEdgeGratuitTTS({ characters: clean.length, userId: session.user.id });
+        return new NextResponse(new Uint8Array(audioBuffer), {
+          status: 200,
+          headers: {
+            "Content-Type": "audio/mpeg",
+            "Cache-Control": "no-store",
+            "X-Content-Type-Options": "nosniff",
+          },
+        });
+      } catch (e) {
+        console.error("Edge Gratuit TTS error:", e);
         return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
       }
-
-      logEduReussiteTTS({ characters: clean.length, userId: session.user.id });
-
-      return new NextResponse(response.body, {
-        status: 200,
-        headers: {
-          "Content-Type": "audio/mpeg",
-          "Cache-Control": "no-store",
-          "X-Content-Type-Options": "nosniff",
-        },
-      });
     }
 
     // ── ElevenLabs TTS (défaut) ───────────────────────────────────────────────
@@ -188,7 +221,7 @@ export async function POST(req: NextRequest) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text: trimmed,
+          text: clean,
           model_id: "eleven_turbo_v2_5",
           voice_settings: ELEVENLABS_VOICE_SETTINGS,
         }),
@@ -200,7 +233,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
     }
 
-    logElevenLabsTTS({ characters: trimmed.length, userId: session.user.id });
+    logElevenLabsTTS({ characters: clean.length, userId: session.user.id });
 
     return new NextResponse(response.body, {
       status: 200,

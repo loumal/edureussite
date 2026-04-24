@@ -422,29 +422,34 @@ export const eleveRouter = createTRPCRouter({
 
   // Récupérer le profil complet pour les paramètres
   getProfilParametres: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.profilEleve.findUnique({
-      where: { userId: ctx.user.id },
-      select: {
-        prenom: true,
-        nom: true,
-        niveauScolaire: true,
-        ecole: true,
-        styleApprentissage: true,
-        matieresPreferees: true,
-        matieresRedoutees: true,
-        tdah: true,
-        dyslexie: true,
-        anxieteScolaire: true,
-        centresInteret: true,
-        sportFavori: true,
-        universMediatique: true,
-        autresPassions: true,
-        environnement: true,
-        personnalite: true,
-        objectifScolaire: true,
-        dateNaissance: true,
-      },
-    });
+    const [profil, user] = await Promise.all([
+      ctx.prisma.profilEleve.findUnique({
+        where: { userId: ctx.user.id },
+        select: {
+          prenom: true,
+          nom: true,
+          niveauScolaire: true,
+          ecole: true,
+          styleApprentissage: true,
+          matieresPreferees: true,
+          matieresRedoutees: true,
+          tdah: true,
+          dyslexie: true,
+          anxieteScolaire: true,
+          centresInteret: true,
+          sportFavori: true,
+          universMediatique: true,
+          autresPassions: true,
+          environnement: true,
+          personnalite: true,
+          objectifScolaire: true,
+          dateNaissance: true,
+        },
+      }),
+      ctx.prisma.user.findUnique({ where: { id: ctx.user.id }, select: { province: true } }),
+    ]);
+    if (!profil) return null;
+    return { ...profil, province: user?.province ?? "QC" };
   }),
 
   // Mettre à jour le profil depuis les paramètres (sections indépendantes)
@@ -560,6 +565,7 @@ export const eleveRouter = createTRPCRouter({
     const profil = await ctx.prisma.profilEleve.findUnique({
       where: { userId: ctx.user.id },
       select: {
+        id: true,
         prenom: true,
         niveauScolaire: true,
         styleApprentissage: true,
@@ -587,6 +593,13 @@ export const eleveRouter = createTRPCRouter({
       SECONDAIRE_5: "Secondaire 5",
     };
 
+    const MATIERE_LABEL: Record<string, string> = {
+      MATHEMATIQUES: "Mathématiques", FRANCAIS: "Français", SCIENCES: "Sciences",
+      HISTOIRE: "Histoire", GEOGRAPHIE: "Géographie", ANGLAIS: "Anglais",
+      ART: "Arts", EDUCATION_PHYSIQUE: "Éducation physique", INFORMATIQUE: "Informatique",
+      ETHIQUE: "Éthique", AUTRE: "Autre",
+    };
+
     const extras: string[] = [];
     if (profil.styleApprentissage) extras.push(`Style d'apprentissage : ${profil.styleApprentissage}`);
     if (profil.centresInteret.length) extras.push(`Centres d'intérêt : ${profil.centresInteret.join(", ")}`);
@@ -604,10 +617,90 @@ export const eleveRouter = createTRPCRouter({
     const weekKey = getMondayKey();
     const secsUsed = profil.miraWeekOf === weekKey ? profil.miraSecsUsedWeek : 0;
 
+    // ── Diagnostic pédagogique ─────────────────────────────────────────────────
+    const [niveauxMatieres, exercicesRecents, notionsUrgentes] = await Promise.all([
+      // Scores et lacunes par matière (trié par score croissant = plus faibles en premier)
+      ctx.prisma.niveauMatiere.findMany({
+        where: { eleveId: profil.id },
+        select: { matiere: true, scoreGlobal: true, lacunes: true },
+        orderBy: { scoreGlobal: "asc" },
+      }),
+      // Exercices des 21 derniers jours (terminés)
+      ctx.prisma.exerciceAssigne.findMany({
+        where: {
+          eleveId: profil.id,
+          statut: "TERMINE",
+          dateFin: { gte: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000) },
+        },
+        select: {
+          score: true,
+          feedbackIA: true,
+          dateFin: true,
+          exercice: { select: { titre: true, matiere: true, competencesPFEQ: true } },
+        },
+        orderBy: { dateFin: "desc" },
+        take: 15,
+      }),
+      // Notions urgentes / importantes non maîtrisées
+      ctx.prisma.planifNotionEleve.findMany({
+        where: {
+          eleveId: profil.id,
+          maitrisee: false,
+          priorite: { in: ["URGENT", "IMPORTANT"] },
+        },
+        select: { notion: true, matiere: true, priorite: true },
+        orderBy: [{ priorite: "asc" }, { ordre: "asc" }],
+        take: 6,
+      }),
+    ]);
+
+    // Formater le diagnostic textuel pour le system prompt
+    const lignesMatieres = niveauxMatieres
+      .filter((n) => n.scoreGlobal < 85 || n.lacunes.length > 0)
+      .map((n) => {
+        const label = MATIERE_LABEL[n.matiere] ?? n.matiere;
+        const score = Math.round(n.scoreGlobal);
+        const lacunesStr = n.lacunes.length
+          ? `Lacunes : ${n.lacunes.slice(0, 4).join(", ")}`
+          : "Aucune lacune précisée";
+        return `• ${label} — Score : ${score}/100 — ${lacunesStr}`;
+      });
+
+    const lignesExercices = exercicesRecents.map((e) => {
+      const label = MATIERE_LABEL[e.exercice.matiere] ?? e.exercice.matiere;
+      const scoreStr = e.score != null ? `${Math.round(e.score)}/100` : "non noté";
+      const dateStr = e.dateFin ? new Date(e.dateFin).toLocaleDateString("fr-CA") : "";
+      const feedback = e.feedbackIA
+        ? `\n  Feedback IA : "${e.feedbackIA.slice(0, 120)}${e.feedbackIA.length > 120 ? "…" : ""}"`
+        : "";
+      const competences = e.exercice.competencesPFEQ?.length
+        ? `\n  Compétences visées : ${e.exercice.competencesPFEQ.slice(0, 3).join(", ")}`
+        : "";
+      return `• "${e.exercice.titre}" (${label}) — ${scoreStr} — ${dateStr}${competences}${feedback}`;
+    });
+
+    const lignesNotions = notionsUrgentes.map((n) => {
+      const label = MATIERE_LABEL[n.matiere] ?? n.matiere;
+      return `• ${n.notion} (${label}) — Priorité : ${n.priorite}`;
+    });
+
+    const diagnosticContext = [
+      lignesMatieres.length
+        ? `PERFORMANCES PAR MATIÈRE :\n${lignesMatieres.join("\n")}`
+        : null,
+      lignesExercices.length
+        ? `EXERCICES RÉCENTS (21 derniers jours) :\n${lignesExercices.join("\n")}`
+        : null,
+      lignesNotions.length
+        ? `NOTIONS PRIORITAIRES DU PLAN :\n${lignesNotions.join("\n")}`
+        : null,
+    ].filter(Boolean).join("\n\n");
+
     return {
       prenom: profil.prenom,
       niveauLabel: NIVEAU_LABEL[profil.niveauScolaire] ?? profil.niveauScolaire,
       profilExtra: extras.join(" · ") || undefined,
+      diagnosticContext: diagnosticContext || undefined,
       secsUsed,
       secsMax: 30 * 60 + profil.miraSecsBonus,
     };

@@ -4,7 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import type { Matiere, NiveauScolaire, TypeExercice, NiveauDifficulte, SourceEpreuve } from "@/generated/prisma";
+import type { Matiere, NiveauScolaire, TypeExercice, NiveauDifficulte, SourceEpreuve, TypeModeleEpreuve } from "@/generated/prisma";
 
 const MATIERES = [
   { value: "FRANCAIS", label: "Français" },
@@ -89,6 +89,8 @@ export function NouveauEpreuveForm() {
   const [niveauScolaire, setNiveauScolaire] = useState<NiveauScolaire | "">("");
   const [source, setSource] = useState<SourceEpreuve>("MEES_OFFICIEL");
   const [annee, setAnnee] = useState("");
+  const [typeModele, setTypeModele] = useState<TypeModeleEpreuve>("EPREUVE_COMPLETE");
+  const [notion, setNotion] = useState("");
 
   // Upload
   const [fichierNom, setFichierNom] = useState<string | null>(null);
@@ -132,6 +134,7 @@ export function NouveauEpreuveForm() {
     fd.append("fichier", file);
     fd.append("matiere", matiere);
     fd.append("niveauScolaire", niveauScolaire);
+    fd.append("typeModele", typeModele);
 
     try {
       // Brief delay so the "extraction" label is visible
@@ -169,6 +172,8 @@ export function NouveauEpreuveForm() {
       structureAnalysee: structure as never,
       totalPoints: structure.totalPoints,
       dureeMinutes: structure.dureeMinutes,
+      typeModele,
+      notion: typeModele === "CONSOLIDATION" && notion.trim() ? notion.trim() : undefined,
       sections: structure.sections,
     });
   };
@@ -210,7 +215,43 @@ export function NouveauEpreuveForm() {
       {/* Étape 1 — Métadonnées */}
       {etape === "meta" && (
         <div className="rounded-2xl border border-[var(--color-rule)] bg-white p-6 space-y-4">
-          <h2 className="font-bold text-[var(--color-ink)]">1. Informations sur l'épreuve</h2>
+          <h2 className="font-bold text-[var(--color-ink)]">1. Informations sur le modèle</h2>
+
+          {/* Sélecteur type modèle */}
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { value: "EPREUVE_COMPLETE", label: "📋 Épreuve complète", desc: "Épreuve de fin de cycle, bulletin" },
+              { value: "CONSOLIDATION", label: "📝 Consolidation", desc: "Mini-composition par notion" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setTypeModele(opt.value as TypeModeleEpreuve)}
+                className={`rounded-xl border-2 p-3 text-left transition-all ${
+                  typeModele === opt.value
+                    ? "border-[var(--color-ink)] bg-[var(--color-paper-warm)]"
+                    : "border-[var(--color-rule)] hover:border-[var(--color-ink-soft)]"
+                }`}
+              >
+                <p className="text-sm font-semibold text-[var(--color-ink)]">{opt.label}</p>
+                <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">{opt.desc}</p>
+              </button>
+            ))}
+          </div>
+
+          {/* Notion ciblée — uniquement pour consolidation */}
+          {typeModele === "CONSOLIDATION" && (
+            <div>
+              <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Notion ciblée (optionnel)</label>
+              <input
+                type="text"
+                value={notion}
+                onChange={(e) => setNotion(e.target.value)}
+                placeholder="Ex : fractions, aires et périmètres, accord du participe…"
+                className="w-full rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]"
+              />
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -393,12 +434,24 @@ export function NouveauEpreuveForm() {
         <div className="rounded-2xl border border-[var(--color-rule)] bg-white p-6 space-y-5">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="font-bold text-[var(--color-ink)]">3. Structure extraite par Claude</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="font-bold text-[var(--color-ink)]">3. Structure extraite par Claude</h2>
+                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+                  typeModele === "CONSOLIDATION"
+                    ? "bg-[rgba(91,79,207,0.1)] text-[var(--color-purple)]"
+                    : "bg-[var(--color-paper-warm)] text-[var(--color-ink-soft)]"
+                }`}>
+                  {typeModele === "CONSOLIDATION" ? "📝 Consolidation" : "📋 Épreuve complète"}
+                </span>
+              </div>
               {fichierNom && (
                 <div className="flex items-center gap-2 mt-1.5">
                   <span className="text-base">{fileIcon(fichierNom)}</span>
                   <span className="text-xs text-[var(--color-ink-soft)] truncate max-w-[200px]">{fichierNom}</span>
                 </div>
+              )}
+              {typeModele === "CONSOLIDATION" && notion && (
+                <p className="text-xs text-[var(--color-purple)] mt-1">Notion : {notion}</p>
               )}
             </div>
             <span className="rounded-full bg-[rgba(42,124,111,0.1)] px-2 py-0.5 text-xs font-semibold text-[var(--color-success)] flex-shrink-0">

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { requireRole } from "@/lib/auth/utils";
 import { api } from "@/lib/trpc/server";
 import { Card, CardLabel } from "@/components/ui/card";
@@ -115,7 +116,7 @@ export default async function SpecialistesAdminPage() {
                 <Card key={s.id} className="p-4">
                   <div className="flex items-center gap-4">
                     {s.photo ? (
-                      <img src={s.photo} alt="" className="h-12 w-12 rounded-xl object-cover flex-shrink-0" />
+                      <Image src={s.photo} alt="" width={48} height={48} className="h-12 w-12 rounded-xl object-cover flex-shrink-0" />
                     ) : (
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-purple)] text-lg font-black text-white flex-shrink-0">
                         {s.prenom.charAt(0)}

@@ -4,6 +4,9 @@ import { TRPCError } from "@trpc/server";
 import { anthropic } from "@/lib/ai/client";
 import { logClaude } from "@/lib/api-usage/logger";
 import { rechercherWeb, formaterContexteWeb, type TavilyResult } from "@/lib/tavily/client";
+import { sendCampagneEmail } from "@/lib/email/send-campagne-email";
+import { waitUntil } from "@vercel/functions";
+import { Role } from "@/generated/prisma";
 
 // ─── Profil de l'organisation (system prompt de base) ────────────────────────
 
@@ -556,6 +559,346 @@ Sections : Analyse de la situation, Objectifs SMART, Stratégie par canal (SEO, 
       } catch {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Erreur lors de la génération du plan marketing." });
       }
+    }),
+
+  // ── Personas & Stratégie ──────────────────────────────────────────────────
+
+  getPersona: adminProcedure.query(async ({ ctx }) => {
+    return ctx.prisma.personaMarketing.findFirst({
+      where: { adminId: ctx.user.id },
+      orderBy: { updatedAt: "desc" },
+    });
+  }),
+
+  genererPersona: adminProcedure.mutation(async ({ ctx }) => {
+    const existing = await ctx.prisma.personaMarketing.findFirst({
+      where: { adminId: ctx.user.id },
+      orderBy: { updatedAt: "desc" },
+    });
+
+    const SYSTEM = `${PROFIL_EDU}
+Tu es un expert en marketing stratégique et en design de personas.
+Rédige des fiches de personas détaillées, basées sur des données réelles du marché EdTech québécois.
+Format Markdown avec emojis, sections claires, données concrètes (âges, revenus, habitudes numériques).`;
+
+    const prompt = `Génère les 4 personas clés pour ÉduRéussite QC.
+
+Pour chaque persona, inclure :
+1. Nom fictif + photo emoji + démographie (âge, situation, revenu, région du Québec)
+2. Objectifs principaux (3-4 objectifs concrets)
+3. Points de douleur (3-4 frustrations réelles)
+4. Habitudes numériques (appareils, réseaux sociaux, heure d'utilisation)
+5. Déclencheur d'achat (ce qui le convainc)
+6. Message marketing idéal (1 phrase percutante)
+7. Canal de communication préféré
+
+Les 4 personas :
+- La Parent Engagé(e) (parent d'un élève en difficulté ou soucieux de la réussite)
+- L'Élève en Quête de Réussite (secondaire 1-5, motivation variable)
+- L'Enseignant(e) Innovant(e) (cherche des outils différenciés)
+- La Direction ou Commission Scolaire (décideur institutionnel)`;
+
+    const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 3000);
+    await logAgent(ctx, { agentType: "MARKETING", action: "Génération personas", prompt, output: text, inputTokens, outputTokens });
+
+    const version = (existing?.version ?? 0) + 1;
+    let saved;
+    if (existing) {
+      saved = await ctx.prisma.personaMarketing.update({
+        where: { id: existing.id },
+        data: { contenu: text, version, updatedAt: new Date() },
+      });
+    } else {
+      saved = await ctx.prisma.personaMarketing.create({
+        data: { contenu: text, version, adminId: ctx.user.id },
+      });
+    }
+    return saved;
+  }),
+
+  getStrategie: adminProcedure.query(async ({ ctx }) => {
+    return ctx.prisma.strategieMarketing.findFirst({
+      where: { adminId: ctx.user.id },
+      orderBy: { updatedAt: "desc" },
+    });
+  }),
+
+  actualiserStrategie: adminProcedure
+    .input(z.object({
+      contexteAdditionnel: z.string().max(500).optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.prisma.strategieMarketing.findFirst({
+        where: { adminId: ctx.user.id },
+        orderBy: { updatedAt: "desc" },
+      });
+
+      // Chercher les tendances actuelles si Tavily disponible
+      let tendances = "";
+      try {
+        const { results, disponible } = await rechercherWeb("stratégie marketing EdTech 2025 Quebec tendances IA éducation");
+        if (disponible && results.length > 0) {
+          tendances = `\n\nTENDANCES ACTUELLES (sources web) :\n${formaterContexteWeb(results)}`;
+        }
+      } catch { /* Tavily indisponible, continuer sans */ }
+
+      const SYSTEM = `${PROFIL_EDU}
+Tu es le CMO (Chief Marketing Officer) d'ÉduRéussite QC.
+Tu élabores des stratégies marketing de pointe, data-driven, adaptées au marché EdTech québécois 2025.
+Sois ultra-concret, chiffré, avec des actions immédiates et des KPIs mesurables.
+Intègre les dernières tendances en IA, contenus courts, SEO, marketing automation.
+Réponds en Markdown structuré et professionnel.`;
+
+      const prompt = `Génère la stratégie marketing de pointe pour ÉduRéussite QC — ${new Date().toLocaleDateString("fr-CA", { month: "long", year: "numeric" })}.
+${input.contexteAdditionnel ? `Contexte spécifique : ${input.contexteAdditionnel}` : ""}
+${tendances}
+
+Structure OBLIGATOIRE :
+## 1. Analyse de position (forces, différenciateurs, menaces)
+## 2. Concurrence EdTech Québec (Alloprof, Khan Academy, Classum, autres)
+## 3. Tendances technologiques à exploiter (IA, vidéos courtes, personalization)
+## 4. Stratégie par canal (SEO/contenu, Meta Ads, Google Ads, TikTok/Reels, e-mail, partenariats)
+## 5. Entonnoir d'acquisition (awareness → activation → rétention → référence)
+## 6. Plan d'actions 90 jours (semaine par semaine)
+## 7. KPIs et objectifs (CAC, LTV, taux activation, NPS)
+## 8. Budget recommandé par canal
+## 9. Quick wins immédiats (3 actions à lancer cette semaine)`;
+
+      const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 4000);
+      await logAgent(ctx, { agentType: "MARKETING", action: "Stratégie de pointe actualisée", prompt, output: text, inputTokens, outputTokens });
+
+      const version = (existing?.version ?? 0) + 1;
+      let saved;
+      if (existing) {
+        saved = await ctx.prisma.strategieMarketing.update({
+          where: { id: existing.id },
+          data: { contenu: text, version, updatedAt: new Date() },
+        });
+      } else {
+        saved = await ctx.prisma.strategieMarketing.create({
+          data: { contenu: text, version, adminId: ctx.user.id },
+        });
+      }
+      return saved;
+    }),
+
+  // ── Campagnes email ───────────────────────────────────────────────────────
+
+  getCampagnes: adminProcedure.query(async ({ ctx }) => {
+    return ctx.prisma.campagneEmail.findMany({
+      where: { adminId: ctx.user.id },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    });
+  }),
+
+  getUsersPourCampagne: adminProcedure
+    .input(z.object({
+      type: z.enum(["ALL", "ROLE", "USER"]),
+      roles: z.array(z.string()).optional(),
+      rechercheEmail: z.string().optional(),
+    }))
+    .query(async ({ ctx, input }) => {
+      if (input.type === "USER" && input.rechercheEmail) {
+        const users = await ctx.prisma.user.findMany({
+          where: {
+            email: { contains: input.rechercheEmail, mode: "insensitive" },
+            suspended: false,
+          },
+          select: { id: true, email: true, name: true, role: true },
+          take: 10,
+        });
+        return { users, total: users.length };
+      }
+      const where = input.type === "ROLE" && input.roles?.length
+        ? { role: { in: input.roles as Role[] }, suspended: false }
+        : { suspended: false };
+      const total = await ctx.prisma.user.count({ where });
+      const users = await ctx.prisma.user.findMany({
+        where,
+        select: { id: true, email: true, name: true, role: true },
+        take: 20,
+      });
+      return { users, total };
+    }),
+
+  genererEmailMarketing: adminProcedure
+    .input(z.object({
+      typeEvenement: z.enum(["INFORMATION", "MISE_A_JOUR", "FETE", "PROMO", "AUTRE"]),
+      destinataires: z.string(), // "parents", "enseignants", "tous", etc.
+      sujet: z.string().min(5).max(200),
+      contexte: z.string().min(10).max(600),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const SYSTEM = `Tu es expert en email marketing professionnel pour ÉduRéussite QC, une plateforme EdTech québécoise.
+Tu génères des emails HTML percutants, chaleureux, professionnels.
+
+RÈGLES ABSOLUES :
+- Rédige UNIQUEMENT le corps HTML de l'email (pas le <html>, pas le <body>, juste les balises internes)
+- Utilise : <p>, <h2>, <h3>, <strong>, <ul>, <li>, <a>, <br>
+- Aucun CSS inline complexe — juste du texte structuré, le template se charge du style
+- Ton québécois authentique, chaleureux, professionnel
+- Longueur idéale : 150-300 mots
+- Inclure 1 phrase d'accroche forte en ouverture`;
+
+      const TYPE_LABELS: Record<string, string> = {
+        INFORMATION: "informatif (partage d'une information importante)",
+        MISE_A_JOUR: "annonce de mise à jour de la plateforme (nouvelles fonctionnalités)",
+        FETE: "message festif adapté à l'occasion (chaleureux, célébratoire)",
+        PROMO: "offre promotionnelle ou invitation spéciale",
+        AUTRE: "communication générale",
+      };
+
+      const prompt = `Génère un email ${TYPE_LABELS[input.typeEvenement]} pour ÉduRéussite QC.
+
+Destinataires : ${input.destinataires}
+Sujet / Objet de l'email : ${input.sujet}
+Contexte / Ce qu'on veut communiquer : ${input.contexte}
+
+Génère :
+1. Une ligne "OBJET: [objet email accrocheur]"
+2. Puis le corps HTML de l'email (balises simples seulement)`;
+
+      const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 1500);
+      await logAgent(ctx, { agentType: "MARKETING", action: `Email campagne : ${input.typeEvenement}`, prompt, output: text, inputTokens, outputTokens });
+
+      // Extraire l'objet et le corps
+      const lines   = text.split("\n");
+      const objetLine = lines.find((l) => l.toLowerCase().startsWith("objet:") || l.toLowerCase().startsWith("**objet"));
+      const objet   = objetLine
+        ? objetLine.replace(/^\*?\*?objet\s*:\s*\*?\*?/i, "").replace(/\*\*/g, "").trim()
+        : input.sujet;
+      const htmlIdx = lines.findIndex((l) => l.toLowerCase().includes("objet:") || l.toLowerCase().includes("**objet"));
+      const htmlBody = lines.slice(htmlIdx + 1).join("\n").trim();
+
+      // Version texte (strip HTML)
+      const textContenu = htmlBody.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+
+      return { objet, htmlContenu: htmlBody, textContenu };
+    }),
+
+  sauvegarderCampagne: adminProcedure
+    .input(z.object({
+      id: z.string().optional(),
+      titre: z.string().min(1).max(200),
+      objet: z.string().min(1).max(200),
+      htmlContenu: z.string().min(1),
+      textContenu: z.string(),
+      typeEvenement: z.string(),
+      destinataires: z.object({
+        type: z.enum(["ALL", "ROLE", "USER"]),
+        roles: z.array(z.string()).optional(),
+        userId: z.string().optional(),
+        userEmail: z.string().optional(),
+      }),
+      planifieLe: z.string().optional(), // ISO datetime
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const statut = input.planifieLe ? "PLANIFIE" : "BROUILLON";
+      const planifieLe = input.planifieLe ? new Date(input.planifieLe) : null;
+
+      if (input.id) {
+        return ctx.prisma.campagneEmail.update({
+          where: { id: input.id, adminId: ctx.user.id },
+          data: {
+            titre: input.titre,
+            objet: input.objet,
+            htmlContenu: input.htmlContenu,
+            textContenu: input.textContenu,
+            typeEvenement: input.typeEvenement,
+            destinataires: input.destinataires,
+            statut,
+            planifieLe,
+          },
+        });
+      }
+      return ctx.prisma.campagneEmail.create({
+        data: {
+          titre: input.titre,
+          objet: input.objet,
+          htmlContenu: input.htmlContenu,
+          textContenu: input.textContenu,
+          typeEvenement: input.typeEvenement,
+          destinataires: input.destinataires,
+          statut,
+          planifieLe: planifieLe ?? undefined,
+          adminId: ctx.user.id,
+        },
+      });
+    }),
+
+  envoyerCampagne: adminProcedure
+    .input(z.object({ campagneId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const campagne = await ctx.prisma.campagneEmail.findUniqueOrThrow({
+        where: { id: input.campagneId, adminId: ctx.user.id },
+      });
+
+      if (campagne.statut === "ENVOYE") {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Cette campagne a déjà été envoyée." });
+      }
+
+      // Construire la liste des destinataires
+      const dest = campagne.destinataires as { type: string; roles?: string[]; userId?: string; userEmail?: string };
+      let users: { email: string; name: string | null }[] = [];
+
+      if (dest.type === "ALL") {
+        users = await ctx.prisma.user.findMany({
+          where: { suspended: false, emailVerified: { not: null } },
+          select: { email: true, name: true },
+        });
+      } else if (dest.type === "ROLE" && dest.roles?.length) {
+        users = await ctx.prisma.user.findMany({
+          where: { role: { in: dest.roles as Role[] }, suspended: false, emailVerified: { not: null } },
+          select: { email: true, name: true },
+        });
+      } else if (dest.type === "USER" && dest.userEmail) {
+        const u = await ctx.prisma.user.findFirst({
+          where: { email: dest.userEmail, suspended: false },
+          select: { email: true, name: true },
+        });
+        if (u) users = [u];
+      }
+
+      if (users.length === 0) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Aucun destinataire trouvé pour cette campagne." });
+      }
+
+      // Mettre à jour le statut immédiatement
+      await ctx.prisma.campagneEmail.update({
+        where: { id: campagne.id },
+        data: { statut: "ENVOYE", envoyeLe: new Date(), nbEnvoyes: users.length },
+      });
+
+      // Envoyer en arrière-plan (waitUntil) pour ne pas bloquer la réponse
+      waitUntil((async () => {
+        for (const user of users) {
+          try {
+            await sendCampagneEmail(
+              user.email,
+              campagne.objet,
+              campagne.htmlContenu,
+              campagne.typeEvenement,
+              user.name ?? undefined,
+            );
+          } catch (err) {
+            console.error(`[campagne] Échec envoi à ${user.email}:`, err);
+          }
+          // Petit délai pour ne pas dépasser les limites Resend
+          await new Promise((r) => setTimeout(r, 120));
+        }
+      })());
+
+      return { nbEnvoyes: users.length };
+    }),
+
+  supprimerCampagne: adminProcedure
+    .input(z.object({ campagneId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.campagneEmail.delete({
+        where: { id: input.campagneId, adminId: ctx.user.id },
+      });
+      return { ok: true };
     }),
 
   // ══════════════════════════════════════════════════════════════════════════

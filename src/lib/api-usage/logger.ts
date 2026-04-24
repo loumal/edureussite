@@ -136,6 +136,25 @@ export function logOpenAITTS(params: {
     .catch(() => {});
 }
 
+// Edge Gratuit TTS : Microsoft Edge TTS via Vercel, fully free
+const EDGE_GRATUIT_TTS_PER_CHAR = 0;
+
+export function logEdgeGratuitTTS(params: {
+  characters: number;
+  userId?: string | null;
+}) {
+  prisma.apiUsageLog
+    .create({
+      data: {
+        service: ApiService.EDGE_GRATUIT_TTS,
+        characters: params.characters,
+        coutUSD: params.characters * EDGE_GRATUIT_TTS_PER_CHAR,
+        userId: params.userId ?? undefined,
+      },
+    })
+    .catch(() => {});
+}
+
 // Edureussite RunPod TTS : self-hosted edge-tts, cost is RunPod compute (near-zero per char)
 const EDUREUSSITE_TTS_PER_CHAR = 0;
 

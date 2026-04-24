@@ -674,6 +674,8 @@ export const ModeleEpreuveScalarFieldEnum = {
   totalPoints: 'totalPoints',
   dureeMinutes: 'dureeMinutes',
   valide: 'valide',
+  typeModele: 'typeModele',
+  notion: 'notion',
   uploadePar: 'uploadePar',
   province: 'province',
   matiereLibre: 'matiereLibre',

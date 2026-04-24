@@ -7,6 +7,7 @@ import { trpc } from "@/lib/trpc/client";
 import { useRouter } from "next/navigation";
 import type { CoursStructure, EtapeLecon, ExerciceVerification } from "@/lib/ai/cours";
 import { EnseignantIA } from "./enseignant-ia";
+import { MiraFigure } from "@/components/mira/mira-figures";
 
 // Wrapper qui charge le quota hebdo Mira depuis la DB avant d'ouvrir la session
 function EnseignantIAAvecQuota(props: Omit<React.ComponentProps<typeof EnseignantIA>, "miraSecsAlreadyUsed" | "miraSecsMax">) {
@@ -291,6 +292,49 @@ function IntroSection({ cours, onStart }: { cours: CoursStructure; onStart: () =
   );
 }
 
+// ─── Utilitaire : rend la démonstration numérotée en blocs visuels ─────────────
+
+function DemarcheSteps({ text }: { text: string }) {
+  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+  const steps: { num: string; content: string }[] = [];
+  let special: string[] = [];
+
+  for (const line of lines) {
+    const m = line.match(/^(\d+)\.\s+(.+)/);
+    if (m) {
+      steps.push({ num: m[1], content: m[2] });
+    } else {
+      special.push(line);
+    }
+  }
+
+  if (steps.length === 0) {
+    return (
+      <p className="text-sm text-[var(--color-ink)] leading-relaxed whitespace-pre-line font-mono">
+        {text}
+      </p>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      {steps.map((s, i) => (
+        <div key={i} className="flex items-start gap-3">
+          <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--color-success)] text-white text-xs font-black mt-0.5">
+            {s.num}
+          </div>
+          <p className="text-sm text-[var(--color-ink)] leading-relaxed flex-1">{s.content}</p>
+        </div>
+      ))}
+      {special.map((line, i) => (
+        <p key={`s-${i}`} className="text-sm font-semibold text-[var(--color-ink)] leading-relaxed mt-2 pl-9">
+          {line}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 // ─── Étape de la leçon ────────────────────────────────────────────────────────
 
 function EtapeSection({
@@ -307,6 +351,7 @@ function EtapeSection({
   const [reponseVue, setReponseVue] = useState(false);
 
   const peutAvancer = checkpointSoumis || reponseVue;
+  const hasFigure = !!(etape.figureCode && etape.figureCode.trim() && etape.figureCode !== "");
 
   return (
     <div className="space-y-4 animate-fade-in">
@@ -315,13 +360,31 @@ function EtapeSection({
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-ink)] text-white font-black flex-shrink-0 text-sm">
           {etape.numero}
         </div>
-        <div>
+        <div className="flex-1">
           <p className="text-xs text-[var(--color-ink-soft)] uppercase tracking-wider">
             Étape {etape.numero} sur {total}
           </p>
           <h2 className="text-lg font-black text-[var(--color-ink)]">{etape.titre}</h2>
         </div>
+        {/* Badge méthode QC */}
+        {etape.methodeQC && (
+          <div className="flex-shrink-0 rounded-full bg-[rgba(42,124,111,0.1)] border border-[rgba(42,124,111,0.25)] px-3 py-1 max-w-[160px]">
+            <p className="text-[10px] font-semibold text-[var(--color-success)] leading-tight text-center">
+              {etape.methodeQC.split("—")[0].trim()}
+            </p>
+          </div>
+        )}
       </div>
+
+      {/* Méthode QC complète */}
+      {etape.methodeQC && (
+        <div className="rounded-xl bg-[rgba(42,124,111,0.06)] border border-[rgba(42,124,111,0.2)] px-4 py-2.5 flex items-center gap-2">
+          <span className="text-sm flex-shrink-0">🏫</span>
+          <p className="text-xs text-[var(--color-success)] font-semibold leading-relaxed">
+            Méthode : <span className="font-bold">{etape.methodeQC}</span>
+          </p>
+        </div>
+      )}
 
       {/* Lien avec l'erreur — pourquoi on voit ça */}
       {etape.lienAvecErreur && (
@@ -334,12 +397,15 @@ function EtapeSection({
         </div>
       )}
 
-      {/* Explication */}
+      {/* Explication + figure optionnelle */}
       <Card className="p-5">
-        <div className="flex items-start justify-between gap-3 mb-2">
-          <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-ink-soft)]">📖 Explication</p>
-        </div>
+        <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-ink-soft)] mb-3">📖 Explication</p>
         <p className="text-sm text-[var(--color-ink)] leading-relaxed">{etape.explication}</p>
+        {hasFigure && (
+          <div className="mt-4">
+            <MiraFigure type={etape.figureCode!.trim()} />
+          </div>
+        )}
       </Card>
 
       {/* Analogie */}
@@ -357,25 +423,21 @@ function EtapeSection({
         </div>
       </Card>
 
-      {/* Démonstration pas à pas */}
+      {/* Démonstration pas à pas — numérotée visuellement */}
       <Card className="p-5 border-[rgba(42,124,111,0.2)] bg-[rgba(42,124,111,0.03)]">
         <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-success)] mb-3">
           ✍️ Démarche pas à pas
         </p>
         <div className="bg-white rounded-xl border border-[var(--color-rule)] p-4">
-          <p className="text-sm text-[var(--color-ink)] leading-relaxed whitespace-pre-line font-mono">
-            {etape.demonstration}
-          </p>
+          <DemarcheSteps text={etape.demonstration} />
         </div>
       </Card>
 
       {/* Point clé */}
       <div className="rounded-2xl bg-[var(--color-ink)] px-5 py-4">
-        <div className="flex items-start justify-between gap-3 mb-1">
-          <p className="text-xs font-bold uppercase tracking-wider text-white/60">
-            ⭐ À retenir absolument
-          </p>
-        </div>
+        <p className="text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+          ⭐ À retenir absolument
+        </p>
         <p className="text-sm font-semibold text-white leading-relaxed">{etape.pointCle}</p>
       </div>
 

@@ -443,7 +443,7 @@ function LigneEleve({ eleve, epingle, onTogglePin, onRetirer }: {
           <button
             onClick={() => { if (confirm(`Retirer ${eleve.prenom} de votre liste ?`)) retirer.mutate({ eleveId: eleve.id }); }}
             disabled={retirer.isPending}
-            title="Retirer de ma liste"
+            aria-label={`Retirer ${eleve.prenom} de ma liste`}
             className="text-xs text-[var(--color-ink-soft)] hover:text-[var(--color-accent)] transition-colors"
           >
             ✕

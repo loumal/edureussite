@@ -4,7 +4,7 @@ import { useState } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils/cn";
 
-type TtsProvider = "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD";
+type TtsProvider = "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD" | "EDGE_GRATUIT";
 
 const PROVIDERS = [
   {
@@ -27,6 +27,13 @@ const PROVIDERS = [
     emoji: "🏠",
     cout: "TTS auto-hébergé · coût RunPod uniquement",
     detail: "edge-tts · fr-FR-DeniseNeural · infrastructure propriétaire",
+  },
+  {
+    id: "EDGE_GRATUIT" as const,
+    label: "Edge_gratuit",
+    emoji: "🆓",
+    cout: "TTS 100% gratuit · aucune clé API requise",
+    detail: "DeniseNeural (FR) + JennyNeural (EN) · SSML cheerful · sur Vercel",
   },
 ];
 

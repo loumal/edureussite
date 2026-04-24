@@ -78,6 +78,14 @@ export const SourceEpreuve = {
 export type SourceEpreuve = (typeof SourceEpreuve)[keyof typeof SourceEpreuve]
 
 
+export const TypeModeleEpreuve = {
+  EPREUVE_COMPLETE: 'EPREUVE_COMPLETE',
+  CONSOLIDATION: 'CONSOLIDATION'
+} as const
+
+export type TypeModeleEpreuve = (typeof TypeModeleEpreuve)[keyof typeof TypeModeleEpreuve]
+
+
 export const NiveauScolaire = {
   PRIMAIRE_1: 'PRIMAIRE_1',
   PRIMAIRE_2: 'PRIMAIRE_2',
@@ -304,6 +312,7 @@ export const ApiService = {
   DEEPGRAM_TTS: 'DEEPGRAM_TTS',
   OPENAI_TTS: 'OPENAI_TTS',
   EDUREUSSITE_TTS: 'EDUREUSSITE_TTS',
+  EDGE_GRATUIT_TTS: 'EDGE_GRATUIT_TTS',
   RESEND: 'RESEND'
 } as const
 

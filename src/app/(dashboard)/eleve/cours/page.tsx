@@ -128,8 +128,8 @@ export default async function MesCoursPage() {
                   {
                     num: "2",
                     emoji: "🔬",
-                    titre: "L'IA analyse tes erreurs",
-                    desc: "Après 3 exercices, elle identifie exactement ce qui te bloque.",
+                    titre: "Nous analysons tes erreurs",
+                    desc: "Après 3 exercices, nous identifions exactement ce qui te bloque.",
                   },
                   {
                     num: "3",

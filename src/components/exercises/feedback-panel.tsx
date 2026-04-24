@@ -96,7 +96,7 @@ const MATIERE_LABEL_FR: Record<string, string> = {
   EDUCATION_PHYSIQUE: "Éd. physique", ETHIQUE: "Éthique",
 };
 
-export function FeedbackPanel({ assignation, objectifAtteint, planNotionActive }: Props) {
+export function FeedbackPanel({ assignation, exercice, objectifAtteint, planNotionActive }: Props) {
   const router = useRouter();
   const [affiche, setAffiche] = useState(false);
   const [etapeOuverte, setEtapeOuverte] = useState<number | null>(null);
@@ -314,6 +314,52 @@ export function FeedbackPanel({ assignation, objectifAtteint, planNotionActive }
             <h3 className="font-bold text-[var(--color-ink)]">Correction détaillée — méthode PFEQ</h3>
           </div>
 
+          {/* ── Question corrigée ── */}
+          <div className={`rounded-2xl border overflow-hidden mb-3 ${
+            feedback.correct
+              ? "border-[rgba(42,124,111,0.3)] bg-[rgba(42,124,111,0.04)]"
+              : "border-[rgba(217,79,43,0.25)] bg-[rgba(217,79,43,0.03)]"
+          }`}>
+            <div className="flex items-start gap-3 px-5 py-4">
+              <div className={`flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-full text-sm font-black text-white ${
+                feedback.correct ? "bg-[var(--color-success)]" : "bg-[var(--color-accent)]"
+              }`}>
+                {feedback.correct ? "✓" : "✗"}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-xs font-bold uppercase tracking-wide text-[var(--color-ink-soft)]">
+                    Question corrigée
+                  </span>
+                  <span className={`rounded-full px-2 py-0.5 text-xs font-bold border ${
+                    feedback.correct
+                      ? "bg-[rgba(42,124,111,0.1)] border-[rgba(42,124,111,0.3)] text-[var(--color-success)]"
+                      : "bg-[rgba(217,79,43,0.08)] border-[rgba(217,79,43,0.25)] text-[var(--color-accent)]"
+                  }`}>
+                    {Math.round(score)}/100
+                  </span>
+                  <span className={`text-xs font-semibold ${feedback.correct ? "text-[var(--color-success)]" : "text-[var(--color-accent)]"}`}>
+                    {feedback.correct ? "Bonne réponse ✓" : "À corriger"}
+                  </span>
+                </div>
+                {exercice.consigne && (
+                  <p className="text-sm font-semibold text-[var(--color-ink)] leading-relaxed mb-2">
+                    {exercice.consigne}
+                  </p>
+                )}
+                {assignation.reponseEleve != null && (
+                  <div className="rounded-lg bg-white border border-[var(--color-rule)] px-3 py-2">
+                    <p className="text-xs font-bold text-[var(--color-ink-soft)] mb-0.5">Ta réponse</p>
+                    <p className="text-sm text-[var(--color-ink)] italic">
+                      {formatReponseEleve(assignation.reponseEleve)}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* ── 4 étapes PFEQ ── */}
           <div className="space-y-2">
             {etapes.sort((a, b) => a.num - b.num).map((etape) => (
               <div
@@ -374,6 +420,28 @@ export function FeedbackPanel({ assignation, objectifAtteint, planNotionActive }
               </div>
             ))}
           </div>
+
+          {/* ── Leçon à retenir ── */}
+          {(feedback.correctionDetaillee?.etape2?.rappelTheorique ?? feedback.astuceMemoire) && (
+            <div className="mt-3 rounded-2xl bg-[var(--color-ink)] overflow-hidden">
+              <div className="px-5 pt-4 pb-1">
+                <p className="text-xs font-bold uppercase tracking-wider text-white/60 mb-1">📚 Leçon à retenir</p>
+              </div>
+              {feedback.correctionDetaillee?.etape2?.rappelTheorique && (
+                <div className="px-5 pb-3">
+                  <p className="text-sm font-semibold text-white leading-relaxed">
+                    {feedback.correctionDetaillee.etape2.rappelTheorique}
+                  </p>
+                </div>
+              )}
+              {feedback.astuceMemoire && (
+                <div className="mx-5 mb-4 rounded-xl bg-white/10 px-4 py-2.5">
+                  <p className="text-xs font-bold text-[var(--color-gold)] mb-0.5">🧠 Astuce mnémotechnique</p>
+                  <p className="text-xs text-white/90 leading-relaxed">{feedback.astuceMemoire}</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
@@ -672,4 +740,20 @@ function formatTemps(secondes: number) {
   const s = secondes % 60;
   if (m === 0) return `${s} secondes`;
   return `${m} min ${s} s`;
+}
+
+function formatReponseEleve(reponse: unknown): string {
+  if (reponse === null || reponse === undefined) return "Aucune réponse";
+  if (typeof reponse === "string") return reponse;
+  if (typeof reponse === "number" || typeof reponse === "boolean") return String(reponse);
+  if (Array.isArray(reponse)) return reponse.join(", ");
+  if (typeof reponse === "object") {
+    // Essaie d'extraire un champ texte courant
+    const r = reponse as Record<string, unknown>;
+    if (typeof r.texte === "string") return r.texte;
+    if (typeof r.reponse === "string") return r.reponse;
+    if (typeof r.valeur === "string") return r.valeur;
+    return JSON.stringify(reponse);
+  }
+  return String(reponse);
 }

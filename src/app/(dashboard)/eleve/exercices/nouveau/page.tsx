@@ -208,7 +208,7 @@ export default function NouvelExercicePage() {
                   <>
                     <p className="text-sm font-semibold text-[var(--color-accent)] mb-1">Service temporairement indisponible</p>
                     <p className="text-xs text-[var(--color-ink-soft)] mb-3 max-w-xs mx-auto">
-                      L'IA est momentanément inaccessible. Réessaie dans quelques minutes ou contacte un administrateur.
+                      Nous sommes momentanément inaccessibles. Réessaie dans quelques minutes ou contacte un administrateur.
                     </p>
                   </>
                 ) : isRateLimit ? (
@@ -635,21 +635,21 @@ function jouerSonNotification() {
 ══════════════════════════════════════════════════════════════ */
 
 const MESSAGES_EXERCICE = [
-  { emoji: "📖", texte: "L'IA consulte le programme PFEQ…" },
-  { emoji: "🎯", texte: "Elle choisit les meilleures notions pour toi…" },
-  { emoji: "✏️", texte: "Elle adapte les questions à ton niveau…" },
-  { emoji: "🌟", texte: "Elle personnalise l'exercice selon ton profil…" },
-  { emoji: "🔍", texte: "Elle vérifie que tout est bien calibré…" },
+  { emoji: "📖", texte: "Nous consultons le programme PFEQ…" },
+  { emoji: "🎯", texte: "Nous choisissons les meilleures notions pour toi…" },
+  { emoji: "✏️", texte: "Nous adaptons les questions à ton niveau…" },
+  { emoji: "🌟", texte: "Nous personnalisons l'exercice selon ton profil…" },
+  { emoji: "🔍", texte: "Nous vérifions que tout est bien calibré…" },
   { emoji: "✨", texte: "Ton exercice est presque prêt…" },
 ];
 
 const MESSAGES_EPREUVE = [
-  { emoji: "📋", texte: "L'IA construit la mise en situation…" },
-  { emoji: "✍️", texte: "Elle rédige les questions de la Partie 1…" },
-  { emoji: "📐", texte: "Elle prépare la Partie 2 avec des défis…" },
-  { emoji: "🏆", texte: "Elle crée la Partie 3 pour te pousser…" },
-  { emoji: "⚖️", texte: "Elle calibre le barème sur 100 points…" },
-  { emoji: "📚", texte: "Elle aligne tout sur le PFEQ québécois…" },
+  { emoji: "📋", texte: "Nous construisons la mise en situation…" },
+  { emoji: "✍️", texte: "Nous rédigeons les questions de la Partie 1…" },
+  { emoji: "📐", texte: "Nous préparons la Partie 2 avec des défis…" },
+  { emoji: "🏆", texte: "Nous créons la Partie 3 pour te pousser…" },
+  { emoji: "⚖️", texte: "Nous calibrons le barème sur 100 points…" },
+  { emoji: "📚", texte: "Nous alignons tout sur le PFEQ québécois…" },
   { emoji: "🌟", texte: "Ton épreuve complète est presque prête…" },
 ];
 

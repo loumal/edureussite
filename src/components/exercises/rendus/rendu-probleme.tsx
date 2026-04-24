@@ -113,10 +113,15 @@ export function RenduProbleme({ contenu, onReponse }: Props) {
       )}
 
       {/* Réponse finale */}
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--color-ink)]">
+      <div className="rounded-xl border-2 border-[var(--color-rule)] bg-[rgba(91,79,207,0.03)] p-4">
+        <label className="mb-1 block text-sm font-semibold text-[var(--color-ink)]">
           Ma réponse finale *
         </label>
+        {question && (
+          <p className="mb-3 text-xs text-[var(--color-ink-soft)] leading-snug">
+            → Réponds à : <span className="font-medium text-[var(--color-ink)]">{question}</span>
+          </p>
+        )}
         <div className="flex items-center gap-2">
           <input
             type="text"

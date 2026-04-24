@@ -4821,6 +4821,8 @@ export const ModeleEpreuveScalarFieldEnum = {
   totalPoints: 'totalPoints',
   dureeMinutes: 'dureeMinutes',
   valide: 'valide',
+  typeModele: 'typeModele',
+  notion: 'notion',
   uploadePar: 'uploadePar',
   province: 'province',
   matiereLibre: 'matiereLibre',
@@ -5503,6 +5505,20 @@ export type EnumSourceEpreuveFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'SourceEpreuve[]'
  */
 export type ListEnumSourceEpreuveFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceEpreuve[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TypeModeleEpreuve'
+ */
+export type EnumTypeModeleEpreuveFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeModeleEpreuve'>
+    
+
+
+/**
+ * Reference to a field of type 'TypeModeleEpreuve[]'
+ */
+export type ListEnumTypeModeleEpreuveFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeModeleEpreuve[]'>
     
 
 
