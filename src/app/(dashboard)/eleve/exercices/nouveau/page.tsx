@@ -93,11 +93,13 @@ export default function NouvelExercicePage() {
   const { data: profilData } = trpc.eleve.getProfil.useQuery();
   const niveau = profilData?.niveauScolaire ?? "PRIMAIRE_6";
 
-  // Fetch notion active du plan (une seule, la première non maîtrisée)
+  // Fetch notion active du plan — si notionId fourni (depuis widget défi), utiliser cette notion précise
   const isPlanParam = searchParams.get("plan") === "1";
-  const { data: notionActive } = trpc.plan.getNotionActive.useQuery(undefined, {
-    enabled: isPlanParam,
-  });
+  const notionIdParam = searchParams.get("notionId") ?? undefined;
+  const { data: notionActive } = trpc.plan.getNotionActive.useQuery(
+    { notionId: notionIdParam },
+    { enabled: isPlanParam }
+  );
 
   // Initialisation mode plan — notion unique, verrouillée
   useEffect(() => {

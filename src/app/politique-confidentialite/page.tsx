@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 export const metadata = {
-  title: "Politique de confidentialité — ÉduRéussite QC",
-  description: "Comment ÉduRéussite QC collecte, utilise et protège vos renseignements personnels conformément à la Loi 25 du Québec.",
+  title: "Politique de confidentialité — Édu-Réussite QC",
+  description: "Comment Édu-Réussite QC collecte, utilise et protège vos renseignements personnels conformément à la Loi 25 du Québec.",
 };
 
 const Section = ({
@@ -60,7 +60,7 @@ const Tableau = ({ headers, rows }: { headers: string[]; rows: string[][] }) => 
 );
 
 export default function PolitiqueConfidentialitePage() {
-  const dateMAJ = "29 mars 2026";
+  const dateMAJ = "3 mai 2026";
 
   const sections = [
     "#responsable",
@@ -100,7 +100,7 @@ export default function PolitiqueConfidentialitePage() {
       <header className="sticky top-0 z-10 border-b border-[var(--color-rule)] bg-white/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
           <Link href="/" className="text-base font-black text-[var(--color-ink)] tracking-tight hover:opacity-75 transition-opacity">
-            ✦ ÉduRéussite QC
+            ✦ Édu-Réussite QC
           </Link>
           <Link
             href="/login"
@@ -135,7 +135,7 @@ export default function PolitiqueConfidentialitePage() {
                   <div>
                     <p className="font-bold text-[var(--color-success)] text-sm mb-1">Notre engagement envers vos données</p>
                     <p className="text-sm text-[var(--color-ink)] leading-relaxed">
-                      ÉduRéussite QC s'engage à protéger vos renseignements personnels conformément à la{" "}
+                      Édu-Réussite QC s'engage à protéger vos renseignements personnels conformément à la{" "}
                       <strong>Loi modernisant des dispositions législatives en matière de protection des renseignements personnels (Loi 25)</strong>{" "}
                       du Québec et à la{" "}
                       <strong>Loi sur la protection des renseignements personnels et les documents électroniques (LPRPDE)</strong>{" "}
@@ -152,12 +152,12 @@ export default function PolitiqueConfidentialitePage() {
               <Section id="responsable" num="1" title="Responsable du traitement">
                 <p>
                   Le responsable du traitement de vos renseignements personnels est{" "}
-                  <strong className="text-[var(--color-ink)]">ÉduRéussite QC</strong>, plateforme éducative numérique québécoise opérée depuis la province de Québec, Canada.
+                  <strong className="text-[var(--color-ink)]">Édu-Réussite QC</strong>, plateforme éducative numérique québécoise opérée depuis la province de Québec, Canada.
                 </p>
                 <div className="rounded-xl border border-[var(--color-rule)] bg-white p-4">
                   <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-ink-soft)] mb-2">Responsable de la protection des renseignements personnels (RPRP)</p>
-                  <p className="text-[var(--color-ink)] font-semibold">ÉduRéussite QC</p>
-                  <p>📧 <a href="mailto:confidentialite@edureussite.qc.ca" className="text-[var(--color-accent)] hover:underline">confidentialite@edureussite.qc.ca</a></p>
+                  <p className="text-[var(--color-ink)] font-semibold">Édu-Réussite QC</p>
+                  <p>📧 <a href="mailto:confidentialite@edu-reussite.com" className="text-[var(--color-accent)] hover:underline">confidentialite@edu-reussite.com</a></p>
                   <p>🌐 Province de Québec, Canada</p>
                 </div>
                 <p>
@@ -207,7 +207,7 @@ export default function PolitiqueConfidentialitePage() {
                 <Tableau
                   headers={["Catégorie", "Données collectées", "Personnes concernées"]}
                   rows={[
-                    ["Compte utilisateur", "Prénom, nom, adresse courriel, mot de passe (haché bcrypt), rôle", "Parents, enseignants, spécialistes"],
+                    ["Compte utilisateur", "Prénom, nom, adresse courriel, mot de passe (haché de façon irréversible), rôle", "Parents, enseignants, spécialistes"],
                     ["Profil scolaire", "Prénom, nom, niveau scolaire, école, style d'apprentissage, matières préférées/redoutées, plan d'apprentissage IA", "Élèves"],
                     ["Bien-être scolaire", "Humeur déclarée lors des check-ins quotidiens (voluntary self-reporting)", "Élèves"],
                     ["Besoins particuliers", "TDAH, dyslexie, dyscalculie, anxiété scolaire — renseignés volontairement par le parent", "Élèves"],
@@ -227,14 +227,14 @@ export default function PolitiqueConfidentialitePage() {
               {/* 4. Cookies */}
               <Section id="cookies" num="4" title="Témoins (cookies)">
                 <p>
-                  ÉduRéussite QC utilise uniquement des témoins <strong className="text-[var(--color-ink)]">strictement essentiels</strong> au fonctionnement de la plateforme. Aucun cookie publicitaire, de pistage commercial ou d'analyse de tiers n'est installé.
+                  Édu-Réussite QC utilise uniquement des témoins <strong className="text-[var(--color-ink)]">strictement essentiels</strong> au fonctionnement de la plateforme. Aucun cookie publicitaire, de pistage commercial ou d'analyse de tiers n'est installé.
                 </p>
                 <Tableau
                   headers={["Nom du témoin", "Finalité", "Durée", "Attributs de sécurité"]}
                   rows={[
-                    ["authjs.session-token", "Maintenir la session de connexion (JWT signé et chiffré)", "30 jours", "HttpOnly · Secure · SameSite=Lax"],
-                    ["authjs.csrf-token", "Protection contre les attaques CSRF (Cross-Site Request Forgery)", "Session", "HttpOnly · SameSite=Strict"],
-                    ["authjs.callback-url", "URL de redirection après authentification", "Session", "Essentiel"],
+                    ["session-token", "Maintenir la session de connexion (jeton signé et chiffré)", "30 jours", "HttpOnly · Secure · SameSite=Lax"],
+                    ["csrf-token", "Protection contre les attaques CSRF (Cross-Site Request Forgery)", "Session", "HttpOnly · SameSite=Strict"],
+                    ["callback-url", "URL de redirection après authentification", "Session", "Essentiel"],
                   ]}
                 />
                 <p>
@@ -276,47 +276,42 @@ export default function PolitiqueConfidentialitePage() {
                 <div className="space-y-3">
                   {[
                     {
-                      nom: "Supabase",
-                      pays: "🇨🇦 Canada (AWS ca-central-1)",
-                      role: "Hébergement de la base de données PostgreSQL",
-                      donnees: "Ensemble des données de la plateforme, chiffrées au repos (AES-256) et en transit (TLS 1.3)",
-                      lien: "https://supabase.com/privacy",
+                      nom: "Hébergement de la base de données",
+                      pays: "🇨🇦 Canada",
+                      role: "Stockage sécurisé de l'ensemble des données de la plateforme",
+                      donnees: "Toutes les données applicatives, chiffrées au repos (AES-256) et en transit (TLS 1.3)",
                       badge: "Données au Canada",
                       badgeCouleur: "rgba(42,124,111,0.1)",
                     },
                     {
-                      nom: "Anthropic (Claude API)",
+                      nom: "Moteur d'intelligence artificielle",
                       pays: "🇺🇸 États-Unis",
-                      role: "Moteur d'intelligence artificielle pour les recommandations pédagogiques, la génération d'exercices et les corrections",
+                      role: "Génération d'exercices personnalisés, corrections pédagogiques et recommandations de spécialistes",
                       donnees: "Profil scolaire anonymisé (niveau, résultats, indicateurs de difficulté) — aucun nom, courriel ou identifiant direct transmis",
-                      lien: "https://www.anthropic.com/privacy",
                       badge: "Transfert international",
                       badgeCouleur: "rgba(201,149,42,0.1)",
                     },
                     {
-                      nom: "Resend",
+                      nom: "Service d'envoi de courriels",
                       pays: "🇺🇸 États-Unis",
-                      role: "Service d'envoi des courriels transactionnels (OTP, confirmations, invitations)",
+                      role: "Acheminement des courriels transactionnels (codes de vérification, confirmations, invitations)",
                       donnees: "Adresse courriel du destinataire et contenu du message uniquement",
-                      lien: "https://resend.com/legal/privacy-policy",
                       badge: "Transfert international",
                       badgeCouleur: "rgba(201,149,42,0.1)",
                     },
                     {
-                      nom: "ElevenLabs",
+                      nom: "Services de synthèse et reconnaissance vocales",
                       pays: "🇺🇸 États-Unis",
-                      role: "Synthèse vocale (voix de Mira) et transcription audio de secours pour les navigateurs ne supportant pas l'API Web Speech (Firefox)",
-                      donnees: "Synthèse vocale : texte des réponses de Mira uniquement. Transcription (fallback) : fichier audio de la prise de parole de l'élève, traité immédiatement et non conservé par ElevenLabs. Aucun identifiant personnel transmis.",
-                      lien: "https://elevenlabs.io/privacy",
+                      role: "Génération de la voix de l'enseignante IA et transcription audio de secours sur certains navigateurs",
+                      donnees: "Synthèse : texte à vocaliser uniquement. Transcription (mode secours) : enregistrement audio traité immédiatement et non conservé. Aucun identifiant personnel transmis.",
                       badge: "Transfert international",
                       badgeCouleur: "rgba(201,149,42,0.1)",
                     },
                     {
-                      nom: "Vercel",
-                      pays: "🇺🇸 États-Unis (Edge Network mondial)",
-                      role: "Hébergement de l'application web et traitement serverless des requêtes",
-                      donnees: "Métadonnées de requête HTTP (IP anonymisée, en-têtes) — traitées en transit uniquement, non stockées de façon permanente par Vercel",
-                      lien: "https://vercel.com/legal/privacy-policy",
+                      nom: "Hébergement de l'application web",
+                      pays: "🇺🇸 États-Unis",
+                      role: "Mise à disposition de l'interface web et traitement des requêtes applicatives",
+                      donnees: "Métadonnées de requête HTTP (IP anonymisée, en-têtes) — traitées en transit uniquement, non stockées de façon permanente",
                       badge: "Transfert international",
                       badgeCouleur: "rgba(201,149,42,0.1)",
                     },
@@ -337,17 +332,9 @@ export default function PolitiqueConfidentialitePage() {
                       <p className="text-xs text-[var(--color-ink-soft)] mb-1">
                         <span className="font-semibold text-[var(--color-ink)]">Rôle : </span>{t.role}
                       </p>
-                      <p className="text-xs text-[var(--color-ink-soft)] mb-3">
+                      <p className="text-xs text-[var(--color-ink-soft)]">
                         <span className="font-semibold text-[var(--color-ink)]">Données transmises : </span>{t.donnees}
                       </p>
-                      <a
-                        href={t.lien}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-[var(--color-accent)] hover:underline"
-                      >
-                        Politique de confidentialité du sous-traitant →
-                      </a>
                     </div>
                   ))}
                 </div>
@@ -356,17 +343,17 @@ export default function PolitiqueConfidentialitePage() {
               {/* 7. Transferts internationaux */}
               <Section id="transferts-internationaux" num="7" title="Transferts internationaux de données">
                 <p>
-                  Certains de nos sous-traitants (Anthropic, Resend) sont établis aux <strong className="text-[var(--color-ink)]">États-Unis</strong>. Conformément à la Loi 25, tout transfert de renseignements personnels hors Québec fait l'objet d'une évaluation des facteurs relatifs à la vie privée (ÉFVP).
+                  Certains de nos sous-traitants sont établis aux <strong className="text-[var(--color-ink)]">États-Unis</strong>. Conformément à la Loi 25, tout transfert de renseignements personnels hors Québec fait l'objet d'une évaluation des facteurs relatifs à la vie privée (ÉFVP).
                 </p>
                 <div className="rounded-xl bg-[rgba(201,149,42,0.06)] border border-[rgba(201,149,42,0.2)] px-4 py-4 space-y-3">
                   <p className="text-xs font-bold text-[var(--color-gold)] uppercase tracking-wider">Mesures de protection appliquées</p>
                   {[
-                    "Les données transmises à Anthropic sont anonymisées — aucun identifiant personnel (nom, courriel, IP) n'est inclus dans les requêtes IA",
-                    "Les données transmises à Resend se limitent à l'adresse courriel et au contenu du message transactionnel",
-                    "ElevenLabs reçoit uniquement le texte des réponses de Mira (synthèse vocale) ou, en mode fallback navigateur, un enregistrement audio traité instantanément et non conservé",
-                    "Vercel traite les requêtes HTTP en transit — aucune donnée applicatif n'est stockée de façon permanente sur l'infrastructure Vercel",
-                    "Nos sous-traitants américains sont soumis au cadre de protection des données UE-É.-U. ou à des clauses contractuelles équivalentes",
-                    "La base de données principale est hébergée au Canada (Supabase, AWS ca-central-1) — les données sensibles ne quittent pas le territoire canadien",
+                    "Les données transmises à notre fournisseur IA sont anonymisées — aucun identifiant personnel (nom, courriel, IP) n'est inclus dans les requêtes",
+                    "Les données transmises à notre service d'envoi de courriels se limitent à l'adresse courriel du destinataire et au contenu du message transactionnel",
+                    "Notre fournisseur de services vocaux reçoit uniquement le texte à vocaliser, ou en mode secours un enregistrement audio traité instantanément et non conservé",
+                    "Notre fournisseur d'hébergement applicatif traite les requêtes HTTP en transit — aucune donnée applicative n'est stockée de façon permanente",
+                    "Nos sous-traitants établis aux États-Unis sont soumis au cadre de protection des données UE-É.-U. ou à des clauses contractuelles équivalentes",
+                    "La base de données principale est hébergée au Canada — les données sensibles ne quittent pas le territoire canadien",
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-2 text-xs">
                       <span className="text-[var(--color-gold)] flex-shrink-0 mt-0.5">⚡</span>
@@ -388,7 +375,7 @@ export default function PolitiqueConfidentialitePage() {
                     ["Données scolaires de l'élève", "Durée du compte parent + 1 an", "Continuité du suivi pédagogique"],
                     ["Exercices et corrections IA", "Durée du compte + 1 an", "Historique d'apprentissage"],
                     ["Recommandations IA", "7 jours (cache renouvelable)", "Calcul à la demande"],
-                    ["Session de connexion (JWT)", "30 jours ou fermeture de session", "Sécurité de l'authentification"],
+                    ["Session de connexion", "30 jours ou fermeture de session", "Sécurité de l'authentification"],
                     ["Quota d'utilisation Mira", "Réinitialisé chaque lundi — seul le compteur de la semaine courante est conservé", "Limitation du service + équité entre utilisateurs"],
                     ["Codes OTP de vérification", "15 minutes", "Sécurité — expiration automatique"],
                     ["Jetons d'invitation spécialiste", "72 heures", "Sécurité — usage unique"],
@@ -408,9 +395,9 @@ export default function PolitiqueConfidentialitePage() {
                 </p>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   {[
-                    { icon: "🔑", titre: "Hachage des mots de passe", desc: "bcrypt avec facteur de coût 12 — jamais stockés en clair" },
-                    { icon: "🎲", titre: "Codes OTP cryptographiques", desc: "Générés via crypto.randomInt() — non prédictibles" },
-                    { icon: "🍪", titre: "Sessions sécurisées", desc: "JWT signé via Auth.js, cookie HttpOnly · Secure · SameSite" },
+                    { icon: "🔑", titre: "Hachage des mots de passe", desc: "Algorithme de hachage cryptographique irréversible à coût adaptatif élevé — jamais stockés en clair" },
+                    { icon: "🎲", titre: "Codes OTP cryptographiques", desc: "Générés par un générateur de nombres aléatoires cryptographiquement sûr — non prédictibles" },
+                    { icon: "🍪", titre: "Sessions sécurisées", desc: "Jeton de session signé cryptographiquement, cookie HttpOnly · Secure · SameSite" },
                     { icon: "📧", titre: "Double vérification", desc: "OTP par courriel requis pour toutes les connexions adultes" },
                     { icon: "🔒", titre: "Chiffrement en transit", desc: "TLS 1.3 pour toutes les communications avec la base de données" },
                     { icon: "👮", titre: "Contrôle d'accès (RBAC)", desc: "Chaque rôle n'accède qu'à ses données autorisées" },
@@ -440,7 +427,7 @@ export default function PolitiqueConfidentialitePage() {
               {/* 10. Mineurs */}
               <Section id="mineurs" num="10" title="Protection des mineurs">
                 <p>
-                  ÉduRéussite QC est une plateforme conçue pour le soutien scolaire des enfants. Nous accordons une attention particulière à la protection de leurs données.
+                  Édu-Réussite QC est une plateforme conçue pour le soutien scolaire des enfants. Nous accordons une attention particulière à la protection de leurs données.
                 </p>
                 <div className="space-y-3">
                   {[
@@ -457,7 +444,7 @@ export default function PolitiqueConfidentialitePage() {
                     {
                       icon: "🤖",
                       titre: "Anonymisation pour l'IA",
-                      desc: "Les données transmises à l'API d'intelligence artificielle (Claude/Anthropic) pour la génération de contenu pédagogique sont anonymisées — elles n'incluent ni le nom, ni le courriel, ni aucun identifiant direct de l'enfant.",
+                      desc: "Les données transmises à notre fournisseur d'intelligence artificielle pour la génération de contenu pédagogique sont anonymisées — elles n'incluent ni le nom, ni le courriel, ni aucun identifiant direct de l'enfant.",
                     },
                     {
                       icon: "🚫",
@@ -479,7 +466,7 @@ export default function PolitiqueConfidentialitePage() {
               {/* 11. IA */}
               <Section id="ia" num="11" title="Intelligence artificielle — Transparence">
                 <p>
-                  ÉduRéussite QC utilise l'intelligence artificielle (Claude, développé par Anthropic) comme outil pédagogique d'appui. Voici comment nous l'utilisons de façon responsable :
+                  Édu-Réussite QC utilise l'intelligence artificielle comme outil pédagogique d'appui. Voici comment nous l'utilisons de façon responsable :
                 </p>
                 <div className="space-y-3">
                   {[
@@ -501,7 +488,7 @@ export default function PolitiqueConfidentialitePage() {
                     {
                       icon: "🎙️",
                       titre: "Enseignante IA orale — Mira",
-                      desc: "Mira est une enseignante IA interactive avec laquelle l'élève peut converser par texte ou par microphone. La reconnaissance vocale utilise en priorité l'API Web Speech du navigateur (traitement 100 % local, aucune donnée audio transmise à nos serveurs). Sur les navigateurs incompatibles (Firefox), un enregistrement audio est transmis à ElevenLabs pour transcription immédiate et n'est pas conservé. L'utilisation est limitée à 30 minutes par semaine — seul le compteur de durée est conservé en base, aucun enregistrement ni transcription.",
+                      desc: "Mira est une enseignante IA interactive avec laquelle l'élève peut converser par texte ou par microphone. La reconnaissance vocale utilise en priorité le traitement local du navigateur (aucune donnée audio transmise à nos serveurs). Sur certains navigateurs incompatibles, un enregistrement audio est transmis à un service tiers pour transcription immédiate et n'est pas conservé. L'utilisation est limitée à 30 minutes par semaine — seul le compteur de durée est conservé en base, aucun enregistrement ni transcription.",
                     },
                   ].map((item) => (
                     <div key={item.titre} className="flex gap-3 rounded-xl border border-[var(--color-rule)] bg-white px-4 py-3">
@@ -548,8 +535,8 @@ export default function PolitiqueConfidentialitePage() {
                   <p className="text-xs font-bold text-[var(--color-ink)] mb-2">Comment exercer vos droits</p>
                   <p className="text-xs leading-relaxed mb-2">
                     Envoyez votre demande à{" "}
-                    <a href="mailto:confidentialite@edureussite.qc.ca" className="text-[var(--color-accent)] hover:underline font-semibold">
-                      confidentialite@edureussite.qc.ca
+                    <a href="mailto:confidentialite@edu-reussite.com" className="text-[var(--color-accent)] hover:underline font-semibold">
+                      confidentialite@edu-reussite.com
                     </a>{" "}
                     en précisant votre identité et la nature de votre demande. Nous vous répondrons dans un délai de <strong>30 jours</strong>.
                   </p>
@@ -565,12 +552,12 @@ export default function PolitiqueConfidentialitePage() {
               {/* 13. Contact */}
               <Section id="contact" num="13" title="Nous contacter">
                 <div className="rounded-2xl border border-[var(--color-rule)] bg-white p-5 space-y-2">
-                  <p className="font-black text-[var(--color-ink)]">ÉduRéussite QC</p>
+                  <p className="font-black text-[var(--color-ink)]">Édu-Réussite QC</p>
                   <p className="text-xs text-[var(--color-ink-soft)]">Responsable de la protection des renseignements personnels (RPRP)</p>
                   <p className="text-sm">
                     📧{" "}
-                    <a href="mailto:confidentialite@edureussite.qc.ca" className="text-[var(--color-accent)] hover:underline font-semibold">
-                      confidentialite@edureussite.qc.ca
+                    <a href="mailto:confidentialite@edu-reussite.com" className="text-[var(--color-accent)] hover:underline font-semibold">
+                      confidentialite@edu-reussite.com
                     </a>
                   </p>
                   <p className="text-sm">🌐 Province de Québec, Canada</p>
@@ -588,7 +575,7 @@ export default function PolitiqueConfidentialitePage() {
             {/* Pied de page */}
             <div className="mt-16 border-t border-[var(--color-rule)] pt-8 text-center">
               <p className="text-xs text-[var(--color-ink-soft)]">
-                © {new Date().getFullYear()} ÉduRéussite QC · Tous droits réservés ·{" "}
+                © {new Date().getFullYear()} Édu-Réussite QC · Tous droits réservés ·{" "}
                 <Link href="/" className="hover:underline">Accueil</Link>
                 {" · "}
                 <Link href="/login" className="hover:underline">Connexion</Link>
@@ -623,7 +610,7 @@ export default function PolitiqueConfidentialitePage() {
                   Mise à jour : <strong className="text-[var(--color-ink)]">{dateMAJ}</strong>
                 </p>
                 <a
-                  href="mailto:confidentialite@edureussite.qc.ca"
+                  href="mailto:confidentialite@edu-reussite.com"
                   className="mt-2 block text-[11px] text-[var(--color-accent)] hover:underline"
                 >
                   Questions ? Écrivez-nous →

@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logResend } from "@/lib/api-usage/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 const DEV = process.env.NODE_ENV !== "production";
 
 interface ConfirmationRdvParams {
@@ -39,7 +39,7 @@ export async function sendConfirmationRdvEmail(params: ConfirmationRdvParams): P
 
   const htmlParent = `
     <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 32px; background: #f9f7f4; border-radius: 16px;">
-      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ ÉduRéussite QC</h1>
+      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ Édu-Réussite QC</h1>
       <p style="color: #8a909c; font-size: 13px; margin-bottom: 24px;">Confirmation de rendez-vous</p>
 
       <div style="background: #fff; border: 1px solid #e5e2dc; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
@@ -70,14 +70,14 @@ export async function sendConfirmationRdvEmail(params: ConfirmationRdvParams): P
       </div>
 
       <p style="font-size: 12px; color: #8a909c; text-align: center;">
-        ÉduRéussite QC — Votre partenaire en réussite éducative
+        Édu-Réussite QC — Votre partenaire en réussite éducative
       </p>
     </div>
   `;
 
   const htmlSpecialiste = `
     <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 32px; background: #f9f7f4; border-radius: 16px;">
-      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ ÉduRéussite QC</h1>
+      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ Édu-Réussite QC</h1>
       <p style="color: #8a909c; font-size: 13px; margin-bottom: 24px;">Rendez-vous confirmé</p>
 
       <div style="background: #fff; border: 1px solid #e5e2dc; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
@@ -97,7 +97,7 @@ export async function sendConfirmationRdvEmail(params: ConfirmationRdvParams): P
       </div>
 
       <p style="font-size: 12px; color: #8a909c; text-align: center;">
-        ÉduRéussite QC — Tableau de bord spécialiste
+        Édu-Réussite QC — Tableau de bord spécialiste
       </p>
     </div>
   `;
@@ -106,7 +106,7 @@ export async function sendConfirmationRdvEmail(params: ConfirmationRdvParams): P
     resend.emails.send({
       from: FROM,
       to: parentEmail,
-      subject: `Rendez-vous confirmé avec ${specialisteNom} — ÉduRéussite QC`,
+      subject: `Rendez-vous confirmé avec ${specialisteNom} — Édu-Réussite QC`,
       html: htmlParent,
     }),
     resend.emails.send({

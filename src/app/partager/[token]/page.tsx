@@ -49,7 +49,7 @@ export default async function PartagerPage({ params }: Props) {
       <div className="border-b border-[var(--color-rule)] bg-white print:hidden">
         <div className="mx-auto max-w-4xl px-4 py-4 flex items-center justify-between gap-4 flex-wrap">
           <div>
-            <p className="text-sm font-bold text-[var(--color-ink)]">ÉduRéussite QC</p>
+            <p className="text-sm font-bold text-[var(--color-ink)]">Édu-Réussite QC</p>
             <p className="text-xs text-[var(--color-ink-soft)]">Plan d'accompagnement parental partagé</p>
           </div>
           <button
@@ -255,7 +255,7 @@ export default async function PartagerPage({ params }: Props) {
 
           {/* Footer légal */}
           <p className="text-xs text-center text-[var(--color-ink-soft)] pb-4">
-            Document généré par ÉduRéussite QC · à titre informatif · ne remplace pas un avis professionnel
+            Document généré par Édu-Réussite QC · à titre informatif · ne remplace pas un avis professionnel
           </p>
         </div>
       </main>

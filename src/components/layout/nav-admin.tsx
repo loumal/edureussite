@@ -51,7 +51,7 @@ export function NavAdmin({ role }: NavAdminProps) {
           href="/admin"
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
-          <span className="text-base font-black text-[var(--color-ink)]">✦ ÉduRéussite</span>
+          <span className="text-base font-black text-[var(--color-ink)]">✦ Édu-Réussite</span>
           <span className="rounded-full bg-[rgba(217,79,43,0.1)] px-2 py-0.5 text-[11px] font-bold text-[var(--color-accent)] leading-tight">
             {isSuperAdmin ? "Super Admin" : "Admin"}
           </span>

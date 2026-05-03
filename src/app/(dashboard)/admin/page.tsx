@@ -50,7 +50,7 @@ export default async function AdminDashboardPage() {
             Tableau de bord {isSuperAdmin ? "Super Admin" : "Admin"} ⚙️
           </h1>
           <p className="text-sm text-[var(--color-ink-soft)] mt-1">
-            Vue d'ensemble de la plateforme ÉduRéussite QC
+            Vue d'ensemble de la plateforme Édu-Réussite QC
           </p>
         </div>
 

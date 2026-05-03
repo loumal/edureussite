@@ -3,52 +3,34 @@ import { CheckInEmotionnelWidget } from "@/components/dashboard/check-in-widget"
 import { ExercicesDuJourWidget } from "@/components/dashboard/exercices-du-jour";
 import { PlanDuJourWidget, ObjectifsProgressionWidget } from "@/components/dashboard/plan-du-jour-widget";
 import { ProgressionWidget } from "@/components/dashboard/progression-widget";
-import { StreakBadgesWidget } from "@/components/dashboard/streak-badges";
 import { CoursWidget } from "@/components/dashboard/cours-widget";
 import { DefJourWidget } from "@/components/dashboard/def-jour-widget";
 import { MissionsWidget } from "@/components/dashboard/missions-widget";
 import { ClassementWidget } from "@/components/dashboard/classement-widget";
-import { StreakDangerBanner } from "@/components/dashboard/streak-danger-banner";
+import { HeroEleve } from "@/components/dashboard/hero-eleve";
 import { NavEleve } from "@/components/layout/nav-eleve";
-import { CommentaireEleveWidget } from "@/components/eleve/commentaire-eleve-widget";
-import { MesCommentaires } from "@/components/eleve/mes-commentaires";
-import { InspirationsWidget } from "@/components/eleve/inspirations-widget";
-import { selectionnerHistoires, getMessageIntro, HISTOIRES } from "@/lib/stories/histoires-inspirantes";
 import { BirthdayOverlay } from "@/components/eleve/birthday-overlay";
 import { SessionTracker } from "@/components/eleve/session-tracker";
 import { WelcomeTour } from "@/components/ui/welcome-tour";
 import { SurpriseCard } from "@/components/eleve/surprise-card";
 import { MiraLibreBtn } from "@/components/mira/mira-libre";
-import { GamificationGuide } from "@/components/dashboard/gamification-guide";
 import { estJeuneEleve } from "@/lib/utils/niveau-eleve";
+import { parseCosmetiques } from "@/lib/boutique/items";
+import Link from "next/link";
 
 export default async function EleveDashboardPage() {
   const { profil, totalExercices, aFaitExerciceAujourdhui } = await api.eleve.getDashboard();
-
   if (!profil) return null;
 
-  const derniereSession = profil.sessions[0];
   const modeDoux = profil.checkIns[0]?.modeDoux ?? false;
   const jeune = estJeuneEleve(profil.niveauScolaire);
-
-  const profilPourSelection = {
-    tdah: profil.tdah,
-    dyslexie: profil.dyslexie,
-    anxieteScolaire: profil.anxieteScolaire,
-    matieresRedoutees: profil.matieresRedoutees as string[],
-    matieresPreferees: profil.matieresPreferees as string[],
-    niveauxMatieres: profil.niveauxMatieres.map((n) => ({
-      matiere: n.matiere,
-      scoreGlobal: n.scoreGlobal,
-    })),
-  };
-  const histoiresSelectionnees = selectionnerHistoires(profilPourSelection, 3);
-  const messageIntro = getMessageIntro(profil.prenom, profilPourSelection);
+  const cosmetiques = parseCosmetiques((profil as { cosmetiques?: unknown }).cosmetiques ?? null);
+  const coursEnCours = profil.coursRemediation.filter((c) => c.statut !== "TERMINE");
+  const tousCoursTermines = profil.coursRemediation.length > 0 && coursEnCours.length === 0;
 
   const estAnniversaire = (() => {
     if (!profil.dateNaissance) return false;
-    const auj = new Date();
-    const nais = new Date(profil.dateNaissance);
+    const auj = new Date(), nais = new Date(profil.dateNaissance);
     return auj.getDate() === nais.getDate() && auj.getMonth() === nais.getMonth();
   })();
 
@@ -57,65 +39,45 @@ export default async function EleveDashboardPage() {
       <WelcomeTour role="eleve" prenom={profil.prenom} />
       <SessionTracker />
       {estAnniversaire && <BirthdayOverlay prenom={profil.prenom} />}
-      <NavEleve prenom={profil.prenom} streak={profil.streakJours} niveauScolaire={profil.niveauScolaire} />
+      <NavEleve prenom={profil.prenom} streak={profil.streakJours} niveauScolaire={profil.niveauScolaire} avatarEquipe={cosmetiques.avatarEquipe} />
 
-      <main className="mx-auto max-w-5xl px-4 py-6 sm:py-8">
+      <main className="mx-auto max-w-5xl px-4 py-5 sm:py-6">
 
-        {/* ── SALUTATION — sobre et directe ── */}
-        <div className="mb-4">
-          {jeune ? (
-            <>
-              <h1 className="text-2xl font-black text-[var(--color-ink)] sm:text-3xl">
-                {modeDoux ? "💙" : "👋"} Coucou {profil.prenom} !
-              </h1>
-              <p className="text-base text-[var(--color-ink-soft)] mt-1">
-                {modeDoux ? "Prends soin de toi aujourd'hui 💙" : "C'est le moment de pratiquer ! 🌟"}
-              </p>
-            </>
-          ) : (
-            <>
-              <h1 className="text-xl font-black text-[var(--color-ink)] sm:text-2xl">
-                {getGreeting()}, {profil.prenom} ! {modeDoux ? "💙" : "👋"}
-              </h1>
-              {(modeDoux || totalExercices > 0) && (
-                <p className="text-sm text-[var(--color-ink-soft)] mt-1">
-                  {modeDoux
-                    ? "Prends soin de toi aujourd'hui. Des exercices doux t'attendent."
-                    : `Tu as complété ${totalExercices} exercice${totalExercices > 1 ? "s" : ""} au total. Continue comme ça !`}
-                </p>
-              )}
-            </>
-          )}
-        </div>
-
-        {/* ── BANNIÈRE STREAK — juste après la salutation ── */}
-        <StreakDangerBanner
+        {/* ── HERO ── */}
+        <HeroEleve
+          prenom={profil.prenom}
+          niveauJeu={profil.niveauJeu}
+          totalPoints={profil.totalPoints}
           streak={profil.streakJours}
+          streakBoucliers={profil.streakBoucliers}
           aFaitExerciceAujourdhui={aFaitExerciceAujourdhui}
+          modeDoux={modeDoux}
+          cosmetiques={cosmetiques}
+          jeune={jeune}
         />
 
-        {/* ── GRILLE PRINCIPALE ── */}
-        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-[2fr_1fr] lg:grid-cols-3">
-          {/* Colonne principale (2/3) */}
-          <div className="md:col-span-1 lg:col-span-2 space-y-4 sm:space-y-6">
+        {/* ── ACCÈS RAPIDE — 3 raccourcis contextuels ── */}
+        <div className="grid grid-cols-3 gap-2 mb-5">
+          <QuickCard href="/eleve/cours" emoji="📚" label="Mes cours" badge={profil.coursRemediation.filter(c => c.statut !== "TERMINE").length || undefined} />
+          <QuickCard href="/eleve/plan" emoji="🗺️" label="Mon plan" />
+          <QuickCard href="/eleve/boutique?onglet=jeux" emoji="🎮" label="Jeux" />
+        </div>
 
-            {/* ── DÉFI DU JOUR — première chose visible ── */}
+        {/* ── GRILLE PRINCIPALE ── */}
+        <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-[2fr_1fr] lg:grid-cols-3">
+
+          {/* ── Colonne principale ── */}
+          <div className="md:col-span-1 lg:col-span-2 space-y-4">
+
+            {/* Défi du jour — priorité absolue */}
             <PlanDuJourWidget niveauScolaire={profil.niveauScolaire} />
 
-            {/* ── Check-in émotionnel — intégré dans le flux, non bloquant ── */}
-            {!derniereSession && (
+            {/* Check-in — seulement si nouvelle session */}
+            {!profil.sessions[0] && (
               <CheckInEmotionnelWidget niveauScolaire={profil.niveauScolaire} />
             )}
 
-            {/* ── Cours personnalisés (remédiation en cours) ── */}
-            {profil.coursRemediation.filter((c) => c.statut !== "TERMINE").length > 0 && (
-              <CoursWidget cours={profil.coursRemediation} />
-            )}
-
-            {/* ── Aller plus loin — exploration libre ── */}
-            {!jeune && <DefJourWidget />}
-
-            {/* ── Exercices recommandés par Mira ── */}
+            {/* Exercices assignés par Mira */}
             {profil.exercicesAssignes.filter((e) => e.statut !== "TERMINE").length > 0 && (
               <ExercicesDuJourWidget
                 exercices={profil.exercicesAssignes}
@@ -123,67 +85,58 @@ export default async function EleveDashboardPage() {
               />
             )}
 
-            {/* ── Missions de la semaine ── */}
-            <MissionsWidget />
-
-            {/* ── Ma progression — décalée après le contenu principal ── */}
-            <ObjectifsProgressionWidget />
-
-            {/* ── Surprise parentale ── */}
-            <SurpriseCard />
-
-            {profil.coursRemediation.filter((c) => c.statut === "TERMINE").length > 0 && (
-              <CoursWidget cours={profil.coursRemediation.filter((c) => c.statut === "TERMINE")} />
+            {/* Cours de remédiation en cours */}
+            {coursEnCours.length > 0 && <CoursWidget cours={coursEnCours} />}
+            {tousCoursTermines && (
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-center">
+                <p className="text-sm font-bold text-emerald-700">🎉 Tous tes cours sont terminés !</p>
+                <p className="text-xs text-emerald-600 mt-1">Continue à t'entraîner avec les exercices du jour.</p>
+              </div>
             )}
+
+            {/* Défi avancé — secondaires seulement */}
+            {!jeune && <DefJourWidget />}
+
+            {/* Surprise parentale */}
+            <SurpriseCard />
           </div>
 
-          {/* Sidebar droite */}
-          <div className="space-y-4 sm:space-y-6">
-            <StreakBadgesWidget
-              streak={profil.streakJours}
-              streakBoucliers={profil.streakBoucliers}
-              totalBadges={profil.badges.length}
-              badges={profil.badges.slice(0, 3)}
-              totalPoints={profil.totalPoints}
-              niveauJeu={profil.niveauJeu}
-              niveauScolaire={profil.niveauScolaire}
-            />
+          {/* ── Sidebar ── */}
+          <div className="space-y-4">
+            {/* Missions semaine */}
+            <MissionsWidget />
 
-            {/* Classement hebdomadaire — masqué pour les jeunes (notion de compétition prématurée) */}
-            {!jeune && <ClassementWidget />}
-
+            {/* Progression par matière */}
             <ProgressionWidget niveauxMatieres={profil.niveauxMatieres} />
 
-            {/* Guide gamification — explication XP/niveaux/séries */}
-            <GamificationGuide />
-
-            <div>
-              <CommentaireEleveWidget prenom={profil.prenom} />
-              <MesCommentaires />
-            </div>
+            {/* Objectifs + classement — pas pour les jeunes */}
+            {!jeune && (
+              <>
+                <ObjectifsProgressionWidget />
+                <ClassementWidget />
+              </>
+            )}
           </div>
         </div>
 
-        {/* Bouton flottant Mira aide libre */}
+        {/* Bouton Mira flottant */}
         <MiraLibreBtn />
-
-        {/* Section inspirations — textes longs, non adaptés aux jeunes lecteurs */}
-        {!jeune && (
-          <InspirationsWidget
-            histoires={histoiresSelectionnees}
-            messageIntro={messageIntro}
-            prenom={profil.prenom}
-            allHistoiresCount={HISTOIRES.length}
-          />
-        )}
       </main>
     </div>
   );
 }
 
-function getGreeting(): string {
-  const h = new Date().getHours();
-  if (h < 12) return "Bonjour";
-  if (h < 18) return "Bon après-midi";
-  return "Bonsoir";
+function QuickCard({ href, emoji, label, badge }: { href: string; emoji: string; label: string; badge?: number }) {
+  return (
+    <Link href={href}
+      className="group relative flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-[var(--color-rule)] bg-white py-3 px-2 text-center transition-all duration-200 hover:border-[var(--color-ink)] hover:shadow-md hover:-translate-y-0.5 active:scale-95 active:shadow-none">
+      <span className="text-2xl transition-transform duration-200 group-hover:scale-110">{emoji}</span>
+      <span className="text-xs font-semibold text-[var(--color-ink-soft)] group-hover:text-[var(--color-ink)] leading-tight transition-colors">{label}</span>
+      {badge !== undefined && badge > 0 && (
+        <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--color-accent)] px-1 text-[10px] font-bold text-white">
+          {badge}
+        </span>
+      )}
+    </Link>
+  );
 }

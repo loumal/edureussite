@@ -27,7 +27,7 @@ export function LandingNav() {
           href="/"
           className="text-base font-black text-[var(--color-ink)] tracking-tight hover:opacity-75 transition-opacity"
         >
-          ✦ ÉduRéussite QC
+          ✦ Édu-Réussite QC
         </Link>
 
         {/* CTA desktop */}

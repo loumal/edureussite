@@ -110,9 +110,14 @@ export default function HistoriqueExercicesPage() {
               </p>
             )}
           </div>
-          <Link href="/eleve/exercices/nouveau">
-            <Button size="sm">+ Nouvel exercice</Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link href="/eleve/exercices/depuis-photo">
+              <Button size="sm" variant="secondary">📸 Importer</Button>
+            </Link>
+            <Link href="/eleve/exercices/nouveau">
+              <Button size="sm">+ Nouvel exercice</Button>
+            </Link>
+          </div>
         </div>
 
         {/* ── Filtres ── */}

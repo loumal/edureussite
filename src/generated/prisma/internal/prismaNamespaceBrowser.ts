@@ -101,7 +101,9 @@ export const ModelName = {
   PublicationSociale: 'PublicationSociale',
   PersonaMarketing: 'PersonaMarketing',
   StrategieMarketing: 'StrategieMarketing',
-  CampagneEmail: 'CampagneEmail'
+  DemandeJeu: 'DemandeJeu',
+  CampagneEmail: 'CampagneEmail',
+  PartieMultijoueur: 'PartieMultijoueur'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -211,6 +213,7 @@ export const ProfilEleveScalarFieldEnum = {
   derniereConnexion: 'derniereConnexion',
   totalPoints: 'totalPoints',
   niveauJeu: 'niveauJeu',
+  cosmetiques: 'cosmetiques',
   onboardingComplete: 'onboardingComplete',
   onboardingEtape: 'onboardingEtape',
   enseignantId: 'enseignantId',
@@ -916,6 +919,27 @@ export const StrategieMarketingScalarFieldEnum = {
 export type StrategieMarketingScalarFieldEnum = (typeof StrategieMarketingScalarFieldEnum)[keyof typeof StrategieMarketingScalarFieldEnum]
 
 
+export const DemandeJeuScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  jeuId: 'jeuId',
+  jeuNom: 'jeuNom',
+  jeuDescription: 'jeuDescription',
+  token: 'token',
+  statut: 'statut',
+  xpCout: 'xpCout',
+  minutesAccordees: 'minutesAccordees',
+  scoreObtenu: 'scoreObtenu',
+  debutPartieAt: 'debutPartieAt',
+  termineAt: 'termineAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DemandeJeuScalarFieldEnum = (typeof DemandeJeuScalarFieldEnum)[keyof typeof DemandeJeuScalarFieldEnum]
+
+
 export const CampagneEmailScalarFieldEnum = {
   id: 'id',
   titre: 'titre',
@@ -936,6 +960,23 @@ export const CampagneEmailScalarFieldEnum = {
 export type CampagneEmailScalarFieldEnum = (typeof CampagneEmailScalarFieldEnum)[keyof typeof CampagneEmailScalarFieldEnum]
 
 
+export const PartieMultijoueurScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  jeuId: 'jeuId',
+  createurId: 'createurId',
+  joueurs: 'joueurs',
+  etat: 'etat',
+  statut: 'statut',
+  gagnantId: 'gagnantId',
+  maxJoueurs: 'maxJoueurs',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PartieMultijoueurScalarFieldEnum = (typeof PartieMultijoueurScalarFieldEnum)[keyof typeof PartieMultijoueurScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -944,19 +985,19 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
 export const NullableJsonNullValueInput = {
   DbNull: DbNull,
   JsonNull: JsonNull
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

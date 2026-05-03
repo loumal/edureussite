@@ -31,8 +31,8 @@ const ETAPES: Record<Role, Etape[]> = {
   eleve: [
     {
       icon: "👋",
-      titre: "Bienvenue sur ÉduRéussite !",
-      description: "ÉduRéussite est ta plateforme d'apprentissage personnalisée. Elle s'adapte à ton niveau, ton rythme et même ton humeur pour t'aider à progresser dans toutes tes matières.",
+      titre: "Bienvenue sur Édu-Réussite !",
+      description: "Édu-Réussite est ta plateforme d'apprentissage personnalisée. Elle s'adapte à ton niveau, ton rythme et même ton humeur pour t'aider à progresser dans toutes tes matières.",
       conseil: "Ce guide te présente les 7 fonctions principales. Tu peux y revenir à tout moment via le bouton ? en bas à droite. Prends 2 minutes — ça changera ta façon d'étudier.",
       visuel: {
         titre: "Ce que tu vas pouvoir faire",
@@ -64,7 +64,7 @@ const ETAPES: Record<Role, Etape[]> = {
     {
       icon: "📅",
       titre: "Check-in du jour",
-      description: "Chaque matin, ÉduRéussite te demande comment tu te sens. Stressé, fatigué, super motivé ? Ta réponse adapte l'exercice du jour — plus doux si tu es à plat, plus stimulant si tu es en forme.",
+      description: "Chaque matin, Édu-Réussite te demande comment tu te sens. Stressé, fatigué, super motivé ? Ta réponse adapte l'exercice du jour — plus doux si tu es à plat, plus stimulant si tu es en forme.",
       conseil: "Si tu actives le Mode Doux, les exercices deviennent moins intenses et Mira t'encourage davantage. Ton état émotionnel est privé — personne d'autre ne peut le voir.",
       visuel: {
         titre: "États émotionnels disponibles",
@@ -155,8 +155,8 @@ const ETAPES: Record<Role, Etape[]> = {
   parent: [
     {
       icon: "👋",
-      titre: "Bienvenue sur ÉduRéussite !",
-      description: "ÉduRéussite est une plateforme éducative qui accompagne vos enfants et vous informe en temps réel de leurs progrès. Vous êtes le partenaire clé de leur réussite scolaire.",
+      titre: "Bienvenue sur Édu-Réussite !",
+      description: "Édu-Réussite est une plateforme éducative qui accompagne vos enfants et vous informe en temps réel de leurs progrès. Vous êtes le partenaire clé de leur réussite scolaire.",
       conseil: "Ce guide présente les 6 fonctions principales de votre espace. Le bouton ? en bas à droite vous y redonne accès à tout moment pendant votre première semaine.",
       visuel: {
         titre: "Votre espace parent en un coup d'œil",
@@ -237,8 +237,8 @@ const ETAPES: Record<Role, Etape[]> = {
   enseignant: [
     {
       icon: "👋",
-      titre: "Bienvenue sur ÉduRéussite !",
-      description: "ÉduRéussite est votre tableau de bord pédagogique. Il centralise le suivi de tous vos élèves, la génération d'épreuves PFEQ et la communication avec les familles — tout en un seul endroit.",
+      titre: "Bienvenue sur Édu-Réussite !",
+      description: "Édu-Réussite est votre tableau de bord pédagogique. Il centralise le suivi de tous vos élèves, la génération d'épreuves PFEQ et la communication avec les familles — tout en un seul endroit.",
       conseil: "Ce guide vous présente les 6 fonctions clés. Le bouton ? en bas à droite vous y redonne accès à tout moment pendant votre première semaine. Présentez-le à vos élèves dès aujourd'hui !",
       visuel: {
         titre: "Ce que vous pouvez faire ici",
@@ -309,8 +309,8 @@ const ETAPES: Record<Role, Etape[]> = {
   specialiste: [
     {
       icon: "👋",
-      titre: "Bienvenue sur ÉduRéussite !",
-      description: "ÉduRéussite vous connecte avec des familles qui ont besoin de votre expertise. Gérez vos demandes, vos rendez-vous et développez votre clientèle — tout depuis un seul espace.",
+      titre: "Bienvenue sur Édu-Réussite !",
+      description: "Édu-Réussite vous connecte avec des familles qui ont besoin de votre expertise. Gérez vos demandes, vos rendez-vous et développez votre clientèle — tout depuis un seul espace.",
       conseil: "Ce guide vous présente les 5 fonctions principales. Commencez par compléter votre profil public — c'est la base pour être recommandé par l'IA aux familles.",
       visuel: {
         titre: "Votre espace spécialiste",

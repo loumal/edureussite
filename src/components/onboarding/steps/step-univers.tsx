@@ -219,7 +219,7 @@ export function StepUnivers({ data, onSubmit, onBack, loading }: Props) {
         {/* Objectif scolaire */}
         <div>
           <p className="text-sm font-semibold text-[var(--color-ink)] mb-2">
-            🎯 Pourquoi tu utilises ÉduRéussite ?
+            🎯 Pourquoi tu utilises Édu-Réussite ?
           </p>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {OBJECTIFS.map((o) => (

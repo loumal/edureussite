@@ -3,7 +3,7 @@ export default function Loading() {
     <div className="min-h-screen flex items-center justify-center bg-[var(--color-paper)]">
       <div className="flex flex-col items-center gap-4">
         <div className="text-3xl font-black text-[var(--color-ink)] animate-pulse">
-          ✦ ÉduRéussite
+          ✦ Édu-Réussite
         </div>
         <div className="flex gap-1.5">
           {[0, 1, 2].map((i) => (

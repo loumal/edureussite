@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logResend } from "@/lib/api-usage/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 const DEV = process.env.NODE_ENV !== "production";
 
 export async function sendSurpriseDisponibleEmail(opts: {
@@ -21,7 +21,7 @@ export async function sendSurpriseDisponibleEmail(opts: {
 
   const html = `
     <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 32px; background: #f9f7f4; border-radius: 16px;">
-      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ ÉduRéussite QC</h1>
+      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ Édu-Réussite QC</h1>
       <p style="color: #8a909c; font-size: 13px; margin-bottom: 28px;">Message pour les parents</p>
 
       <div style="background: linear-gradient(135deg, #fef9ec 0%, #fff 100%); border: 1px solid #e5e2dc; border-radius: 14px; padding: 28px; margin-bottom: 24px;">
@@ -53,7 +53,7 @@ export async function sendSurpriseDisponibleEmail(opts: {
       </p>
 
       <p style="font-size: 11px; color: #aab0bc; text-align: center;">
-        Ce message a été généré automatiquement par ÉduRéussite QC.<br>
+        Ce message a été généré automatiquement par Édu-Réussite QC.<br>
         La surprise restera disponible pendant 14 jours.
       </p>
     </div>
@@ -67,7 +67,7 @@ export async function sendSurpriseDisponibleEmail(opts: {
   const { error } = await resend.emails.send({
     from: FROM,
     to: parentEmail,
-    subject: `🌟 ${prenomEnfant} mérite une surprise — ÉduRéussite QC`,
+    subject: `🌟 ${prenomEnfant} mérite une surprise — Édu-Réussite QC`,
     html,
   });
   if (error) throw new Error(`Resend error: ${error.message}`);

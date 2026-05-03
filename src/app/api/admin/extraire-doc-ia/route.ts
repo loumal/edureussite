@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
   const buffer = Buffer.from(await fichier.arrayBuffer());
   const base64 = buffer.toString("base64");
 
-  const systemPrompt = `Tu es un assistant spécialisé dans l'extraction et la synthèse de documents pédagogiques pour une plateforme éducative québécoise (ÉduRéussite QC).
+  const systemPrompt = `Tu es un assistant spécialisé dans l'extraction et la synthèse de documents pédagogiques pour une plateforme éducative québécoise (Édu-Réussite QC).
 
 Ta tâche : extraire le contenu pertinent du document fourni pour qu'il serve de référence à une IA générant des plans d'accompagnement et des exercices personnalisés pour des élèves du primaire et secondaire.
 

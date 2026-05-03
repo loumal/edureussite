@@ -28,12 +28,25 @@ export function ClassementWidget() {
     );
   }
 
-  if (!data || data.classement.length === 0) return null;
+  if (!data) return null;
+
+  if (data.classement.length === 0) {
+    return (
+      <Card className="p-5">
+        <CardLabel className="mb-3">Classement de la semaine</CardLabel>
+        <p className="text-xs text-[var(--color-ink-soft)] text-center py-3">
+          🔄 Le classement de cette semaine est en cours de calcul.<br />Reviens dans quelques minutes !
+        </p>
+      </Card>
+    );
+  }
 
   const { classement, monRang } = data;
-  // Afficher top 5 + moi si je ne suis pas dans le top 5
   const top5 = classement.slice(0, 5);
   const moiHorsTop = monRang && monRang > 5 ? classement.find((c) => c.estMoi) : null;
+  const monEntree = classement.find((c) => c.estMoi);
+  const entreeAuDessus = monEntree && monEntree.rang > 1 ? classement.find((c) => c.rang === monEntree.rang - 1) : null;
+  const xpManquant = entreeAuDessus && monEntree ? entreeAuDessus.xp - monEntree.xp : null;
 
   return (
     <Card className="p-5">
@@ -98,8 +111,18 @@ export function ClassementWidget() {
         )}
       </div>
 
-      <p className="mt-3 text-[11px] text-[var(--color-ink-soft)] text-center">
-        Classement anonyme parmi les élèves de {(data.niveauScolaire && NIVEAU_LABEL[data.niveauScolaire]) ?? "ton niveau"} · Réinitialisé chaque lundi
+      {xpManquant !== null && xpManquant > 0 && (
+        <p className="mt-2 text-xs text-center rounded-lg bg-amber-50 border border-amber-100 py-1.5 px-3">
+          Il te manque <span className="font-black text-amber-600">{xpManquant} XP</span> pour monter au rang #{(monEntree?.rang ?? 2) - 1} 🎯
+        </p>
+      )}
+      {monEntree?.rang === 1 && (
+        <p className="mt-2 text-xs text-center rounded-lg bg-emerald-50 border border-emerald-100 py-1.5 text-emerald-700 font-semibold">
+          🥇 Tu es en tête ! Continue comme ça !
+        </p>
+      )}
+      <p className="mt-2 text-[11px] text-[var(--color-ink-soft)] text-center">
+        Classement anonyme · {(data.niveauScolaire && NIVEAU_LABEL[data.niveauScolaire]) ?? "ton niveau"} · Réinitialisé chaque lundi
       </p>
     </Card>
   );

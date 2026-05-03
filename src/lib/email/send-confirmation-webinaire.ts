@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logResend } from "@/lib/api-usage/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 const DEV = process.env.NODE_ENV !== "production";
 
 interface ConfirmationWebinaireParams {
@@ -27,7 +27,7 @@ export async function sendConfirmationWebinaireEmail(params: ConfirmationWebinai
 
   const html = `
     <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 32px; background: #f9f7f4; border-radius: 16px;">
-      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ ÉduRéussite QC</h1>
+      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ Édu-Réussite QC</h1>
       <p style="color: #8a909c; font-size: 13px; margin-bottom: 24px;">Inscription au webinaire confirmée</p>
 
       <div style="background: #fff; border: 1px solid #e5e2dc; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
@@ -55,7 +55,7 @@ export async function sendConfirmationWebinaireEmail(params: ConfirmationWebinai
       </div>
 
       <p style="font-size: 12px; color: #8a909c; text-align: center;">
-        ÉduRéussite QC — Votre partenaire en réussite éducative
+        Édu-Réussite QC — Votre partenaire en réussite éducative
       </p>
     </div>
   `;
@@ -63,7 +63,7 @@ export async function sendConfirmationWebinaireEmail(params: ConfirmationWebinai
   const { error } = await resend.emails.send({
     from: FROM,
     to: parentEmail,
-    subject: `Inscription confirmée : ${webinaireTitle} — ÉduRéussite QC`,
+    subject: `Inscription confirmée : ${webinaireTitle} — Édu-Réussite QC`,
     html,
   });
 

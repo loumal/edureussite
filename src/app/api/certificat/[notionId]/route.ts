@@ -272,7 +272,7 @@ export async function GET(
   <div class="cert" role="main" aria-label="Certificat de maîtrise">
 
     <div class="cert-header">
-      <p class="logo">✦ ÉduRéussite</p>
+      <p class="logo">✦ Édu-Réussite</p>
       <p class="titre">Certificat de maîtrise</p>
     </div>
 
@@ -296,7 +296,7 @@ export async function GET(
       <div class="cert-footer">
         <div>
           <p class="cert-date">Maîtrisée le ${dateStr}</p>
-          <p style="margin-top:2px">ÉduRéussite — edureussite.ca</p>
+          <p style="margin-top:2px">Édu-Réussite — edureussite.ca</p>
         </div>
         <div class="cert-seal" aria-hidden="true">🏅</div>
       </div>

@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logResend } from "@/lib/api-usage/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 const DEV = process.env.NODE_ENV !== "production";
 
 interface AnnulationRdvParams {
@@ -28,7 +28,7 @@ export async function sendAnnulationRdvEmail(params: AnnulationRdvParams): Promi
 
   const htmlCommun = (destinataire: "parent" | "specialiste") => `
     <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 32px; background: #f9f7f4; border-radius: 16px;">
-      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ ÉduRéussite QC</h1>
+      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ Édu-Réussite QC</h1>
       <p style="color: #d94f2b; font-size: 13px; margin-bottom: 24px; font-weight: 600;">Rendez-vous annulé</p>
 
       <div style="background: #fff; border: 1px solid #e5e2dc; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
@@ -53,7 +53,7 @@ export async function sendAnnulationRdvEmail(params: AnnulationRdvParams): Promi
       </div>
 
       <p style="font-size: 12px; color: #8a909c; text-align: center;">
-        Vous pouvez planifier un nouveau rendez-vous depuis la plateforme ÉduRéussite QC.
+        Vous pouvez planifier un nouveau rendez-vous depuis la plateforme Édu-Réussite QC.
       </p>
     </div>
   `;
@@ -62,7 +62,7 @@ export async function sendAnnulationRdvEmail(params: AnnulationRdvParams): Promi
     resend.emails.send({
       from: FROM,
       to: parentEmail,
-      subject: `Rendez-vous annulé — ÉduRéussite QC`,
+      subject: `Rendez-vous annulé — Édu-Réussite QC`,
       html: htmlCommun("parent"),
     }),
     resend.emails.send({

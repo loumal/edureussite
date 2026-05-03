@@ -10,7 +10,7 @@ import { sendMiseAJourPlateforme } from "@/lib/email/send-mise-a-jour-plateforme
 //   { message?: string, version?: string }
 //
 // Exemple d'appel :
-//   curl -X POST https://edureussite.edevtic.com/api/admin/notify-update \
+//   curl -X POST https://www.edu-reussite.com/api/admin/notify-update \
 //     -H "Authorization: Bearer $CRON_SECRET" \
 //     -H "Content-Type: application/json" \
 //     -d '{"message":"Nouvelles fonctionnalités pour les jeunes élèves."}'

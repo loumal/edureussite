@@ -103,7 +103,7 @@ JAMAIS d'URLs, de liens ou d'adresses web — ils seraient lus à voix haute com
 Seule exception autorisée : la balise [FIGURE:type] pour insérer des figures pédagogiques.
 Utilise des phrases complètes et naturelles.
 Varie tes formules d'encouragement pour qu'elles sonnent toujours sincères.
-Tu ne révèles jamais que tu es une IA générale. Tu es Mira, enseignante IA d'ÉduRéussite QC.`;
+Tu ne révèles jamais que tu es une IA générale. Tu es Mira, enseignante IA d'Édu-Réussite QC.`;
 
 // ── Bloc mode enseignement de l'anglais ──────────────────────────────────────
 
@@ -182,7 +182,7 @@ function buildSystemPrompt(params: {
 }) {
   const { prenom, niveauLabel, subjectContext, profilExtra, diagnosticContext } = params;
 
-  return `Tu es Mira, enseignante IA de la plateforme ÉduRéussite QC.
+  return `Tu es Mira, enseignante IA de la plateforme Édu-Réussite QC.
 Tu incarnes simultanément cinq rôles complémentaires dans chaque échange avec l'élève.
 
 ${ROLES_COMBINES}
@@ -237,7 +237,7 @@ function buildLibreSystemPrompt(params: {
 }) {
   const { prenom, niveauLabel, profilExtra, contextePrec, diagnosticContext } = params;
 
-  return `Tu es Mira, enseignante IA de la plateforme ÉduRéussite QC.
+  return `Tu es Mira, enseignante IA de la plateforme Édu-Réussite QC.
 Tu incarnes simultanément cinq rôles complémentaires dans chaque échange avec l'élève.
 
 ${ROLES_COMBINES}
@@ -304,7 +304,7 @@ function buildPlanSystemPrompt(params: {
   const { notionActive, matiereLabel, nbNotions, nbMaitrisees } = planContext;
   const progression = nbNotions > 0 ? Math.round((nbMaitrisees / nbNotions) * 100) : 0;
 
-  return `Tu es Mira, enseignante IA de la plateforme ÉduRéussite QC.
+  return `Tu es Mira, enseignante IA de la plateforme Édu-Réussite QC.
 Tu incarnes simultanément cinq rôles complémentaires dans chaque échange avec l'élève.
 
 ${ROLES_COMBINES}
@@ -344,7 +344,7 @@ ${STYLE_VOCAL}`;
 
 function buildPremierSessionBloc(prenom: string): string {
   return `═══ PREMIÈRE SESSION DE ${prenom.toUpperCase()} — ACCUEIL EXCEPTIONNEL ═══
-C'est la toute première fois que ${prenom} utilise ÉduRéussite QC. Tu as une chance unique de créer une expérience mémorable.
+C'est la toute première fois que ${prenom} utilise Édu-Réussite QC. Tu as une chance unique de créer une expérience mémorable.
 
 PROTOCOLE D'ACCUEIL OBLIGATOIRE :
 1. Commence par un message de bienvenue EXTRA-CHALEUREUX et personnalisé (utilise son prénom plusieurs fois)
@@ -362,7 +362,7 @@ INTERDICTIONS absolues pour cette première session :
 // ── Prompt pour génération du résumé fin de session ──────────────────────────
 
 function buildSummaryPrompt(prenom: string, subjectContext: string) {
-  return `Tu es Mira, enseignante IA d'ÉduRéussite QC.
+  return `Tu es Mira, enseignante IA d'Édu-Réussite QC.
 La session de ${prenom} vient de se terminer. Génère un résumé structuré et bienveillant pour ses parents.
 
 Matière et sujet travaillés : ${subjectContext}

@@ -9,9 +9,9 @@ const MATIERES_LABELS: Record<string, string> = {
 };
 
 const MATIERES_EMOJI: Record<string, string> = {
-  FRANCAIS: "✏️", MATHEMATIQUES: "🔢", SCIENCES: "🔬",
-  UNIVERS_SOCIAL: "🌍", ARTS: "🎨", ETHIQUE: "🤝",
-  ANGLAIS: "🗣️", EDUCATION_PHYSIQUE: "🏃",
+  FRANCAIS: "📖", MATHEMATIQUES: "🔢", SCIENCES: "🔬",
+  UNIVERS_SOCIAL: "🌍", ARTS: "🎨", ETHIQUE: "💭",
+  ANGLAIS: "🇨🇦", EDUCATION_PHYSIQUE: "⚽",
 };
 
 const STATUT_CONFIG = {

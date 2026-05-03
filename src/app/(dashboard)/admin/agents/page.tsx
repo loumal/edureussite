@@ -12,7 +12,7 @@ export default async function AgentsPage() {
         <div className="mb-6">
           <h1 className="text-2xl font-black text-[var(--color-ink)]">Agents IA 🤖</h1>
           <p className="text-sm text-[var(--color-ink-soft)] mt-1">
-            Assistants intelligents pour la croissance, la veille et les partenariats d'ÉduRéussite QC
+            Assistants intelligents pour la croissance, la veille et les partenariats d'Édu-Réussite QC
           </p>
         </div>
         <AgentsClient />

@@ -2,6 +2,8 @@ import {
   createTRPCRouter,
   protectedProcedure,
 } from "@/lib/trpc/init";
+import { TOUS_LES_ITEMS, parseCosmetiques, COSMETIQUES_DEFAUT } from "@/lib/boutique/items";
+import { getJeuById } from "@/lib/jeux/catalog";
 
 // Retourne la date du lundi de la semaine courante (YYYY-MM-DD) — clé de reset hebdo
 function getMondayKey(date = new Date()): string {
@@ -760,6 +762,215 @@ export const eleveRouter = createTRPCRouter({
           ...(input.exercicesReussis !== undefined ? { exercicesReussis: input.exercicesReussis } : {}),
         },
       });
+      return { success: true };
+    }),
+
+  getBoutique: protectedProcedure.query(async ({ ctx }) => {
+    const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+      where: { userId: ctx.user.id },
+      select: { totalPoints: true, cosmetiques: true },
+    });
+    return {
+      totalPoints: profil.totalPoints,
+      cosmetiques: parseCosmetiques(profil.cosmetiques),
+      items: TOUS_LES_ITEMS,
+    };
+  }),
+
+  acheterItem: protectedProcedure
+    .input(z.object({ itemId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const item = TOUS_LES_ITEMS.find((i) => i.id === input.itemId);
+      if (!item) throw new TRPCError({ code: "NOT_FOUND", message: "Item introuvable." });
+
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true, totalPoints: true, cosmetiques: true },
+      });
+
+      const cosmetiques = parseCosmetiques(profil.cosmetiques);
+
+      if (cosmetiques.debloquesIds.includes(item.id)) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Item déjà débloqué." });
+      }
+      if (item.prix > profil.totalPoints) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "XP insuffisants." });
+      }
+
+      const updated = {
+        ...cosmetiques,
+        debloquesIds: [...cosmetiques.debloquesIds, item.id],
+      };
+
+      await ctx.prisma.profilEleve.update({
+        where: { id: profil.id },
+        data: {
+          totalPoints: profil.totalPoints - item.prix,
+          cosmetiques: updated,
+        },
+      });
+
+      return { success: true, cosmetiques: updated, totalPoints: profil.totalPoints - item.prix };
+    }),
+
+  equiperItem: protectedProcedure
+    .input(z.object({ itemId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const item = TOUS_LES_ITEMS.find((i) => i.id === input.itemId);
+      if (!item) throw new TRPCError({ code: "NOT_FOUND", message: "Item introuvable." });
+
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true, cosmetiques: true },
+      });
+
+      const cosmetiques = parseCosmetiques(profil.cosmetiques);
+
+      if (!cosmetiques.debloquesIds.includes(item.id)) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Item non débloqué." });
+      }
+
+      const updated = {
+        ...cosmetiques,
+        ...(item.categorie === "avatar" ? { avatarEquipe: item.id } : { titreEquipe: item.id }),
+      };
+
+      await ctx.prisma.profilEleve.update({
+        where: { id: profil.id },
+        data: { cosmetiques: updated },
+      });
+
+      return { success: true, cosmetiques: updated };
+    }),
+
+  // ─── Jeux ────────────────────────────────────────────────────────────────────
+
+  demanderJeu: protectedProcedure
+    .input(z.object({ jeuId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const jeu = getJeuById(input.jeuId);
+      if (!jeu || !jeu.disponible) throw new TRPCError({ code: "NOT_FOUND", message: "Jeu introuvable." });
+
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true, totalPoints: true, niveauScolaire: true, dateNaissance: true },
+      });
+
+      // ── Vérification âge / niveau ───────────────────────────────────────────
+      const AGE_PAR_NIVEAU: Record<string, number> = {
+        PRIMAIRE_1: 6, PRIMAIRE_2: 7, PRIMAIRE_3: 8, PRIMAIRE_4: 9, PRIMAIRE_5: 10, PRIMAIRE_6: 11,
+        SECONDAIRE_1: 12, SECONDAIRE_2: 13, SECONDAIRE_3: 14, SECONDAIRE_4: 15, SECONDAIRE_5: 16,
+        SECONDAIRE_6: 17, SECONDAIRE_7: 18,
+      };
+      const ageApprox = profil.dateNaissance
+        ? Math.floor((Date.now() - profil.dateNaissance.getTime()) / (365.25 * 24 * 3600 * 1000))
+        : AGE_PAR_NIVEAU[profil.niveauScolaire] ?? 10;
+
+      if (ageApprox < jeu.ageMin) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: `Ce jeu est recommandé à partir de ${jeu.ageMin} ans. Continue à accumuler des XP sur d'autres jeux !` });
+      }
+      if (ageApprox > jeu.ageMax) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: `Ce jeu est conçu pour les moins de ${jeu.ageMax + 1} ans. Explore les jeux plus avancés !` });
+      }
+
+      // Reuse active request for same game
+      const existing = await ctx.prisma.demandeJeu.findFirst({
+        where: { eleveId: profil.id, jeuId: input.jeuId, statut: { in: ["AUTORISE", "EN_COURS"] } },
+      });
+      if (existing) return { demandeId: existing.id, statut: existing.statut };
+
+      if (profil.totalPoints < jeu.xpCout) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: `Il te faut ${jeu.xpCout} XP pour jouer. Tu en as ${profil.totalPoints}.` });
+      }
+
+      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      const demande = await ctx.prisma.demandeJeu.create({
+        data: {
+          eleveId: profil.id,
+          jeuId: jeu.id,
+          jeuNom: jeu.nom,
+          jeuDescription: jeu.description,
+          xpCout: jeu.xpCout,
+          minutesAccordees: jeu.minutesSession,
+          statut: "AUTORISE",
+          expiresAt,
+        },
+      });
+
+      return { demandeId: demande.id, statut: "AUTORISE" as const };
+    }),
+
+  getStatutDemande: protectedProcedure
+    .input(z.object({ demandeId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true },
+      });
+      const demande = await ctx.prisma.demandeJeu.findFirst({
+        where: { id: input.demandeId, eleveId: profil.id },
+        select: { statut: true, minutesAccordees: true, jeuId: true, debutPartieAt: true },
+      });
+      if (!demande) throw new TRPCError({ code: "NOT_FOUND" });
+      return demande;
+    }),
+
+  demarrerJeu: protectedProcedure
+    .input(z.object({ demandeId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true },
+      });
+      const profilComplet = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true, totalPoints: true },
+      });
+      const demande = await ctx.prisma.demandeJeu.findFirst({
+        where: { id: input.demandeId, eleveId: profilComplet.id },
+        select: { id: true, debutPartieAt: true, statut: true, xpCout: true },
+      });
+      if (!demande) throw new TRPCError({ code: "NOT_FOUND" });
+
+      // Si déjà démarré, retourner le timestamp original — timer ne repart pas à zéro
+      if (demande.debutPartieAt) return { debutPartieAt: demande.debutPartieAt };
+
+      const now = new Date();
+      // Déduire les XP au début de la partie (déduction garantie même si le tab est fermé)
+      await ctx.prisma.$transaction([
+        ctx.prisma.demandeJeu.update({
+          where: { id: demande.id },
+          data: { debutPartieAt: now, statut: "EN_COURS" },
+        }),
+        ctx.prisma.profilEleve.update({
+          where: { id: profilComplet.id },
+          data: { totalPoints: Math.max(0, profilComplet.totalPoints - demande.xpCout) },
+        }),
+      ]);
+      return { debutPartieAt: now };
+    }),
+
+  terminerJeu: protectedProcedure
+    .input(z.object({ demandeId: z.string(), score: z.number().min(0) }))
+    .mutation(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true, totalPoints: true },
+      });
+
+      const demande = await ctx.prisma.demandeJeu.findFirst({
+        where: { id: input.demandeId, eleveId: profil.id, statut: { in: ["AUTORISE", "EN_COURS"] } },
+        select: { id: true, xpCout: true, minutesAccordees: true, debutPartieAt: true },
+      });
+      if (!demande) throw new TRPCError({ code: "NOT_FOUND", message: "Session introuvable." });
+
+      const now = new Date();
+      // XP déjà déduit au démarrage — juste fermer la session
+      await ctx.prisma.demandeJeu.update({
+        where: { id: demande.id },
+        data: { statut: "TERMINE", scoreObtenu: input.score, termineAt: now },
+      });
+
       return { success: true };
     }),
 });

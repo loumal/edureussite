@@ -226,16 +226,27 @@ export const planRouter = createTRPCRouter({
     }),
 
   // ── Notion active (celle en cours, non maîtrisée) ─────────────────────────
-  getNotionActive: protectedProcedure.query(async ({ ctx }) => {
-    const profil = await ctx.prisma.profilEleve.findUnique({ where: { userId: ctx.user.id } });
-    if (!profil) throw new TRPCError({ code: "NOT_FOUND" });
+  getNotionActive: protectedProcedure
+    .input(z.object({ notionId: z.string().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUnique({ where: { userId: ctx.user.id } });
+      if (!profil) throw new TRPCError({ code: "NOT_FOUND" });
 
-    const notion = await ctx.prisma.planifNotionEleve.findFirst({
-      where: { eleveId: profil.id, maitrisee: false, priorite: { not: "MAITRISE" } },
-      orderBy: { ordre: "asc" },
-    });
-    return notion ?? null;
-  }),
+      // Si un notionId précis est fourni (depuis le widget "Défi du jour"), retourner cette notion exacte
+      if (input?.notionId) {
+        const notion = await ctx.prisma.planifNotionEleve.findFirst({
+          where: { id: input.notionId, eleveId: profil.id },
+        });
+        return notion ?? null;
+      }
+
+      // Sinon, retourner la première notion non maîtrisée par ordre
+      const notion = await ctx.prisma.planifNotionEleve.findFirst({
+        where: { eleveId: profil.id, maitrisee: false, priorite: { not: "MAITRISE" } },
+        orderBy: { ordre: "asc" },
+      });
+      return notion ?? null;
+    }),
 
   // ── Marquer une notion comme maîtrisée ────────────────────────────────────
   markNotionMaitrisee: protectedProcedure

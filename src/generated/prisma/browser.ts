@@ -268,7 +268,17 @@ export type PersonaMarketing = Prisma.PersonaMarketingModel
  */
 export type StrategieMarketing = Prisma.StrategieMarketingModel
 /**
+ * Model DemandeJeu
+ * Demande d'accès à un jeu — nécessite approbation du parent
+ */
+export type DemandeJeu = Prisma.DemandeJeuModel
+/**
  * Model CampagneEmail
  * Campagnes email marketing
  */
 export type CampagneEmail = Prisma.CampagneEmailModel
+/**
+ * Model PartieMultijoueur
+ * 
+ */
+export type PartieMultijoueur = Prisma.PartieMultijoueurModel

@@ -150,7 +150,7 @@ export function OnboardingFlow({ etapeInitiale, profilExistant, province = "QC" 
       {/* En-tête */}
       <div className="mb-8 text-center">
         <div className="mb-3 text-3xl font-black text-[var(--color-ink)]">
-          ✦ ÉduRéussite
+          ✦ Édu-Réussite
         </div>
         <p className="text-sm text-[var(--color-ink-soft)]">
           Créons ton profil d'apprentissage personnalisé

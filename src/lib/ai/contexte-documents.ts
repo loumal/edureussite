@@ -61,7 +61,7 @@ ${meta.length > 0 ? meta.join(" | ") + "\n" : ""}${d.contenu}`;
 
   return `
 ═══ DOCUMENTS PÉDAGOGIQUES ET RECHERCHES DE RÉFÉRENCE ═══
-Les documents suivants ont été sélectionnés par l'équipe ÉduRéussite QC pour enrichir votre analyse. Intégrez leurs enseignements dans vos recommandations lorsqu'ils sont pertinents au profil de l'élève.
+Les documents suivants ont été sélectionnés par l'équipe Édu-Réussite QC pour enrichir votre analyse. Intégrez leurs enseignements dans vos recommandations lorsqu'ils sont pertinents au profil de l'élève.
 
 ${sections.join("\n\n")}
 

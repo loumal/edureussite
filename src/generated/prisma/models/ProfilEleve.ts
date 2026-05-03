@@ -161,6 +161,7 @@ export type ProfilEleveCountAggregateOutputType = {
   derniereConnexion: number
   totalPoints: number
   niveauJeu: number
+  cosmetiques: number
   onboardingComplete: number
   onboardingEtape: number
   enseignantId: number
@@ -308,6 +309,7 @@ export type ProfilEleveCountAggregateInputType = {
   derniereConnexion?: true
   totalPoints?: true
   niveauJeu?: true
+  cosmetiques?: true
   onboardingComplete?: true
   onboardingEtape?: true
   enseignantId?: true
@@ -438,6 +440,7 @@ export type ProfilEleveGroupByOutputType = {
   derniereConnexion: Date | null
   totalPoints: number
   niveauJeu: number
+  cosmetiques: runtime.JsonValue | null
   onboardingComplete: boolean
   onboardingEtape: number
   enseignantId: string | null
@@ -504,6 +507,7 @@ export type ProfilEleveWhereInput = {
   derniereConnexion?: Prisma.DateTimeNullableFilter<"ProfilEleve"> | Date | string | null
   totalPoints?: Prisma.IntFilter<"ProfilEleve"> | number
   niveauJeu?: Prisma.IntFilter<"ProfilEleve"> | number
+  cosmetiques?: Prisma.JsonNullableFilter<"ProfilEleve">
   onboardingComplete?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   onboardingEtape?: Prisma.IntFilter<"ProfilEleve"> | number
   enseignantId?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
@@ -532,6 +536,8 @@ export type ProfilEleveWhereInput = {
   defJourCompletions?: Prisma.DefJourCompletionListRelationFilter
   missionsHebdo?: Prisma.MissionHebdoListRelationFilter
   surprises?: Prisma.SurpriseParentListRelationFilter
+  demandesJeux?: Prisma.DemandeJeuListRelationFilter
+  partiesMulti?: Prisma.PartieMultijoueurListRelationFilter
   miraMessages?: Prisma.MiraMessageListRelationFilter
   objectifsNotes?: Prisma.ObjectifNoteListRelationFilter
   planifNotions?: Prisma.PlanifNotionEleveListRelationFilter
@@ -571,6 +577,7 @@ export type ProfilEleveOrderByWithRelationInput = {
   derniereConnexion?: Prisma.SortOrderInput | Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   niveauJeu?: Prisma.SortOrder
+  cosmetiques?: Prisma.SortOrderInput | Prisma.SortOrder
   onboardingComplete?: Prisma.SortOrder
   onboardingEtape?: Prisma.SortOrder
   enseignantId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -599,6 +606,8 @@ export type ProfilEleveOrderByWithRelationInput = {
   defJourCompletions?: Prisma.DefJourCompletionOrderByRelationAggregateInput
   missionsHebdo?: Prisma.MissionHebdoOrderByRelationAggregateInput
   surprises?: Prisma.SurpriseParentOrderByRelationAggregateInput
+  demandesJeux?: Prisma.DemandeJeuOrderByRelationAggregateInput
+  partiesMulti?: Prisma.PartieMultijoueurOrderByRelationAggregateInput
   miraMessages?: Prisma.MiraMessageOrderByRelationAggregateInput
   objectifsNotes?: Prisma.ObjectifNoteOrderByRelationAggregateInput
   planifNotions?: Prisma.PlanifNotionEleveOrderByRelationAggregateInput
@@ -641,6 +650,7 @@ export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
   derniereConnexion?: Prisma.DateTimeNullableFilter<"ProfilEleve"> | Date | string | null
   totalPoints?: Prisma.IntFilter<"ProfilEleve"> | number
   niveauJeu?: Prisma.IntFilter<"ProfilEleve"> | number
+  cosmetiques?: Prisma.JsonNullableFilter<"ProfilEleve">
   onboardingComplete?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   onboardingEtape?: Prisma.IntFilter<"ProfilEleve"> | number
   enseignantId?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
@@ -669,6 +679,8 @@ export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
   defJourCompletions?: Prisma.DefJourCompletionListRelationFilter
   missionsHebdo?: Prisma.MissionHebdoListRelationFilter
   surprises?: Prisma.SurpriseParentListRelationFilter
+  demandesJeux?: Prisma.DemandeJeuListRelationFilter
+  partiesMulti?: Prisma.PartieMultijoueurListRelationFilter
   miraMessages?: Prisma.MiraMessageListRelationFilter
   objectifsNotes?: Prisma.ObjectifNoteListRelationFilter
   planifNotions?: Prisma.PlanifNotionEleveListRelationFilter
@@ -708,6 +720,7 @@ export type ProfilEleveOrderByWithAggregationInput = {
   derniereConnexion?: Prisma.SortOrderInput | Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   niveauJeu?: Prisma.SortOrder
+  cosmetiques?: Prisma.SortOrderInput | Prisma.SortOrder
   onboardingComplete?: Prisma.SortOrder
   onboardingEtape?: Prisma.SortOrder
   enseignantId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -759,6 +772,7 @@ export type ProfilEleveScalarWhereWithAggregatesInput = {
   derniereConnexion?: Prisma.DateTimeNullableWithAggregatesFilter<"ProfilEleve"> | Date | string | null
   totalPoints?: Prisma.IntWithAggregatesFilter<"ProfilEleve"> | number
   niveauJeu?: Prisma.IntWithAggregatesFilter<"ProfilEleve"> | number
+  cosmetiques?: Prisma.JsonNullableWithAggregatesFilter<"ProfilEleve">
   onboardingComplete?: Prisma.BoolWithAggregatesFilter<"ProfilEleve"> | boolean
   onboardingEtape?: Prisma.IntWithAggregatesFilter<"ProfilEleve"> | number
   enseignantId?: Prisma.StringNullableWithAggregatesFilter<"ProfilEleve"> | string | null
@@ -801,6 +815,7 @@ export type ProfilEleveCreateInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -828,6 +843,8 @@ export type ProfilEleveCreateInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -867,6 +884,7 @@ export type ProfilEleveUncheckedCreateInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -893,6 +911,8 @@ export type ProfilEleveUncheckedCreateInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -931,6 +951,7 @@ export type ProfilEleveUpdateInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -958,6 +979,8 @@ export type ProfilEleveUpdateInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -997,6 +1020,7 @@ export type ProfilEleveUncheckedUpdateInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1023,6 +1047,8 @@ export type ProfilEleveUncheckedUpdateInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -1062,6 +1088,7 @@ export type ProfilEleveCreateManyInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -1104,6 +1131,7 @@ export type ProfilEleveUpdateManyMutationInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1146,6 +1174,7 @@ export type ProfilEleveUncheckedUpdateManyInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1210,6 +1239,7 @@ export type ProfilEleveCountOrderByAggregateInput = {
   derniereConnexion?: Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   niveauJeu?: Prisma.SortOrder
+  cosmetiques?: Prisma.SortOrder
   onboardingComplete?: Prisma.SortOrder
   onboardingEtape?: Prisma.SortOrder
   enseignantId?: Prisma.SortOrder
@@ -1808,6 +1838,34 @@ export type ProfilEleveUpdateOneRequiredWithoutDisponibiliteNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutDisponibiliteInput, Prisma.ProfilEleveUpdateWithoutDisponibiliteInput>, Prisma.ProfilEleveUncheckedUpdateWithoutDisponibiliteInput>
 }
 
+export type ProfilEleveCreateNestedOneWithoutDemandesJeuxInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutDemandesJeuxInput, Prisma.ProfilEleveUncheckedCreateWithoutDemandesJeuxInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutDemandesJeuxInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+}
+
+export type ProfilEleveUpdateOneRequiredWithoutDemandesJeuxNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutDemandesJeuxInput, Prisma.ProfilEleveUncheckedCreateWithoutDemandesJeuxInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutDemandesJeuxInput
+  upsert?: Prisma.ProfilEleveUpsertWithoutDemandesJeuxInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutDemandesJeuxInput, Prisma.ProfilEleveUpdateWithoutDemandesJeuxInput>, Prisma.ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput>
+}
+
+export type ProfilEleveCreateNestedOneWithoutPartiesMultiInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutPartiesMultiInput, Prisma.ProfilEleveUncheckedCreateWithoutPartiesMultiInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutPartiesMultiInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+}
+
+export type ProfilEleveUpdateOneRequiredWithoutPartiesMultiNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutPartiesMultiInput, Prisma.ProfilEleveUncheckedCreateWithoutPartiesMultiInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutPartiesMultiInput
+  upsert?: Prisma.ProfilEleveUpsertWithoutPartiesMultiInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutPartiesMultiInput, Prisma.ProfilEleveUpdateWithoutPartiesMultiInput>, Prisma.ProfilEleveUncheckedUpdateWithoutPartiesMultiInput>
+}
+
 export type ProfilEleveCreateWithoutUserInput = {
   id?: string
   codeAcces?: string | null
@@ -1840,6 +1898,7 @@ export type ProfilEleveCreateWithoutUserInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -1866,6 +1925,8 @@ export type ProfilEleveCreateWithoutUserInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -1904,6 +1965,7 @@ export type ProfilEleveUncheckedCreateWithoutUserInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -1930,6 +1992,8 @@ export type ProfilEleveUncheckedCreateWithoutUserInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -1984,6 +2048,7 @@ export type ProfilEleveUpdateWithoutUserInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2010,6 +2075,8 @@ export type ProfilEleveUpdateWithoutUserInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -2048,6 +2115,7 @@ export type ProfilEleveUncheckedUpdateWithoutUserInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2074,6 +2142,8 @@ export type ProfilEleveUncheckedUpdateWithoutUserInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -2112,6 +2182,7 @@ export type ProfilEleveCreateWithoutMiraMessagesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -2139,6 +2210,8 @@ export type ProfilEleveCreateWithoutMiraMessagesInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
@@ -2177,6 +2250,7 @@ export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -2203,6 +2277,8 @@ export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
@@ -2256,6 +2332,7 @@ export type ProfilEleveUpdateWithoutMiraMessagesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2283,6 +2360,8 @@ export type ProfilEleveUpdateWithoutMiraMessagesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
@@ -2321,6 +2400,7 @@ export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2347,6 +2427,8 @@ export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
@@ -2384,6 +2466,7 @@ export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -2410,6 +2493,8 @@ export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -2449,6 +2534,7 @@ export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -2474,6 +2560,8 @@ export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -2528,6 +2616,7 @@ export type ProfilEleveUpdateWithoutNiveauxMatieresInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2554,6 +2643,8 @@ export type ProfilEleveUpdateWithoutNiveauxMatieresInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -2593,6 +2684,7 @@ export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2618,6 +2710,8 @@ export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -2656,6 +2750,7 @@ export type ProfilEleveCreateWithoutParentsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -2682,6 +2777,8 @@ export type ProfilEleveCreateWithoutParentsInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -2721,6 +2818,7 @@ export type ProfilEleveUncheckedCreateWithoutParentsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -2746,6 +2844,8 @@ export type ProfilEleveUncheckedCreateWithoutParentsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -2809,6 +2909,7 @@ export type ProfilEleveScalarWhereInput = {
   derniereConnexion?: Prisma.DateTimeNullableFilter<"ProfilEleve"> | Date | string | null
   totalPoints?: Prisma.IntFilter<"ProfilEleve"> | number
   niveauJeu?: Prisma.IntFilter<"ProfilEleve"> | number
+  cosmetiques?: Prisma.JsonNullableFilter<"ProfilEleve">
   onboardingComplete?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   onboardingEtape?: Prisma.IntFilter<"ProfilEleve"> | number
   enseignantId?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
@@ -2851,6 +2952,7 @@ export type ProfilEleveCreateWithoutPlansAccompagnementInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -2877,6 +2979,8 @@ export type ProfilEleveCreateWithoutPlansAccompagnementInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -2916,6 +3020,7 @@ export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -2941,6 +3046,8 @@ export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -2995,6 +3102,7 @@ export type ProfilEleveUpdateWithoutPlansAccompagnementInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3021,6 +3129,8 @@ export type ProfilEleveUpdateWithoutPlansAccompagnementInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -3060,6 +3170,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3085,6 +3196,8 @@ export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -3123,6 +3236,7 @@ export type ProfilEleveCreateWithoutCoursRemediationInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -3149,6 +3263,8 @@ export type ProfilEleveCreateWithoutCoursRemediationInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -3188,6 +3304,7 @@ export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -3213,6 +3330,8 @@ export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -3267,6 +3386,7 @@ export type ProfilEleveUpdateWithoutCoursRemediationInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3293,6 +3413,8 @@ export type ProfilEleveUpdateWithoutCoursRemediationInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -3332,6 +3454,7 @@ export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3357,6 +3480,8 @@ export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -3395,6 +3520,7 @@ export type ProfilEleveCreateWithoutSurprisesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -3421,6 +3547,8 @@ export type ProfilEleveCreateWithoutSurprisesInput = {
   rendezVous?: Prisma.RendezVousCreateNestedManyWithoutEleveInput
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -3460,6 +3588,7 @@ export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -3485,6 +3614,8 @@ export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
   rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutEleveInput
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -3539,6 +3670,7 @@ export type ProfilEleveUpdateWithoutSurprisesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3565,6 +3697,8 @@ export type ProfilEleveUpdateWithoutSurprisesInput = {
   rendezVous?: Prisma.RendezVousUpdateManyWithoutEleveNestedInput
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -3604,6 +3738,7 @@ export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3629,6 +3764,8 @@ export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
   rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutEleveNestedInput
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -3667,6 +3804,7 @@ export type ProfilEleveCreateWithoutCommentairesParentsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -3693,6 +3831,8 @@ export type ProfilEleveCreateWithoutCommentairesParentsInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -3732,6 +3872,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -3757,6 +3898,8 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -3811,6 +3954,7 @@ export type ProfilEleveUpdateWithoutCommentairesParentsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3837,6 +3981,8 @@ export type ProfilEleveUpdateWithoutCommentairesParentsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -3876,6 +4022,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3901,6 +4048,8 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -3939,6 +4088,7 @@ export type ProfilEleveCreateWithoutEnseignantInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -3965,6 +4115,8 @@ export type ProfilEleveCreateWithoutEnseignantInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -4004,6 +4156,7 @@ export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -4029,6 +4182,8 @@ export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -4093,6 +4248,7 @@ export type ProfilEleveCreateWithoutPlanActionsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -4119,6 +4275,8 @@ export type ProfilEleveCreateWithoutPlanActionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -4158,6 +4316,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -4183,6 +4342,8 @@ export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -4237,6 +4398,7 @@ export type ProfilEleveUpdateWithoutPlanActionsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4263,6 +4425,8 @@ export type ProfilEleveUpdateWithoutPlanActionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -4302,6 +4466,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4327,6 +4492,8 @@ export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -4365,6 +4532,7 @@ export type ProfilEleveCreateWithoutExercicesAssignesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -4391,6 +4559,8 @@ export type ProfilEleveCreateWithoutExercicesAssignesInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -4430,6 +4600,7 @@ export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -4455,6 +4626,8 @@ export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -4509,6 +4682,7 @@ export type ProfilEleveUpdateWithoutExercicesAssignesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4535,6 +4709,8 @@ export type ProfilEleveUpdateWithoutExercicesAssignesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -4574,6 +4750,7 @@ export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4599,6 +4776,8 @@ export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -4637,6 +4816,7 @@ export type ProfilEleveCreateWithoutSessionsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -4663,6 +4843,8 @@ export type ProfilEleveCreateWithoutSessionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -4702,6 +4884,7 @@ export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -4727,6 +4910,8 @@ export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -4781,6 +4966,7 @@ export type ProfilEleveUpdateWithoutSessionsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4807,6 +4993,8 @@ export type ProfilEleveUpdateWithoutSessionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -4846,6 +5034,7 @@ export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4871,6 +5060,8 @@ export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -4909,6 +5100,7 @@ export type ProfilEleveCreateWithoutCheckInsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -4935,6 +5127,8 @@ export type ProfilEleveCreateWithoutCheckInsInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -4974,6 +5168,7 @@ export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -4999,6 +5194,8 @@ export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -5053,6 +5250,7 @@ export type ProfilEleveUpdateWithoutCheckInsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5079,6 +5277,8 @@ export type ProfilEleveUpdateWithoutCheckInsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -5118,6 +5318,7 @@ export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5143,6 +5344,8 @@ export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -5181,6 +5384,7 @@ export type ProfilEleveCreateWithoutBadgesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -5207,6 +5411,8 @@ export type ProfilEleveCreateWithoutBadgesInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -5246,6 +5452,7 @@ export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -5271,6 +5478,8 @@ export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -5325,6 +5534,7 @@ export type ProfilEleveUpdateWithoutBadgesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5351,6 +5561,8 @@ export type ProfilEleveUpdateWithoutBadgesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -5390,6 +5602,7 @@ export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5415,6 +5628,8 @@ export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -5453,6 +5668,7 @@ export type ProfilEleveCreateWithoutCommentairesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -5479,6 +5695,8 @@ export type ProfilEleveCreateWithoutCommentairesInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -5518,6 +5736,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -5543,6 +5762,8 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -5597,6 +5818,7 @@ export type ProfilEleveUpdateWithoutCommentairesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5623,6 +5845,8 @@ export type ProfilEleveUpdateWithoutCommentairesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -5662,6 +5886,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5687,6 +5912,8 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -5725,6 +5952,7 @@ export type ProfilEleveCreateWithoutCommentairesEleveInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -5751,6 +5979,8 @@ export type ProfilEleveCreateWithoutCommentairesEleveInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -5790,6 +6020,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -5815,6 +6046,8 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -5869,6 +6102,7 @@ export type ProfilEleveUpdateWithoutCommentairesEleveInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5895,6 +6129,8 @@ export type ProfilEleveUpdateWithoutCommentairesEleveInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -5934,6 +6170,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5959,6 +6196,8 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -5997,6 +6236,7 @@ export type ProfilEleveCreateWithoutDemandesRencontreInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -6023,6 +6263,8 @@ export type ProfilEleveCreateWithoutDemandesRencontreInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -6062,6 +6304,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -6087,6 +6330,8 @@ export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -6141,6 +6386,7 @@ export type ProfilEleveUpdateWithoutDemandesRencontreInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6167,6 +6413,8 @@ export type ProfilEleveUpdateWithoutDemandesRencontreInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -6206,6 +6454,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6231,6 +6480,8 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -6269,6 +6520,7 @@ export type ProfilEleveCreateWithoutRendezVousInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -6295,6 +6547,8 @@ export type ProfilEleveCreateWithoutRendezVousInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -6334,6 +6588,7 @@ export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -6359,6 +6614,8 @@ export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -6413,6 +6670,7 @@ export type ProfilEleveUpdateWithoutRendezVousInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6439,6 +6697,8 @@ export type ProfilEleveUpdateWithoutRendezVousInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -6478,6 +6738,7 @@ export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6503,6 +6764,8 @@ export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -6541,6 +6804,7 @@ export type ProfilEleveCreateWithoutRecommandationsIAInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -6567,6 +6831,8 @@ export type ProfilEleveCreateWithoutRecommandationsIAInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -6606,6 +6872,7 @@ export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -6631,6 +6898,8 @@ export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -6685,6 +6954,7 @@ export type ProfilEleveUpdateWithoutRecommandationsIAInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6711,6 +6981,8 @@ export type ProfilEleveUpdateWithoutRecommandationsIAInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -6750,6 +7022,7 @@ export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6775,6 +7048,8 @@ export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -6813,6 +7088,7 @@ export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -6839,6 +7115,8 @@ export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
   rendezVous?: Prisma.RendezVousCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -6878,6 +7156,7 @@ export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -6903,6 +7182,8 @@ export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
   rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -6957,6 +7238,7 @@ export type ProfilEleveUpdateWithoutDefJourCompletionsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -6983,6 +7265,8 @@ export type ProfilEleveUpdateWithoutDefJourCompletionsInput = {
   rendezVous?: Prisma.RendezVousUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -7022,6 +7306,7 @@ export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7047,6 +7332,8 @@ export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
   rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -7085,6 +7372,7 @@ export type ProfilEleveCreateWithoutMissionsHebdoInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -7111,6 +7399,8 @@ export type ProfilEleveCreateWithoutMissionsHebdoInput = {
   rendezVous?: Prisma.RendezVousCreateNestedManyWithoutEleveInput
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -7150,6 +7440,7 @@ export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -7175,6 +7466,8 @@ export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
   rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutEleveInput
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -7229,6 +7522,7 @@ export type ProfilEleveUpdateWithoutMissionsHebdoInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -7255,6 +7549,8 @@ export type ProfilEleveUpdateWithoutMissionsHebdoInput = {
   rendezVous?: Prisma.RendezVousUpdateManyWithoutEleveNestedInput
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -7294,6 +7590,7 @@ export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7319,6 +7616,8 @@ export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
   rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutEleveNestedInput
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -7357,6 +7656,7 @@ export type ProfilEleveCreateWithoutObjectifsNotesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -7384,6 +7684,8 @@ export type ProfilEleveCreateWithoutObjectifsNotesInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
@@ -7422,6 +7724,7 @@ export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -7448,6 +7751,8 @@ export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
@@ -7501,6 +7806,7 @@ export type ProfilEleveUpdateWithoutObjectifsNotesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -7528,6 +7834,8 @@ export type ProfilEleveUpdateWithoutObjectifsNotesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
@@ -7566,6 +7874,7 @@ export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7592,6 +7901,8 @@ export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
@@ -7629,6 +7940,7 @@ export type ProfilEleveCreateWithoutPlanifNotionsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -7656,6 +7968,8 @@ export type ProfilEleveCreateWithoutPlanifNotionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
@@ -7694,6 +8008,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -7720,6 +8035,8 @@ export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
@@ -7773,6 +8090,7 @@ export type ProfilEleveUpdateWithoutPlanifNotionsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -7800,6 +8118,8 @@ export type ProfilEleveUpdateWithoutPlanifNotionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
@@ -7838,6 +8158,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7864,6 +8185,8 @@ export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
@@ -7901,6 +8224,7 @@ export type ProfilEleveCreateWithoutDisponibiliteInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -7928,6 +8252,8 @@ export type ProfilEleveCreateWithoutDisponibiliteInput = {
   defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
@@ -7966,6 +8292,7 @@ export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   enseignantId?: string | null
@@ -7992,6 +8319,8 @@ export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
   surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
@@ -8045,6 +8374,7 @@ export type ProfilEleveUpdateWithoutDisponibiliteInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -8072,6 +8402,8 @@ export type ProfilEleveUpdateWithoutDisponibiliteInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -8110,6 +8442,7 @@ export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8136,9 +8469,579 @@ export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
+}
+
+export type ProfilEleveCreateWithoutDemandesJeuxInput = {
+  id?: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  user: Prisma.UserCreateNestedOneWithoutProfilEleveInput
+  enseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutElevesInput
+  parents?: Prisma.ProfilParentCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIACreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
+  miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+}
+
+export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
+  id?: string
+  userId: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  enseignantId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  parents?: Prisma.ProfilParentUncheckedCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionUncheckedCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueUncheckedCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveUncheckedCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedCreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
+  miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+}
+
+export type ProfilEleveCreateOrConnectWithoutDemandesJeuxInput = {
+  where: Prisma.ProfilEleveWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutDemandesJeuxInput, Prisma.ProfilEleveUncheckedCreateWithoutDemandesJeuxInput>
+}
+
+export type ProfilEleveUpsertWithoutDemandesJeuxInput = {
+  update: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutDemandesJeuxInput, Prisma.ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput>
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutDemandesJeuxInput, Prisma.ProfilEleveUncheckedCreateWithoutDemandesJeuxInput>
+  where?: Prisma.ProfilEleveWhereInput
+}
+
+export type ProfilEleveUpdateToOneWithWhereWithoutDemandesJeuxInput = {
+  where?: Prisma.ProfilEleveWhereInput
+  data: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutDemandesJeuxInput, Prisma.ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput>
+}
+
+export type ProfilEleveUpdateWithoutDemandesJeuxInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.UserUpdateOneRequiredWithoutProfilEleveNestedInput
+  enseignant?: Prisma.ProfilEnseignantUpdateOneWithoutElevesNestedInput
+  parents?: Prisma.ProfilParentUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
+  miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+}
+
+export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  parents?: Prisma.ProfilParentUncheckedUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUncheckedUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUncheckedUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUncheckedUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
+  miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+}
+
+export type ProfilEleveCreateWithoutPartiesMultiInput = {
+  id?: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  user: Prisma.UserCreateNestedOneWithoutProfilEleveInput
+  enseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutElevesInput
+  parents?: Prisma.ProfilParentCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIACreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+}
+
+export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
+  id?: string
+  userId: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  enseignantId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  parents?: Prisma.ProfilParentUncheckedCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionUncheckedCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueUncheckedCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveUncheckedCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedCreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+}
+
+export type ProfilEleveCreateOrConnectWithoutPartiesMultiInput = {
+  where: Prisma.ProfilEleveWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutPartiesMultiInput, Prisma.ProfilEleveUncheckedCreateWithoutPartiesMultiInput>
+}
+
+export type ProfilEleveUpsertWithoutPartiesMultiInput = {
+  update: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutPartiesMultiInput, Prisma.ProfilEleveUncheckedUpdateWithoutPartiesMultiInput>
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutPartiesMultiInput, Prisma.ProfilEleveUncheckedCreateWithoutPartiesMultiInput>
+  where?: Prisma.ProfilEleveWhereInput
+}
+
+export type ProfilEleveUpdateToOneWithWhereWithoutPartiesMultiInput = {
+  where?: Prisma.ProfilEleveWhereInput
+  data: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutPartiesMultiInput, Prisma.ProfilEleveUncheckedUpdateWithoutPartiesMultiInput>
+}
+
+export type ProfilEleveUpdateWithoutPartiesMultiInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.UserUpdateOneRequiredWithoutProfilEleveNestedInput
+  enseignant?: Prisma.ProfilEnseignantUpdateOneWithoutElevesNestedInput
+  parents?: Prisma.ProfilParentUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+}
+
+export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  parents?: Prisma.ProfilParentUncheckedUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUncheckedUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUncheckedUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUncheckedUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
 }
 
 export type ProfilEleveUpdateWithoutParentsInput = {
@@ -8173,6 +9076,7 @@ export type ProfilEleveUpdateWithoutParentsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -8199,6 +9103,8 @@ export type ProfilEleveUpdateWithoutParentsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -8238,6 +9144,7 @@ export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8263,6 +9170,8 @@ export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -8302,6 +9211,7 @@ export type ProfilEleveUncheckedUpdateManyWithoutParentsInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8345,6 +9255,7 @@ export type ProfilEleveCreateManyEnseignantInput = {
   derniereConnexion?: Date | string | null
   totalPoints?: number
   niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: boolean
   onboardingEtape?: number
   createdAt?: Date | string
@@ -8386,6 +9297,7 @@ export type ProfilEleveUpdateWithoutEnseignantInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -8412,6 +9324,8 @@ export type ProfilEleveUpdateWithoutEnseignantInput = {
   defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
@@ -8451,6 +9365,7 @@ export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -8476,6 +9391,8 @@ export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
   defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
   missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
   surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
@@ -8515,6 +9432,7 @@ export type ProfilEleveUncheckedUpdateManyWithoutEnseignantInput = {
   derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -8548,6 +9466,8 @@ export type ProfilEleveCountOutputType = {
   defJourCompletions: number
   missionsHebdo: number
   surprises: number
+  demandesJeux: number
+  partiesMulti: number
   miraMessages: number
   objectifsNotes: number
   planifNotions: number
@@ -8572,6 +9492,8 @@ export type ProfilEleveCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   defJourCompletions?: boolean | ProfilEleveCountOutputTypeCountDefJourCompletionsArgs
   missionsHebdo?: boolean | ProfilEleveCountOutputTypeCountMissionsHebdoArgs
   surprises?: boolean | ProfilEleveCountOutputTypeCountSurprisesArgs
+  demandesJeux?: boolean | ProfilEleveCountOutputTypeCountDemandesJeuxArgs
+  partiesMulti?: boolean | ProfilEleveCountOutputTypeCountPartiesMultiArgs
   miraMessages?: boolean | ProfilEleveCountOutputTypeCountMiraMessagesArgs
   objectifsNotes?: boolean | ProfilEleveCountOutputTypeCountObjectifsNotesArgs
   planifNotions?: boolean | ProfilEleveCountOutputTypeCountPlanifNotionsArgs
@@ -8716,6 +9638,20 @@ export type ProfilEleveCountOutputTypeCountSurprisesArgs<ExtArgs extends runtime
 /**
  * ProfilEleveCountOutputType without action
  */
+export type ProfilEleveCountOutputTypeCountDemandesJeuxArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DemandeJeuWhereInput
+}
+
+/**
+ * ProfilEleveCountOutputType without action
+ */
+export type ProfilEleveCountOutputTypeCountPartiesMultiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PartieMultijoueurWhereInput
+}
+
+/**
+ * ProfilEleveCountOutputType without action
+ */
 export type ProfilEleveCountOutputTypeCountMiraMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.MiraMessageWhereInput
 }
@@ -8768,6 +9704,7 @@ export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   derniereConnexion?: boolean
   totalPoints?: boolean
   niveauJeu?: boolean
+  cosmetiques?: boolean
   onboardingComplete?: boolean
   onboardingEtape?: boolean
   enseignantId?: boolean
@@ -8796,6 +9733,8 @@ export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   defJourCompletions?: boolean | Prisma.ProfilEleve$defJourCompletionsArgs<ExtArgs>
   missionsHebdo?: boolean | Prisma.ProfilEleve$missionsHebdoArgs<ExtArgs>
   surprises?: boolean | Prisma.ProfilEleve$surprisesArgs<ExtArgs>
+  demandesJeux?: boolean | Prisma.ProfilEleve$demandesJeuxArgs<ExtArgs>
+  partiesMulti?: boolean | Prisma.ProfilEleve$partiesMultiArgs<ExtArgs>
   miraMessages?: boolean | Prisma.ProfilEleve$miraMessagesArgs<ExtArgs>
   objectifsNotes?: boolean | Prisma.ProfilEleve$objectifsNotesArgs<ExtArgs>
   planifNotions?: boolean | Prisma.ProfilEleve$planifNotionsArgs<ExtArgs>
@@ -8836,6 +9775,7 @@ export type ProfilEleveSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   derniereConnexion?: boolean
   totalPoints?: boolean
   niveauJeu?: boolean
+  cosmetiques?: boolean
   onboardingComplete?: boolean
   onboardingEtape?: boolean
   enseignantId?: boolean
@@ -8881,6 +9821,7 @@ export type ProfilEleveSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   derniereConnexion?: boolean
   totalPoints?: boolean
   niveauJeu?: boolean
+  cosmetiques?: boolean
   onboardingComplete?: boolean
   onboardingEtape?: boolean
   enseignantId?: boolean
@@ -8926,6 +9867,7 @@ export type ProfilEleveSelectScalar = {
   derniereConnexion?: boolean
   totalPoints?: boolean
   niveauJeu?: boolean
+  cosmetiques?: boolean
   onboardingComplete?: boolean
   onboardingEtape?: boolean
   enseignantId?: boolean
@@ -8936,7 +9878,7 @@ export type ProfilEleveSelectScalar = {
   miraSecsBonus?: boolean
 }
 
-export type ProfilEleveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "codeAcces" | "prenom" | "nom" | "dateNaissance" | "niveauScolaire" | "ecole" | "styleApprentissage" | "vitesseTraitement" | "niveauMotivation" | "facteursStress" | "matieresPreferees" | "matieresRedoutees" | "tdah" | "dyslexie" | "dyscalculie" | "anxieteScolaire" | "autresBesoins" | "centresInteret" | "sportFavori" | "universMediatique" | "autresPassions" | "environnement" | "personnalite" | "objectifScolaire" | "streakJours" | "streakMaxJours" | "streakBoucliers" | "derniereConnexion" | "totalPoints" | "niveauJeu" | "onboardingComplete" | "onboardingEtape" | "enseignantId" | "createdAt" | "updatedAt" | "miraSecsUsedWeek" | "miraWeekOf" | "miraSecsBonus", ExtArgs["result"]["profilEleve"]>
+export type ProfilEleveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "codeAcces" | "prenom" | "nom" | "dateNaissance" | "niveauScolaire" | "ecole" | "styleApprentissage" | "vitesseTraitement" | "niveauMotivation" | "facteursStress" | "matieresPreferees" | "matieresRedoutees" | "tdah" | "dyslexie" | "dyscalculie" | "anxieteScolaire" | "autresBesoins" | "centresInteret" | "sportFavori" | "universMediatique" | "autresPassions" | "environnement" | "personnalite" | "objectifScolaire" | "streakJours" | "streakMaxJours" | "streakBoucliers" | "derniereConnexion" | "totalPoints" | "niveauJeu" | "cosmetiques" | "onboardingComplete" | "onboardingEtape" | "enseignantId" | "createdAt" | "updatedAt" | "miraSecsUsedWeek" | "miraWeekOf" | "miraSecsBonus", ExtArgs["result"]["profilEleve"]>
 export type ProfilEleveInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enseignant?: boolean | Prisma.ProfilEleve$enseignantArgs<ExtArgs>
@@ -8958,6 +9900,8 @@ export type ProfilEleveInclude<ExtArgs extends runtime.Types.Extensions.Internal
   defJourCompletions?: boolean | Prisma.ProfilEleve$defJourCompletionsArgs<ExtArgs>
   missionsHebdo?: boolean | Prisma.ProfilEleve$missionsHebdoArgs<ExtArgs>
   surprises?: boolean | Prisma.ProfilEleve$surprisesArgs<ExtArgs>
+  demandesJeux?: boolean | Prisma.ProfilEleve$demandesJeuxArgs<ExtArgs>
+  partiesMulti?: boolean | Prisma.ProfilEleve$partiesMultiArgs<ExtArgs>
   miraMessages?: boolean | Prisma.ProfilEleve$miraMessagesArgs<ExtArgs>
   objectifsNotes?: boolean | Prisma.ProfilEleve$objectifsNotesArgs<ExtArgs>
   planifNotions?: boolean | Prisma.ProfilEleve$planifNotionsArgs<ExtArgs>
@@ -8996,6 +9940,8 @@ export type $ProfilElevePayload<ExtArgs extends runtime.Types.Extensions.Interna
     defJourCompletions: Prisma.$DefJourCompletionPayload<ExtArgs>[]
     missionsHebdo: Prisma.$MissionHebdoPayload<ExtArgs>[]
     surprises: Prisma.$SurpriseParentPayload<ExtArgs>[]
+    demandesJeux: Prisma.$DemandeJeuPayload<ExtArgs>[]
+    partiesMulti: Prisma.$PartieMultijoueurPayload<ExtArgs>[]
     miraMessages: Prisma.$MiraMessagePayload<ExtArgs>[]
     objectifsNotes: Prisma.$ObjectifNotePayload<ExtArgs>[]
     planifNotions: Prisma.$PlanifNotionElevePayload<ExtArgs>[]
@@ -9034,6 +9980,7 @@ export type $ProfilElevePayload<ExtArgs extends runtime.Types.Extensions.Interna
     derniereConnexion: Date | null
     totalPoints: number
     niveauJeu: number
+    cosmetiques: runtime.JsonValue | null
     onboardingComplete: boolean
     onboardingEtape: number
     enseignantId: string | null
@@ -9456,6 +10403,8 @@ export interface Prisma__ProfilEleveClient<T, Null = never, ExtArgs extends runt
   defJourCompletions<T extends Prisma.ProfilEleve$defJourCompletionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$defJourCompletionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DefJourCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   missionsHebdo<T extends Prisma.ProfilEleve$missionsHebdoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$missionsHebdoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MissionHebdoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   surprises<T extends Prisma.ProfilEleve$surprisesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$surprisesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SurpriseParentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  demandesJeux<T extends Prisma.ProfilEleve$demandesJeuxArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$demandesJeuxArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandeJeuPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  partiesMulti<T extends Prisma.ProfilEleve$partiesMultiArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$partiesMultiArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PartieMultijoueurPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   miraMessages<T extends Prisma.ProfilEleve$miraMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$miraMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MiraMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   objectifsNotes<T extends Prisma.ProfilEleve$objectifsNotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$objectifsNotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ObjectifNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   planifNotions<T extends Prisma.ProfilEleve$planifNotionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$planifNotionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanifNotionElevePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9521,6 +10470,7 @@ export interface ProfilEleveFieldRefs {
   readonly derniereConnexion: Prisma.FieldRef<"ProfilEleve", 'DateTime'>
   readonly totalPoints: Prisma.FieldRef<"ProfilEleve", 'Int'>
   readonly niveauJeu: Prisma.FieldRef<"ProfilEleve", 'Int'>
+  readonly cosmetiques: Prisma.FieldRef<"ProfilEleve", 'Json'>
   readonly onboardingComplete: Prisma.FieldRef<"ProfilEleve", 'Boolean'>
   readonly onboardingEtape: Prisma.FieldRef<"ProfilEleve", 'Int'>
   readonly enseignantId: Prisma.FieldRef<"ProfilEleve", 'String'>
@@ -10378,6 +11328,54 @@ export type ProfilEleve$surprisesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.SurpriseParentScalarFieldEnum | Prisma.SurpriseParentScalarFieldEnum[]
+}
+
+/**
+ * ProfilEleve.demandesJeux
+ */
+export type ProfilEleve$demandesJeuxArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DemandeJeu
+   */
+  select?: Prisma.DemandeJeuSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DemandeJeu
+   */
+  omit?: Prisma.DemandeJeuOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DemandeJeuInclude<ExtArgs> | null
+  where?: Prisma.DemandeJeuWhereInput
+  orderBy?: Prisma.DemandeJeuOrderByWithRelationInput | Prisma.DemandeJeuOrderByWithRelationInput[]
+  cursor?: Prisma.DemandeJeuWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DemandeJeuScalarFieldEnum | Prisma.DemandeJeuScalarFieldEnum[]
+}
+
+/**
+ * ProfilEleve.partiesMulti
+ */
+export type ProfilEleve$partiesMultiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PartieMultijoueur
+   */
+  select?: Prisma.PartieMultijoueurSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PartieMultijoueur
+   */
+  omit?: Prisma.PartieMultijoueurOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PartieMultijoueurInclude<ExtArgs> | null
+  where?: Prisma.PartieMultijoueurWhereInput
+  orderBy?: Prisma.PartieMultijoueurOrderByWithRelationInput | Prisma.PartieMultijoueurOrderByWithRelationInput[]
+  cursor?: Prisma.PartieMultijoueurWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PartieMultijoueurScalarFieldEnum | Prisma.PartieMultijoueurScalarFieldEnum[]
 }
 
 /**

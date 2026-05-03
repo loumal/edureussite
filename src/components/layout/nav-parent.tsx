@@ -54,7 +54,7 @@ export function NavParent({ specialistesActif }: NavParentProps) {
     <nav className="sticky top-0 z-50 border-b border-[var(--color-rule)] bg-white/90 backdrop-blur-sm" ref={menuRef}>
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
         <Link href="/parent" className="text-lg font-black text-[var(--color-ink)]">
-          ✦ ÉduRéussite
+          ✦ Édu-Réussite
         </Link>
 
         {/* Navigation desktop */}

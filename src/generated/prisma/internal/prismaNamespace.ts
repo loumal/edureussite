@@ -434,7 +434,9 @@ export const ModelName = {
   PublicationSociale: 'PublicationSociale',
   PersonaMarketing: 'PersonaMarketing',
   StrategieMarketing: 'StrategieMarketing',
-  CampagneEmail: 'CampagneEmail'
+  DemandeJeu: 'DemandeJeu',
+  CampagneEmail: 'CampagneEmail',
+  PartieMultijoueur: 'PartieMultijoueur'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -450,7 +452,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "campagneEmail"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4154,6 +4156,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DemandeJeu: {
+      payload: Prisma.$DemandeJeuPayload<ExtArgs>
+      fields: Prisma.DemandeJeuFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DemandeJeuFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DemandeJeuFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload>
+        }
+        findFirst: {
+          args: Prisma.DemandeJeuFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DemandeJeuFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload>
+        }
+        findMany: {
+          args: Prisma.DemandeJeuFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload>[]
+        }
+        create: {
+          args: Prisma.DemandeJeuCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload>
+        }
+        createMany: {
+          args: Prisma.DemandeJeuCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DemandeJeuCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload>[]
+        }
+        delete: {
+          args: Prisma.DemandeJeuDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload>
+        }
+        update: {
+          args: Prisma.DemandeJeuUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload>
+        }
+        deleteMany: {
+          args: Prisma.DemandeJeuDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DemandeJeuUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DemandeJeuUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload>[]
+        }
+        upsert: {
+          args: Prisma.DemandeJeuUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeJeuPayload>
+        }
+        aggregate: {
+          args: Prisma.DemandeJeuAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDemandeJeu>
+        }
+        groupBy: {
+          args: Prisma.DemandeJeuGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandeJeuGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DemandeJeuCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandeJeuCountAggregateOutputType> | number
+        }
+      }
+    }
     CampagneEmail: {
       payload: Prisma.$CampagneEmailPayload<ExtArgs>
       fields: Prisma.CampagneEmailFieldRefs
@@ -4225,6 +4301,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CampagneEmailCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CampagneEmailCountAggregateOutputType> | number
+        }
+      }
+    }
+    PartieMultijoueur: {
+      payload: Prisma.$PartieMultijoueurPayload<ExtArgs>
+      fields: Prisma.PartieMultijoueurFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PartieMultijoueurFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PartieMultijoueurFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload>
+        }
+        findFirst: {
+          args: Prisma.PartieMultijoueurFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PartieMultijoueurFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload>
+        }
+        findMany: {
+          args: Prisma.PartieMultijoueurFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload>[]
+        }
+        create: {
+          args: Prisma.PartieMultijoueurCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload>
+        }
+        createMany: {
+          args: Prisma.PartieMultijoueurCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PartieMultijoueurCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload>[]
+        }
+        delete: {
+          args: Prisma.PartieMultijoueurDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload>
+        }
+        update: {
+          args: Prisma.PartieMultijoueurUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload>
+        }
+        deleteMany: {
+          args: Prisma.PartieMultijoueurDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PartieMultijoueurUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PartieMultijoueurUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload>[]
+        }
+        upsert: {
+          args: Prisma.PartieMultijoueurUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PartieMultijoueurPayload>
+        }
+        aggregate: {
+          args: Prisma.PartieMultijoueurAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePartieMultijoueur>
+        }
+        groupBy: {
+          args: Prisma.PartieMultijoueurGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PartieMultijoueurGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PartieMultijoueurCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PartieMultijoueurCountAggregateOutputType> | number
         }
       }
     }
@@ -4358,6 +4508,7 @@ export const ProfilEleveScalarFieldEnum = {
   derniereConnexion: 'derniereConnexion',
   totalPoints: 'totalPoints',
   niveauJeu: 'niveauJeu',
+  cosmetiques: 'cosmetiques',
   onboardingComplete: 'onboardingComplete',
   onboardingEtape: 'onboardingEtape',
   enseignantId: 'enseignantId',
@@ -5063,6 +5214,27 @@ export const StrategieMarketingScalarFieldEnum = {
 export type StrategieMarketingScalarFieldEnum = (typeof StrategieMarketingScalarFieldEnum)[keyof typeof StrategieMarketingScalarFieldEnum]
 
 
+export const DemandeJeuScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  jeuId: 'jeuId',
+  jeuNom: 'jeuNom',
+  jeuDescription: 'jeuDescription',
+  token: 'token',
+  statut: 'statut',
+  xpCout: 'xpCout',
+  minutesAccordees: 'minutesAccordees',
+  scoreObtenu: 'scoreObtenu',
+  debutPartieAt: 'debutPartieAt',
+  termineAt: 'termineAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DemandeJeuScalarFieldEnum = (typeof DemandeJeuScalarFieldEnum)[keyof typeof DemandeJeuScalarFieldEnum]
+
+
 export const CampagneEmailScalarFieldEnum = {
   id: 'id',
   titre: 'titre',
@@ -5083,6 +5255,23 @@ export const CampagneEmailScalarFieldEnum = {
 export type CampagneEmailScalarFieldEnum = (typeof CampagneEmailScalarFieldEnum)[keyof typeof CampagneEmailScalarFieldEnum]
 
 
+export const PartieMultijoueurScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  jeuId: 'jeuId',
+  createurId: 'createurId',
+  joueurs: 'joueurs',
+  etat: 'etat',
+  statut: 'statut',
+  gagnantId: 'gagnantId',
+  maxJoueurs: 'maxJoueurs',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PartieMultijoueurScalarFieldEnum = (typeof PartieMultijoueurScalarFieldEnum)[keyof typeof PartieMultijoueurScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -5091,19 +5280,19 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
 export const NullableJsonNullValueInput = {
   DbNull: DbNull,
   JsonNull: JsonNull
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -5271,6 +5460,20 @@ export type EnumMatiereFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
 
 
 /**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
  * Reference to a field of type 'NiveauDifficulte'
  */
 export type EnumNiveauDifficulteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NiveauDifficulte'>
@@ -5295,20 +5498,6 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -5563,6 +5752,34 @@ export type EnumPrioriteNotionFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 export type ListEnumPrioriteNotionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrioriteNotion[]'>
     
 
+
+/**
+ * Reference to a field of type 'StatutDemandeJeu'
+ */
+export type EnumStatutDemandeJeuFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutDemandeJeu'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutDemandeJeu[]'
+ */
+export type ListEnumStatutDemandeJeuFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutDemandeJeu[]'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutPartie'
+ */
+export type EnumStatutPartieFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutPartie'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutPartie[]'
+ */
+export type ListEnumStatutPartieFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutPartie[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -5708,7 +5925,9 @@ export type GlobalOmitConfig = {
   publicationSociale?: Prisma.PublicationSocialeOmit
   personaMarketing?: Prisma.PersonaMarketingOmit
   strategieMarketing?: Prisma.StrategieMarketingOmit
+  demandeJeu?: Prisma.DemandeJeuOmit
   campagneEmail?: Prisma.CampagneEmailOmit
+  partieMultijoueur?: Prisma.PartieMultijoueurOmit
 }
 
 /* Types for Logging */

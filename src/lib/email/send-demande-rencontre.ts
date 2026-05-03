@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logResend } from "@/lib/api-usage/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 const DEV = process.env.NODE_ENV !== "production";
 
 interface DemandeParams {
@@ -17,11 +17,11 @@ interface DemandeParams {
 export async function sendDemandeRencontreEmail(params: DemandeParams): Promise<void> {
   const { specialisteEmail, specialisteNom, parentEmail, parentNom, prenomEnfant, message } = params;
 
-  const subject = `Nouvelle demande de rencontre — ÉduRéussite QC`;
+  const subject = `Nouvelle demande de rencontre — Édu-Réussite QC`;
 
   const html = `
     <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 32px; background: #f9f7f4; border-radius: 16px;">
-      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ ÉduRéussite QC</h1>
+      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ Édu-Réussite QC</h1>
       <p style="color: #8a909c; font-size: 13px; margin-bottom: 24px;">Nouvelle demande de rencontre</p>
 
       <div style="background: #fff; border: 1px solid #e5e2dc; border-radius: 12px; padding: 24px; margin-bottom: 20px;">

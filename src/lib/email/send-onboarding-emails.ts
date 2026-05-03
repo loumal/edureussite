@@ -40,14 +40,14 @@ export async function sendOnboardingJ3Email(params: {
   <div style="max-width:560px;margin:32px auto;background:#faf8f4;border:1px solid #e8e4dc;border-radius:16px;overflow:hidden;">
 
     <div style="background:#1a1a1a;padding:24px 28px;">
-      <p style="margin:0;font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;">✦ ÉduRéussite QC</p>
+      <p style="margin:0;font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;">✦ Édu-Réussite QC</p>
       <p style="margin:4px 0 0;font-size:13px;color:#aaa;">3 jours déjà — premières observations</p>
     </div>
 
     <div style="padding:28px;">
       <p style="font-size:16px;color:#1a1a1a;margin:0 0 16px;">Bonjour ${parentPrenom} 👋</p>
       <p style="font-size:14px;color:#444;line-height:1.6;margin:0 0 20px;">
-        Ça fait maintenant 3 jours que <strong>${enfant.prenomEnfant}</strong> utilise ÉduRéussite QC. Voici ce qu'on a observé :
+        Ça fait maintenant 3 jours que <strong>${enfant.prenomEnfant}</strong> utilise Édu-Réussite QC. Voici ce qu'on a observé :
       </p>
 
       <div style="background:#fff;border:1px solid #e8e4dc;border-radius:12px;padding:20px;margin-bottom:20px;">
@@ -75,7 +75,7 @@ export async function sendOnboardingJ3Email(params: {
     </div>
 
     <div style="padding:16px 28px;border-top:1px solid #e8e4dc;text-align:center;">
-      <p style="margin:0;font-size:11px;color:#999;">© 2026 ÉduRéussite QC · <a href="${process.env.NEXTAUTH_URL ?? "https://edureussite.ca"}/politique-confidentialite" style="color:#999;">Politique de confidentialité</a></p>
+      <p style="margin:0;font-size:11px;color:#999;">© 2026 Édu-Réussite QC · <a href="${process.env.NEXTAUTH_URL ?? "https://edureussite.ca"}/politique-confidentialite" style="color:#999;">Politique de confidentialité</a></p>
     </div>
   </div>
 </body>
@@ -84,7 +84,7 @@ export async function sendOnboardingJ3Email(params: {
   await resend.emails.send({
     from: FROM,
     to: parentEmail,
-    subject: `3 jours avec ÉduRéussite — premiers résultats de ${enfant.prenomEnfant}`,
+    subject: `3 jours avec Édu-Réussite — premiers résultats de ${enfant.prenomEnfant}`,
     html,
   });
   logResend({ userId: undefined });
@@ -128,14 +128,14 @@ export async function sendOnboardingJ7Email(params: {
   <div style="max-width:560px;margin:32px auto;background:#faf8f4;border:1px solid #e8e4dc;border-radius:16px;overflow:hidden;">
 
     <div style="background:#1a1a1a;padding:24px 28px;">
-      <p style="margin:0;font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;">✦ ÉduRéussite QC</p>
+      <p style="margin:0;font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;">✦ Édu-Réussite QC</p>
       <p style="margin:4px 0 0;font-size:13px;color:#aaa;">1 semaine — rapport de progression</p>
     </div>
 
     <div style="padding:28px;">
       <p style="font-size:16px;color:#1a1a1a;margin:0 0 8px;">Bonjour ${parentPrenom} 👋</p>
       <p style="font-size:14px;color:#444;line-height:1.6;margin:0 0 20px;">
-        <strong>${enfant.prenomEnfant}</strong> vient de terminer sa première semaine sur ÉduRéussite QC.
+        <strong>${enfant.prenomEnfant}</strong> vient de terminer sa première semaine sur Édu-Réussite QC.
         Voici ses <strong>3 premières améliorations mesurées</strong> :
       </p>
 
@@ -170,7 +170,7 @@ export async function sendOnboardingJ7Email(params: {
     </div>
 
     <div style="padding:16px 28px;border-top:1px solid #e8e4dc;text-align:center;">
-      <p style="margin:0;font-size:11px;color:#999;">© 2026 ÉduRéussite QC · <a href="${process.env.NEXTAUTH_URL ?? "https://edureussite.ca"}/politique-confidentialite" style="color:#999;">Politique de confidentialité</a></p>
+      <p style="margin:0;font-size:11px;color:#999;">© 2026 Édu-Réussite QC · <a href="${process.env.NEXTAUTH_URL ?? "https://edureussite.ca"}/politique-confidentialite" style="color:#999;">Politique de confidentialité</a></p>
     </div>
   </div>
 </body>
@@ -179,7 +179,7 @@ export async function sendOnboardingJ7Email(params: {
   await resend.emails.send({
     from: FROM,
     to: parentEmail,
-    subject: `1 semaine avec ÉduRéussite — les 3 premières améliorations de ${enfant.prenomEnfant}`,
+    subject: `1 semaine avec Édu-Réussite — les 3 premières améliorations de ${enfant.prenomEnfant}`,
     html,
   });
   logResend({ userId: undefined });

@@ -15,9 +15,9 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300; // 5 min max (Vercel Pro)
 
-// ── Profil ÉduRéussite QC ────────────────────────────────────────────────────
+// ── Profil Édu-Réussite QC ────────────────────────────────────────────────────
 
-const PROFIL_EDU = `Tu travailles pour ÉduRéussite QC, une plateforme éducative québécoise propulsée par l'IA.
+const PROFIL_EDU = `Tu travailles pour Édu-Réussite QC, une plateforme éducative québécoise propulsée par l'IA.
 Mission : accompagner les élèves du primaire et du secondaire (niveaux 1 à 11) dans leur parcours scolaire grâce à une approche personnalisée, inclusive et basée sur le PFEQ (Programme de formation de l'école québécoise).
 Contexte : québécois francophone, collaboration parent-enseignant-spécialiste, gamification bienveillante, accessibilité.
 Secteurs cibles : familles, commissions scolaires, écoles privées, MEES, MIFI, organismes communautaires en éducation.`;
@@ -126,13 +126,13 @@ export async function GET(req: Request) {
 
     const SYSTEM_VEILLE = `${PROFIL_EDU}
 
-Tu es l'analyste de veille stratégique d'ÉduRéussite QC. Tu analyses les tendances EdTech et de l'éducation numérique en contexte québécois et canadien.
+Tu es l'analyste de veille stratégique d'Édu-Réussite QC. Tu analyses les tendances EdTech et de l'éducation numérique en contexte québécois et canadien.
 Sois concis, factuel, structuré, orienté recommandations concrètes. Réponds en Markdown.
 Utilise les données web fournies en priorité et cite les sources si pertinent.`;
 
     const SYSTEM_OPP = `${PROFIL_EDU}
 
-Tu es le chargé des partenariats stratégiques d'ÉduRéussite QC. Tu identifies des opportunités concrètes de financement, d'appels à candidature et de partenariat.
+Tu es le chargé des partenariats stratégiques d'Édu-Réussite QC. Tu identifies des opportunités concrètes de financement, d'appels à candidature et de partenariat.
 Nomme les programmes réels, les organismes actifs, les montants si connus, et les fenêtres d'opportunité. Sois précis et actionnable. Réponds en Markdown.
 Appuie-toi sur les données web fournies.`;
 
@@ -155,7 +155,7 @@ Structure ton rapport ainsi :
 ## 📈 Tendances à surveiller
 (Évolutions technologiques, pédagogiques, réglementaires)
 
-## 🏫 Ce qui concerne directement ÉduRéussite QC
+## 🏫 Ce qui concerne directement Édu-Réussite QC
 (Impacts, opportunités ou menaces spécifiques à notre contexte)
 
 ## ⚡ Actions recommandées cette semaine
@@ -167,7 +167,7 @@ Structure ton rapport ainsi :
         SYSTEM_VEILLE,
         `VEILLE IA EN ÉDUCATION — ${dateStr}
 
-Analyse les avancées récentes de l'IA appliquée à l'éducation et leur impact potentiel pour ÉduRéussite QC.
+Analyse les avancées récentes de l'IA appliquée à l'éducation et leur impact potentiel pour Édu-Réussite QC.
 
 === DONNÉES WEB RÉCENTES ===
 ${formaterContexteWeb(webIaEdu.results)}
@@ -181,7 +181,7 @@ Structure :
 ## ⚠️ Risques et débats actuels
 (Éthique, biais, dépendance, enjeux réglementaires)
 
-## 💡 Opportunités pour ÉduRéussite QC
+## 💡 Opportunités pour Édu-Réussite QC
 (Comment capitaliser sur ces avancées)`,
         1500
       ),
@@ -190,7 +190,7 @@ Structure :
         SYSTEM_OPP,
         `VEILLE OPPORTUNITÉS — ${dateStr}
 
-Identifie les opportunités de financement, appels à candidature et partenariats disponibles pour ÉduRéussite QC au Québec, au Canada et à l'international.
+Identifie les opportunités de financement, appels à candidature et partenariats disponibles pour Édu-Réussite QC au Québec, au Canada et à l'international.
 
 === DONNÉES WEB RÉCENTES ===
 ${formaterContexteWeb(uniqueOppResults)}

@@ -395,7 +395,7 @@ export function AjouterEnfantModal({ onClose, multiProvince = false, provincesAc
               ) : (
                 <form onSubmit={handleLier} className="space-y-4">
                   <p className="text-sm text-[var(--color-ink-soft)]">
-                    Si votre enfant a déjà un compte ÉduRéussite QC, entrez son <strong>code d'accès</strong> pour lier les comptes.
+                    Si votre enfant a déjà un compte Édu-Réussite QC, entrez son <strong>code d'accès</strong> pour lier les comptes.
                   </p>
 
                   <div className="rounded-lg bg-[var(--color-paper-warm)] border border-[var(--color-rule)] px-3 py-2.5">

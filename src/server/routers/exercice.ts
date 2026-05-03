@@ -1,6 +1,6 @@
 import { createTRPCRouter, protectedProcedure, aiProcedure } from "@/lib/trpc/init";
 import { z } from "zod";
-import { generateExercice, genererFeedback, genererEpreuve, genererFeedbackEpreuve, type EpreuveGeneree } from "@/lib/ai/exercice";
+import { generateExercice, genererFeedback, genererEpreuve, genererFeedbackEpreuve, generateExerciceDepuisDocument, type EpreuveGeneree } from "@/lib/ai/exercice";
 import { genererCours } from "@/lib/ai/cours";
 import { getContexteDocuments } from "@/lib/ai/contexte-documents";
 import { Matiere, TypeExercice, NiveauDifficulte, StatutExercice } from "@/generated/prisma";
@@ -119,6 +119,86 @@ export const exerciceRouter = createTRPCRouter({
           exerciceId: exercice.id,
           statut: "NON_COMMENCE",
         },
+        include: { exercice: true },
+      });
+
+      return assigne;
+    }),
+
+  // Générer un exercice à partir d'un document importé (photo / fichier)
+  genererDepuisDocument: aiProcedure
+    .input(
+      z.object({
+        contenuBrut: z.string().min(1).max(20000),
+        questionsExtraites: z.array(
+          z.object({
+            numero: z.number(),
+            enonce: z.string(),
+            type: z.enum(["QCM", "REPONSE_COURTE", "CALCUL", "VRAI_FAUX", "DEVELOPPEMENT"]),
+            choix: z.array(z.string()).optional(),
+            pointsAttribues: z.number().nullable().optional(),
+          })
+        ),
+        matiere: z.nativeEnum(Matiere),
+        typeDetecte: z.enum(["CONSOLIDATION", "EPREUVE_COMPLETE", "DEVOIRS", "AUTRE"]),
+        notions: z.array(z.string()),
+        niveauEstime: z.string().optional(),
+        difficulteChoisie: z.nativeEnum(NiveauDifficulte).optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: {
+          id: true, prenom: true, niveauScolaire: true, styleApprentissage: true,
+          tdah: true, dyslexie: true, anxieteScolaire: true,
+          centresInteret: true, sportFavori: true, universMediatique: true,
+          autresPassions: true, environnement: true, personnalite: true, objectifScolaire: true,
+        },
+      });
+
+      const exerciceData = await generateExerciceDepuisDocument({
+        contenuBrut: input.contenuBrut,
+        questionsExtraites: input.questionsExtraites,
+        matiere: input.matiere,
+        typeDetecte: input.typeDetecte,
+        notions: input.notions,
+        niveauEstime: input.niveauEstime ?? profil.niveauScolaire,
+        difficulteChoisie: input.difficulteChoisie ?? "ATTENDU",
+        profil: {
+          prenom: profil.prenom,
+          niveauScolaire: profil.niveauScolaire,
+          styleApprentissage: profil.styleApprentissage,
+          tdah: profil.tdah,
+          dyslexie: profil.dyslexie,
+          anxieteScolaire: profil.anxieteScolaire,
+          centresInteret: profil.centresInteret as string[],
+          sportFavori: profil.sportFavori,
+          universMediatique: profil.universMediatique,
+          autresPassions: profil.autresPassions,
+          environnement: profil.environnement,
+          personnalite: profil.personnalite as string[],
+          objectifScolaire: profil.objectifScolaire,
+        },
+      });
+
+      const exercice = await ctx.prisma.exercice.create({
+        data: {
+          titre: String(exerciceData.titre ?? "Exercice importé"),
+          consigne: String(exerciceData.consigne ?? ""),
+          contenu: exerciceData.contenu,
+          type: exerciceData.type,
+          matiere: input.matiere,
+          niveauScolaire: profil.niveauScolaire,
+          difficulte: exerciceData.difficulte,
+          competencesPFEQ: (exerciceData.competencesPFEQ ?? []).map(String),
+          dureeMinutes: Math.round(Number(exerciceData.dureeMinutes) || 15),
+          correctionAttendue: exerciceData.correctionAttendue ?? null,
+        },
+      });
+
+      const assigne = await ctx.prisma.exerciceAssigne.create({
+        data: { eleveId: profil.id, exerciceId: exercice.id, statut: "NON_COMMENCE" },
         include: { exercice: true },
       });
 

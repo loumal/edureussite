@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import type { TavilyResult } from "@/lib/tavily/client";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 
 // ── Convertisseur Markdown → HTML inline-styled pour emails ──────────────────
 
@@ -140,7 +140,7 @@ export async function sendVeilleHebdo(opts: {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rapport Hebdomadaire — ÉduRéussite QC</title>
+  <title>Rapport Hebdomadaire — Édu-Réussite QC</title>
 </head>
 <body style="margin:0;padding:0;background:#edeae4;font-family:Georgia,'Times New Roman',serif;">
 
@@ -151,7 +151,7 @@ export async function sendVeilleHebdo(opts: {
     <div style="position:absolute;top:-30px;right:-30px;width:220px;height:220px;background:radial-gradient(circle,rgba(42,124,111,0.2) 0%,transparent 70%);pointer-events:none;"></div>
     <div style="position:absolute;bottom:-50px;left:-10px;width:160px;height:160px;background:radial-gradient(circle,rgba(42,124,111,0.1) 0%,transparent 70%);pointer-events:none;"></div>
     <div style="position:relative;">
-      <p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:#2a7c6f;">✦ ÉduRéussite QC — Intelligence Stratégique</p>
+      <p style="margin:0 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:#2a7c6f;">✦ Édu-Réussite QC — Intelligence Stratégique</p>
       <h1 style="margin:0 0 6px;font-size:28px;font-weight:800;color:#ffffff;line-height:1.15;letter-spacing:-0.01em;">Rapport Hebdomadaire</h1>
       <p style="margin:0 0 16px;font-size:16px;font-weight:400;color:rgba(255,255,255,0.55);">Veille &amp; Opportunités</p>
       <div style="display:inline-block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:30px;padding:6px 14px;">
@@ -164,7 +164,7 @@ export async function sendVeilleHebdo(opts: {
   <div style="background:white;border-radius:14px;padding:16px 22px;margin-bottom:14px;border-left:4px solid #2a7c6f;">
     <p style="margin:0;font-size:14px;color:#3a4460;line-height:1.65;">
       Bonjour <strong style="color:#0f1623;">${adminNom}</strong>,<br>
-      Voici votre rapport de veille stratégique et d'opportunités compilé automatiquement par les agents IA d'ÉduRéussite QC pour la semaine du ${dateStr}.
+      Voici votre rapport de veille stratégique et d'opportunités compilé automatiquement par les agents IA d'Édu-Réussite QC pour la semaine du ${dateStr}.
     </p>
   </div>
 
@@ -198,7 +198,7 @@ export async function sendVeilleHebdo(opts: {
       <div style="width:40px;height:40px;background:linear-gradient(135deg,#5b67c9,#3d4b9e);border-radius:12px;text-align:center;line-height:40px;font-size:20px;flex-shrink:0;">🤖</div>
       <div>
         <h2 style="margin:0 0 2px;font-size:17px;font-weight:800;color:#0f1623;">IA en Éducation</h2>
-        <p style="margin:0;font-size:11px;color:#9aa3b8;font-family:Arial,sans-serif;">Innovations · Débats · Implications pour ÉduRéussite QC</p>
+        <p style="margin:0;font-size:11px;color:#9aa3b8;font-family:Arial,sans-serif;">Innovations · Débats · Implications pour Édu-Réussite QC</p>
       </div>
     </div>
     <div style="font-family:Georgia,serif;color:#3a4460;">
@@ -246,7 +246,7 @@ export async function sendVeilleHebdo(opts: {
 
   <!-- ══ FOOTER ══ -->
   <div style="text-align:center;padding-top:4px;">
-    <p style="margin:0 0 3px;font-size:13px;font-weight:700;color:#0f1623;">✦ ÉduRéussite QC</p>
+    <p style="margin:0 0 3px;font-size:13px;font-weight:700;color:#0f1623;">✦ Édu-Réussite QC</p>
     <p style="margin:0;font-size:11px;color:#9aa3b8;font-family:Arial,sans-serif;">
       Rapport généré automatiquement chaque vendredi à 23h58 · Agents IA stratégiques<br>
       Pour gérer vos préférences, accédez à votre <a href="${appUrl}/admin" style="color:#2a7c6f;text-decoration:none;">portail administrateur</a>.
@@ -260,7 +260,7 @@ export async function sendVeilleHebdo(opts: {
   await resend.emails.send({
     from: FROM,
     to: adminEmail,
-    subject: `📊 Veille Sem. ${semaine} — ${sources.length > 0 ? `${sources.length} sources web` : "Analyse IA"} · ÉduRéussite QC`,
+    subject: `📊 Veille Sem. ${semaine} — ${sources.length > 0 ? `${sources.length} sources web` : "Analyse IA"} · Édu-Réussite QC`,
     html,
   });
 }

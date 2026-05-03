@@ -1,4 +1,4 @@
-// Persona unique : Mira — Enseignante IA d'ÉduRéussite QC
+// Persona unique : Mira — Enseignante IA d'Édu-Réussite QC
 // Voix ElevenLabs : Charlotte (douce, naturelle en français)
 // Pour changer la voix → remplacer MIRA.voiceId par un autre ID ElevenLabs
 
@@ -17,7 +17,7 @@ export const MIRA: AvatarPersona = {
   title: "Ton enseignante IA",
   imagePath: "/avatars/mira.png",
   voiceId: "Xb7hH8MSUJpSbSDYk0k2", // Alice — Clear, Engaging Educator
-  primaryColor: "#2a7c6f",          // --color-success du thème ÉduRéussite
+  primaryColor: "#2a7c6f",          // --color-success du thème Édu-Réussite
 };
 
 // Formatage humain du niveau scolaire (PFEQ)

@@ -5,7 +5,7 @@ export default function CompteSuspenduPage() {
     <div className="min-h-screen bg-[var(--color-paper)] flex items-center justify-center p-4">
       <div style={{ fontFamily: "Georgia, serif", maxWidth: 480, width: "100%" }}>
         <div className="text-center mb-8">
-          <h1 className="text-xl font-black text-[var(--color-ink)] mb-1">✦ ÉduRéussite QC</h1>
+          <h1 className="text-xl font-black text-[var(--color-ink)] mb-1">✦ Édu-Réussite QC</h1>
         </div>
 
         <div className="rounded-2xl border border-red-200 bg-white p-8 text-center shadow-sm">
@@ -22,13 +22,13 @@ export default function CompteSuspenduPage() {
             <p className="font-semibold text-[var(--color-ink)] mb-2">Pour récupérer votre accès :</p>
             <ol className="space-y-1 list-decimal list-inside">
               <li>Consultez le courriel de suspension reçu</li>
-              <li>Contactez le support à <strong>support@edureussite.qc.ca</strong></li>
+              <li>Contactez le support à <strong>support@edu-reussite.com</strong></li>
               <li>Un administrateur réactivera votre compte</li>
             </ol>
           </div>
 
           <a
-            href="mailto:support@edureussite.qc.ca"
+            href="mailto:support@edu-reussite.com"
             className="inline-block rounded-xl bg-[var(--color-ink)] text-white px-6 py-2.5 text-sm font-bold hover:opacity-80 transition-opacity"
           >
             Contacter le support →

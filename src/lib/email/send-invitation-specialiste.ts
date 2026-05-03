@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logResend } from "@/lib/api-usage/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 const DEV = process.env.NODE_ENV !== "production";
 
 interface InvitationParams {
@@ -17,7 +17,7 @@ export async function sendInvitationSpecialiste(params: InvitationParams): Promi
 
   const html = `
     <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 32px; background: #f9f7f4; border-radius: 16px;">
-      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ ÉduRéussite QC</h1>
+      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ Édu-Réussite QC</h1>
       <p style="color: #8a909c; font-size: 13px; margin-bottom: 24px;">Invitation à rejoindre l'équipe</p>
 
       <div style="background: #fff; border: 1px solid #e5e2dc; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
@@ -25,7 +25,7 @@ export async function sendInvitationSpecialiste(params: InvitationParams): Promi
           Bonjour <strong>${prenom}</strong>,
         </p>
         <p style="margin: 0 0 16px 0; font-size: 14px; color: #5a6070; line-height: 1.6;">
-          Vous avez été invité(e) à rejoindre la plateforme <strong>ÉduRéussite QC</strong> en tant que spécialiste.
+          Vous avez été invité(e) à rejoindre la plateforme <strong>Édu-Réussite QC</strong> en tant que spécialiste.
           Cliquez sur le bouton ci-dessous pour activer votre compte et définir votre mot de passe.
         </p>
         <a
@@ -53,7 +53,7 @@ export async function sendInvitationSpecialiste(params: InvitationParams): Promi
   const { error } = await resend.emails.send({
     from: FROM,
     to: email,
-    subject: "Votre invitation ÉduRéussite QC — Activez votre compte",
+    subject: "Votre invitation Édu-Réussite QC — Activez votre compte",
     html,
   });
   if (error) throw new Error(`Resend error: ${error.message}`);

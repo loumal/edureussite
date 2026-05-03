@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
     <div className="flex min-h-screen items-center justify-center bg-[var(--color-paper)] px-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="text-3xl font-black text-[var(--color-ink)] mb-2">✦ ÉduRéussite QC</div>
+          <div className="text-3xl font-black text-[var(--color-ink)] mb-2">✦ Édu-Réussite QC</div>
           <p className="text-sm text-[var(--color-ink-soft)]">Réinitialisation du mot de passe</p>
         </div>
 

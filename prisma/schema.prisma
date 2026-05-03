@@ -165,6 +165,7 @@ enum TypeNotification {
   SURPRISE_DISPONIBLE
   SURPRISE_ACCORDEE
   AIDE_PLANIFICATION
+  INVITATION_JEU
 }
 
 enum StatutSurprise {
@@ -172,6 +173,22 @@ enum StatutSurprise {
   ACCORDE     // Parent a accordé, enfant doit confirmer
   CONFIRME    // Enfant a confirmé et laissé un souvenir
   EXPIRE      // Parent n'a pas répondu dans 14 jours
+}
+
+enum StatutPartie {
+  EN_ATTENTE
+  EN_COURS
+  TERMINEE
+  ANNULEE
+}
+
+enum StatutDemandeJeu {
+  EN_ATTENTE  // Demande envoyée au parent, en attente
+  AUTORISE    // Parent a approuvé — enfant peut jouer
+  REFUSE      // Parent a refusé
+  EXPIRE      // 24h sans réponse
+  EN_COURS    // Partie en cours
+  TERMINE     // Partie terminée
 }
 
 enum TypeCommentaireParent {
@@ -334,6 +351,7 @@ model ProfilEleve {
   derniereConnexion DateTime?
   totalPoints       Int      @default(0)
   niveauJeu         Int      @default(1)
+  cosmetiques       Json?    // { debloquesIds: string[], avatarEquipe: string, titreEquipe: string }
 
   onboardingComplete Boolean @default(false)
   onboardingEtape    Int     @default(0)
@@ -364,6 +382,8 @@ model ProfilEleve {
   defJourCompletions    DefJourCompletion[]
   missionsHebdo         MissionHebdo[]
   surprises             SurpriseParent[]
+  demandesJeux          DemandeJeu[]
+  partiesMulti          PartieMultijoueur[] @relation("PartiesCreees")
   miraMessages        MiraMessage[]
   objectifsNotes        ObjectifNote[]
   planifNotions         PlanifNotionEleve[]
@@ -1274,6 +1294,30 @@ model StrategieMarketing {
   @@map("strategies_marketing")
 }
 
+/// Demande d'accès à un jeu — nécessite approbation du parent
+model DemandeJeu {
+  id               String           @id @default(cuid())
+  eleveId          String
+  eleve            ProfilEleve      @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+  jeuId            String
+  jeuNom           String
+  jeuDescription   String
+  token            String           @unique @default(cuid())
+  statut           StatutDemandeJeu @default(EN_ATTENTE)
+  xpCout           Int
+  minutesAccordees Int
+  scoreObtenu      Int?
+  debutPartieAt    DateTime?
+  termineAt        DateTime?
+  expiresAt        DateTime
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([eleveId])
+  @@index([token])
+  @@map("demandes_jeux")
+}
+
 /// Campagnes email marketing
 model CampagneEmail {
   id            String   @id @default(cuid())
@@ -1296,4 +1340,23 @@ model CampagneEmail {
   @@index([statut])
   @@index([planifieLe])
   @@map("campagnes_email")
+}
+
+model PartieMultijoueur {
+  id         String       @id @default(cuid())
+  code       String       @unique
+  jeuId      String
+  createurId String
+  createur   ProfilEleve  @relation("PartiesCreees", fields: [createurId], references: [id], onDelete: Cascade)
+  joueurs    Json         // [{ eleveId, prenom, pret, score }]
+  etat       Json         // game-specific state
+  statut     StatutPartie @default(EN_ATTENTE)
+  gagnantId  String?
+  maxJoueurs Int          @default(2)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([code])
+  @@index([createurId])
+  @@map("parties_multijoueur")
 }

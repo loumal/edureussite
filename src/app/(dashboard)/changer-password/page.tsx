@@ -27,7 +27,7 @@ export default function ChangerPasswordPage() {
     <div className="min-h-screen bg-[var(--color-paper)] flex items-center justify-center p-4">
       <div style={{ fontFamily: "Georgia, serif", maxWidth: 420, width: "100%" }}>
         <div className="text-center mb-8">
-          <h1 className="text-xl font-black text-[var(--color-ink)] mb-1">✦ ÉduRéussite QC</h1>
+          <h1 className="text-xl font-black text-[var(--color-ink)] mb-1">✦ Édu-Réussite QC</h1>
         </div>
 
         <div className="rounded-2xl border border-[var(--color-rule)] bg-white p-8 shadow-sm">

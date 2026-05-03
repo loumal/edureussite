@@ -26,7 +26,7 @@ export function NavSpecialiste() {
     <nav className="sticky top-0 z-50 border-b border-[var(--color-rule)] bg-white/90 backdrop-blur-sm">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
         <Link href="/specialiste" className="text-lg font-black text-[var(--color-ink)]">
-          ✦ ÉduRéussite
+          ✦ Édu-Réussite
         </Link>
 
         {/* Desktop nav */}

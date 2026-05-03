@@ -216,7 +216,7 @@ function SocialComptesTab() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Nom du compte</label>
-              <input value={nom} onChange={e => setNom(e.target.value)} placeholder="Ex: ÉduRéussite QC officiel"
+              <input value={nom} onChange={e => setNom(e.target.value)} placeholder="Ex: Édu-Réussite QC officiel"
                 className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]" />
             </div>
             <div>
@@ -948,7 +948,7 @@ function MarketingPersonasTab() {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-bold text-[var(--color-ink)]">Personas marketing</p>
-          <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">Les 4 profils cibles clés d&apos;ÉduRéussite QC, générés par l&apos;IA.</p>
+          <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">Les 4 profils cibles clés d&apos;Édu-Réussite QC, générés par l&apos;IA.</p>
         </div>
         <button
           onClick={() => genPersona.mutate()}
@@ -1680,7 +1680,7 @@ function OngletPartenariats() {
           </div>
           <div>
             <label className="block text-xs font-semibold text-[var(--color-ink-soft)] mb-1">Type de partenariat visé</label>
-            <input value={typePartenariat} onChange={(e) => setTypePartenariat(e.target.value)} placeholder="Ex: Intégration d'ÉduRéussite QC dans les écoles du CSS, pilote 2026-2027"
+            <input value={typePartenariat} onChange={(e) => setTypePartenariat(e.target.value)} placeholder="Ex: Intégration d'Édu-Réussite QC dans les écoles du CSS, pilote 2026-2027"
               className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]" />
           </div>
           <TextareaField label="Objectif du partenariat" value={objectifSoumission} onChange={setObjectifSoumission}

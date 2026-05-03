@@ -1315,3 +1315,156 @@ IMPORTANT ABSOLU :
     };
   }
 }
+
+// ─── Génération d'exercice depuis document importé ────────────────────────────
+
+export interface QuestionExtraite {
+  numero: number;
+  enonce: string;
+  type: "QCM" | "REPONSE_COURTE" | "CALCUL" | "VRAI_FAUX" | "DEVELOPPEMENT";
+  choix?: string[];
+  pointsAttribues?: number | null;
+}
+
+export interface DocumentExerciceInput {
+  contenuBrut: string;
+  questionsExtraites: QuestionExtraite[];
+  matiere: Matiere;
+  typeDetecte: "CONSOLIDATION" | "EPREUVE_COMPLETE" | "DEVOIRS" | "AUTRE";
+  notions: string[];
+  niveauEstime: string;
+  difficulteChoisie: NiveauDifficulte;
+  profil: ProfilComplet;
+}
+
+export async function generateExerciceDepuisDocument(
+  input: DocumentExerciceInput
+): Promise<ExerciceGenere> {
+  const { contenuBrut, questionsExtraites, matiere, typeDetecte, notions, difficulteChoisie, profil } = input;
+  const profilNarratif = construireProfilNarratif(profil);
+
+  const typeExerciceConverti =
+    typeDetecte === "EPREUVE_COMPLETE"
+      ? "EPREUVE_COMPLETE"
+      : questionsExtraites.length > 1
+      ? "LECTURE_COMPREHENSION"
+      : questionsExtraites[0]?.type === "QCM"
+      ? "QCM"
+      : questionsExtraites[0]?.type === "CALCUL"
+      ? "PROBLEME_MATHEMATIQUE"
+      : "QUESTION_OUVERTE";
+
+  const questionsFormatees = questionsExtraites
+    .map(
+      (q) =>
+        `Q${q.numero}. [${q.type}] ${q.enonce}${
+          q.choix?.length ? `\n   Choix : ${q.choix.join(" | ")}` : ""
+        }${q.pointsAttribues ? ` (${q.pointsAttribues} pts)` : ""}`
+    )
+    .join("\n");
+
+  const systemPrompt = `Tu es un expert en psychopédagogie québécoise. Tu reçois un exercice scolaire extrait d'un document et tu dois le reformater dans le JSON de la plateforme Édu-Réussite, en reproduisant FIDÈLEMENT le contenu original.
+
+RÈGLES ABSOLUES :
+1. Reproduis les questions EXACTEMENT telles qu'elles apparaissent — ne les reformule pas, ne les invente pas
+2. Adapte uniquement la MISE EN FORME pour correspondre au type JSON requis
+3. Génère la correctionAttendue en te basant sur les données de l'exercice
+4. Réponds UNIQUEMENT avec un JSON valide, sans markdown ni texte supplémentaire
+5. ⚠️ MATHÉMATIQUES : Utilise UNIQUEMENT les symboles Unicode (×, ÷, √, π, ²) — JAMAIS de LaTeX
+
+PROFIL DE L'ÉLÈVE :
+${profilNarratif}
+
+TYPE JSON À PRODUIRE : ${typeExerciceConverti}
+
+${typeExerciceConverti === "LECTURE_COMPREHENSION" ? `SCHÉMA LECTURE_COMPREHENSION :
+"contenu": {
+  "texte": "Le texte principal ou contexte de l'exercice (fidèle à l'original)",
+  "questions": [
+    {"id": "q1", "type": "QCM"|"OUVERTE", "enonce": "...", "choix": [{"id":"A","texte":"..."}]},
+    {"id": "q2", "type": "OUVERTE", "enonce": "..."}
+  ]
+}` : ""}
+${typeExerciceConverti === "QCM" ? `SCHÉMA QCM :
+"contenu": {
+  "miseEnSituation": "contexte ou consigne de l'exercice",
+  "question": "la question posée",
+  "choix": [{"id":"A","texte":"..."},{"id":"B","texte":"..."},{"id":"C","texte":"..."},{"id":"D","texte":"..."}]
+}` : ""}
+${typeExerciceConverti === "PROBLEME_MATHEMATIQUE" ? `SCHÉMA PROBLEME_MATHEMATIQUE :
+"contenu": {
+  "miseEnSituation": "contexte du problème",
+  "donnees": ["Donnée 1", "Donnée 2"],
+  "question": "ce que l'élève doit calculer/trouver",
+  "unite": "unité de la réponse",
+  "avecDemarche": true
+}` : ""}
+${typeExerciceConverti === "QUESTION_OUVERTE" ? `SCHÉMA QUESTION_OUVERTE :
+"contenu": {
+  "miseEnSituation": "contexte de la question",
+  "question": "la question posée",
+  "pointsGuidage": ["piste 1", "piste 2"],
+  "minMots": 20
+}` : ""}
+
+FORMAT DE RÉPONSE JSON :
+{
+  "titre": "Titre de l'exercice (fidèle à l'original)",
+  "consigne": "Consigne claire pour ${profil.prenom} — 1 phrase",
+  "contenu": { /* selon le schéma ci-dessus */ },
+  "type": "${typeExerciceConverti}",
+  "difficulte": "${difficulteChoisie}",
+  "competencesPFEQ": ["compétence PFEQ correspondant à la matière et aux notions"],
+  "dureeMinutes": 15,
+  "correctionAttendue": {
+    "reponse": "Réponse correcte complète",
+    "demarche": "Démarche ou explication de la correction",
+    "pointsCles": ["point clé 1", "point clé 2"]
+  }
+}`;
+
+  const userPrompt = `EXERCICE ORIGINAL EXTRAIT DU DOCUMENT :
+Matière : ${MATIERES_LABELS[matiere]}
+Notions identifiées : ${notions.join(", ") || "Non spécifiées"}
+
+CONTENU BRUT :
+${contenuBrut}
+
+QUESTIONS EXTRAITES :
+${questionsFormatees || "Voir contenu brut ci-dessus"}
+
+Reproduis cet exercice FIDÈLEMENT dans le format JSON de la plateforme. Ne modifie pas les questions.`;
+
+  const response = await anthropic.messages.create(
+    {
+      model: "claude-sonnet-4-6",
+      max_tokens: 6000,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userPrompt }],
+    },
+    { timeout: 55000 }
+  );
+
+  if (response.stop_reason === "max_tokens") {
+    throw new Error("Réponse trop longue. Réessayez avec un exercice plus court.");
+  }
+
+  const text = response.content[0].type === "text" ? response.content[0].text : "";
+  const cleaned = extractJSON(text);
+
+  try {
+    const parsed = JSON.parse(cleaned);
+    return {
+      titre: String(parsed.titre ?? "Exercice importé"),
+      consigne: String(parsed.consigne ?? "Réponds aux questions suivantes."),
+      contenu: parsed.contenu ?? {},
+      type: (parsed.type ?? typeExerciceConverti) as TypeExercice,
+      difficulte: (parsed.difficulte ?? difficulteChoisie) as NiveauDifficulte,
+      competencesPFEQ: Array.isArray(parsed.competencesPFEQ) ? parsed.competencesPFEQ.map(String) : [],
+      dureeMinutes: Math.round(Number(parsed.dureeMinutes) || 15),
+      correctionAttendue: parsed.correctionAttendue ?? {},
+    };
+  } catch {
+    throw new Error("Erreur lors de la conversion de l'exercice. Réessayez.");
+  }
+}

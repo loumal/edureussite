@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logResend } from "@/lib/api-usage/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 const DEV = process.env.NODE_ENV !== "production";
 
 export async function sendAidePlanificationParent(opts: {
@@ -15,7 +15,7 @@ export async function sendAidePlanificationParent(opts: {
 }): Promise<void> {
   const { parentEmail, parentPrenom, prenomEnfant, niveauScolaire, eleveId, nbNotions } = opts;
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://edureussite.qc.ca";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://edu-reussite.com";
   const lienPlan = `${appUrl}/parent/accompagnement/${eleveId}`;
 
   const niveauxLabels: Record<string, string> = {
@@ -30,11 +30,11 @@ export async function sendAidePlanificationParent(opts: {
 
   const messagePersonnalise = estJeuneEnfant
     ? `En ${niveauLabel}, votre enfant a besoin de votre aide pour planifier ses apprentissages. Quelques minutes ensemble suffiront pour l'aider à organiser son travail de façon concrète et motivante.`
-    : `${prenomEnfant} vient de mettre à jour son plan de travail sur ÉduRéussite QC. Vous pouvez consulter ses objectifs et suivre sa progression depuis votre espace parent.`;
+    : `${prenomEnfant} vient de mettre à jour son plan de travail sur Édu-Réussite QC. Vous pouvez consulter ses objectifs et suivre sa progression depuis votre espace parent.`;
 
   const html = `
     <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 32px; background: #f9f7f4; border-radius: 16px;">
-      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ ÉduRéussite QC</h1>
+      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ Édu-Réussite QC</h1>
       <p style="color: #8a909c; font-size: 13px; margin-bottom: 28px;">Plan de travail — action requise${estJeuneEnfant ? " 👨‍👩‍👧" : ""}</p>
 
       <div style="background: linear-gradient(135deg, #f0eeff 0%, #fff 100%); border: 1px solid rgba(91,79,207,0.2); border-radius: 14px; padding: 28px; margin-bottom: 24px; text-align: center;">
@@ -71,7 +71,7 @@ export async function sendAidePlanificationParent(opts: {
       </div>
 
       <p style="font-size: 11px; color: #aab0bc; text-align: center;">
-        Ce message est envoyé automatiquement par ÉduRéussite QC.<br>
+        Ce message est envoyé automatiquement par Édu-Réussite QC.<br>
         ${prenomEnfant} vient d'enregistrer ou de modifier son plan de travail.
       </p>
     </div>
@@ -83,8 +83,8 @@ export async function sendAidePlanificationParent(opts: {
   }
 
   const subject = estJeuneEnfant
-    ? `🗺️ Aidez ${prenomEnfant} à planifier ses apprentissages — ÉduRéussite QC`
-    : `🗺️ ${prenomEnfant} a mis à jour son plan de travail — ÉduRéussite QC`;
+    ? `🗺️ Aidez ${prenomEnfant} à planifier ses apprentissages — Édu-Réussite QC`
+    : `🗺️ ${prenomEnfant} a mis à jour son plan de travail — Édu-Réussite QC`;
 
   const { error } = await resend.emails.send({
     from: FROM,

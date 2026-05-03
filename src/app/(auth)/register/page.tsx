@@ -154,7 +154,7 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-[var(--color-paper)] px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="text-3xl font-black text-[var(--color-ink)] mb-2">✦ ÉduRéussite QC</div>
+          <div className="text-3xl font-black text-[var(--color-ink)] mb-2">✦ Édu-Réussite QC</div>
           <p className="text-sm text-[var(--color-ink-soft)]">
             {step === "form" ? "Créer votre compte" : "Vérification du courriel"}
           </p>

@@ -149,7 +149,7 @@ export default function VerifyEmailPage() {
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="text-3xl font-black text-[var(--color-ink)] mb-2">
-            ✦ ÉduRéussite QC
+            ✦ Édu-Réussite QC
           </div>
         </div>
         <Suspense>

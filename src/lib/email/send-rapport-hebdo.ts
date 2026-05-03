@@ -103,13 +103,13 @@ export async function sendRapportHebdoEmail(params: RapportHebdoParams): Promise
   <div style="max-width:600px;margin:0 auto;padding:24px 16px;">
 
     <div style="text-align:center;margin-bottom:24px;">
-      <p style="font-size:22px;font-weight:900;color:#1a1a1a;margin:0;">✦ ÉduRéussite</p>
+      <p style="font-size:22px;font-weight:900;color:#1a1a1a;margin:0;">✦ Édu-Réussite</p>
       <p style="font-size:13px;color:#888;margin:4px 0 0;">Rapport de la semaine du ${semaineDu}</p>
     </div>
 
     <p style="font-size:15px;color:#333;margin-bottom:20px;">
       Bonjour <strong>${parentPrenom}</strong> 👋,<br>
-      Voici le bilan hebdomadaire de ${enfants.length > 1 ? "vos enfants" : "votre enfant"} sur ÉduRéussite.
+      Voici le bilan hebdomadaire de ${enfants.length > 1 ? "vos enfants" : "votre enfant"} sur Édu-Réussite.
     </p>
 
     ${lignesEnfants}
@@ -122,7 +122,7 @@ export async function sendRapportHebdoEmail(params: RapportHebdoParams): Promise
     </div>
 
     <p style="font-size:11px;color:#bbb;text-align:center;margin-top:24px;">
-      Vous recevez cet email car vous avez un compte parent sur ÉduRéussite.<br>
+      Vous recevez cet email car vous avez un compte parent sur Édu-Réussite.<br>
       <a href="${process.env.NEXTAUTH_URL ?? "https://edureussite.ca"}/parent" style="color:#bbb;">Gérer mes préférences</a>
     </p>
   </div>

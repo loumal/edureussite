@@ -110,8 +110,8 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
 
   const lienDefi = enAttentePlan.length > 0
     ? `/eleve/exercices/${enAttentePlan[0].id}`
-    : matierePrincipale
-      ? `/eleve/exercices/nouveau?plan=1&matiere=${matierePrincipale}`
+    : notionPrincipale
+      ? `/eleve/exercices/nouveau?plan=1&notionId=${notionPrincipale.id}`
       : "/eleve/exercices/nouveau?plan=1";
 
   // ── XP estimé selon priorité ──
@@ -129,33 +129,32 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
         {/* Hero défi — style amber */}
         <div className="rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 overflow-hidden">
           <div className="p-5">
-            {/* Date */}
-            <p className="text-xs font-bold text-amber-600 mb-3 capitalize">
-              C'est {dateDuJour} — voici ton défi ! 🌟
-            </p>
-
             {matierePrincipale ? (
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-2xl flex-shrink-0">
-                  {matiereEmoji}
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-amber-700 uppercase tracking-wide">{matiereLabel}</p>
-                  <p className="text-base font-black text-[var(--color-ink)] leading-snug">
-                    {titrePrincipal}
-                  </p>
-                </div>
+              <div className="mb-4">
+                <p className="text-xs font-bold text-amber-700 uppercase tracking-wide mb-0.5">{matiereEmoji} {matiereLabel}</p>
+                <p className="text-base font-black text-[var(--color-ink)] leading-snug">{titrePrincipal}</p>
               </div>
             ) : (
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-4xl">🎲</span>
-                <p className="text-base font-bold text-[var(--color-ink)]">Un exercice surprise !</p>
+              <div className="mb-4">
+                <p className="text-base font-bold text-[var(--color-ink)]">🎲 Un exercice surprise !</p>
               </div>
             )}
 
             {defiFait ? (
-              <div className="rounded-xl bg-amber-100 border border-amber-200 py-3 text-center">
-                <p className="text-sm font-black text-amber-700">✅ Défi complété ! +{xpBonus} XP gagnés 🏆</p>
+              <div className="space-y-2">
+                <div className="rounded-xl bg-amber-100 border border-amber-200 py-3 text-center">
+                  <p className="text-sm font-black text-amber-700">✅ Défi complété ! +{xpBonus} XP gagnés 🏆</p>
+                </div>
+                {notionsSRSDues.length > 0 ? (
+                  <Link href={`/eleve/exercices/nouveau?matiere=${notionsSRSDues[0]}`}
+                    className="flex items-center justify-center gap-2 rounded-xl border border-amber-200 bg-white px-4 py-2 text-xs font-bold text-amber-700 hover:bg-amber-50 transition-colors">
+                    🔁 Faire tes révisions du jour →
+                  </Link>
+                ) : (
+                  <p className="text-[11px] text-center text-amber-600 font-semibold">
+                    Reviens demain pour maintenir ta série ! 🔥
+                  </p>
+                )}
               </div>
             ) : (
               <div className="flex items-center justify-between gap-3">
@@ -214,23 +213,9 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
         <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-50 pointer-events-none" />
 
         <div className="relative p-5">
-          {/* Date du jour */}
-          <p className="text-xs font-bold text-amber-600 mb-3 capitalize">
-            C'est {dateDuJour} — voici ton défi du jour !
-          </p>
-
-          {/* En-tête label + badge */}
-          <div className="flex items-center justify-between mb-4">
-            <CardLabel>Défi du jour</CardLabel>
-            <div className="flex items-center gap-1.5 rounded-full bg-amber-100 border border-amber-200 px-2.5 py-1">
-              <span className="text-xs">⏰</span>
-              <span className="text-[11px] font-bold text-amber-700">Aujourd'hui seulement</span>
-            </div>
-          </div>
-
           {defiFait ? (
             /* ── Défi complété ── */
-            <div className="text-center py-4">
+            <div className="text-center py-3">
               <div className="text-4xl mb-2">✅</div>
               <p className="text-base font-black text-[var(--color-success)]">Défi du jour complété !</p>
               <p className="text-xs text-amber-600 font-semibold mt-1">+{xpBonus} XP gagnés aujourd'hui 🏆</p>
@@ -239,35 +224,38 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
                   {exercicesPlan.length} exercice{exercicesPlan.length > 1 ? "s" : ""} réalisé{exercicesPlan.length > 1 ? "s" : ""}
                 </p>
               )}
+              <div className="mt-3">
+                {notionsSRSDues.length > 0 ? (
+                  <Link href={`/eleve/exercices/nouveau?matiere=${notionsSRSDues[0]}`}
+                    className="inline-flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-bold text-amber-700 hover:bg-amber-100 transition-colors">
+                    🔁 Faire tes révisions du jour →
+                  </Link>
+                ) : (
+                  <p className="text-[11px] text-amber-600 font-semibold">
+                    Reviens demain pour maintenir ta série ! 🔥
+                  </p>
+                )}
+              </div>
             </div>
           ) : (
             /* ── Défi à relever ── */
             <>
               {/* Matière + titre — toujours aligné sur l'exercice réel */}
               {matierePrincipale ? (
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-2xl flex-shrink-0">
-                    {matiereEmoji}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[11px] font-bold text-amber-700 uppercase tracking-wide">
-                      {matiereLabel}
-                      {notionPrincipale?.priorite === "URGENT" && (
-                        <span className="ml-1.5 text-red-500">· 🔴 Urgent</span>
-                      )}
-                    </p>
-                    <p className="text-sm font-semibold text-[var(--color-ink)] leading-snug">
-                      {titrePrincipal}
-                    </p>
-                  </div>
+                <div className="mb-3">
+                  <p className="text-[11px] font-bold text-amber-700 uppercase tracking-wide mb-0.5">
+                    {matiereEmoji} {matiereLabel}
+                    {notionPrincipale?.priorite === "URGENT" && (
+                      <span className="ml-1.5 text-red-500">· 🔴 Urgent</span>
+                    )}
+                  </p>
+                  <p className="text-sm font-semibold text-[var(--color-ink)] leading-snug">
+                    {titrePrincipal}
+                  </p>
                 </div>
               ) : (
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-3xl">📚</span>
-                  <div>
-                    <p className="text-sm font-semibold text-[var(--color-ink)]">{titreDuJour}</p>
-                    <p className="text-xs text-amber-600">⏱️ {minutesDispo} min d'exercices</p>
-                  </div>
+                <div className="mb-3">
+                  <p className="text-sm font-semibold text-[var(--color-ink)]">{titreDuJour}</p>
                 </div>
               )}
 
@@ -284,18 +272,6 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
                       style={{ width: `${progressionPct}%` }}
                     />
                   </div>
-                </div>
-              )}
-
-              {/* Autres notions (pills discrètes) */}
-              {notionsPlanifiees.length > 1 && (
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {notionsPlanifiees.slice(1, 4).map((n) => (
-                    <span key={n.notion}
-                      className="rounded-full bg-amber-100 border border-amber-200 px-2.5 py-0.5 text-[10px] font-semibold text-amber-700">
-                      {PRIORITE_EMOJI[n.priorite]} {n.notion.replace(/_/g, " ").toLowerCase()}
-                    </span>
-                  ))}
                 </div>
               )}
 
@@ -316,12 +292,10 @@ export function PlanDuJourWidget({ niveauScolaire }: Props) {
           )}
         </div>
 
-        {/* Lien "Modifier mon plan" discret */}
-        <div className="relative border-t border-amber-200 px-5 py-2 flex justify-between items-center bg-amber-50/60">
-          <span className="text-[10px] text-amber-600">Plan personnel · {minutesDispo} min / jour</span>
+        <div className="relative border-t border-amber-200 px-5 py-2 flex justify-end bg-amber-50/60">
           <Link href="/eleve/plan/configurer"
             className="text-[10px] font-semibold text-amber-700 hover:text-amber-900 underline">
-            Modifier mon plan
+            {minutesDispo} min / jour · Modifier mon plan
           </Link>
         </div>
       </div>

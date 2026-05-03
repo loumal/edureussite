@@ -11,7 +11,7 @@ import { Role } from "@/generated/prisma";
 // ─── Profil de l'organisation (system prompt de base) ────────────────────────
 
 const PROFIL_EDU = `
-Tu travailles pour ÉduRéussite QC, une plateforme éducative québécoise propulsée par l'IA.
+Tu travailles pour Édu-Réussite QC, une plateforme éducative québécoise propulsée par l'IA.
 
 MISSION : Accompagner les élèves du primaire et du secondaire (niveaux 1 à 11) dans leur parcours scolaire grâce à une approche personnalisée, inclusive et basée sur le Programme de formation de l'école québécoise (PFEQ).
 
@@ -272,7 +272,7 @@ export const agentsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const SYSTEM = `${PROFIL_EDU}
 
-Tu es le Community Manager d'ÉduRéussite QC. Tu rédiges des réponses aux commentaires sur les réseaux sociaux.
+Tu es le Community Manager d'Édu-Réussite QC. Tu rédiges des réponses aux commentaires sur les réseaux sociaux.
 Tes réponses sont ${input.ton.toLowerCase()}, authentiques, et valorisent la communauté.
 Règles : courte (2-4 phrases), personnalisée, ne jamais ignorer la question ou la préoccupation, finir par une invitation à continuer l'échange ou une question ouverte quand c'est pertinent.
 Réponds UNIQUEMENT avec le texte de la réponse, prêt à poster.`;
@@ -303,7 +303,7 @@ Rédige une réponse ${input.ton.toLowerCase()} et engageante.`;
     .mutation(async ({ ctx, input }) => {
       const SYSTEM = `${PROFIL_EDU}
 
-Tu es le Social Media Manager d'ÉduRéussite QC. Tu rédiges des publications pour les réseaux sociaux en respectant :
+Tu es le Social Media Manager d'Édu-Réussite QC. Tu rédiges des publications pour les réseaux sociaux en respectant :
 - La charte éditoriale : ton ${input.ton.toLowerCase()}, authentique, québécois francophone
 - Les bonnes pratiques de la plateforme ${input.plateforme}
 - L'objectif : augmenter la notoriété et l'engagement de la communauté éducative québécoise
@@ -344,7 +344,7 @@ Format de réponse : UNIQUEMENT le texte de la publication, prêt à copier-coll
 
       const SYSTEM = `${PROFIL_EDU}
 
-Tu es le Social Media Manager d'ÉduRéussite QC. Tu génères des calendriers éditoriaux stratégiques.
+Tu es le Social Media Manager d'Édu-Réussite QC. Tu génères des calendriers éditoriaux stratégiques.
 Tu réponds UNIQUEMENT avec un objet JSON valide, sans markdown, sans explication, sans texte avant ou après.
 Format attendu :
 {
@@ -364,7 +364,7 @@ Format attendu :
       const nbJours = input.periode === "SEMAINE" ? 7 : 30;
       const frequenceParSemaine = input.plateformes.length <= 2 ? 3 : 5;
 
-      const prompt = `Génère un calendrier éditorial professionnel pour ÉduRéussite QC.
+      const prompt = `Génère un calendrier éditorial professionnel pour Édu-Réussite QC.
 Période : ${nbJours} jours à partir du ${debutStr}
 Plateformes : ${input.plateformes.join(", ")}
 Fréquence : environ ${frequenceParSemaine} posts/semaine au total, répartis intelligemment
@@ -421,7 +421,7 @@ Contraintes :
 
       const SYSTEM = `${PROFIL_EDU}
 
-Tu es l'analyste de veille concurrentielle d'ÉduRéussite QC. Tu analyses les plateformes EdTech concurrentes.
+Tu es l'analyste de veille concurrentielle d'Édu-Réussite QC. Tu analyses les plateformes EdTech concurrentes.
 ${webDispo ? "Des données web récentes te sont fournies ci-dessous — utilise-les en priorité, en les citant si pertinent." : "Base-toi sur ta connaissance du marché."}
 Sois structuré, objectif, stratégique. Réponds en Markdown avec des sections claires.`;
 
@@ -430,7 +430,7 @@ ${input.focusPoints?.length ? `Points d'attention particuliers : ${input.focusPo
 
 ${contextWeb ? `=== DONNÉES WEB RÉCENTES ===\n${contextWeb}\n=== FIN DES DONNÉES ===\n` : ""}
 
-Inclure : positionnement actuel, fonctionnalités clés, modèle tarifaire, public cible, Forces, Faiblesses, Opportunités pour ÉduRéussite QC, Menaces, et recommandations stratégiques concrètes.`;
+Inclure : positionnement actuel, fonctionnalités clés, modèle tarifaire, public cible, Forces, Faiblesses, Opportunités pour Édu-Réussite QC, Menaces, et recommandations stratégiques concrètes.`;
 
       try {
         const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 2500);
@@ -449,8 +449,8 @@ Inclure : positionnement actuel, fonctionnalités clés, modèle tarifaire, publ
     .mutation(async ({ ctx, input }) => {
       const SYSTEM = `${PROFIL_EDU}
 
-Tu es l'analyste de veille stratégique d'ÉduRéussite QC. Tu identifies les tendances émergentes dans le secteur EdTech.
-Sois prospectif, factuel, et oriente tes observations vers des recommandations concrètes pour ÉduRéussite QC.
+Tu es l'analyste de veille stratégique d'Édu-Réussite QC. Tu identifies les tendances émergentes dans le secteur EdTech.
+Sois prospectif, factuel, et oriente tes observations vers des recommandations concrètes pour Édu-Réussite QC.
 Réponds en Markdown.`;
 
       const DOMAINE_LABELS: Record<string, string> = {
@@ -479,7 +479,7 @@ Réponds en Markdown.`;
 
 ${contextWeb ? `=== DONNÉES WEB RÉCENTES ===\n${contextWeb}\n=== FIN DES DONNÉES ===\n` : ""}
 
-Sections : Tendances technologiques, Évolution des usages pédagogiques, Opportunités de marché, Risques à anticiper, Recommandations stratégiques pour ÉduRéussite QC.`;
+Sections : Tendances technologiques, Évolution des usages pédagogiques, Opportunités de marché, Risques à anticiper, Recommandations stratégiques pour Édu-Réussite QC.`;
 
       try {
         const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 2500);
@@ -504,8 +504,8 @@ Sections : Tendances technologiques, Évolution des usages pédagogiques, Opport
     .mutation(async ({ ctx, input }) => {
       const SYSTEM = `${PROFIL_EDU}
 
-Tu es le Spécialiste Marketing & Growth d'ÉduRéussite QC. Tu rédiges des copies marketing percutantes.
-Ton écriture est persuasive, empathique, orientée bénéfices, et respecte les valeurs d'ÉduRéussite QC.
+Tu es le Spécialiste Marketing & Growth d'Édu-Réussite QC. Tu rédiges des copies marketing percutantes.
+Ton écriture est persuasive, empathique, orientée bénéfices, et respecte les valeurs d'Édu-Réussite QC.
 Public cible : ${input.cibleAudience}. Réponds en Markdown.`;
 
       const TYPE_LABELS: Record<string, string> = {
@@ -516,7 +516,7 @@ Public cible : ${input.cibleAudience}. Réponds en Markdown.`;
         PROPOSITION_VALEUR: "une proposition de valeur unique claire et mémorable",
       };
 
-      const prompt = `Crée ${TYPE_LABELS[input.type]} pour ÉduRéussite QC.
+      const prompt = `Crée ${TYPE_LABELS[input.type]} pour Édu-Réussite QC.
 Objectif de campagne : ${input.objectif}
 ${input.contraintes ? `Contraintes : ${input.contraintes}` : ""}`;
 
@@ -539,13 +539,13 @@ ${input.contraintes ? `Contraintes : ${input.contraintes}` : ""}`;
     .mutation(async ({ ctx, input }) => {
       const SYSTEM = `${PROFIL_EDU}
 
-Tu es le Directeur Marketing & Growth d'ÉduRéussite QC. Tu conçois des plans marketing dynamiques et réalistes.
+Tu es le Directeur Marketing & Growth d'Édu-Réussite QC. Tu conçois des plans marketing dynamiques et réalistes.
 Sois très concret : canaux, actions, métriques, priorités. Adapte au budget et au contexte québécois.
 Réponds en Markdown structuré.`;
 
       const BUDGET_LABELS = { FAIBLE: "limité (< 2 000$ CAD/mois)", MOYEN: "moyen (2 000–10 000$ CAD/mois)", ELEVE: "élevé (> 10 000$ CAD/mois)" };
 
-      const prompt = `Élabore un plan marketing pour ÉduRéussite QC sur ${input.horizon.replace("_", " ")}.
+      const prompt = `Élabore un plan marketing pour Édu-Réussite QC sur ${input.horizon.replace("_", " ")}.
 Objectif de croissance : ${input.objectifCroissance}
 Budget : ${BUDGET_LABELS[input.budget]}
 ${input.contexteConcurrentiel ? `Contexte concurrentiel actuel : ${input.contexteConcurrentiel}` : ""}
@@ -581,7 +581,7 @@ Tu es un expert en marketing stratégique et en design de personas.
 Rédige des fiches de personas détaillées, basées sur des données réelles du marché EdTech québécois.
 Format Markdown avec emojis, sections claires, données concrètes (âges, revenus, habitudes numériques).`;
 
-    const prompt = `Génère les 4 personas clés pour ÉduRéussite QC.
+    const prompt = `Génère les 4 personas clés pour Édu-Réussite QC.
 
 Pour chaque persona, inclure :
 1. Nom fictif + photo emoji + démographie (âge, situation, revenu, région du Québec)
@@ -643,13 +643,13 @@ Les 4 personas :
       } catch { /* Tavily indisponible, continuer sans */ }
 
       const SYSTEM = `${PROFIL_EDU}
-Tu es le CMO (Chief Marketing Officer) d'ÉduRéussite QC.
+Tu es le CMO (Chief Marketing Officer) d'Édu-Réussite QC.
 Tu élabores des stratégies marketing de pointe, data-driven, adaptées au marché EdTech québécois 2025.
 Sois ultra-concret, chiffré, avec des actions immédiates et des KPIs mesurables.
 Intègre les dernières tendances en IA, contenus courts, SEO, marketing automation.
 Réponds en Markdown structuré et professionnel.`;
 
-      const prompt = `Génère la stratégie marketing de pointe pour ÉduRéussite QC — ${new Date().toLocaleDateString("fr-CA", { month: "long", year: "numeric" })}.
+      const prompt = `Génère la stratégie marketing de pointe pour Édu-Réussite QC — ${new Date().toLocaleDateString("fr-CA", { month: "long", year: "numeric" })}.
 ${input.contexteAdditionnel ? `Contexte spécifique : ${input.contexteAdditionnel}` : ""}
 ${tendances}
 
@@ -730,7 +730,7 @@ Structure OBLIGATOIRE :
       contexte: z.string().min(10).max(600),
     }))
     .mutation(async ({ ctx, input }) => {
-      const SYSTEM = `Tu es expert en email marketing professionnel pour ÉduRéussite QC, une plateforme EdTech québécoise.
+      const SYSTEM = `Tu es expert en email marketing professionnel pour Édu-Réussite QC, une plateforme EdTech québécoise.
 Tu génères des emails HTML percutants, chaleureux, professionnels.
 
 RÈGLES ABSOLUES :
@@ -749,7 +749,7 @@ RÈGLES ABSOLUES :
         AUTRE: "communication générale",
       };
 
-      const prompt = `Génère un email ${TYPE_LABELS[input.typeEvenement]} pour ÉduRéussite QC.
+      const prompt = `Génère un email ${TYPE_LABELS[input.typeEvenement]} pour Édu-Réussite QC.
 
 Destinataires : ${input.destinataires}
 Sujet / Objet de l'email : ${input.sujet}
@@ -914,7 +914,7 @@ Génère :
     .mutation(async ({ ctx, input }) => {
       const SYSTEM = `${PROFIL_EDU}
 
-Tu es le chargé des partenariats stratégiques d'ÉduRéussite QC. Tu identifies des opportunités de partenariat réelles et pertinentes.
+Tu es le chargé des partenariats stratégiques d'Édu-Réussite QC. Tu identifies des opportunités de partenariat réelles et pertinentes.
 Appuie-toi sur ta connaissance des institutions, programmes, appels à projets et subventions au Québec, au Canada et à l'international.
 Sois précis : nomme les organismes réels, les programmes existants, les fenêtres habituelles de soumission. Réponds en Markdown.`;
 
@@ -953,12 +953,12 @@ Sois précis : nomme les organismes réels, les programmes existants, les fenêt
       const contextWeb = formaterContexteWeb(uniqueResults);
       const webDispo = uniqueResults.length > 0;
 
-      const prompt = `Identifie 8 à 12 opportunités de partenariat concrètes pour ÉduRéussite QC auprès de ${TYPE_LABELS[input.type]} ${REGION_LABELS[input.region]}.
+      const prompt = `Identifie 8 à 12 opportunités de partenariat concrètes pour Édu-Réussite QC auprès de ${TYPE_LABELS[input.type]} ${REGION_LABELS[input.region]}.
 ${input.contexte ? `Contexte supplémentaire : ${input.contexte}` : ""}
 
 ${contextWeb ? `=== DONNÉES WEB RÉCENTES (programmes, appels d'offres, organismes actifs) ===\n${contextWeb}\n=== FIN DES DONNÉES ===\n` : ""}
 
-Pour chaque opportunité : Nom de l'organisation/programme, Type de partenariat possible, Valeur stratégique pour ÉduRéussite QC, Niveau de priorité (Haute/Moyenne/Faible), Lien ou référence si disponible, Prochaine action recommandée.`;
+Pour chaque opportunité : Nom de l'organisation/programme, Type de partenariat possible, Valeur stratégique pour Édu-Réussite QC, Niveau de priorité (Haute/Moyenne/Faible), Lien ou référence si disponible, Prochaine action recommandée.`;
 
       try {
         const { text, inputTokens, outputTokens } = await callClaude(SYSTEM, prompt, 3000);
@@ -981,11 +981,11 @@ Pour chaque opportunité : Nom de l'organisation/programme, Type de partenariat 
     .mutation(async ({ ctx, input }) => {
       const SYSTEM = `${PROFIL_EDU}
 
-Tu es le chargé des partenariats d'ÉduRéussite QC et tu rédiges des soumissions et lettres de partenariat professionnelles.
+Tu es le chargé des partenariats d'Édu-Réussite QC et tu rédiges des soumissions et lettres de partenariat professionnelles.
 Style : formel, québécois, orienté impact pédagogique et social. Chaque soumission doit être convaincante et personnalisée.
 Réponds en Markdown avec des sections clairement délimitées pour faciliter la mise en page finale.`;
 
-      const prompt = `Rédige une soumission / lettre d'intention de partenariat complète pour ÉduRéussite QC.
+      const prompt = `Rédige une soumission / lettre d'intention de partenariat complète pour Édu-Réussite QC.
 
 Destinataire : ${input.organisation}
 Type de partenariat visé : ${input.typePartenariat}
@@ -995,7 +995,7 @@ ${input.signataire ? `Signataire : ${input.signataire}` : ""}
 
 Structure la soumission ainsi :
 1. En-tête et formule d'appel
-2. Introduction et présentation d'ÉduRéussite QC
+2. Introduction et présentation d'Édu-Réussite QC
 3. Valeur ajoutée et impact pédagogique attendu
 4. Description concrète du partenariat proposé
 5. Alignement avec la mission de l'organisation destinataire

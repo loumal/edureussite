@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 
 export async function sendApiRenewalAlert(opts: {
   adminEmail: string;
@@ -28,7 +28,7 @@ export async function sendApiRenewalAlert(opts: {
           Budget API bientôt épuisé
         </h1>
         <p style="color: #3a4460; font-size: 14px; margin-top: 6px;">
-          ÉduRéussite QC — Alerte système
+          Édu-Réussite QC — Alerte système
         </p>
       </div>
 
@@ -58,7 +58,7 @@ export async function sendApiRenewalAlert(opts: {
 
       <div style="margin-top: 28px; padding-top: 16px; border-top: 1px solid rgba(15,22,35,0.12); text-align: center;">
         <p style="font-size: 11px; color: #9aa3b8; margin: 0;">
-          ÉduRéussite QC — Système d'alertes administratives
+          Édu-Réussite QC — Système d'alertes administratives
         </p>
       </div>
     </div>
@@ -67,7 +67,7 @@ export async function sendApiRenewalAlert(opts: {
   await resend.emails.send({
     from: FROM,
     to: adminEmail,
-    subject: `⚠️ [${urgenceLabel}] Budget ${apiNom} dans ${heuresRestantes}h — ÉduRéussite QC`,
+    subject: `⚠️ [${urgenceLabel}] Budget ${apiNom} dans ${heuresRestantes}h — Édu-Réussite QC`,
     html,
   });
 }

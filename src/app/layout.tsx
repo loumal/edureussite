@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ÉduRéussite — Réussite pour chaque élève",
+  title: "Édu-Réussite — Réussite pour chaque élève",
   description:
     "Plateforme éducative adaptative pour élèves du primaire et du secondaire. IA personnalisée, alignée sur le curriculum local.",
   keywords: ["éducation", "québec", "primaire", "secondaire", "PFEQ", "IA", "apprentissage"],
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "ÉduRéussite",
+    title: "Édu-Réussite",
   },
   icons: {
     icon: "/icon",

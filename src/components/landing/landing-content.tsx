@@ -50,26 +50,42 @@ const CONTENT = {
     },
     cta: {
       title: ["Prêt à changer", "leur trajectoire ?"],
-      sub: "Rejoignez les familles et enseignants qui font confiance à ÉduRéussite pour accompagner la réussite de chaque élève.",
+      sub: "Rejoignez les familles et enseignants qui font confiance à Édu-Réussite pour accompagner la réussite de chaque élève.",
       btn: "Créer un compte gratuit",
       btnSub: "Se connecter",
       tagline: "Aucun engagement · Données protégées",
     },
-    footer: {
-      brand: "✦ ÉduRéussite",
-      privacy: "Politique de confidentialité",
-      register: "S'inscrire",
-      login: "Connexion",
-      copy: (year: number) => `© ${year} ÉduRéussite · Canada`,
-    },
     commitment: {
       sub: "Notre engagement",
       title: ["L'IA accompagne.", "Les humains décident."],
-      desc: "ÉduRéussite utilise l'intelligence artificielle comme outil d'appui — jamais comme substitut au jugement professionnel. Chaque recommandation est conçue pour informer, non pour remplacer l'expertise des enseignants, des parents et des spécialistes.",
+      desc: "Édu-Réussite utilise l'intelligence artificielle comme outil d'appui — jamais comme substitut au jugement professionnel. Chaque recommandation est conçue pour informer, non pour remplacer l'expertise des enseignants, des parents et des spécialistes.",
       pillars: [
         { icon: "🎓", titre: "L'humain au centre", desc: "La technologie soutient — elle ne remplace pas. Nous croyons en la collaboration avec les professionnels de l'éducation." },
         { icon: "🔒", titre: "Vous gardez le contrôle", desc: "Les parents et enseignants restent les décideurs. L'IA ne fait que mettre en lumière ce qui compte." },
       ],
+    },
+    trust: {
+      sub: "Confiance & conformité",
+      title: "Conçu pour les familles québécoises.",
+      desc: "Nous ne promettons pas juste de protéger vos données — nous vous expliquons exactement comment.",
+      badges: [
+        { icon: "🔒", label: "Conforme à la Loi 25", detail: "Québec & LPRPDE Canada" },
+        { icon: "🍁", label: "Données hébergées au Canada", detail: "Serveurs canadiens certifiés" },
+        { icon: "🤖", label: "IA transparente & explicable", detail: "Aucune décision autonome" },
+        { icon: "👶", label: "Données des mineurs protégées", detail: "Accès strictement contrôlé" },
+      ],
+      howItWorks: "Comprendre comment fonctionne notre IA →",
+      howItWorksHref: "/comment-ca-marche",
+      privacy: "Lire la politique de confidentialité →",
+      privacyHref: "/politique-confidentialite",
+    },
+    footer: {
+      brand: "✦ Édu-Réussite",
+      privacy: "Politique de confidentialité",
+      howItWorks: "Comment ça marche",
+      register: "S'inscrire",
+      login: "Connexion",
+      copy: (year: number) => `© ${year} Édu-Réussite · Canada`,
     },
   },
   EN: {
@@ -116,26 +132,42 @@ const CONTENT = {
     },
     cta: {
       title: ["Ready to change", "their trajectory?"],
-      sub: "Join the families and teachers who trust ÉduRéussite to support every student's success.",
+      sub: "Join the families and teachers who trust Édu-Réussite to support every student's success.",
       btn: "Create a free account",
       btnSub: "Sign in",
       tagline: "No commitment · Data protected",
     },
-    footer: {
-      brand: "✦ ÉduRéussite",
-      privacy: "Privacy policy",
-      register: "Sign up",
-      login: "Sign in",
-      copy: (year: number) => `© ${year} ÉduRéussite · Canada`,
-    },
     commitment: {
       sub: "Our commitment",
       title: ["AI supports.", "Humans decide."],
-      desc: "ÉduRéussite uses artificial intelligence as a support tool — never as a substitute for professional judgment. Every recommendation is designed to inform, not replace the expertise of teachers, parents, and specialists.",
+      desc: "Édu-Réussite uses artificial intelligence as a support tool — never as a substitute for professional judgment. Every recommendation is designed to inform, not replace the expertise of teachers, parents, and specialists.",
       pillars: [
         { icon: "🎓", titre: "Humans at the center", desc: "Technology supports — it doesn't replace. We believe in collaboration with education professionals." },
         { icon: "🔒", titre: "You stay in control", desc: "Parents and teachers remain the decision-makers. AI only illuminates what matters." },
       ],
+    },
+    trust: {
+      sub: "Trust & compliance",
+      title: "Built for Canadian families.",
+      desc: "We don't just promise to protect your data — we explain exactly how.",
+      badges: [
+        { icon: "🔒", label: "Loi 25 compliant", detail: "Quebec & PIPEDA Canada" },
+        { icon: "🍁", label: "Data hosted in Canada", detail: "Certified Canadian servers" },
+        { icon: "🤖", label: "Transparent & explainable AI", detail: "No autonomous decisions" },
+        { icon: "👶", label: "Children's data protected", detail: "Strictly controlled access" },
+      ],
+      howItWorks: "Understand how our AI works →",
+      howItWorksHref: "/comment-ca-marche",
+      privacy: "Read our privacy policy →",
+      privacyHref: "/politique-confidentialite",
+    },
+    footer: {
+      brand: "✦ Édu-Réussite",
+      privacy: "Privacy policy",
+      howItWorks: "How it works",
+      register: "Sign up",
+      login: "Sign in",
+      copy: (year: number) => `© ${year} Édu-Réussite · Canada`,
     },
   },
 } as const;
@@ -253,7 +285,9 @@ export function LandingContent({ multiProvince, provincesActives }: Props) {
             <div className="mx-auto max-w-6xl flex items-center justify-between gap-4 flex-wrap">
               <p className="text-xs text-[var(--color-ink-soft)]">{c.pickBanner}</p>
               <div className="flex items-center gap-3">
+                <label htmlFor="province-banner" className="sr-only">{c.pickLabel}</label>
                 <select
+                  id="province-banner"
                   value={province}
                   onChange={(e) => handleProvinceChange(e.target.value)}
                   className="rounded-lg border border-[var(--color-rule)] bg-white px-3 py-1.5 text-xs font-semibold text-[var(--color-ink)] focus:outline-none focus:ring-1 focus:ring-[var(--color-ink)]"
@@ -471,11 +505,51 @@ export function LandingContent({ multiProvince, provincesActives }: Props) {
         </div>
       </section>
 
+      {/* ── CONFIANCE & CONFORMITÉ ──────────────────────────────────── */}
+      <section className="border-t border-[var(--color-rule)] bg-[var(--color-paper-warm)] py-12 px-6">
+        <div className="mx-auto max-w-4xl">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+            {/* Texte gauche */}
+            <div className="md:max-w-xs">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-ink-soft)] mb-2">{c.trust.sub}</p>
+              <h3 className="text-lg font-black text-[var(--color-ink)] leading-snug mb-3">{c.trust.title}</h3>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href={c.trust.howItWorksHref}
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-ink)] hover:opacity-70 transition-opacity"
+                >
+                  {c.trust.howItWorks}
+                </Link>
+                <Link
+                  href={c.trust.privacyHref}
+                  className="text-xs text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] transition-colors"
+                >
+                  {c.trust.privacy}
+                </Link>
+              </div>
+            </div>
+            {/* Points forts droite */}
+            <div className="grid grid-cols-2 gap-3 flex-1 md:max-w-lg">
+              {c.trust.badges.map((b) => (
+                <div key={b.label} className="flex items-start gap-3 rounded-2xl bg-white border border-[var(--color-rule)] px-4 py-3">
+                  <span className="text-xl flex-shrink-0 mt-0.5">{b.icon}</span>
+                  <div>
+                    <p className="text-xs font-bold text-[var(--color-ink)] leading-snug">{b.label}</p>
+                    <p className="text-[11px] text-[var(--color-ink-soft)] leading-snug mt-0.5">{b.detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── FOOTER ──────────────────────────────────────────────────── */}
-      <footer className="border-t border-[var(--color-rule)] bg-white py-10 px-6">
+      <footer className="border-t border-[var(--color-rule)] bg-[var(--color-paper-warm)] py-10 px-6">
         <div className="mx-auto max-w-6xl flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <p className="text-sm font-black text-[var(--color-ink)] tracking-tight">{c.footer.brand}</p>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 flex-wrap justify-center">
+            <Link href={c.trust.howItWorksHref} className="text-xs text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] transition-colors">{c.footer.howItWorks}</Link>
             <Link href="/politique-confidentialite" className="text-xs text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] transition-colors">{c.footer.privacy}</Link>
             <Link href="/register" className="text-xs text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] transition-colors">{c.footer.register}</Link>
             <Link href="/login" className="text-xs text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] transition-colors">{c.footer.login}</Link>
@@ -517,13 +591,16 @@ function LandingNav({ multiProvince, lang, province, provCanada, provFrancophoni
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[var(--color-paper)]/95 backdrop-blur-md shadow-[0_1px_24px_rgba(15,22,35,0.07)] border-b border-[var(--color-rule)]" : "bg-transparent"}`}>
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="text-base font-black text-[var(--color-ink)] tracking-tight hover:opacity-75 transition-opacity">
-          ✦ ÉduRéussite
+          ✦ Édu-Réussite
         </Link>
 
         <div className="hidden md:flex items-center gap-2">
           {/* Sélecteur province compact dans la nav (quand scrollé) */}
           {multiProvince && mounted && scrolled && (
+            <>
+            <label htmlFor="province-nav" className="sr-only">Province</label>
             <select
+              id="province-nav"
               value={province}
               onChange={(e) => onProvinceChange(e.target.value)}
               className="rounded-lg border border-[var(--color-rule)] bg-white/80 px-2 py-1 text-xs font-semibold text-[var(--color-ink)] focus:outline-none mr-2"
@@ -543,6 +620,7 @@ function LandingNav({ multiProvince, lang, province, provCanada, provFrancophoni
                 </optgroup>
               )}
             </select>
+            </>
           )}
           {/* Bouton langue (NB bilingue ou langue non native de la province) */}
           {multiProvince && mounted && (province === "NB" || provinceInfo.langue !== lang) && (
@@ -567,7 +645,9 @@ function LandingNav({ multiProvince, lang, province, provCanada, provFrancophoni
       {menuOpen && (
         <div className="md:hidden border-t border-[var(--color-rule)] bg-[var(--color-paper)] px-6 py-4 space-y-2">
           {multiProvince && mounted && (
-            <select value={province} onChange={(e) => { onProvinceChange(e.target.value); setMenuOpen(false); }}
+            <>
+            <label htmlFor="province-mobile" className="sr-only">Province</label>
+            <select id="province-mobile" value={province} onChange={(e) => { onProvinceChange(e.target.value); setMenuOpen(false); }}
               className="w-full rounded-xl border border-[var(--color-rule)] bg-white px-3 py-2.5 text-sm font-medium text-[var(--color-ink)] mb-1">
               {provCanada.length > 0 && (
                 <optgroup label="🇨🇦 Canada">
@@ -584,6 +664,7 @@ function LandingNav({ multiProvince, lang, province, provCanada, provFrancophoni
                 </optgroup>
               )}
             </select>
+            </>
           )}
           <Link href="/login" onClick={() => setMenuOpen(false)} className="block rounded-xl border border-[var(--color-rule)] px-4 py-3 text-center text-sm font-semibold text-[var(--color-ink)]">{c.login}</Link>
           <Link href="/register" onClick={() => setMenuOpen(false)} className="block rounded-xl bg-[var(--color-ink)] px-4 py-3 text-center text-sm font-bold text-white">{c.register}</Link>

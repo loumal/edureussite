@@ -63,6 +63,16 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**" },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.edu-reussite.com" }],
+        destination: "https://edu-reussite.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

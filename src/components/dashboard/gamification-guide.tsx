@@ -128,7 +128,7 @@ export function GamificationGuide() {
         <div className="flex items-center gap-3">
           <span className="text-xl">🎮</span>
           <div>
-            <p className="text-sm font-bold text-[var(--color-ink)]">Comment fonctionne ÉduRéussite ?</p>
+            <p className="text-sm font-bold text-[var(--color-ink)]">Comment fonctionne Édu-Réussite ?</p>
             <p className="text-xs text-[var(--color-ink-soft)]">Comprends les XP, niveaux, séries et badges</p>
           </div>
         </div>

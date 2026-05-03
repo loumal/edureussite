@@ -49,7 +49,7 @@ export function MissionsWidget() {
         />
       </div>
 
-      <div className="space-y-2.5">
+      <div className="space-y-2.5 max-h-96 overflow-y-auto pr-0.5">
         {missions.map((mission) => {
           const pct = Math.min(100, Math.round((mission.progres / mission.cible) * 100));
           return (

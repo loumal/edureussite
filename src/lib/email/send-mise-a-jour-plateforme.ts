@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logResend } from "@/lib/api-usage/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 const DEV = process.env.NODE_ENV !== "production";
 
 export async function sendMiseAJourPlateforme(opts: {
@@ -13,7 +13,7 @@ export async function sendMiseAJourPlateforme(opts: {
 }): Promise<void> {
   const { parentEmail, parentPrenom, message, version } = opts;
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://edureussite.edevtic.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.edu-reussite.com";
   const dateStr = new Date().toLocaleDateString("fr-CA", {
     day: "numeric", month: "long", year: "numeric",
   });
@@ -24,7 +24,7 @@ export async function sendMiseAJourPlateforme(opts: {
 
   const html = `
     <div style="font-family: Georgia, serif; max-width: 520px; margin: 0 auto; padding: 32px; background: #f9f7f4; border-radius: 16px;">
-      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ ÉduRéussite QC</h1>
+      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 4px;">✦ Édu-Réussite QC</h1>
       <p style="color: #8a909c; font-size: 13px; margin-bottom: 28px;">Mise à jour de la plateforme · ${dateStr}</p>
 
       <div style="background: linear-gradient(135deg, #f0eeff 0%, #fff 100%); border: 1px solid rgba(91,79,207,0.2); border-radius: 14px; padding: 28px; margin-bottom: 24px; text-align: center;">
@@ -60,7 +60,7 @@ export async function sendMiseAJourPlateforme(opts: {
       </div>
 
       <p style="font-size: 11px; color: #aab0bc; text-align: center; line-height: 1.7;">
-        Ce message vous est envoyé automatiquement par ÉduRéussite QC.<br>
+        Ce message vous est envoyé automatiquement par Édu-Réussite QC.<br>
         Vous recevez ce courriel car vous êtes parent inscrit sur la plateforme.
       </p>
     </div>
@@ -72,8 +72,8 @@ export async function sendMiseAJourPlateforme(opts: {
   }
 
   const subject = version
-    ? `🚀 ÉduRéussite QC v${version} — Nouvelle mise à jour disponible`
-    : `🚀 ÉduRéussite QC — Nouvelle mise à jour pour une meilleure expérience`;
+    ? `🚀 Édu-Réussite QC v${version} — Nouvelle mise à jour disponible`
+    : `🚀 Édu-Réussite QC — Nouvelle mise à jour pour une meilleure expérience`;
 
   const { error } = await resend.emails.send({
     from: FROM,

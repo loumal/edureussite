@@ -109,7 +109,7 @@ export function BirthdayOverlay({ prenom }: Props) {
                 className="text-sm leading-relaxed mb-8"
                 style={{ color: "rgba(245,240,232,0.7)" }}
               >
-                Toute l'équipe ÉduRéussite QC te souhaite une magnifique journée.
+                Toute l'équipe Édu-Réussite QC te souhaite une magnifique journée.
                 Continue de briller — tu le mérites ! ✨
               </motion.p>
 

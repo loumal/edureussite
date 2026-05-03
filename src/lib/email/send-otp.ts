@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logResend } from "@/lib/api-usage/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 const DEV = process.env.NODE_ENV !== "production";
 
 export async function sendOtpEmail(
@@ -12,14 +12,14 @@ export async function sendOtpEmail(
 ): Promise<void> {
   const isVerif = purpose === "verification";
   const subject = isVerif
-    ? "Confirmez votre adresse courriel — ÉduRéussite QC"
+    ? "Confirmez votre adresse courriel — Édu-Réussite QC"
     : purpose === "reset"
-    ? "Réinitialisation de votre mot de passe — ÉduRéussite QC"
-    : "Votre code de connexion — ÉduRéussite QC";
+    ? "Réinitialisation de votre mot de passe — Édu-Réussite QC"
+    : "Votre code de connexion — Édu-Réussite QC";
 
   const html = `
     <div style="font-family: Georgia, serif; max-width: 480px; margin: 0 auto; padding: 32px; background: #f9f7f4; border-radius: 16px;">
-      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 8px;">✦ ÉduRéussite QC</h1>
+      <h1 style="font-size: 20px; color: #0f1623; margin-bottom: 8px;">✦ Édu-Réussite QC</h1>
       <p style="color: #5a6070; font-size: 14px; margin-bottom: 24px;">
         ${isVerif
           ? "Merci de créer votre compte. Veuillez confirmer votre adresse courriel avec le code ci-dessous."

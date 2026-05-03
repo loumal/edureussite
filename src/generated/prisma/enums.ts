@@ -200,7 +200,8 @@ export const TypeNotification = {
   PLAN_MODIFIE: 'PLAN_MODIFIE',
   SURPRISE_DISPONIBLE: 'SURPRISE_DISPONIBLE',
   SURPRISE_ACCORDEE: 'SURPRISE_ACCORDEE',
-  AIDE_PLANIFICATION: 'AIDE_PLANIFICATION'
+  AIDE_PLANIFICATION: 'AIDE_PLANIFICATION',
+  INVITATION_JEU: 'INVITATION_JEU'
 } as const
 
 export type TypeNotification = (typeof TypeNotification)[keyof typeof TypeNotification]
@@ -214,6 +215,28 @@ export const StatutSurprise = {
 } as const
 
 export type StatutSurprise = (typeof StatutSurprise)[keyof typeof StatutSurprise]
+
+
+export const StatutPartie = {
+  EN_ATTENTE: 'EN_ATTENTE',
+  EN_COURS: 'EN_COURS',
+  TERMINEE: 'TERMINEE',
+  ANNULEE: 'ANNULEE'
+} as const
+
+export type StatutPartie = (typeof StatutPartie)[keyof typeof StatutPartie]
+
+
+export const StatutDemandeJeu = {
+  EN_ATTENTE: 'EN_ATTENTE',
+  AUTORISE: 'AUTORISE',
+  REFUSE: 'REFUSE',
+  EXPIRE: 'EXPIRE',
+  EN_COURS: 'EN_COURS',
+  TERMINE: 'TERMINE'
+} as const
+
+export type StatutDemandeJeu = (typeof StatutDemandeJeu)[keyof typeof StatutDemandeJeu]
 
 
 export const TypeCommentaireParent = {

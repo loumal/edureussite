@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { logResend } from "@/lib/api-usage/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM   = process.env.EMAIL_FROM ?? "noreply@edureussite.qc.ca";
+const FROM   = process.env.EMAIL_FROM ?? "noreply@edu-reussite.com";
 const DEV    = process.env.NODE_ENV !== "production";
 
 // ─── Couleurs par type d'événement ───────────────────────────────────────────
@@ -83,7 +83,7 @@ export function buildEmailHTML(options: {
         <div class="header">
           <div class="header-brand">
             <span style="font-size:24px;">✦</span>
-            <span class="header-logo">ÉduRéussite QC</span>
+            <span class="header-logo">Édu-Réussite QC</span>
           </div>
           <div class="header-badge">${theme.emoji} ${theme.label}</div>
         </div>
@@ -104,22 +104,22 @@ export function buildEmailHTML(options: {
 
         <!-- Footer -->
         <div class="footer">
-          <div class="footer-logo">✦ ÉduRéussite QC</div>
+          <div class="footer-logo">✦ Édu-Réussite QC</div>
           <p class="footer-text">
             La plateforme éducative québécoise propulsée par l'IA.<br />
-            © ${annee} ÉduRéussite QC — Tous droits réservés.
+            © ${annee} Édu-Réussite QC — Tous droits réservés.
           </p>
           <div class="footer-links">
-            <a href="https://edureussite.edevtic.com">Plateforme</a>
-            <a href="https://edureussite.edevtic.com/politique-confidentialite">Confidentialité</a>
+            <a href="https://www.edu-reussite.com">Plateforme</a>
+            <a href="https://www.edu-reussite.com/politique-confidentialite">Confidentialité</a>
           </div>
         </div>
       </div>
 
       <!-- Sub-footer -->
       <p style="text-align:center;font-size:11px;color:#a0a8b8;margin-top:20px;line-height:1.6;">
-        Vous recevez ce message car vous êtes utilisateur de la plateforme ÉduRéussite QC.<br />
-        ÉduRéussite QC · edureussite.edevtic.com
+        Vous recevez ce message car vous êtes utilisateur de la plateforme Édu-Réussite QC.<br />
+        Édu-Réussite QC · www.edu-reussite.com
       </p>
     </div>
   </div>
