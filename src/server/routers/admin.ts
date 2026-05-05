@@ -865,12 +865,12 @@ export const adminRouter = createTRPCRouter({
     const param = await ctx.prisma.parametreApp.findUnique({ where: { cle: "config_tts_provider" } });
     const v = param?.valeur;
     return {
-      provider: (v === "OPENAI" ? "OPENAI" : v === "EDUREUSSITE_RUNPOD" ? "EDUREUSSITE_RUNPOD" : v === "EDGE_GRATUIT" ? "EDGE_GRATUIT" : "ELEVENLABS") as "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD" | "EDGE_GRATUIT",
+      provider: (v === "OPENAI" ? "OPENAI" : v === "EDUREUSSITE_RUNPOD" ? "EDUREUSSITE_RUNPOD" : v === "EDGE_GRATUIT" ? "EDGE_GRATUIT" : v === "FISH_AUDIO" ? "FISH_AUDIO" : "ELEVENLABS") as "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD" | "EDGE_GRATUIT" | "FISH_AUDIO",
     };
   }),
 
   setTtsProvider: superAdminProcedure
-    .input(z.object({ provider: z.enum(["ELEVENLABS", "OPENAI", "EDUREUSSITE_RUNPOD", "EDGE_GRATUIT"]) }))
+    .input(z.object({ provider: z.enum(["ELEVENLABS", "OPENAI", "EDUREUSSITE_RUNPOD", "EDGE_GRATUIT", "FISH_AUDIO"]) }))
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.parametreApp.upsert({
         where: { cle: "config_tts_provider" },

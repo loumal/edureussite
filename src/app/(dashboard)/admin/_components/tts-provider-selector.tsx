@@ -4,7 +4,7 @@ import { useState } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils/cn";
 
-type TtsProvider = "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD" | "EDGE_GRATUIT";
+type TtsProvider = "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD" | "EDGE_GRATUIT" | "FISH_AUDIO";
 
 const PROVIDERS = [
   {
@@ -34,6 +34,13 @@ const PROVIDERS = [
     emoji: "🆓",
     cout: "TTS 100% gratuit · aucune clé API requise",
     detail: "DeniseNeural (FR) + JennyNeural (EN) · SSML cheerful · sur Vercel",
+  },
+  {
+    id: "FISH_AUDIO" as const,
+    label: "Fish Audio",
+    emoji: "🐟",
+    cout: "TTS $0,015/1000 chars · speech-1.6",
+    detail: "Voix ultra-naturelle · multilingue · faible latence · configurer FISH_AUDIO_VOICE_ID",
   },
 ];
 

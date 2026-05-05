@@ -155,6 +155,25 @@ export function logEdgeGratuitTTS(params: {
     .catch(() => {});
 }
 
+// Fish Audio TTS : speech-1.6 — $14.9 / 1M chars
+const FISH_AUDIO_TTS_PER_CHAR = 14.9 / 1_000_000;
+
+export function logFishAudioTTS(params: {
+  characters: number;
+  userId?: string | null;
+}) {
+  prisma.apiUsageLog
+    .create({
+      data: {
+        service: ApiService.FISH_AUDIO_TTS,
+        characters: params.characters,
+        coutUSD: params.characters * FISH_AUDIO_TTS_PER_CHAR,
+        userId: params.userId ?? undefined,
+      },
+    })
+    .catch(() => {});
+}
+
 // Edureussite RunPod TTS : self-hosted edge-tts, cost is RunPod compute (near-zero per char)
 const EDUREUSSITE_TTS_PER_CHAR = 0;
 

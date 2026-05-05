@@ -11,7 +11,7 @@ export const CONFIG_KEYS = {
 } as const;
 
 export type SttProvider = "ELEVENLABS" | "DEEPGRAM";
-export type TtsProvider = "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD" | "EDGE_GRATUIT";
+export type TtsProvider = "ELEVENLABS" | "OPENAI" | "EDUREUSSITE_RUNPOD" | "EDGE_GRATUIT" | "FISH_AUDIO";
 
 export async function getSttProvider(): Promise<SttProvider> {
   const param = await prisma.parametreApp.findUnique({ where: { cle: CONFIG_KEYS.STT_PROVIDER } });
@@ -24,6 +24,7 @@ export async function getTtsProvider(): Promise<TtsProvider> {
   if (param?.valeur === "OPENAI") return "OPENAI";
   if (param?.valeur === "EDUREUSSITE_RUNPOD") return "EDUREUSSITE_RUNPOD";
   if (param?.valeur === "EDGE_GRATUIT") return "EDGE_GRATUIT";
+  if (param?.valeur === "FISH_AUDIO") return "FISH_AUDIO";
   return "ELEVENLABS"; // défaut
 }
 

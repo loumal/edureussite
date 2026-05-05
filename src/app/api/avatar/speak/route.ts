@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/config";
-import { logElevenLabsTTS, logOpenAITTS, logEduReussiteTTS, logEdgeGratuitTTS } from "@/lib/api-usage/logger";
+import { logElevenLabsTTS, logOpenAITTS, logEduReussiteTTS, logEdgeGratuitTTS, logFishAudioTTS } from "@/lib/api-usage/logger";
+import { encode as msgpackEncode } from "@msgpack/msgpack";
 import { generateEdgeGratuitAudio } from "@/lib/tts/edge-gratuit";
 import { getTtsProvider } from "@/lib/features";
 
@@ -9,6 +10,8 @@ const ELEVENLABS_BASE = "https://api.elevenlabs.io/v1";
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 const EDUREUSSITE_TTS_URL = process.env.EDUREUSSITE_TTS_URL;
 const EDUREUSSITE_TTS_KEY = process.env.EDUREUSSITE_TTS_KEY;
+const FISH_AUDIO_API_KEY = process.env.FISH_AUDIO_API_KEY;
+const FISH_AUDIO_VOICE_ID = process.env.FISH_AUDIO_VOICE_ID || "";
 
 // RunPod — aligné sur EDGE_GRATUIT : cheerful, rate -8%, pitch +10% FR / +8% EN auto-détecté
 const RUNPOD_VOICE_PARAMS = {
@@ -183,6 +186,45 @@ export async function POST(req: NextRequest) {
           return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
         }
       }
+    }
+
+    // ── Fish Audio TTS (speech-1.6, voix haute fidélité) ─────────────────────
+    if (provider === "FISH_AUDIO") {
+      if (!FISH_AUDIO_API_KEY) {
+        return NextResponse.json({ error: "Fish Audio non configuré" }, { status: 503 });
+      }
+
+      const payload: Record<string, unknown> = {
+        text: clean,
+        format: "mp3",
+        latency: "normal",
+      };
+      if (FISH_AUDIO_VOICE_ID) payload.reference_id = FISH_AUDIO_VOICE_ID;
+
+      const response = await fetch("https://api.fish.audio/v1/tts", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${FISH_AUDIO_API_KEY}`,
+          "Content-Type": "application/msgpack",
+        },
+        body: msgpackEncode(payload),
+      });
+
+      if (!response.ok) {
+        console.error("Fish Audio TTS error:", response.status, await response.text());
+        return NextResponse.json({ error: "Synthèse vocale indisponible" }, { status: 500 });
+      }
+
+      logFishAudioTTS({ characters: clean.length, userId: session.user.id });
+
+      return new NextResponse(response.body, {
+        status: 200,
+        headers: {
+          "Content-Type": "audio/mpeg",
+          "Cache-Control": "no-store",
+          "X-Content-Type-Options": "nosniff",
+        },
+      });
     }
 
     // ── Edge Gratuit TTS (msedge-tts sur Vercel, gratuit) ────────────────────
