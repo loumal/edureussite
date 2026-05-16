@@ -336,6 +336,7 @@ export const ApiService = {
   OPENAI_TTS: 'OPENAI_TTS',
   EDUREUSSITE_TTS: 'EDUREUSSITE_TTS',
   EDGE_GRATUIT_TTS: 'EDGE_GRATUIT_TTS',
+  FISH_AUDIO_TTS: 'FISH_AUDIO_TTS',
   RESEND: 'RESEND'
 } as const
 
@@ -350,3 +351,45 @@ export const PrioriteNotion = {
 } as const
 
 export type PrioriteNotion = (typeof PrioriteNotion)[keyof typeof PrioriteNotion]
+
+
+export const DomaineSpecialiste = {
+  NEUROPSYCHOLOGUE: 'NEUROPSYCHOLOGUE',
+  ORTHOPEDAGOGUE: 'ORTHOPEDAGOGUE',
+  ORTHOPHONISTE: 'ORTHOPHONISTE',
+  ERGOTHERAPEUTE: 'ERGOTHERAPEUTE',
+  OPTOMETRISTE: 'OPTOMETRISTE',
+  PSYCHOEDUCATEUR: 'PSYCHOEDUCATEUR'
+} as const
+
+export type DomaineSpecialiste = (typeof DomaineSpecialiste)[keyof typeof DomaineSpecialiste]
+
+
+export const StatutEvaluation = {
+  DETECTED: 'DETECTED',
+  ADMIN_NOTIFIED: 'ADMIN_NOTIFIED',
+  ADMIN_VALIDATED: 'ADMIN_VALIDATED',
+  FORM_SENT: 'FORM_SENT',
+  FORM_IN_PROGRESS: 'FORM_IN_PROGRESS',
+  FORM_COMPLETED: 'FORM_COMPLETED',
+  REPORT_GENERATING: 'REPORT_GENERATING',
+  REPORT_READY: 'REPORT_READY',
+  PARENT_VALIDATED: 'PARENT_VALIDATED',
+  PARENT_COMMENTED: 'PARENT_COMMENTED',
+  PARENT_REFUSED: 'PARENT_REFUSED',
+  PARCOURS_ADJUSTED: 'PARCOURS_ADJUSTED',
+  SECOND_CYCLE_PENDING: 'SECOND_CYCLE_PENDING',
+  CLOSED: 'CLOSED'
+} as const
+
+export type StatutEvaluation = (typeof StatutEvaluation)[keyof typeof StatutEvaluation]
+
+
+export const ValidationParent = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  COMMENTED: 'COMMENTED',
+  REFUSED: 'REFUSED'
+} as const
+
+export type ValidationParent = (typeof ValidationParent)[keyof typeof ValidationParent]

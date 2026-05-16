@@ -4,6 +4,7 @@ import {
 } from "@/lib/trpc/init";
 import { TOUS_LES_ITEMS, parseCosmetiques, COSMETIQUES_DEFAUT } from "@/lib/boutique/items";
 import { getJeuById } from "@/lib/jeux/catalog";
+import { checkAndTriggerEvaluation } from "@/lib/evaluation/trigger";
 
 // Retourne la date du lundi de la semaine courante (YYYY-MM-DD) — clé de reset hebdo
 function getMondayKey(date = new Date()): string {
@@ -762,6 +763,8 @@ export const eleveRouter = createTRPCRouter({
           ...(input.exercicesReussis !== undefined ? { exercicesReussis: input.exercicesReussis } : {}),
         },
       });
+      // Fire-and-forget: triage cognitif asynchrone (n'impacte pas la réponse)
+      void checkAndTriggerEvaluation(profil.id);
       return { success: true };
     }),
 

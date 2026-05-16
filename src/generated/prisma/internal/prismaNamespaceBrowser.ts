@@ -103,7 +103,10 @@ export const ModelName = {
   StrategieMarketing: 'StrategieMarketing',
   DemandeJeu: 'DemandeJeu',
   CampagneEmail: 'CampagneEmail',
-  PartieMultijoueur: 'PartieMultijoueur'
+  PartieMultijoueur: 'PartieMultijoueur',
+  EvaluationRequest: 'EvaluationRequest',
+  FormulaireReponse: 'FormulaireReponse',
+  RapportEvaluation: 'RapportEvaluation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -200,6 +203,7 @@ export const ProfilEleveScalarFieldEnum = {
   dyscalculie: 'dyscalculie',
   anxieteScolaire: 'anxieteScolaire',
   autresBesoins: 'autresBesoins',
+  profilCognitif: 'profilCognitif',
   centresInteret: 'centresInteret',
   sportFavori: 'sportFavori',
   universMediatique: 'universMediatique',
@@ -975,6 +979,66 @@ export const PartieMultijoueurScalarFieldEnum = {
 } as const
 
 export type PartieMultijoueurScalarFieldEnum = (typeof PartieMultijoueurScalarFieldEnum)[keyof typeof PartieMultijoueurScalarFieldEnum]
+
+
+export const EvaluationRequestScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  triageScores: 'triageScores',
+  primarySpecialist: 'primarySpecialist',
+  triageEvidence: 'triageEvidence',
+  status: 'status',
+  round: 'round',
+  nextSpecialist: 'nextSpecialist',
+  parentValidation: 'parentValidation',
+  parentComment: 'parentComment',
+  detectedAt: 'detectedAt',
+  adminNotifiedAt: 'adminNotifiedAt',
+  adminValidatedAt: 'adminValidatedAt',
+  formSentAt: 'formSentAt',
+  formCompletedAt: 'formCompletedAt',
+  reportGeneratedAt: 'reportGeneratedAt',
+  parentValidatedAt: 'parentValidatedAt',
+  parcoursAdjustedAt: 'parcoursAdjustedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EvaluationRequestScalarFieldEnum = (typeof EvaluationRequestScalarFieldEnum)[keyof typeof EvaluationRequestScalarFieldEnum]
+
+
+export const FormulaireReponseScalarFieldEnum = {
+  id: 'id',
+  evaluationId: 'evaluationId',
+  domaine: 'domaine',
+  langue: 'langue',
+  tokenAcces: 'tokenAcces',
+  reponsesEchelle: 'reponsesEchelle',
+  reponsesAnamnese: 'reponsesAnamnese',
+  reponsesOuvertes: 'reponsesOuvertes',
+  etapeActuelle: 'etapeActuelle',
+  completed: 'completed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FormulaireReponseScalarFieldEnum = (typeof FormulaireReponseScalarFieldEnum)[keyof typeof FormulaireReponseScalarFieldEnum]
+
+
+export const RapportEvaluationScalarFieldEnum = {
+  id: 'id',
+  evaluationId: 'evaluationId',
+  type: 'type',
+  langue: 'langue',
+  domaine: 'domaine',
+  contenu: 'contenu',
+  sharedWithEnseignant: 'sharedWithEnseignant',
+  sharedAt: 'sharedAt',
+  tokenPartage: 'tokenPartage',
+  generatedAt: 'generatedAt'
+} as const
+
+export type RapportEvaluationScalarFieldEnum = (typeof RapportEvaluationScalarFieldEnum)[keyof typeof RapportEvaluationScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -1073,4 +1073,135 @@ export const adminRouter = createTRPCRouter({
       });
       return { success: true };
     }),
+
+  // ── Évaluations cognitives — badge de notification ────────────────────────
+  getEvaluationsBadge: superAdminProcedure.query(async ({ ctx }) => {
+    const count = await ctx.prisma.evaluationRequest.count({
+      where: { status: "DETECTED" },
+    });
+    return { count };
+  }),
+
+  // ── Évaluations cognitives — liste ───────────────────────────────────────
+  listerEvaluations: superAdminProcedure
+    .input(z.object({
+      status: z.string().optional(),
+      page: z.number().min(1).default(1),
+    }).optional())
+    .query(async ({ ctx, input }) => {
+      const page = input?.page ?? 1;
+      const perPage = 20;
+
+      const where = input?.status ? { status: input.status as never } : {};
+
+      const [total, evaluations] = await Promise.all([
+        ctx.prisma.evaluationRequest.count({ where }),
+        ctx.prisma.evaluationRequest.findMany({
+          where,
+          orderBy: { detectedAt: "desc" },
+          skip: (page - 1) * perPage,
+          take: perPage,
+          include: {
+            eleve: {
+              select: {
+                prenom: true,
+                nom: true,
+                niveauScolaire: true,
+              },
+            },
+            formulaire: {
+              select: { completed: true, etapeActuelle: true },
+            },
+            rapports: {
+              select: { type: true, langue: true },
+            },
+          },
+        }),
+      ]);
+
+      return { total, page, perPage, evaluations };
+    }),
+
+  // ── Évaluations cognitives — détail ──────────────────────────────────────
+  getEvaluationDetail: superAdminProcedure
+    .input(z.object({ evaluationId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const evaluation = await ctx.prisma.evaluationRequest.findUnique({
+        where: { id: input.evaluationId },
+        include: {
+          eleve: {
+            select: { prenom: true, nom: true, niveauScolaire: true },
+          },
+          formulaire: true,
+          rapports: true,
+        },
+      });
+      if (!evaluation) throw new TRPCError({ code: "NOT_FOUND" });
+      return evaluation;
+    }),
+
+  // ── Évaluations cognitives — validation admin ─────────────────────────────
+  validerEvaluation: superAdminProcedure
+    .input(z.object({
+      evaluationId: z.string(),
+      action: z.enum(["APPROVE", "REJECT"]),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const evaluation = await ctx.prisma.evaluationRequest.findUnique({
+        where: { id: input.evaluationId },
+        include: {
+          eleve: {
+            select: {
+              prenom: true,
+              nom: true,
+              parents: {
+                select: {
+                  prenom: true,
+                  user: { select: { email: true } },
+                },
+              },
+            },
+          },
+        },
+      });
+      if (!evaluation) throw new TRPCError({ code: "NOT_FOUND" });
+      if (evaluation.status !== "DETECTED") {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Cette évaluation n'est plus en attente de validation." });
+      }
+
+      if (input.action === "REJECT") {
+        await ctx.prisma.evaluationRequest.update({
+          where: { id: input.evaluationId },
+          data: { status: "CLOSED", adminValidatedAt: new Date() },
+        });
+        return { success: true, action: "REJECTED" };
+      }
+
+      // Approuver : générer le token d'accès au formulaire parent et passer en ADMIN_VALIDATED
+      const token = `eval_${evaluation.id}_${Date.now()}`;
+      await ctx.prisma.evaluationRequest.update({
+        where: { id: input.evaluationId },
+        data: {
+          status: "ADMIN_VALIDATED",
+          adminValidatedAt: new Date(),
+        },
+      });
+
+      // Créer le FormulaireReponse vide pour le parent
+      await ctx.prisma.formulaireReponse.create({
+        data: {
+          evaluationId: input.evaluationId,
+          domaine: evaluation.primarySpecialist,
+          langue: "fr",
+          tokenAcces: token,
+        },
+      });
+
+      await ctx.prisma.evaluationRequest.update({
+        where: { id: input.evaluationId },
+        data: { status: "FORM_SENT", formSentAt: new Date() },
+      });
+
+      return { success: true, action: "APPROVED", tokenAcces: token };
+    }),
 });

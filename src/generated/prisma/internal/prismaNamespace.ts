@@ -436,7 +436,10 @@ export const ModelName = {
   StrategieMarketing: 'StrategieMarketing',
   DemandeJeu: 'DemandeJeu',
   CampagneEmail: 'CampagneEmail',
-  PartieMultijoueur: 'PartieMultijoueur'
+  PartieMultijoueur: 'PartieMultijoueur',
+  EvaluationRequest: 'EvaluationRequest',
+  FormulaireReponse: 'FormulaireReponse',
+  RapportEvaluation: 'RapportEvaluation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -452,7 +455,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur" | "evaluationRequest" | "formulaireReponse" | "rapportEvaluation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4378,6 +4381,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EvaluationRequest: {
+      payload: Prisma.$EvaluationRequestPayload<ExtArgs>
+      fields: Prisma.EvaluationRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EvaluationRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EvaluationRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.EvaluationRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EvaluationRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload>
+        }
+        findMany: {
+          args: Prisma.EvaluationRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload>[]
+        }
+        create: {
+          args: Prisma.EvaluationRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload>
+        }
+        createMany: {
+          args: Prisma.EvaluationRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EvaluationRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.EvaluationRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload>
+        }
+        update: {
+          args: Prisma.EvaluationRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.EvaluationRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EvaluationRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EvaluationRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.EvaluationRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EvaluationRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.EvaluationRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEvaluationRequest>
+        }
+        groupBy: {
+          args: Prisma.EvaluationRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EvaluationRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EvaluationRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EvaluationRequestCountAggregateOutputType> | number
+        }
+      }
+    }
+    FormulaireReponse: {
+      payload: Prisma.$FormulaireReponsePayload<ExtArgs>
+      fields: Prisma.FormulaireReponseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FormulaireReponseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FormulaireReponseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload>
+        }
+        findFirst: {
+          args: Prisma.FormulaireReponseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FormulaireReponseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload>
+        }
+        findMany: {
+          args: Prisma.FormulaireReponseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload>[]
+        }
+        create: {
+          args: Prisma.FormulaireReponseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload>
+        }
+        createMany: {
+          args: Prisma.FormulaireReponseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FormulaireReponseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload>[]
+        }
+        delete: {
+          args: Prisma.FormulaireReponseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload>
+        }
+        update: {
+          args: Prisma.FormulaireReponseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload>
+        }
+        deleteMany: {
+          args: Prisma.FormulaireReponseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FormulaireReponseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FormulaireReponseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload>[]
+        }
+        upsert: {
+          args: Prisma.FormulaireReponseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FormulaireReponsePayload>
+        }
+        aggregate: {
+          args: Prisma.FormulaireReponseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFormulaireReponse>
+        }
+        groupBy: {
+          args: Prisma.FormulaireReponseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FormulaireReponseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FormulaireReponseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FormulaireReponseCountAggregateOutputType> | number
+        }
+      }
+    }
+    RapportEvaluation: {
+      payload: Prisma.$RapportEvaluationPayload<ExtArgs>
+      fields: Prisma.RapportEvaluationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RapportEvaluationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RapportEvaluationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload>
+        }
+        findFirst: {
+          args: Prisma.RapportEvaluationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RapportEvaluationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload>
+        }
+        findMany: {
+          args: Prisma.RapportEvaluationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload>[]
+        }
+        create: {
+          args: Prisma.RapportEvaluationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload>
+        }
+        createMany: {
+          args: Prisma.RapportEvaluationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RapportEvaluationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload>[]
+        }
+        delete: {
+          args: Prisma.RapportEvaluationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload>
+        }
+        update: {
+          args: Prisma.RapportEvaluationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload>
+        }
+        deleteMany: {
+          args: Prisma.RapportEvaluationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RapportEvaluationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RapportEvaluationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload>[]
+        }
+        upsert: {
+          args: Prisma.RapportEvaluationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RapportEvaluationPayload>
+        }
+        aggregate: {
+          args: Prisma.RapportEvaluationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRapportEvaluation>
+        }
+        groupBy: {
+          args: Prisma.RapportEvaluationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RapportEvaluationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RapportEvaluationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RapportEvaluationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -4495,6 +4720,7 @@ export const ProfilEleveScalarFieldEnum = {
   dyscalculie: 'dyscalculie',
   anxieteScolaire: 'anxieteScolaire',
   autresBesoins: 'autresBesoins',
+  profilCognitif: 'profilCognitif',
   centresInteret: 'centresInteret',
   sportFavori: 'sportFavori',
   universMediatique: 'universMediatique',
@@ -5272,6 +5498,66 @@ export const PartieMultijoueurScalarFieldEnum = {
 export type PartieMultijoueurScalarFieldEnum = (typeof PartieMultijoueurScalarFieldEnum)[keyof typeof PartieMultijoueurScalarFieldEnum]
 
 
+export const EvaluationRequestScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  triageScores: 'triageScores',
+  primarySpecialist: 'primarySpecialist',
+  triageEvidence: 'triageEvidence',
+  status: 'status',
+  round: 'round',
+  nextSpecialist: 'nextSpecialist',
+  parentValidation: 'parentValidation',
+  parentComment: 'parentComment',
+  detectedAt: 'detectedAt',
+  adminNotifiedAt: 'adminNotifiedAt',
+  adminValidatedAt: 'adminValidatedAt',
+  formSentAt: 'formSentAt',
+  formCompletedAt: 'formCompletedAt',
+  reportGeneratedAt: 'reportGeneratedAt',
+  parentValidatedAt: 'parentValidatedAt',
+  parcoursAdjustedAt: 'parcoursAdjustedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EvaluationRequestScalarFieldEnum = (typeof EvaluationRequestScalarFieldEnum)[keyof typeof EvaluationRequestScalarFieldEnum]
+
+
+export const FormulaireReponseScalarFieldEnum = {
+  id: 'id',
+  evaluationId: 'evaluationId',
+  domaine: 'domaine',
+  langue: 'langue',
+  tokenAcces: 'tokenAcces',
+  reponsesEchelle: 'reponsesEchelle',
+  reponsesAnamnese: 'reponsesAnamnese',
+  reponsesOuvertes: 'reponsesOuvertes',
+  etapeActuelle: 'etapeActuelle',
+  completed: 'completed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FormulaireReponseScalarFieldEnum = (typeof FormulaireReponseScalarFieldEnum)[keyof typeof FormulaireReponseScalarFieldEnum]
+
+
+export const RapportEvaluationScalarFieldEnum = {
+  id: 'id',
+  evaluationId: 'evaluationId',
+  type: 'type',
+  langue: 'langue',
+  domaine: 'domaine',
+  contenu: 'contenu',
+  sharedWithEnseignant: 'sharedWithEnseignant',
+  sharedAt: 'sharedAt',
+  tokenPartage: 'tokenPartage',
+  generatedAt: 'generatedAt'
+} as const
+
+export type RapportEvaluationScalarFieldEnum = (typeof RapportEvaluationScalarFieldEnum)[keyof typeof RapportEvaluationScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -5780,6 +6066,48 @@ export type EnumStatutPartieFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 export type ListEnumStatutPartieFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutPartie[]'>
     
 
+
+/**
+ * Reference to a field of type 'DomaineSpecialiste'
+ */
+export type EnumDomaineSpecialisteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DomaineSpecialiste'>
+    
+
+
+/**
+ * Reference to a field of type 'DomaineSpecialiste[]'
+ */
+export type ListEnumDomaineSpecialisteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DomaineSpecialiste[]'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutEvaluation'
+ */
+export type EnumStatutEvaluationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutEvaluation'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutEvaluation[]'
+ */
+export type ListEnumStatutEvaluationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutEvaluation[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ValidationParent'
+ */
+export type EnumValidationParentFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ValidationParent'>
+    
+
+
+/**
+ * Reference to a field of type 'ValidationParent[]'
+ */
+export type ListEnumValidationParentFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ValidationParent[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -5928,6 +6256,9 @@ export type GlobalOmitConfig = {
   demandeJeu?: Prisma.DemandeJeuOmit
   campagneEmail?: Prisma.CampagneEmailOmit
   partieMultijoueur?: Prisma.PartieMultijoueurOmit
+  evaluationRequest?: Prisma.EvaluationRequestOmit
+  formulaireReponse?: Prisma.FormulaireReponseOmit
+  rapportEvaluation?: Prisma.RapportEvaluationOmit
 }
 
 /* Types for Logging */

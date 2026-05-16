@@ -148,6 +148,7 @@ export type ProfilEleveCountAggregateOutputType = {
   dyscalculie: number
   anxieteScolaire: number
   autresBesoins: number
+  profilCognitif: number
   centresInteret: number
   sportFavori: number
   universMediatique: number
@@ -296,6 +297,7 @@ export type ProfilEleveCountAggregateInputType = {
   dyscalculie?: true
   anxieteScolaire?: true
   autresBesoins?: true
+  profilCognitif?: true
   centresInteret?: true
   sportFavori?: true
   universMediatique?: true
@@ -427,6 +429,7 @@ export type ProfilEleveGroupByOutputType = {
   dyscalculie: boolean
   anxieteScolaire: boolean
   autresBesoins: string | null
+  profilCognitif: runtime.JsonValue | null
   centresInteret: string[]
   sportFavori: string | null
   universMediatique: string | null
@@ -494,6 +497,7 @@ export type ProfilEleveWhereInput = {
   dyscalculie?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   anxieteScolaire?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   autresBesoins?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
+  profilCognitif?: Prisma.JsonNullableFilter<"ProfilEleve">
   centresInteret?: Prisma.StringNullableListFilter<"ProfilEleve">
   sportFavori?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   universMediatique?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
@@ -542,6 +546,7 @@ export type ProfilEleveWhereInput = {
   objectifsNotes?: Prisma.ObjectifNoteListRelationFilter
   planifNotions?: Prisma.PlanifNotionEleveListRelationFilter
   disponibilite?: Prisma.XOR<Prisma.DisponibiliteEleveNullableScalarRelationFilter, Prisma.DisponibiliteEleveWhereInput> | null
+  evaluations?: Prisma.EvaluationRequestListRelationFilter
 }
 
 export type ProfilEleveOrderByWithRelationInput = {
@@ -564,6 +569,7 @@ export type ProfilEleveOrderByWithRelationInput = {
   dyscalculie?: Prisma.SortOrder
   anxieteScolaire?: Prisma.SortOrder
   autresBesoins?: Prisma.SortOrderInput | Prisma.SortOrder
+  profilCognitif?: Prisma.SortOrderInput | Prisma.SortOrder
   centresInteret?: Prisma.SortOrder
   sportFavori?: Prisma.SortOrderInput | Prisma.SortOrder
   universMediatique?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -612,6 +618,7 @@ export type ProfilEleveOrderByWithRelationInput = {
   objectifsNotes?: Prisma.ObjectifNoteOrderByRelationAggregateInput
   planifNotions?: Prisma.PlanifNotionEleveOrderByRelationAggregateInput
   disponibilite?: Prisma.DisponibiliteEleveOrderByWithRelationInput
+  evaluations?: Prisma.EvaluationRequestOrderByRelationAggregateInput
 }
 
 export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
@@ -637,6 +644,7 @@ export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
   dyscalculie?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   anxieteScolaire?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   autresBesoins?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
+  profilCognitif?: Prisma.JsonNullableFilter<"ProfilEleve">
   centresInteret?: Prisma.StringNullableListFilter<"ProfilEleve">
   sportFavori?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   universMediatique?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
@@ -685,6 +693,7 @@ export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
   objectifsNotes?: Prisma.ObjectifNoteListRelationFilter
   planifNotions?: Prisma.PlanifNotionEleveListRelationFilter
   disponibilite?: Prisma.XOR<Prisma.DisponibiliteEleveNullableScalarRelationFilter, Prisma.DisponibiliteEleveWhereInput> | null
+  evaluations?: Prisma.EvaluationRequestListRelationFilter
 }, "id" | "userId" | "codeAcces">
 
 export type ProfilEleveOrderByWithAggregationInput = {
@@ -707,6 +716,7 @@ export type ProfilEleveOrderByWithAggregationInput = {
   dyscalculie?: Prisma.SortOrder
   anxieteScolaire?: Prisma.SortOrder
   autresBesoins?: Prisma.SortOrderInput | Prisma.SortOrder
+  profilCognitif?: Prisma.SortOrderInput | Prisma.SortOrder
   centresInteret?: Prisma.SortOrder
   sportFavori?: Prisma.SortOrderInput | Prisma.SortOrder
   universMediatique?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -759,6 +769,7 @@ export type ProfilEleveScalarWhereWithAggregatesInput = {
   dyscalculie?: Prisma.BoolWithAggregatesFilter<"ProfilEleve"> | boolean
   anxieteScolaire?: Prisma.BoolWithAggregatesFilter<"ProfilEleve"> | boolean
   autresBesoins?: Prisma.StringNullableWithAggregatesFilter<"ProfilEleve"> | string | null
+  profilCognitif?: Prisma.JsonNullableWithAggregatesFilter<"ProfilEleve">
   centresInteret?: Prisma.StringNullableListFilter<"ProfilEleve">
   sportFavori?: Prisma.StringNullableWithAggregatesFilter<"ProfilEleve"> | string | null
   universMediatique?: Prisma.StringNullableWithAggregatesFilter<"ProfilEleve"> | string | null
@@ -802,6 +813,7 @@ export type ProfilEleveCreateInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -849,6 +861,7 @@ export type ProfilEleveCreateInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateInput = {
@@ -871,6 +884,7 @@ export type ProfilEleveUncheckedCreateInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -917,6 +931,7 @@ export type ProfilEleveUncheckedCreateInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUpdateInput = {
@@ -938,6 +953,7 @@ export type ProfilEleveUpdateInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -985,6 +1001,7 @@ export type ProfilEleveUpdateInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateInput = {
@@ -1007,6 +1024,7 @@ export type ProfilEleveUncheckedUpdateInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1053,6 +1071,7 @@ export type ProfilEleveUncheckedUpdateInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateManyInput = {
@@ -1075,6 +1094,7 @@ export type ProfilEleveCreateManyInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -1118,6 +1138,7 @@ export type ProfilEleveUpdateManyMutationInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1161,6 +1182,7 @@ export type ProfilEleveUncheckedUpdateManyInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1226,6 +1248,7 @@ export type ProfilEleveCountOrderByAggregateInput = {
   dyscalculie?: Prisma.SortOrder
   anxieteScolaire?: Prisma.SortOrder
   autresBesoins?: Prisma.SortOrder
+  profilCognitif?: Prisma.SortOrder
   centresInteret?: Prisma.SortOrder
   sportFavori?: Prisma.SortOrder
   universMediatique?: Prisma.SortOrder
@@ -1866,6 +1889,20 @@ export type ProfilEleveUpdateOneRequiredWithoutPartiesMultiNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutPartiesMultiInput, Prisma.ProfilEleveUpdateWithoutPartiesMultiInput>, Prisma.ProfilEleveUncheckedUpdateWithoutPartiesMultiInput>
 }
 
+export type ProfilEleveCreateNestedOneWithoutEvaluationsInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutEvaluationsInput, Prisma.ProfilEleveUncheckedCreateWithoutEvaluationsInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutEvaluationsInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+}
+
+export type ProfilEleveUpdateOneRequiredWithoutEvaluationsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutEvaluationsInput, Prisma.ProfilEleveUncheckedCreateWithoutEvaluationsInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutEvaluationsInput
+  upsert?: Prisma.ProfilEleveUpsertWithoutEvaluationsInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutEvaluationsInput, Prisma.ProfilEleveUpdateWithoutEvaluationsInput>, Prisma.ProfilEleveUncheckedUpdateWithoutEvaluationsInput>
+}
+
 export type ProfilEleveCreateWithoutUserInput = {
   id?: string
   codeAcces?: string | null
@@ -1885,6 +1922,7 @@ export type ProfilEleveCreateWithoutUserInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -1931,6 +1969,7 @@ export type ProfilEleveCreateWithoutUserInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutUserInput = {
@@ -1952,6 +1991,7 @@ export type ProfilEleveUncheckedCreateWithoutUserInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -1998,6 +2038,7 @@ export type ProfilEleveUncheckedCreateWithoutUserInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutUserInput = {
@@ -2035,6 +2076,7 @@ export type ProfilEleveUpdateWithoutUserInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2081,6 +2123,7 @@ export type ProfilEleveUpdateWithoutUserInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutUserInput = {
@@ -2102,6 +2145,7 @@ export type ProfilEleveUncheckedUpdateWithoutUserInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2148,6 +2192,7 @@ export type ProfilEleveUncheckedUpdateWithoutUserInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutMiraMessagesInput = {
@@ -2169,6 +2214,7 @@ export type ProfilEleveCreateWithoutMiraMessagesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2215,6 +2261,7 @@ export type ProfilEleveCreateWithoutMiraMessagesInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
@@ -2237,6 +2284,7 @@ export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2282,6 +2330,7 @@ export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutMiraMessagesInput = {
@@ -2319,6 +2368,7 @@ export type ProfilEleveUpdateWithoutMiraMessagesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2365,6 +2415,7 @@ export type ProfilEleveUpdateWithoutMiraMessagesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
@@ -2387,6 +2438,7 @@ export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2432,6 +2484,7 @@ export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
@@ -2453,6 +2506,7 @@ export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2499,6 +2553,7 @@ export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
@@ -2521,6 +2576,7 @@ export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2566,6 +2622,7 @@ export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutNiveauxMatieresInput = {
@@ -2603,6 +2660,7 @@ export type ProfilEleveUpdateWithoutNiveauxMatieresInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2649,6 +2707,7 @@ export type ProfilEleveUpdateWithoutNiveauxMatieresInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
@@ -2671,6 +2730,7 @@ export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2716,6 +2776,7 @@ export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutParentsInput = {
@@ -2737,6 +2798,7 @@ export type ProfilEleveCreateWithoutParentsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2783,6 +2845,7 @@ export type ProfilEleveCreateWithoutParentsInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutParentsInput = {
@@ -2805,6 +2868,7 @@ export type ProfilEleveUncheckedCreateWithoutParentsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2850,6 +2914,7 @@ export type ProfilEleveUncheckedCreateWithoutParentsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutParentsInput = {
@@ -2896,6 +2961,7 @@ export type ProfilEleveScalarWhereInput = {
   dyscalculie?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   anxieteScolaire?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   autresBesoins?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
+  profilCognitif?: Prisma.JsonNullableFilter<"ProfilEleve">
   centresInteret?: Prisma.StringNullableListFilter<"ProfilEleve">
   sportFavori?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   universMediatique?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
@@ -2939,6 +3005,7 @@ export type ProfilEleveCreateWithoutPlansAccompagnementInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2985,6 +3052,7 @@ export type ProfilEleveCreateWithoutPlansAccompagnementInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
@@ -3007,6 +3075,7 @@ export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3052,6 +3121,7 @@ export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlansAccompagnementInput = {
@@ -3089,6 +3159,7 @@ export type ProfilEleveUpdateWithoutPlansAccompagnementInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3135,6 +3206,7 @@ export type ProfilEleveUpdateWithoutPlansAccompagnementInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
@@ -3157,6 +3229,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3202,6 +3275,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCoursRemediationInput = {
@@ -3223,6 +3297,7 @@ export type ProfilEleveCreateWithoutCoursRemediationInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3269,6 +3344,7 @@ export type ProfilEleveCreateWithoutCoursRemediationInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
@@ -3291,6 +3367,7 @@ export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3336,6 +3413,7 @@ export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCoursRemediationInput = {
@@ -3373,6 +3451,7 @@ export type ProfilEleveUpdateWithoutCoursRemediationInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3419,6 +3498,7 @@ export type ProfilEleveUpdateWithoutCoursRemediationInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
@@ -3441,6 +3521,7 @@ export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3486,6 +3567,7 @@ export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutSurprisesInput = {
@@ -3507,6 +3589,7 @@ export type ProfilEleveCreateWithoutSurprisesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3553,6 +3636,7 @@ export type ProfilEleveCreateWithoutSurprisesInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
@@ -3575,6 +3659,7 @@ export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3620,6 +3705,7 @@ export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutSurprisesInput = {
@@ -3657,6 +3743,7 @@ export type ProfilEleveUpdateWithoutSurprisesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3703,6 +3790,7 @@ export type ProfilEleveUpdateWithoutSurprisesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
@@ -3725,6 +3813,7 @@ export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3770,6 +3859,7 @@ export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesParentsInput = {
@@ -3791,6 +3881,7 @@ export type ProfilEleveCreateWithoutCommentairesParentsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3837,6 +3928,7 @@ export type ProfilEleveCreateWithoutCommentairesParentsInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
@@ -3859,6 +3951,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3904,6 +3997,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesParentsInput = {
@@ -3941,6 +4035,7 @@ export type ProfilEleveUpdateWithoutCommentairesParentsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3987,6 +4082,7 @@ export type ProfilEleveUpdateWithoutCommentairesParentsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
@@ -4009,6 +4105,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4054,6 +4151,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutEnseignantInput = {
@@ -4075,6 +4173,7 @@ export type ProfilEleveCreateWithoutEnseignantInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4121,6 +4220,7 @@ export type ProfilEleveCreateWithoutEnseignantInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
@@ -4143,6 +4243,7 @@ export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4188,6 +4289,7 @@ export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutEnseignantInput = {
@@ -4235,6 +4337,7 @@ export type ProfilEleveCreateWithoutPlanActionsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4281,6 +4384,7 @@ export type ProfilEleveCreateWithoutPlanActionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
@@ -4303,6 +4407,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4348,6 +4453,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlanActionsInput = {
@@ -4385,6 +4491,7 @@ export type ProfilEleveUpdateWithoutPlanActionsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4431,6 +4538,7 @@ export type ProfilEleveUpdateWithoutPlanActionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
@@ -4453,6 +4561,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4498,6 +4607,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutExercicesAssignesInput = {
@@ -4519,6 +4629,7 @@ export type ProfilEleveCreateWithoutExercicesAssignesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4565,6 +4676,7 @@ export type ProfilEleveCreateWithoutExercicesAssignesInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
@@ -4587,6 +4699,7 @@ export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4632,6 +4745,7 @@ export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutExercicesAssignesInput = {
@@ -4669,6 +4783,7 @@ export type ProfilEleveUpdateWithoutExercicesAssignesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4715,6 +4830,7 @@ export type ProfilEleveUpdateWithoutExercicesAssignesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
@@ -4737,6 +4853,7 @@ export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4782,6 +4899,7 @@ export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutSessionsInput = {
@@ -4803,6 +4921,7 @@ export type ProfilEleveCreateWithoutSessionsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4849,6 +4968,7 @@ export type ProfilEleveCreateWithoutSessionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
@@ -4871,6 +4991,7 @@ export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4916,6 +5037,7 @@ export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutSessionsInput = {
@@ -4953,6 +5075,7 @@ export type ProfilEleveUpdateWithoutSessionsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4999,6 +5122,7 @@ export type ProfilEleveUpdateWithoutSessionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
@@ -5021,6 +5145,7 @@ export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5066,6 +5191,7 @@ export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCheckInsInput = {
@@ -5087,6 +5213,7 @@ export type ProfilEleveCreateWithoutCheckInsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5133,6 +5260,7 @@ export type ProfilEleveCreateWithoutCheckInsInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
@@ -5155,6 +5283,7 @@ export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5200,6 +5329,7 @@ export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCheckInsInput = {
@@ -5237,6 +5367,7 @@ export type ProfilEleveUpdateWithoutCheckInsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5283,6 +5414,7 @@ export type ProfilEleveUpdateWithoutCheckInsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
@@ -5305,6 +5437,7 @@ export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5350,6 +5483,7 @@ export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutBadgesInput = {
@@ -5371,6 +5505,7 @@ export type ProfilEleveCreateWithoutBadgesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5417,6 +5552,7 @@ export type ProfilEleveCreateWithoutBadgesInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
@@ -5439,6 +5575,7 @@ export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5484,6 +5621,7 @@ export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutBadgesInput = {
@@ -5521,6 +5659,7 @@ export type ProfilEleveUpdateWithoutBadgesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5567,6 +5706,7 @@ export type ProfilEleveUpdateWithoutBadgesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
@@ -5589,6 +5729,7 @@ export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5634,6 +5775,7 @@ export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesInput = {
@@ -5655,6 +5797,7 @@ export type ProfilEleveCreateWithoutCommentairesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5701,6 +5844,7 @@ export type ProfilEleveCreateWithoutCommentairesInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
@@ -5723,6 +5867,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5768,6 +5913,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesInput = {
@@ -5805,6 +5951,7 @@ export type ProfilEleveUpdateWithoutCommentairesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5851,6 +5998,7 @@ export type ProfilEleveUpdateWithoutCommentairesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
@@ -5873,6 +6021,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5918,6 +6067,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesEleveInput = {
@@ -5939,6 +6089,7 @@ export type ProfilEleveCreateWithoutCommentairesEleveInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5985,6 +6136,7 @@ export type ProfilEleveCreateWithoutCommentairesEleveInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
@@ -6007,6 +6159,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6052,6 +6205,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesEleveInput = {
@@ -6089,6 +6243,7 @@ export type ProfilEleveUpdateWithoutCommentairesEleveInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6135,6 +6290,7 @@ export type ProfilEleveUpdateWithoutCommentairesEleveInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
@@ -6157,6 +6313,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6202,6 +6359,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDemandesRencontreInput = {
@@ -6223,6 +6381,7 @@ export type ProfilEleveCreateWithoutDemandesRencontreInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6269,6 +6428,7 @@ export type ProfilEleveCreateWithoutDemandesRencontreInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
@@ -6291,6 +6451,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6336,6 +6497,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDemandesRencontreInput = {
@@ -6373,6 +6535,7 @@ export type ProfilEleveUpdateWithoutDemandesRencontreInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6419,6 +6582,7 @@ export type ProfilEleveUpdateWithoutDemandesRencontreInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
@@ -6441,6 +6605,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6486,6 +6651,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutRendezVousInput = {
@@ -6507,6 +6673,7 @@ export type ProfilEleveCreateWithoutRendezVousInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6553,6 +6720,7 @@ export type ProfilEleveCreateWithoutRendezVousInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
@@ -6575,6 +6743,7 @@ export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6620,6 +6789,7 @@ export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutRendezVousInput = {
@@ -6657,6 +6827,7 @@ export type ProfilEleveUpdateWithoutRendezVousInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6703,6 +6874,7 @@ export type ProfilEleveUpdateWithoutRendezVousInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
@@ -6725,6 +6897,7 @@ export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6770,6 +6943,7 @@ export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutRecommandationsIAInput = {
@@ -6791,6 +6965,7 @@ export type ProfilEleveCreateWithoutRecommandationsIAInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6837,6 +7012,7 @@ export type ProfilEleveCreateWithoutRecommandationsIAInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
@@ -6859,6 +7035,7 @@ export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6904,6 +7081,7 @@ export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutRecommandationsIAInput = {
@@ -6941,6 +7119,7 @@ export type ProfilEleveUpdateWithoutRecommandationsIAInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6987,6 +7166,7 @@ export type ProfilEleveUpdateWithoutRecommandationsIAInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
@@ -7009,6 +7189,7 @@ export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7054,6 +7235,7 @@ export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
@@ -7075,6 +7257,7 @@ export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7121,6 +7304,7 @@ export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
@@ -7143,6 +7327,7 @@ export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7188,6 +7373,7 @@ export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDefJourCompletionsInput = {
@@ -7225,6 +7411,7 @@ export type ProfilEleveUpdateWithoutDefJourCompletionsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7271,6 +7458,7 @@ export type ProfilEleveUpdateWithoutDefJourCompletionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
@@ -7293,6 +7481,7 @@ export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7338,6 +7527,7 @@ export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutMissionsHebdoInput = {
@@ -7359,6 +7549,7 @@ export type ProfilEleveCreateWithoutMissionsHebdoInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7405,6 +7596,7 @@ export type ProfilEleveCreateWithoutMissionsHebdoInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
@@ -7427,6 +7619,7 @@ export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7472,6 +7665,7 @@ export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutMissionsHebdoInput = {
@@ -7509,6 +7703,7 @@ export type ProfilEleveUpdateWithoutMissionsHebdoInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7555,6 +7750,7 @@ export type ProfilEleveUpdateWithoutMissionsHebdoInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
@@ -7577,6 +7773,7 @@ export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7622,6 +7819,7 @@ export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutObjectifsNotesInput = {
@@ -7643,6 +7841,7 @@ export type ProfilEleveCreateWithoutObjectifsNotesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7689,6 +7888,7 @@ export type ProfilEleveCreateWithoutObjectifsNotesInput = {
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
@@ -7711,6 +7911,7 @@ export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7756,6 +7957,7 @@ export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutObjectifsNotesInput = {
@@ -7793,6 +7995,7 @@ export type ProfilEleveUpdateWithoutObjectifsNotesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7839,6 +8042,7 @@ export type ProfilEleveUpdateWithoutObjectifsNotesInput = {
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
@@ -7861,6 +8065,7 @@ export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7906,6 +8111,7 @@ export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutPlanifNotionsInput = {
@@ -7927,6 +8133,7 @@ export type ProfilEleveCreateWithoutPlanifNotionsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7973,6 +8180,7 @@ export type ProfilEleveCreateWithoutPlanifNotionsInput = {
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
@@ -7995,6 +8203,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8040,6 +8249,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlanifNotionsInput = {
@@ -8077,6 +8287,7 @@ export type ProfilEleveUpdateWithoutPlanifNotionsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8123,6 +8334,7 @@ export type ProfilEleveUpdateWithoutPlanifNotionsInput = {
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
@@ -8145,6 +8357,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8190,6 +8403,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDisponibiliteInput = {
@@ -8211,6 +8425,7 @@ export type ProfilEleveCreateWithoutDisponibiliteInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8257,6 +8472,7 @@ export type ProfilEleveCreateWithoutDisponibiliteInput = {
   miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
@@ -8279,6 +8495,7 @@ export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8324,6 +8541,7 @@ export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
   miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDisponibiliteInput = {
@@ -8361,6 +8579,7 @@ export type ProfilEleveUpdateWithoutDisponibiliteInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8407,6 +8626,7 @@ export type ProfilEleveUpdateWithoutDisponibiliteInput = {
   miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
@@ -8429,6 +8649,7 @@ export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8474,6 +8695,7 @@ export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDemandesJeuxInput = {
@@ -8495,6 +8717,7 @@ export type ProfilEleveCreateWithoutDemandesJeuxInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8541,6 +8764,7 @@ export type ProfilEleveCreateWithoutDemandesJeuxInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
@@ -8563,6 +8787,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8608,6 +8833,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDemandesJeuxInput = {
@@ -8645,6 +8871,7 @@ export type ProfilEleveUpdateWithoutDemandesJeuxInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8691,6 +8918,7 @@ export type ProfilEleveUpdateWithoutDemandesJeuxInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
@@ -8713,6 +8941,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8758,6 +8987,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutPartiesMultiInput = {
@@ -8779,6 +9009,7 @@ export type ProfilEleveCreateWithoutPartiesMultiInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8825,6 +9056,7 @@ export type ProfilEleveCreateWithoutPartiesMultiInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
@@ -8847,6 +9079,7 @@ export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8892,6 +9125,7 @@ export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPartiesMultiInput = {
@@ -8929,6 +9163,7 @@ export type ProfilEleveUpdateWithoutPartiesMultiInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8975,6 +9210,7 @@ export type ProfilEleveUpdateWithoutPartiesMultiInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
@@ -8997,6 +9233,7 @@ export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9042,6 +9279,299 @@ export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+}
+
+export type ProfilEleveCreateWithoutEvaluationsInput = {
+  id?: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  user: Prisma.UserCreateNestedOneWithoutProfilEleveInput
+  enseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutElevesInput
+  parents?: Prisma.ProfilParentCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIACreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
+  miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+}
+
+export type ProfilEleveUncheckedCreateWithoutEvaluationsInput = {
+  id?: string
+  userId: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  enseignantId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  parents?: Prisma.ProfilParentUncheckedCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionUncheckedCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueUncheckedCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveUncheckedCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedCreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
+  miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+}
+
+export type ProfilEleveCreateOrConnectWithoutEvaluationsInput = {
+  where: Prisma.ProfilEleveWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutEvaluationsInput, Prisma.ProfilEleveUncheckedCreateWithoutEvaluationsInput>
+}
+
+export type ProfilEleveUpsertWithoutEvaluationsInput = {
+  update: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutEvaluationsInput, Prisma.ProfilEleveUncheckedUpdateWithoutEvaluationsInput>
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutEvaluationsInput, Prisma.ProfilEleveUncheckedCreateWithoutEvaluationsInput>
+  where?: Prisma.ProfilEleveWhereInput
+}
+
+export type ProfilEleveUpdateToOneWithWhereWithoutEvaluationsInput = {
+  where?: Prisma.ProfilEleveWhereInput
+  data: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutEvaluationsInput, Prisma.ProfilEleveUncheckedUpdateWithoutEvaluationsInput>
+}
+
+export type ProfilEleveUpdateWithoutEvaluationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.UserUpdateOneRequiredWithoutProfilEleveNestedInput
+  enseignant?: Prisma.ProfilEnseignantUpdateOneWithoutElevesNestedInput
+  parents?: Prisma.ProfilParentUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
+  miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+}
+
+export type ProfilEleveUncheckedUpdateWithoutEvaluationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  parents?: Prisma.ProfilParentUncheckedUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUncheckedUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUncheckedUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUncheckedUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
+  miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
 }
 
 export type ProfilEleveUpdateWithoutParentsInput = {
@@ -9063,6 +9593,7 @@ export type ProfilEleveUpdateWithoutParentsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9109,6 +9640,7 @@ export type ProfilEleveUpdateWithoutParentsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
@@ -9131,6 +9663,7 @@ export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9176,6 +9709,7 @@ export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateManyWithoutParentsInput = {
@@ -9198,6 +9732,7 @@ export type ProfilEleveUncheckedUpdateManyWithoutParentsInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9242,6 +9777,7 @@ export type ProfilEleveCreateManyEnseignantInput = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -9284,6 +9820,7 @@ export type ProfilEleveUpdateWithoutEnseignantInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9330,6 +9867,7 @@ export type ProfilEleveUpdateWithoutEnseignantInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
@@ -9352,6 +9890,7 @@ export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9397,6 +9936,7 @@ export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateManyWithoutEnseignantInput = {
@@ -9419,6 +9959,7 @@ export type ProfilEleveUncheckedUpdateManyWithoutEnseignantInput = {
   dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9471,6 +10012,7 @@ export type ProfilEleveCountOutputType = {
   miraMessages: number
   objectifsNotes: number
   planifNotions: number
+  evaluations: number
 }
 
 export type ProfilEleveCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -9497,6 +10039,7 @@ export type ProfilEleveCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   miraMessages?: boolean | ProfilEleveCountOutputTypeCountMiraMessagesArgs
   objectifsNotes?: boolean | ProfilEleveCountOutputTypeCountObjectifsNotesArgs
   planifNotions?: boolean | ProfilEleveCountOutputTypeCountPlanifNotionsArgs
+  evaluations?: boolean | ProfilEleveCountOutputTypeCountEvaluationsArgs
 }
 
 /**
@@ -9670,6 +10213,13 @@ export type ProfilEleveCountOutputTypeCountPlanifNotionsArgs<ExtArgs extends run
   where?: Prisma.PlanifNotionEleveWhereInput
 }
 
+/**
+ * ProfilEleveCountOutputType without action
+ */
+export type ProfilEleveCountOutputTypeCountEvaluationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EvaluationRequestWhereInput
+}
+
 
 export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -9691,6 +10241,7 @@ export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: boolean
+  profilCognitif?: boolean
   centresInteret?: boolean
   sportFavori?: boolean
   universMediatique?: boolean
@@ -9739,6 +10290,7 @@ export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   objectifsNotes?: boolean | Prisma.ProfilEleve$objectifsNotesArgs<ExtArgs>
   planifNotions?: boolean | Prisma.ProfilEleve$planifNotionsArgs<ExtArgs>
   disponibilite?: boolean | Prisma.ProfilEleve$disponibiliteArgs<ExtArgs>
+  evaluations?: boolean | Prisma.ProfilEleve$evaluationsArgs<ExtArgs>
   _count?: boolean | Prisma.ProfilEleveCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["profilEleve"]>
 
@@ -9762,6 +10314,7 @@ export type ProfilEleveSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: boolean
+  profilCognitif?: boolean
   centresInteret?: boolean
   sportFavori?: boolean
   universMediatique?: boolean
@@ -9808,6 +10361,7 @@ export type ProfilEleveSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: boolean
+  profilCognitif?: boolean
   centresInteret?: boolean
   sportFavori?: boolean
   universMediatique?: boolean
@@ -9854,6 +10408,7 @@ export type ProfilEleveSelectScalar = {
   dyscalculie?: boolean
   anxieteScolaire?: boolean
   autresBesoins?: boolean
+  profilCognitif?: boolean
   centresInteret?: boolean
   sportFavori?: boolean
   universMediatique?: boolean
@@ -9878,7 +10433,7 @@ export type ProfilEleveSelectScalar = {
   miraSecsBonus?: boolean
 }
 
-export type ProfilEleveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "codeAcces" | "prenom" | "nom" | "dateNaissance" | "niveauScolaire" | "ecole" | "styleApprentissage" | "vitesseTraitement" | "niveauMotivation" | "facteursStress" | "matieresPreferees" | "matieresRedoutees" | "tdah" | "dyslexie" | "dyscalculie" | "anxieteScolaire" | "autresBesoins" | "centresInteret" | "sportFavori" | "universMediatique" | "autresPassions" | "environnement" | "personnalite" | "objectifScolaire" | "streakJours" | "streakMaxJours" | "streakBoucliers" | "derniereConnexion" | "totalPoints" | "niveauJeu" | "cosmetiques" | "onboardingComplete" | "onboardingEtape" | "enseignantId" | "createdAt" | "updatedAt" | "miraSecsUsedWeek" | "miraWeekOf" | "miraSecsBonus", ExtArgs["result"]["profilEleve"]>
+export type ProfilEleveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "codeAcces" | "prenom" | "nom" | "dateNaissance" | "niveauScolaire" | "ecole" | "styleApprentissage" | "vitesseTraitement" | "niveauMotivation" | "facteursStress" | "matieresPreferees" | "matieresRedoutees" | "tdah" | "dyslexie" | "dyscalculie" | "anxieteScolaire" | "autresBesoins" | "profilCognitif" | "centresInteret" | "sportFavori" | "universMediatique" | "autresPassions" | "environnement" | "personnalite" | "objectifScolaire" | "streakJours" | "streakMaxJours" | "streakBoucliers" | "derniereConnexion" | "totalPoints" | "niveauJeu" | "cosmetiques" | "onboardingComplete" | "onboardingEtape" | "enseignantId" | "createdAt" | "updatedAt" | "miraSecsUsedWeek" | "miraWeekOf" | "miraSecsBonus", ExtArgs["result"]["profilEleve"]>
 export type ProfilEleveInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enseignant?: boolean | Prisma.ProfilEleve$enseignantArgs<ExtArgs>
@@ -9906,6 +10461,7 @@ export type ProfilEleveInclude<ExtArgs extends runtime.Types.Extensions.Internal
   objectifsNotes?: boolean | Prisma.ProfilEleve$objectifsNotesArgs<ExtArgs>
   planifNotions?: boolean | Prisma.ProfilEleve$planifNotionsArgs<ExtArgs>
   disponibilite?: boolean | Prisma.ProfilEleve$disponibiliteArgs<ExtArgs>
+  evaluations?: boolean | Prisma.ProfilEleve$evaluationsArgs<ExtArgs>
   _count?: boolean | Prisma.ProfilEleveCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProfilEleveIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -9946,6 +10502,7 @@ export type $ProfilElevePayload<ExtArgs extends runtime.Types.Extensions.Interna
     objectifsNotes: Prisma.$ObjectifNotePayload<ExtArgs>[]
     planifNotions: Prisma.$PlanifNotionElevePayload<ExtArgs>[]
     disponibilite: Prisma.$DisponibiliteElevePayload<ExtArgs> | null
+    evaluations: Prisma.$EvaluationRequestPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -9967,6 +10524,7 @@ export type $ProfilElevePayload<ExtArgs extends runtime.Types.Extensions.Interna
     dyscalculie: boolean
     anxieteScolaire: boolean
     autresBesoins: string | null
+    profilCognitif: runtime.JsonValue | null
     centresInteret: string[]
     sportFavori: string | null
     universMediatique: string | null
@@ -10409,6 +10967,7 @@ export interface Prisma__ProfilEleveClient<T, Null = never, ExtArgs extends runt
   objectifsNotes<T extends Prisma.ProfilEleve$objectifsNotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$objectifsNotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ObjectifNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   planifNotions<T extends Prisma.ProfilEleve$planifNotionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$planifNotionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanifNotionElevePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   disponibilite<T extends Prisma.ProfilEleve$disponibiliteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$disponibiliteArgs<ExtArgs>>): Prisma.Prisma__DisponibiliteEleveClient<runtime.Types.Result.GetResult<Prisma.$DisponibiliteElevePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  evaluations<T extends Prisma.ProfilEleve$evaluationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$evaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10457,6 +11016,7 @@ export interface ProfilEleveFieldRefs {
   readonly dyscalculie: Prisma.FieldRef<"ProfilEleve", 'Boolean'>
   readonly anxieteScolaire: Prisma.FieldRef<"ProfilEleve", 'Boolean'>
   readonly autresBesoins: Prisma.FieldRef<"ProfilEleve", 'String'>
+  readonly profilCognitif: Prisma.FieldRef<"ProfilEleve", 'Json'>
   readonly centresInteret: Prisma.FieldRef<"ProfilEleve", 'String[]'>
   readonly sportFavori: Prisma.FieldRef<"ProfilEleve", 'String'>
   readonly universMediatique: Prisma.FieldRef<"ProfilEleve", 'String'>
@@ -11467,6 +12027,30 @@ export type ProfilEleve$disponibiliteArgs<ExtArgs extends runtime.Types.Extensio
    */
   include?: Prisma.DisponibiliteEleveInclude<ExtArgs> | null
   where?: Prisma.DisponibiliteEleveWhereInput
+}
+
+/**
+ * ProfilEleve.evaluations
+ */
+export type ProfilEleve$evaluationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EvaluationRequest
+   */
+  select?: Prisma.EvaluationRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EvaluationRequest
+   */
+  omit?: Prisma.EvaluationRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EvaluationRequestInclude<ExtArgs> | null
+  where?: Prisma.EvaluationRequestWhereInput
+  orderBy?: Prisma.EvaluationRequestOrderByWithRelationInput | Prisma.EvaluationRequestOrderByWithRelationInput[]
+  cursor?: Prisma.EvaluationRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EvaluationRequestScalarFieldEnum | Prisma.EvaluationRequestScalarFieldEnum[]
 }
 
 /**

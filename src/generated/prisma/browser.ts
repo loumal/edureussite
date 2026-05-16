@@ -282,3 +282,18 @@ export type CampagneEmail = Prisma.CampagneEmailModel
  * 
  */
 export type PartieMultijoueur = Prisma.PartieMultijoueurModel
+/**
+ * Model EvaluationRequest
+ * 
+ */
+export type EvaluationRequest = Prisma.EvaluationRequestModel
+/**
+ * Model FormulaireReponse
+ * 
+ */
+export type FormulaireReponse = Prisma.FormulaireReponseModel
+/**
+ * Model RapportEvaluation
+ * 
+ */
+export type RapportEvaluation = Prisma.RapportEvaluationModel

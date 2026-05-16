@@ -1,0 +1,177 @@
+import type { Questionnaire } from "./questionnaire-types";
+
+export const questionnaireNeuropsychologue: Questionnaire = {
+  domaine: "NEUROPSYCHOLOGUE",
+  titreFr: "Évaluation comportementale et attentionnelle",
+  titreEn: "Behavioural and attentional assessment",
+  descriptionFr:
+    "Ce questionnaire explore les comportements observés chez votre enfant au cours du dernier mois. Il couvre l'attention, l'impulsivité, la régulation émotionnelle et les fonctions exécutives.",
+  descriptionEn:
+    "This questionnaire explores behaviours observed in your child over the past month. It covers attention, impulsivity, emotional regulation and executive functions.",
+  instructionEchelleFr:
+    "Pour chaque affirmation, indiquez à quelle fréquence c'est vrai pour votre enfant au cours du dernier mois : 0 = Jamais ou rarement · 1 = À l'occasion · 2 = Souvent · 3 = Très souvent / tout le temps",
+  instructionEchelleEn:
+    "For each statement, indicate how often it has been true for your child over the past month: 0 = Never or rarely · 1 = Sometimes · 2 = Often · 3 = Very often / almost always",
+  sections: [
+    {
+      id: "attention",
+      titreFr: "Attention et concentration",
+      titreEn: "Attention and concentration",
+      items: [
+        { id: "att01", fr: "A du mal à maintenir son attention sur une tâche prolongée.", en: "Has difficulty sustaining attention on a lengthy task." },
+        { id: "att02", fr: "Se laisse distraire facilement par ce qui se passe autour de lui/elle.", en: "Is easily distracted by surroundings." },
+        { id: "att03", fr: "Sa performance se dégrade au fil d'une même activité.", en: "Performance deteriorates as an activity progresses." },
+        { id: "att04", fr: "Doit recommencer plusieurs fois avant de bien comprendre les consignes.", en: "Needs instructions repeated multiple times before understanding." },
+        { id: "att05", fr: "Semble ne pas écouter même quand on lui parle directement.", en: "Seems not to listen even when spoken to directly." },
+        { id: "att06", fr: "Oublie ce qu'il/elle doit faire dans ses activités quotidiennes.", en: "Forgets what needs to be done in daily activities." },
+        { id: "att07", fr: "Perd facilement le fil d'une conversation ou d'une explication.", en: "Easily loses track in a conversation or explanation." },
+        { id: "att08", fr: "Fait des erreurs par inattention dans ses travaux scolaires.", en: "Makes careless mistakes in schoolwork." },
+        { id: "att09", fr: "A du mal à porter attention aux détails importants.", en: "Has difficulty attending to important details." },
+        { id: "att10", fr: "Concentré(e) uniquement sur les activités qui l'intéressent, pas les autres.", en: "Can concentrate only on preferred activities, not others." },
+      ],
+    },
+    {
+      id: "impulsivite",
+      titreFr: "Impulsivité",
+      titreEn: "Impulsivity",
+      items: [
+        { id: "imp01", fr: "Répond aux questions avant qu'elles soient terminées.", en: "Answers questions before they are finished." },
+        { id: "imp02", fr: "Agit avant de réfléchir aux conséquences.", en: "Acts before thinking about consequences." },
+        { id: "imp03", fr: "A du mal à attendre son tour.", en: "Has difficulty waiting for his/her turn." },
+        { id: "imp04", fr: "Dit la première chose qui lui passe par la tête.", en: "Says the first thing that comes to mind." },
+        { id: "imp05", fr: "Interrompt les autres dans leurs conversations ou activités.", en: "Interrupts others in conversations or activities." },
+        { id: "imp06", fr: "Prend des décisions à la hâte sans évaluer les options.", en: "Makes hasty decisions without weighing options." },
+      ],
+    },
+    {
+      id: "hyperactivite",
+      titreFr: "Agitation motrice",
+      titreEn: "Motor restlessness",
+      items: [
+        { id: "hyp01", fr: "Bouge beaucoup ou se tortille sur sa chaise.", en: "Fidgets or squirms in his/her seat." },
+        { id: "hyp02", fr: "Se lève ou quitte sa place au mauvais moment.", en: "Gets up or leaves his/her seat at inappropriate times." },
+        { id: "hyp03", fr: "Court ou grimpe dans des situations où ce n'est pas approprié.", en: "Runs or climbs in situations where it is inappropriate." },
+        { id: "hyp04", fr: "A besoin de bouger constamment, même au repos.", en: "Needs to move constantly, even at rest." },
+        { id: "hyp05", fr: "Parle excessivement ou ne s'arrête pas.", en: "Talks excessively or non-stop." },
+      ],
+    },
+    {
+      id: "regulation",
+      titreFr: "Régulation émotionnelle",
+      titreEn: "Emotional regulation",
+      items: [
+        { id: "reg01", fr: "Réagit de façon excessive à de petites contrariétés.", en: "Overreacts to minor frustrations." },
+        { id: "reg02", fr: "A du mal à se calmer après une émotion forte.", en: "Has difficulty calming down after a strong emotion." },
+        { id: "reg03", fr: "Passe rapidement de la bonne humeur à la colère.", en: "Shifts quickly from a good mood to anger." },
+        { id: "reg04", fr: "Se met en colère de façon disproportionnée.", en: "Gets angry in a disproportionate way." },
+        { id: "reg05", fr: "Est souvent irritable ou de mauvaise humeur.", en: "Is often irritable or in a bad mood." },
+        { id: "reg06", fr: "Manifeste de la frustration face aux tâches difficiles.", en: "Shows frustration when facing difficult tasks." },
+        { id: "reg07", fr: "Abandon ou crise émotionnelle face aux échecs.", en: "Gives up or has an emotional outburst when faced with failure." },
+      ],
+    },
+    {
+      id: "humeur",
+      titreFr: "Humeur et estime de soi",
+      titreEn: "Mood and self-esteem",
+      items: [
+        { id: "hum01", fr: "Semble triste, abattu(e) ou morose.", en: "Seems sad, downhearted, or gloomy." },
+        { id: "hum02", fr: "Parle négativement de lui/elle-même (« Je suis nul(le) »).", en: "Speaks negatively about him/herself ('I'm no good')." },
+        { id: "hum03", fr: "Perd facilement confiance en lui/elle après un échec.", en: "Quickly loses confidence after a failure." },
+        { id: "hum04", fr: "Se compare défavorablement aux autres enfants.", en: "Unfavourably compares him/herself to other children." },
+        { id: "hum05", fr: "A peu d'espoir en l'avenir scolaire.", en: "Has little hope about his/her academic future." },
+        { id: "hum06", fr: "Semble se sentir inutile ou sans valeur.", en: "Seems to feel worthless or without value." },
+      ],
+    },
+    {
+      id: "anxiete",
+      titreFr: "Anxiété",
+      titreEn: "Anxiety",
+      items: [
+        { id: "anx01", fr: "S'inquiète excessivement de ses résultats scolaires.", en: "Worries excessively about school performance." },
+        { id: "anx02", fr: "A peur de faire des erreurs devant les autres.", en: "Is afraid of making mistakes in front of others." },
+        { id: "anx03", fr: "Présente des symptômes physiques avant les évaluations (maux de ventre, tête).", en: "Has physical symptoms before tests (stomach ache, headache)." },
+        { id: "anx04", fr: "Évite les nouvelles situations par peur d'échouer.", en: "Avoids new situations for fear of failure." },
+        { id: "anx05", fr: "S'inquiète de nombreuses choses différentes.", en: "Worries about many different things." },
+        { id: "anx06", fr: "A du mal à s'endormir à cause de ses préoccupations.", en: "Has difficulty falling asleep due to worries." },
+      ],
+    },
+    {
+      id: "fonctions_exec",
+      titreFr: "Fonctions exécutives",
+      titreEn: "Executive functions",
+      items: [
+        { id: "fex01", fr: "A du mal à planifier et organiser ses tâches.", en: "Has difficulty planning and organizing tasks." },
+        { id: "fex02", fr: "Commence les tâches mais ne les finit pas.", en: "Starts tasks but does not finish them." },
+        { id: "fex03", fr: "A du mal à passer d'une activité à une autre.", en: "Has difficulty switching from one activity to another." },
+        { id: "fex04", fr: "Perd ou égare fréquemment ses affaires.", en: "Frequently loses or misplaces belongings." },
+        { id: "fex05", fr: "A du mal à gérer son temps (toujours en retard).", en: "Has difficulty managing time (always running late)." },
+        { id: "fex06", fr: "Ne retient pas plusieurs consignes à la fois.", en: "Cannot retain multiple instructions at once." },
+        { id: "fex07", fr: "A besoin de rappels répétés pour accomplir ses routines.", en: "Needs repeated reminders to complete routines." },
+        { id: "fex08", fr: "A du mal à s'adapter quand les plans changent.", en: "Has difficulty adapting when plans change." },
+      ],
+    },
+    {
+      id: "relations",
+      titreFr: "Relations et vie sociale",
+      titreEn: "Relationships and social life",
+      items: [
+        { id: "rel01", fr: "A du mal à se faire des amis ou à les garder.", en: "Has difficulty making or keeping friends." },
+        { id: "rel02", fr: "Est souvent rejeté(e) ou mis(e) à l'écart par ses pairs.", en: "Is often rejected or excluded by peers." },
+        { id: "rel03", fr: "Provoque des conflits avec ses frères/sœurs ou camarades.", en: "Provokes conflicts with siblings or classmates." },
+        { id: "rel04", fr: "A du mal à partager ou à coopérer.", en: "Has difficulty sharing or cooperating." },
+        { id: "rel05", fr: "Est trop dépendant(e) des adultes pour interagir.", en: "Is overly dependent on adults for interaction." },
+      ],
+    },
+    {
+      id: "impact_famille",
+      titreFr: "Impact sur la vie familiale",
+      titreEn: "Impact on family life",
+      items: [
+        { id: "fam01", fr: "Les devoirs créent des tensions importantes à la maison.", en: "Homework creates significant tension at home." },
+        { id: "fam02", fr: "Les difficultés scolaires affectent l'ambiance familiale.", en: "School difficulties affect the family atmosphere." },
+        { id: "fam03", fr: "Résiste fortement aux demandes des adultes.", en: "Strongly resists requests from adults." },
+        { id: "fam04", fr: "Perturbe les activités familiales.", en: "Disrupts family activities." },
+      ],
+    },
+    {
+      id: "forces",
+      titreFr: "Forces observées",
+      titreEn: "Observed strengths",
+      items: [
+        { id: "for01", fr: "Est curieux/curieuse et pose beaucoup de questions.", en: "Is curious and asks many questions." },
+        { id: "for02", fr: "Persévère malgré les difficultés.", en: "Perseveres despite difficulties." },
+        { id: "for03", fr: "Est créatif/créative dans ses activités.", en: "Is creative in his/her activities." },
+        { id: "for04", fr: "S'investit pleinement dans ce qui l'intéresse.", en: "Is fully engaged in what interests him/her." },
+        { id: "for05", fr: "Est apprécié(e) et bien intégré(e) dans son groupe.", en: "Is well-liked and integrated into his/her group." },
+      ],
+    },
+    {
+      id: "ouvertes_neuropsy",
+      titreFr: "Questions ouvertes",
+      titreEn: "Open questions",
+      questions: [
+        {
+          id: "ouv01",
+          fr: "Décrivez comment ces comportements causent des difficultés à votre enfant à la maison, à l'école ou dans ses relations.",
+          en: "Describe how these behaviours cause difficulties for your child at home, at school, or in relationships.",
+          placeholderFr: "Décrivez les situations les plus difficiles...",
+          placeholderEn: "Describe the most challenging situations...",
+        },
+        {
+          id: "ouv02",
+          fr: "Avez-vous d'autres préoccupations au sujet de votre enfant que vous n'avez pas pu exprimer dans ce questionnaire ?",
+          en: "Do you have any other concerns about your child that you were unable to express in this questionnaire?",
+          placeholderFr: "Autres préoccupations...",
+          placeholderEn: "Other concerns...",
+        },
+        {
+          id: "ouv03",
+          fr: "Quelles sont les forces, les habiletés ou les qualités de votre enfant ?",
+          en: "What are your child's strengths, abilities, or qualities?",
+          placeholderFr: "Ce que votre enfant fait bien, ce qui le/la rend unique...",
+          placeholderEn: "What your child does well, what makes him/her unique...",
+        },
+      ],
+    },
+  ],
+};

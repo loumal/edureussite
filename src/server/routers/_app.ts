@@ -12,6 +12,7 @@ import { gamificationRouter } from "./gamification";
 import { surpriseRouter } from "./surprise";
 import { planRouter } from "./plan";
 import { multijoueurRouter } from "./multijoueur";
+import { evaluationRouter } from "./evaluation";
 
 export const appRouter = createTRPCRouter({
   auth: authRouter,
@@ -27,6 +28,7 @@ export const appRouter = createTRPCRouter({
   surprise: surpriseRouter,
   plan: planRouter,
   multijoueur: multijoueurRouter,
+  evaluation: evaluationRouter,
 });
 
 export type AppRouter = typeof appRouter;

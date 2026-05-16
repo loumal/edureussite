@@ -336,6 +336,9 @@ model ProfilEleve {
   anxieteScolaire Boolean @default(false)
   autresBesoins   String?
 
+  // ── Profil cognitif issu de l'évaluation multi-spécialistes ───────────────
+  profilCognitif  Json?   // ajustements parcours : { attentionFragile, memoireTravailFaible, forceVerbale, ... }
+
   // Univers personnel — personnalisation des exercices
   centresInteret    String[]  // ex: ["SOCCER", "MANGA", "JEUX_VIDEO"]
   sportFavori       String?   // ex: "Hockey sur glace"
@@ -384,10 +387,11 @@ model ProfilEleve {
   surprises             SurpriseParent[]
   demandesJeux          DemandeJeu[]
   partiesMulti          PartieMultijoueur[] @relation("PartiesCreees")
-  miraMessages        MiraMessage[]
+  miraMessages          MiraMessage[]
   objectifsNotes        ObjectifNote[]
   planifNotions         PlanifNotionEleve[]
   disponibilite         DisponibiliteEleve?
+  evaluations           EvaluationRequest[]
 
   // ── Quota Mira IA (session vocale hebdomadaire) ───────────────────────
   miraSecsUsedWeek Int     @default(0)   @map("sofiaSecsUsedWeek") // secondes utilisées cette semaine
@@ -1360,4 +1364,130 @@ model PartieMultijoueur {
   @@index([code])
   @@index([createurId])
   @@map("parties_multijoueur")
+}
+
+// ─── ÉVALUATION COGNITIVE MULTI-SPÉCIALISTES ──────────────────────────────────
+
+enum DomaineSpecialiste {
+  NEUROPSYCHOLOGUE
+  ORTHOPEDAGOGUE
+  ORTHOPHONISTE
+  ERGOTHERAPEUTE
+  OPTOMETRISTE
+  PSYCHOEDUCATEUR
+}
+
+enum StatutEvaluation {
+  DETECTED               // Blocage détecté, super admin pas encore notifié
+  ADMIN_NOTIFIED         // Super admin notifié, en attente de validation
+  ADMIN_VALIDATED        // Super admin a validé l'envoi du formulaire
+  FORM_SENT              // Formulaire envoyé aux parents
+  FORM_IN_PROGRESS       // Parent a commencé à remplir
+  FORM_COMPLETED         // Parent a terminé le formulaire
+  REPORT_GENERATING      // IA en train de générer le rapport
+  REPORT_READY           // Rapport généré, en attente de validation parent
+  PARENT_VALIDATED       // Parent a confirmé que le rapport correspond
+  PARENT_COMMENTED       // Parent a ajouté des précisions
+  PARENT_REFUSED         // Parent a refusé le rapport
+  PARCOURS_ADJUSTED      // Parcours mis à jour avec le profil cognitif
+  SECOND_CYCLE_PENDING   // Un 2e domaine a été identifié, nouveau cycle en cours
+  CLOSED                 // Évaluation terminée
+}
+
+enum ValidationParent {
+  PENDING
+  CONFIRMED
+  COMMENTED
+  REFUSED
+}
+
+model EvaluationRequest {
+  id      String @id @default(cuid())
+  eleveId String
+
+  // Triage
+  triageScores     Json   // { NEUROPSYCHOLOGUE: 78, ORTHOPEDAGOGUE: 45, ... }
+  primarySpecialist DomaineSpecialiste
+  triageEvidence   Json   // { signals: string[], dataPoints: {...} }
+
+  // Workflow
+  status           StatutEvaluation @default(DETECTED)
+  round            Int              @default(1)
+  nextSpecialist   DomaineSpecialiste?
+
+  // Validation parent
+  parentValidation ValidationParent @default(PENDING)
+  parentComment    String?
+
+  // Timestamps
+  detectedAt       DateTime  @default(now())
+  adminNotifiedAt  DateTime?
+  adminValidatedAt DateTime?
+  formSentAt       DateTime?
+  formCompletedAt  DateTime?
+  reportGeneratedAt DateTime?
+  parentValidatedAt DateTime?
+  parcoursAdjustedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  eleve    ProfilEleve          @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+  formulaire FormulaireReponse?
+  rapports RapportEvaluation[]
+
+  @@index([eleveId, status])
+  @@map("evaluations_request")
+}
+
+model FormulaireReponse {
+  id           String @id @default(cuid())
+  evaluationId String @unique
+
+  domaine  DomaineSpecialiste
+  langue   String             @default("fr") // "fr" | "en"
+
+  // Token d'accès unique envoyé au parent (URL sécurisée sans compte requis)
+  tokenAcces String? @unique
+
+  // Réponses structurées par section
+  reponsesEchelle    Json? // { itemId: 0|1|2|3, ... } — items comportementaux
+  reponsesAnamnese   Json? // { question: réponse, ... } — historique développemental
+  reponsesOuvertes   Json? // { q115: "...", q116: "...", q117: "..." }
+
+  // Sauvegarde progressive
+  etapeActuelle Int     @default(1)
+  completed     Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  evaluation EvaluationRequest @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+
+  @@map("formulaires_reponses")
+}
+
+model RapportEvaluation {
+  id           String @id @default(cuid())
+  evaluationId String
+
+  type    String // "SOMMAIRE" | "DETAIL"
+  langue  String // "fr" | "en"
+  domaine DomaineSpecialiste
+
+  // Contenu structuré généré par l'IA
+  contenu Json
+  // { observations, synthese, recommandations[], ajustementsParcours[], avertissement }
+
+  // Partage
+  sharedWithEnseignant Boolean   @default(false)
+  sharedAt             DateTime?
+  tokenPartage         String?   @unique @default(cuid())
+
+  generatedAt DateTime @default(now())
+
+  evaluation EvaluationRequest @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+
+  @@index([evaluationId, type])
+  @@map("rapports_evaluation")
 }
