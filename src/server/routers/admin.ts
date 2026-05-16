@@ -1202,6 +1202,24 @@ export const adminRouter = createTRPCRouter({
         data: { status: "FORM_SENT", formSentAt: new Date() },
       });
 
+      // Envoyer le lien du formulaire au parent (fire-and-forget)
+      const parent = evaluation.eleve.parents[0];
+      if (parent?.user?.email) {
+        const appUrl = process.env.NEXTAUTH_URL ?? process.env.APP_URL ?? "https://edureussite.ca";
+        const { sendFormulaireParent } = await import("@/lib/email/send-formulaire-parent");
+        void sendFormulaireParent({
+          parentEmail: parent.user.email,
+          prenomParent: parent.prenom ?? "Parent",
+          prenomEnfant: evaluation.eleve.prenom,
+          nomEnfant: evaluation.eleve.nom ?? "",
+          specialist: evaluation.primarySpecialist,
+          tokenAcces: token,
+          appUrl,
+        }).catch((err) => {
+          console.error("[admin/validerEvaluation] Email parent failed:", err);
+        });
+      }
+
       return { success: true, action: "APPROVED", tokenAcces: token };
     }),
 });

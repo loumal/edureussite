@@ -84,6 +84,10 @@ export const evaluationRouter = createTRPCRouter({
       reponsesOuvertes: z.record(z.string(), z.string().max(2000)).optional(),
       reponsesAnamnese: z.record(z.string(), z.unknown()).optional(),
       langue: z.enum(["fr", "en"]).default("fr"),
+      consentDonne: z.boolean().refine((v) => v === true, {
+        message: "Le consentement est obligatoire pour soumettre le formulaire.",
+      }),
+      consentVersion: z.string().min(1).default("v1.0-2025"),
     }))
     .mutation(async ({ ctx, input }) => {
       const formulaire = await ctx.prisma.formulaireReponse.findUnique({
@@ -93,7 +97,7 @@ export const evaluationRouter = createTRPCRouter({
       if (!formulaire) throw new TRPCError({ code: "NOT_FOUND" });
       if (formulaire.completed) throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Formulaire déjà soumis." });
 
-      // Marquer comme complété
+      // Marquer comme complété avec consentement horodaté
       await ctx.prisma.formulaireReponse.update({
         where: { id: formulaire.id },
         data: {
@@ -102,6 +106,9 @@ export const evaluationRouter = createTRPCRouter({
           reponsesEchelle: input.reponsesEchelle as object,
           ...(input.reponsesOuvertes ? { reponsesOuvertes: input.reponsesOuvertes as object } : {}),
           ...(input.reponsesAnamnese ? { reponsesAnamnese: input.reponsesAnamnese as object } : {}),
+          consentDonne: true,
+          consentAt: new Date(),
+          consentVersion: input.consentVersion,
         },
       });
 
@@ -154,6 +161,54 @@ export const evaluationRouter = createTRPCRouter({
       if (input.validation !== "REFUSED") {
         const { ajusterParcoursApresValidation } = await import("@/lib/evaluation/parcours-adjuster");
         void ajusterParcoursApresValidation(formulaire.evaluationId);
+      }
+
+      return { success: true };
+    }),
+
+  // ── Consentement partage avec le prochain spécialiste ─────────────────────
+  consentirPartageSpecialiste: publicProcedure
+    .input(z.object({
+      token: z.string().min(1),
+      decision: z.enum(["ACCEPTED", "REFUSED"]),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const evaluation = await ctx.prisma.evaluationRequest.findUnique({
+        where: { tokenConsentementPartage: input.token },
+        select: {
+          id: true,
+          consentementPartage: true,
+          consentementPartageRefuse: true,
+          nextSpecialist: true,
+          eleveId: true,
+        },
+      });
+      if (!evaluation) throw new TRPCError({ code: "NOT_FOUND", message: "Lien de consentement invalide ou expiré." });
+      if (evaluation.consentementPartage || evaluation.consentementPartageRefuse) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Vous avez déjà répondu à cette demande." });
+      }
+
+      if (input.decision === "ACCEPTED") {
+        await ctx.prisma.evaluationRequest.update({
+          where: { id: evaluation.id },
+          data: {
+            consentementPartage: true,
+            consentementPartageAt: new Date(),
+            status: "SECOND_CYCLE_PENDING",
+          },
+        });
+
+        // Lancer automatiquement le second cycle (fire-and-forget)
+        const { lancerSecondCycle } = await import("@/lib/evaluation/second-cycle");
+        void lancerSecondCycle(evaluation.id, evaluation.nextSpecialist!);
+      } else {
+        await ctx.prisma.evaluationRequest.update({
+          where: { id: evaluation.id },
+          data: {
+            consentementPartageRefuse: true,
+            status: "CLOSED",
+          },
+        });
       }
 
       return { success: true };

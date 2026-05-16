@@ -63,6 +63,8 @@ export interface ProfilComplet {
   environnement?: string | null;
   personnalite?: string[];
   objectifScolaire?: string | null;
+  // Adaptations cognitives (Couches 1+2)
+  narratifAdaptations?: string;
 }
 
 interface GenerateExerciceInput {
@@ -243,13 +245,18 @@ function construireProfilNarratif(profil: ProfilComplet): string {
     parties.push(`Son objectif : ${OBJECTIF_LABELS[profil.objectifScolaire]}.`);
   }
 
-  // Adaptations
+  // Adaptations diagnostiques de base
   const adaptations: string[] = [];
   if (profil.tdah) adaptations.push("TDAH : consignes très courtes (max 2 phrases), une seule tâche à la fois, texte aéré");
   if (profil.dyslexie) adaptations.push("Dyslexie : phrases courtes, vocabulaire accessible, peu de texte dense");
   if (profil.anxieteScolaire) adaptations.push("Anxiété scolaire : ton particulièrement encourageant, exercice rassurant, jamais de pression");
   if (adaptations.length > 0) {
     parties.push(`Adaptations OBLIGATOIRES : ${adaptations.join(" | ")}.`);
+  }
+
+  // Adaptations cognitives validées (Couches 1+2 — priorité maximale)
+  if (profil.narratifAdaptations) {
+    parties.push(`\n${profil.narratifAdaptations}`);
   }
 
   return parties.join("\n");

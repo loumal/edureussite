@@ -41,11 +41,12 @@ export default async function AccompagnementPage({ params }: Props) {
   await requireRole(["PARENT", "ADMIN", "SUPER_ADMIN"]);
   const { eleveId } = await params;
 
-  const [profilParent, planExistant, planifEnfant, specialistesActif] = await Promise.all([
+  const [profilParent, planExistant, planifEnfant, specialistesActif, evaluationValidee] = await Promise.all([
     api.parent.getDashboard(),
     api.parent.getPlanAccompagnement({ eleveId }),
     api.parent.getEnfantPlanification({ eleveId }).catch(() => null),
     isFeatureActive(FEATURE_KEYS.SPECIALISTES),
+    api.parent.getDerniereEvaluationValidee({ eleveId }).catch(() => null),
   ]);
 
   const eleve = profilParent.eleves.find((e) => e.id === eleveId);
@@ -91,6 +92,9 @@ export default async function AccompagnementPage({ params }: Props) {
             </div>
           </div>
         </div>
+
+        {/* ─── Bannière évaluation cognitive ─── */}
+        {evaluationValidee && <EvaluationCognitiveBanner evaluation={evaluationValidee} />}
 
         {/* ─── Notes du parent et de l'enseignant ─── */}
         <section className="mb-10">
@@ -387,6 +391,115 @@ export default async function AccompagnementPage({ params }: Props) {
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+const DOMAINE_LABELS: Record<string, string> = {
+  NEUROPSYCHOLOGUE: "Neuropsychologue",
+  ORTHOPEDAGOGUE: "Orthopédagogue",
+  ORTHOPHONISTE: "Orthophoniste",
+  ERGOTHERAPEUTE: "Ergothérapeute",
+  OPTOMETRISTE: "Optométriste",
+  PSYCHOEDUCATEUR: "Psychoéducateur",
+};
+
+const STATUS_VALIDATION: Record<string, { label: string; color: string; bg: string; border: string }> = {
+  REPORT_READY:      { label: "En attente de votre validation",  color: "text-amber-700",   bg: "bg-amber-50",   border: "border-amber-200" },
+  PARENT_VALIDATED:  { label: "Rapport validé par vous",         color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-200" },
+  PARENT_COMMENTED:  { label: "Rapport commenté par vous",       color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-200" },
+  PARENT_REFUSED:    { label: "Rapport refusé",                  color: "text-red-700",     bg: "bg-red-50",     border: "border-red-200" },
+  PARCOURS_ADJUSTED: { label: "Parcours ajusté",                 color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-200" },
+  SECOND_CYCLE_PENDING: { label: "Évaluation complémentaire en cours", color: "text-amber-700", bg: "bg-amber-50", border: "border-amber-200" },
+};
+
+interface EvaluationBannerData {
+  evaluationId: string;
+  status: string;
+  domaine: string;
+  parentValidation: string | null;
+  rapportToken: string | null;
+  parcoursAdjustedAt: string | null;
+  forces: string[];
+  zonesVulnerabilite: string[];
+  recommandationsParents: string[];
+}
+
+function EvaluationCognitiveBanner({ evaluation }: { evaluation: EvaluationBannerData }) {
+  const cfg = STATUS_VALIDATION[evaluation.status] ?? STATUS_VALIDATION.REPORT_READY;
+  const domaineLabel = DOMAINE_LABELS[evaluation.domaine] ?? evaluation.domaine;
+  const isValidated = ["PARENT_VALIDATED", "PARENT_COMMENTED", "PARCOURS_ADJUSTED", "SECOND_CYCLE_PENDING"].includes(evaluation.status);
+
+  return (
+    <div className={`mb-8 rounded-2xl border p-5 ${cfg.bg} ${cfg.border}`}>
+      <div className="flex items-start gap-3 flex-wrap">
+        <span className="text-2xl flex-shrink-0">🧠</span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <p className={`text-sm font-bold ${cfg.color}`}>
+              Évaluation cognitive — {domaineLabel}
+            </p>
+            <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold border ${cfg.color} ${cfg.bg} ${cfg.border}`}>
+              {cfg.label}
+            </span>
+          </div>
+
+          {isValidated && evaluation.forces.length > 0 && (
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1.5">Forces identifiées</p>
+                <ul className="space-y-1">
+                  {evaluation.forces.slice(0, 3).map((f, i) => (
+                    <li key={i} className="flex items-start gap-1.5 text-xs text-emerald-800">
+                      <span className="flex-shrink-0 font-bold">✓</span>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {evaluation.zonesVulnerabilite.length > 0 && (
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-amber-700 mb-1.5">Points à renforcer</p>
+                  <ul className="space-y-1">
+                    {evaluation.zonesVulnerabilite.slice(0, 3).map((z, i) => (
+                      <li key={i} className="flex items-start gap-1.5 text-xs text-amber-800">
+                        <span className="flex-shrink-0">◦</span>
+                        <span>{z}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
+          {isValidated && evaluation.recommandationsParents.length > 0 && (
+            <div className="mt-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1.5">
+                Ce rapport enrichit le plan ci-dessous
+              </p>
+              <p className="text-xs text-emerald-800">
+                Les recommandations du spécialiste ont été intégrées dans votre plan d'accompagnement personnalisé. Régénérez le plan pour inclure ces nouvelles données.
+              </p>
+            </div>
+          )}
+
+          {evaluation.status === "REPORT_READY" && (
+            <p className="mt-2 text-xs text-amber-800">
+              Un rapport d'évaluation est prêt. Veuillez le consulter et le valider pour enrichir le plan d'accompagnement.
+            </p>
+          )}
+        </div>
+
+        {evaluation.rapportToken && (
+          <Link
+            href={`/evaluation/rapport/${evaluation.rapportToken}`}
+            className={`flex-shrink-0 rounded-xl border px-4 py-2 text-xs font-semibold transition-opacity hover:opacity-80 ${cfg.color} ${cfg.border} bg-white`}
+          >
+            Voir le rapport →
+          </Link>
+        )}
+      </div>
     </div>
   );
 }

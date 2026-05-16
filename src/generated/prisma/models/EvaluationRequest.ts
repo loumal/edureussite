@@ -43,6 +43,10 @@ export type EvaluationRequestMinAggregateOutputType = {
   nextSpecialist: $Enums.DomaineSpecialiste | null
   parentValidation: $Enums.ValidationParent | null
   parentComment: string | null
+  tokenConsentementPartage: string | null
+  consentementPartage: boolean | null
+  consentementPartageAt: Date | null
+  consentementPartageRefuse: boolean | null
   detectedAt: Date | null
   adminNotifiedAt: Date | null
   adminValidatedAt: Date | null
@@ -64,6 +68,10 @@ export type EvaluationRequestMaxAggregateOutputType = {
   nextSpecialist: $Enums.DomaineSpecialiste | null
   parentValidation: $Enums.ValidationParent | null
   parentComment: string | null
+  tokenConsentementPartage: string | null
+  consentementPartage: boolean | null
+  consentementPartageAt: Date | null
+  consentementPartageRefuse: boolean | null
   detectedAt: Date | null
   adminNotifiedAt: Date | null
   adminValidatedAt: Date | null
@@ -87,6 +95,10 @@ export type EvaluationRequestCountAggregateOutputType = {
   nextSpecialist: number
   parentValidation: number
   parentComment: number
+  tokenConsentementPartage: number
+  consentementPartage: number
+  consentementPartageAt: number
+  consentementPartageRefuse: number
   detectedAt: number
   adminNotifiedAt: number
   adminValidatedAt: number
@@ -118,6 +130,10 @@ export type EvaluationRequestMinAggregateInputType = {
   nextSpecialist?: true
   parentValidation?: true
   parentComment?: true
+  tokenConsentementPartage?: true
+  consentementPartage?: true
+  consentementPartageAt?: true
+  consentementPartageRefuse?: true
   detectedAt?: true
   adminNotifiedAt?: true
   adminValidatedAt?: true
@@ -139,6 +155,10 @@ export type EvaluationRequestMaxAggregateInputType = {
   nextSpecialist?: true
   parentValidation?: true
   parentComment?: true
+  tokenConsentementPartage?: true
+  consentementPartage?: true
+  consentementPartageAt?: true
+  consentementPartageRefuse?: true
   detectedAt?: true
   adminNotifiedAt?: true
   adminValidatedAt?: true
@@ -162,6 +182,10 @@ export type EvaluationRequestCountAggregateInputType = {
   nextSpecialist?: true
   parentValidation?: true
   parentComment?: true
+  tokenConsentementPartage?: true
+  consentementPartage?: true
+  consentementPartageAt?: true
+  consentementPartageRefuse?: true
   detectedAt?: true
   adminNotifiedAt?: true
   adminValidatedAt?: true
@@ -272,6 +296,10 @@ export type EvaluationRequestGroupByOutputType = {
   nextSpecialist: $Enums.DomaineSpecialiste | null
   parentValidation: $Enums.ValidationParent
   parentComment: string | null
+  tokenConsentementPartage: string | null
+  consentementPartage: boolean
+  consentementPartageAt: Date | null
+  consentementPartageRefuse: boolean
   detectedAt: Date
   adminNotifiedAt: Date | null
   adminValidatedAt: Date | null
@@ -318,6 +346,10 @@ export type EvaluationRequestWhereInput = {
   nextSpecialist?: Prisma.EnumDomaineSpecialisteNullableFilter<"EvaluationRequest"> | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFilter<"EvaluationRequest"> | $Enums.ValidationParent
   parentComment?: Prisma.StringNullableFilter<"EvaluationRequest"> | string | null
+  tokenConsentementPartage?: Prisma.StringNullableFilter<"EvaluationRequest"> | string | null
+  consentementPartage?: Prisma.BoolFilter<"EvaluationRequest"> | boolean
+  consentementPartageAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFilter<"EvaluationRequest"> | boolean
   detectedAt?: Prisma.DateTimeFilter<"EvaluationRequest"> | Date | string
   adminNotifiedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   adminValidatedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
@@ -344,6 +376,10 @@ export type EvaluationRequestOrderByWithRelationInput = {
   nextSpecialist?: Prisma.SortOrderInput | Prisma.SortOrder
   parentValidation?: Prisma.SortOrder
   parentComment?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenConsentementPartage?: Prisma.SortOrderInput | Prisma.SortOrder
+  consentementPartage?: Prisma.SortOrder
+  consentementPartageAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  consentementPartageRefuse?: Prisma.SortOrder
   detectedAt?: Prisma.SortOrder
   adminNotifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   adminValidatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -361,6 +397,7 @@ export type EvaluationRequestOrderByWithRelationInput = {
 
 export type EvaluationRequestWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  tokenConsentementPartage?: string
   AND?: Prisma.EvaluationRequestWhereInput | Prisma.EvaluationRequestWhereInput[]
   OR?: Prisma.EvaluationRequestWhereInput[]
   NOT?: Prisma.EvaluationRequestWhereInput | Prisma.EvaluationRequestWhereInput[]
@@ -373,6 +410,9 @@ export type EvaluationRequestWhereUniqueInput = Prisma.AtLeast<{
   nextSpecialist?: Prisma.EnumDomaineSpecialisteNullableFilter<"EvaluationRequest"> | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFilter<"EvaluationRequest"> | $Enums.ValidationParent
   parentComment?: Prisma.StringNullableFilter<"EvaluationRequest"> | string | null
+  consentementPartage?: Prisma.BoolFilter<"EvaluationRequest"> | boolean
+  consentementPartageAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFilter<"EvaluationRequest"> | boolean
   detectedAt?: Prisma.DateTimeFilter<"EvaluationRequest"> | Date | string
   adminNotifiedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   adminValidatedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
@@ -386,7 +426,7 @@ export type EvaluationRequestWhereUniqueInput = Prisma.AtLeast<{
   eleve?: Prisma.XOR<Prisma.ProfilEleveScalarRelationFilter, Prisma.ProfilEleveWhereInput>
   formulaire?: Prisma.XOR<Prisma.FormulaireReponseNullableScalarRelationFilter, Prisma.FormulaireReponseWhereInput> | null
   rapports?: Prisma.RapportEvaluationListRelationFilter
-}, "id">
+}, "id" | "tokenConsentementPartage">
 
 export type EvaluationRequestOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -399,6 +439,10 @@ export type EvaluationRequestOrderByWithAggregationInput = {
   nextSpecialist?: Prisma.SortOrderInput | Prisma.SortOrder
   parentValidation?: Prisma.SortOrder
   parentComment?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenConsentementPartage?: Prisma.SortOrderInput | Prisma.SortOrder
+  consentementPartage?: Prisma.SortOrder
+  consentementPartageAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  consentementPartageRefuse?: Prisma.SortOrder
   detectedAt?: Prisma.SortOrder
   adminNotifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   adminValidatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -430,6 +474,10 @@ export type EvaluationRequestScalarWhereWithAggregatesInput = {
   nextSpecialist?: Prisma.EnumDomaineSpecialisteNullableWithAggregatesFilter<"EvaluationRequest"> | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentWithAggregatesFilter<"EvaluationRequest"> | $Enums.ValidationParent
   parentComment?: Prisma.StringNullableWithAggregatesFilter<"EvaluationRequest"> | string | null
+  tokenConsentementPartage?: Prisma.StringNullableWithAggregatesFilter<"EvaluationRequest"> | string | null
+  consentementPartage?: Prisma.BoolWithAggregatesFilter<"EvaluationRequest"> | boolean
+  consentementPartageAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvaluationRequest"> | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolWithAggregatesFilter<"EvaluationRequest"> | boolean
   detectedAt?: Prisma.DateTimeWithAggregatesFilter<"EvaluationRequest"> | Date | string
   adminNotifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvaluationRequest"> | Date | string | null
   adminValidatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvaluationRequest"> | Date | string | null
@@ -452,6 +500,10 @@ export type EvaluationRequestCreateInput = {
   nextSpecialist?: $Enums.DomaineSpecialiste | null
   parentValidation?: $Enums.ValidationParent
   parentComment?: string | null
+  tokenConsentementPartage?: string | null
+  consentementPartage?: boolean
+  consentementPartageAt?: Date | string | null
+  consentementPartageRefuse?: boolean
   detectedAt?: Date | string
   adminNotifiedAt?: Date | string | null
   adminValidatedAt?: Date | string | null
@@ -478,6 +530,10 @@ export type EvaluationRequestUncheckedCreateInput = {
   nextSpecialist?: $Enums.DomaineSpecialiste | null
   parentValidation?: $Enums.ValidationParent
   parentComment?: string | null
+  tokenConsentementPartage?: string | null
+  consentementPartage?: boolean
+  consentementPartageAt?: Date | string | null
+  consentementPartageRefuse?: boolean
   detectedAt?: Date | string
   adminNotifiedAt?: Date | string | null
   adminValidatedAt?: Date | string | null
@@ -502,6 +558,10 @@ export type EvaluationRequestUpdateInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -528,6 +588,10 @@ export type EvaluationRequestUncheckedUpdateInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -553,6 +617,10 @@ export type EvaluationRequestCreateManyInput = {
   nextSpecialist?: $Enums.DomaineSpecialiste | null
   parentValidation?: $Enums.ValidationParent
   parentComment?: string | null
+  tokenConsentementPartage?: string | null
+  consentementPartage?: boolean
+  consentementPartageAt?: Date | string | null
+  consentementPartageRefuse?: boolean
   detectedAt?: Date | string
   adminNotifiedAt?: Date | string | null
   adminValidatedAt?: Date | string | null
@@ -575,6 +643,10 @@ export type EvaluationRequestUpdateManyMutationInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -598,6 +670,10 @@ export type EvaluationRequestUncheckedUpdateManyInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -631,6 +707,10 @@ export type EvaluationRequestCountOrderByAggregateInput = {
   nextSpecialist?: Prisma.SortOrder
   parentValidation?: Prisma.SortOrder
   parentComment?: Prisma.SortOrder
+  tokenConsentementPartage?: Prisma.SortOrder
+  consentementPartage?: Prisma.SortOrder
+  consentementPartageAt?: Prisma.SortOrder
+  consentementPartageRefuse?: Prisma.SortOrder
   detectedAt?: Prisma.SortOrder
   adminNotifiedAt?: Prisma.SortOrder
   adminValidatedAt?: Prisma.SortOrder
@@ -656,6 +736,10 @@ export type EvaluationRequestMaxOrderByAggregateInput = {
   nextSpecialist?: Prisma.SortOrder
   parentValidation?: Prisma.SortOrder
   parentComment?: Prisma.SortOrder
+  tokenConsentementPartage?: Prisma.SortOrder
+  consentementPartage?: Prisma.SortOrder
+  consentementPartageAt?: Prisma.SortOrder
+  consentementPartageRefuse?: Prisma.SortOrder
   detectedAt?: Prisma.SortOrder
   adminNotifiedAt?: Prisma.SortOrder
   adminValidatedAt?: Prisma.SortOrder
@@ -677,6 +761,10 @@ export type EvaluationRequestMinOrderByAggregateInput = {
   nextSpecialist?: Prisma.SortOrder
   parentValidation?: Prisma.SortOrder
   parentComment?: Prisma.SortOrder
+  tokenConsentementPartage?: Prisma.SortOrder
+  consentementPartage?: Prisma.SortOrder
+  consentementPartageAt?: Prisma.SortOrder
+  consentementPartageRefuse?: Prisma.SortOrder
   detectedAt?: Prisma.SortOrder
   adminNotifiedAt?: Prisma.SortOrder
   adminValidatedAt?: Prisma.SortOrder
@@ -794,6 +882,10 @@ export type EvaluationRequestCreateWithoutEleveInput = {
   nextSpecialist?: $Enums.DomaineSpecialiste | null
   parentValidation?: $Enums.ValidationParent
   parentComment?: string | null
+  tokenConsentementPartage?: string | null
+  consentementPartage?: boolean
+  consentementPartageAt?: Date | string | null
+  consentementPartageRefuse?: boolean
   detectedAt?: Date | string
   adminNotifiedAt?: Date | string | null
   adminValidatedAt?: Date | string | null
@@ -818,6 +910,10 @@ export type EvaluationRequestUncheckedCreateWithoutEleveInput = {
   nextSpecialist?: $Enums.DomaineSpecialiste | null
   parentValidation?: $Enums.ValidationParent
   parentComment?: string | null
+  tokenConsentementPartage?: string | null
+  consentementPartage?: boolean
+  consentementPartageAt?: Date | string | null
+  consentementPartageRefuse?: boolean
   detectedAt?: Date | string
   adminNotifiedAt?: Date | string | null
   adminValidatedAt?: Date | string | null
@@ -872,6 +968,10 @@ export type EvaluationRequestScalarWhereInput = {
   nextSpecialist?: Prisma.EnumDomaineSpecialisteNullableFilter<"EvaluationRequest"> | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFilter<"EvaluationRequest"> | $Enums.ValidationParent
   parentComment?: Prisma.StringNullableFilter<"EvaluationRequest"> | string | null
+  tokenConsentementPartage?: Prisma.StringNullableFilter<"EvaluationRequest"> | string | null
+  consentementPartage?: Prisma.BoolFilter<"EvaluationRequest"> | boolean
+  consentementPartageAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFilter<"EvaluationRequest"> | boolean
   detectedAt?: Prisma.DateTimeFilter<"EvaluationRequest"> | Date | string
   adminNotifiedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   adminValidatedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
@@ -894,6 +994,10 @@ export type EvaluationRequestCreateWithoutFormulaireInput = {
   nextSpecialist?: $Enums.DomaineSpecialiste | null
   parentValidation?: $Enums.ValidationParent
   parentComment?: string | null
+  tokenConsentementPartage?: string | null
+  consentementPartage?: boolean
+  consentementPartageAt?: Date | string | null
+  consentementPartageRefuse?: boolean
   detectedAt?: Date | string
   adminNotifiedAt?: Date | string | null
   adminValidatedAt?: Date | string | null
@@ -919,6 +1023,10 @@ export type EvaluationRequestUncheckedCreateWithoutFormulaireInput = {
   nextSpecialist?: $Enums.DomaineSpecialiste | null
   parentValidation?: $Enums.ValidationParent
   parentComment?: string | null
+  tokenConsentementPartage?: string | null
+  consentementPartage?: boolean
+  consentementPartageAt?: Date | string | null
+  consentementPartageRefuse?: boolean
   detectedAt?: Date | string
   adminNotifiedAt?: Date | string | null
   adminValidatedAt?: Date | string | null
@@ -958,6 +1066,10 @@ export type EvaluationRequestUpdateWithoutFormulaireInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -983,6 +1095,10 @@ export type EvaluationRequestUncheckedUpdateWithoutFormulaireInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1006,6 +1122,10 @@ export type EvaluationRequestCreateWithoutRapportsInput = {
   nextSpecialist?: $Enums.DomaineSpecialiste | null
   parentValidation?: $Enums.ValidationParent
   parentComment?: string | null
+  tokenConsentementPartage?: string | null
+  consentementPartage?: boolean
+  consentementPartageAt?: Date | string | null
+  consentementPartageRefuse?: boolean
   detectedAt?: Date | string
   adminNotifiedAt?: Date | string | null
   adminValidatedAt?: Date | string | null
@@ -1031,6 +1151,10 @@ export type EvaluationRequestUncheckedCreateWithoutRapportsInput = {
   nextSpecialist?: $Enums.DomaineSpecialiste | null
   parentValidation?: $Enums.ValidationParent
   parentComment?: string | null
+  tokenConsentementPartage?: string | null
+  consentementPartage?: boolean
+  consentementPartageAt?: Date | string | null
+  consentementPartageRefuse?: boolean
   detectedAt?: Date | string
   adminNotifiedAt?: Date | string | null
   adminValidatedAt?: Date | string | null
@@ -1070,6 +1194,10 @@ export type EvaluationRequestUpdateWithoutRapportsInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1095,6 +1223,10 @@ export type EvaluationRequestUncheckedUpdateWithoutRapportsInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1118,6 +1250,10 @@ export type EvaluationRequestCreateManyEleveInput = {
   nextSpecialist?: $Enums.DomaineSpecialiste | null
   parentValidation?: $Enums.ValidationParent
   parentComment?: string | null
+  tokenConsentementPartage?: string | null
+  consentementPartage?: boolean
+  consentementPartageAt?: Date | string | null
+  consentementPartageRefuse?: boolean
   detectedAt?: Date | string
   adminNotifiedAt?: Date | string | null
   adminValidatedAt?: Date | string | null
@@ -1140,6 +1276,10 @@ export type EvaluationRequestUpdateWithoutEleveInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1164,6 +1304,10 @@ export type EvaluationRequestUncheckedUpdateWithoutEleveInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1188,6 +1332,10 @@ export type EvaluationRequestUncheckedUpdateManyWithoutEleveInput = {
   nextSpecialist?: Prisma.NullableEnumDomaineSpecialisteFieldUpdateOperationsInput | $Enums.DomaineSpecialiste | null
   parentValidation?: Prisma.EnumValidationParentFieldUpdateOperationsInput | $Enums.ValidationParent
   parentComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenConsentementPartage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  consentementPartage?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentementPartageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentementPartageRefuse?: Prisma.BoolFieldUpdateOperationsInput | boolean
   detectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminNotifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1242,6 +1390,10 @@ export type EvaluationRequestSelect<ExtArgs extends runtime.Types.Extensions.Int
   nextSpecialist?: boolean
   parentValidation?: boolean
   parentComment?: boolean
+  tokenConsentementPartage?: boolean
+  consentementPartage?: boolean
+  consentementPartageAt?: boolean
+  consentementPartageRefuse?: boolean
   detectedAt?: boolean
   adminNotifiedAt?: boolean
   adminValidatedAt?: boolean
@@ -1269,6 +1421,10 @@ export type EvaluationRequestSelectCreateManyAndReturn<ExtArgs extends runtime.T
   nextSpecialist?: boolean
   parentValidation?: boolean
   parentComment?: boolean
+  tokenConsentementPartage?: boolean
+  consentementPartage?: boolean
+  consentementPartageAt?: boolean
+  consentementPartageRefuse?: boolean
   detectedAt?: boolean
   adminNotifiedAt?: boolean
   adminValidatedAt?: boolean
@@ -1293,6 +1449,10 @@ export type EvaluationRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   nextSpecialist?: boolean
   parentValidation?: boolean
   parentComment?: boolean
+  tokenConsentementPartage?: boolean
+  consentementPartage?: boolean
+  consentementPartageAt?: boolean
+  consentementPartageRefuse?: boolean
   detectedAt?: boolean
   adminNotifiedAt?: boolean
   adminValidatedAt?: boolean
@@ -1317,6 +1477,10 @@ export type EvaluationRequestSelectScalar = {
   nextSpecialist?: boolean
   parentValidation?: boolean
   parentComment?: boolean
+  tokenConsentementPartage?: boolean
+  consentementPartage?: boolean
+  consentementPartageAt?: boolean
+  consentementPartageRefuse?: boolean
   detectedAt?: boolean
   adminNotifiedAt?: boolean
   adminValidatedAt?: boolean
@@ -1329,7 +1493,7 @@ export type EvaluationRequestSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EvaluationRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eleveId" | "triageScores" | "primarySpecialist" | "triageEvidence" | "status" | "round" | "nextSpecialist" | "parentValidation" | "parentComment" | "detectedAt" | "adminNotifiedAt" | "adminValidatedAt" | "formSentAt" | "formCompletedAt" | "reportGeneratedAt" | "parentValidatedAt" | "parcoursAdjustedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["evaluationRequest"]>
+export type EvaluationRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eleveId" | "triageScores" | "primarySpecialist" | "triageEvidence" | "status" | "round" | "nextSpecialist" | "parentValidation" | "parentComment" | "tokenConsentementPartage" | "consentementPartage" | "consentementPartageAt" | "consentementPartageRefuse" | "detectedAt" | "adminNotifiedAt" | "adminValidatedAt" | "formSentAt" | "formCompletedAt" | "reportGeneratedAt" | "parentValidatedAt" | "parcoursAdjustedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["evaluationRequest"]>
 export type EvaluationRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   eleve?: boolean | Prisma.ProfilEleveDefaultArgs<ExtArgs>
   formulaire?: boolean | Prisma.EvaluationRequest$formulaireArgs<ExtArgs>
@@ -1361,6 +1525,10 @@ export type $EvaluationRequestPayload<ExtArgs extends runtime.Types.Extensions.I
     nextSpecialist: $Enums.DomaineSpecialiste | null
     parentValidation: $Enums.ValidationParent
     parentComment: string | null
+    tokenConsentementPartage: string | null
+    consentementPartage: boolean
+    consentementPartageAt: Date | null
+    consentementPartageRefuse: boolean
     detectedAt: Date
     adminNotifiedAt: Date | null
     adminValidatedAt: Date | null
@@ -1807,6 +1975,10 @@ export interface EvaluationRequestFieldRefs {
   readonly nextSpecialist: Prisma.FieldRef<"EvaluationRequest", 'DomaineSpecialiste'>
   readonly parentValidation: Prisma.FieldRef<"EvaluationRequest", 'ValidationParent'>
   readonly parentComment: Prisma.FieldRef<"EvaluationRequest", 'String'>
+  readonly tokenConsentementPartage: Prisma.FieldRef<"EvaluationRequest", 'String'>
+  readonly consentementPartage: Prisma.FieldRef<"EvaluationRequest", 'Boolean'>
+  readonly consentementPartageAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>
+  readonly consentementPartageRefuse: Prisma.FieldRef<"EvaluationRequest", 'Boolean'>
   readonly detectedAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>
   readonly adminNotifiedAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>
   readonly adminValidatedAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>

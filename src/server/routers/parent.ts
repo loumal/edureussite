@@ -6,7 +6,9 @@ import { Matiere, NiveauScolaire, Province, TypeCommentaireParent } from "@/gene
 const FR_LANGUE = new Set<string>(["QC","NB","FR","CI","SN","CM","BF","ML","BJ","TG","GA","CD","CG","GN","MG","NE","TD","CF","RW","BI","DJ","KM"]);
 import { getNotionById } from "@/lib/pfeq/notions";
 import bcrypt from "bcryptjs";
-import { genererPlanAccompagnement } from "@/lib/ai/accompagnement";
+import { genererPlanAccompagnement, type ProfilCognitifEvaluation } from "@/lib/ai/accompagnement";
+import type { RapportDetail } from "@/lib/evaluation/report-generator";
+import { lireAdaptations } from "@/lib/evaluation/adaptations";
 import { getContexteDocuments } from "@/lib/ai/contexte-documents";
 import { TRPCError } from "@trpc/server";
 import { motDePasseSchema } from "@/lib/auth/utils";
@@ -282,6 +284,33 @@ export const parentRouter = createTRPCRouter({
         },
       });
 
+      // Fetch latest validated evaluation with its detail report
+      const derniereEvaluation = await ctx.prisma.evaluationRequest.findFirst({
+        where: {
+          eleveId: input.eleveId,
+          status: { in: ["PARENT_VALIDATED", "PARENT_COMMENTED", "PARCOURS_ADJUSTED", "SECOND_CYCLE_PENDING", "CLOSED"] },
+        },
+        orderBy: { parcoursAdjustedAt: "desc" },
+        include: {
+          rapports: {
+            where: { type: "DETAIL", langue: "fr" },
+            take: 1,
+          },
+        },
+      });
+
+      let profilCognitif: ProfilCognitifEvaluation | null = null;
+      if (derniereEvaluation?.rapports[0]) {
+        const contenu = derniereEvaluation.rapports[0].contenu as unknown as RapportDetail;
+        profilCognitif = {
+          domaine: derniereEvaluation.primarySpecialist,
+          forces: contenu.forces ?? [],
+          zonesVulnerabilite: contenu.zonesVulnerabilite ?? [],
+          recommandationsParents: contenu.recommandationsParents ?? [],
+          ajustements: (eleve.profilCognitif as Record<string, Record<string, unknown>> | null)?.[`round_${derniereEvaluation.round}`]?.ajustements as Record<string, boolean | string> ?? {},
+        };
+      }
+
       const docs = await getContexteDocuments(ctx.prisma as unknown as PrismaClient);
       const planIA = await genererPlanAccompagnement({
         prenom: eleve.prenom,
@@ -326,6 +355,7 @@ export const parentRouter = createTRPCRouter({
           matieres: c.matieres as string[],
           date: c.createdAt.toISOString().split("T")[0],
         })),
+        profilCognitif,
       }, docs);
 
       const plan = await ctx.prisma.planAccompagnementParent.upsert({
@@ -734,6 +764,108 @@ export const parentRouter = createTRPCRouter({
           scoreMoyen: scoreMoyenSemaine,
         },
         totalExercices: tousScores.length,
+      };
+    }),
+
+  // Récupérer les adaptations actives pour un enfant (Couches 1+2)
+  getAdaptationsActives: protectedProcedure
+    .input(z.object({ eleveId: z.string().min(1).max(128) }))
+    .query(async ({ ctx, input }) => {
+      const parent = await ctx.prisma.profilParent.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true },
+      });
+      await assertParentDeEleve(ctx.prisma as unknown as PrismaClient, parent.id, input.eleveId);
+
+      const eleve = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { id: input.eleveId },
+        select: { profilCognitif: true, parcoursAdapte: true },
+      });
+
+      return lireAdaptations(eleve.profilCognitif, eleve.parcoursAdapte);
+    }),
+
+  // Récupérer l'évaluation active (toute étape) pour le banner parent dashboard
+  getEvaluationActive: protectedProcedure
+    .input(z.object({ eleveId: z.string().min(1).max(128) }))
+    .query(async ({ ctx, input }) => {
+      const parent = await ctx.prisma.profilParent.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true },
+      });
+      await assertParentDeEleve(ctx.prisma as unknown as PrismaClient, parent.id, input.eleveId);
+
+      const evaluation = await ctx.prisma.evaluationRequest.findFirst({
+        where: {
+          eleveId: input.eleveId,
+          status: { notIn: ["CLOSED", "PARENT_REFUSED"] },
+        },
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          status: true,
+          primarySpecialist: true,
+          round: true,
+          nextSpecialist: true,
+          consentementPartage: true,
+          formulaire: { select: { tokenAcces: true, completed: true } },
+        },
+      });
+
+      if (!evaluation) return null;
+
+      return {
+        evaluationId: evaluation.id,
+        status: evaluation.status as string,
+        domaine: evaluation.primarySpecialist as string,
+        round: evaluation.round,
+        nextSpecialist: evaluation.nextSpecialist as string | null,
+        consentementPartage: evaluation.consentementPartage,
+        formulaireToken: evaluation.formulaire?.tokenAcces ?? null,
+        formulaireCompleted: evaluation.formulaire?.completed ?? false,
+      };
+    }),
+
+  // Récupérer la dernière évaluation cognitive validée pour un enfant
+  getDerniereEvaluationValidee: protectedProcedure
+    .input(z.object({ eleveId: z.string().min(1).max(128) }))
+    .query(async ({ ctx, input }) => {
+      const parent = await ctx.prisma.profilParent.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true },
+      });
+      await assertParentDeEleve(ctx.prisma as unknown as PrismaClient, parent.id, input.eleveId);
+
+      const evaluation = await ctx.prisma.evaluationRequest.findFirst({
+        where: {
+          eleveId: input.eleveId,
+          status: { in: ["REPORT_READY", "PARENT_VALIDATED", "PARENT_COMMENTED", "PARENT_REFUSED", "PARCOURS_ADJUSTED", "SECOND_CYCLE_PENDING"] },
+        },
+        orderBy: { createdAt: "desc" },
+        include: {
+          formulaire: { select: { tokenAcces: true } },
+          rapports: {
+            where: { type: "DETAIL", langue: "fr" },
+            take: 1,
+          },
+        },
+      });
+
+      if (!evaluation) return null;
+
+      const rapport = evaluation.rapports[0];
+      const contenu = rapport?.contenu as unknown as import("@/lib/evaluation/report-generator").RapportDetail | undefined;
+
+      return {
+        evaluationId: evaluation.id,
+        status: evaluation.status as string,
+        domaine: evaluation.primarySpecialist as string,
+        parentValidation: evaluation.parentValidation as string | null,
+        rapportToken: evaluation.formulaire?.tokenAcces ?? null,
+        parcoursAdjustedAt: evaluation.parcoursAdjustedAt?.toISOString() ?? null,
+        forces: contenu?.forces ?? [],
+        zonesVulnerabilite: contenu?.zonesVulnerabilite ?? [],
+        recommandationsParents: contenu?.recommandationsParents ?? [],
       };
     }),
 });

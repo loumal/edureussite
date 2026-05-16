@@ -66,23 +66,27 @@ export default async function ParentDashboardPage({
     messageParent: string;
   } | null = null;
 
-  if (recommandationIaActive && enfantActif) {
-    const cached = await prisma.recommandationIA.findFirst({
-      where: {
-        eleveId: enfantActif.id,
-        parentId: session.user.id,
-        expiresAt: { gt: new Date() },
-      },
-      orderBy: { createdAt: "desc" },
-    });
-    if (cached) {
+  let evaluationActive: Awaited<ReturnType<typeof api.parent.getEvaluationActive>> = null;
+
+  if (enfantActif) {
+    const [recommandation, evaluation] = await Promise.all([
+      recommandationIaActive
+        ? prisma.recommandationIA.findFirst({
+            where: { eleveId: enfantActif.id, parentId: session.user.id, expiresAt: { gt: new Date() } },
+            orderBy: { createdAt: "desc" },
+          })
+        : Promise.resolve(null),
+      api.parent.getEvaluationActive({ eleveId: enfantActif.id }),
+    ]);
+    evaluationActive = evaluation;
+    if (recommandation) {
       recommandationData = {
-        recommande: cached.recommande,
-        urgence: cached.urgence,
-        specialites: cached.specialites,
-        raisonnement: cached.raisonnement,
-        declencheurs: cached.declencheurs,
-        messageParent: cached.messageParent,
+        recommande: recommandation.recommande,
+        urgence: recommandation.urgence,
+        specialites: recommandation.specialites,
+        raisonnement: recommandation.raisonnement,
+        declencheurs: recommandation.declencheurs,
+        messageParent: recommandation.messageParent,
       };
     }
   }
@@ -119,6 +123,14 @@ export default async function ParentDashboardPage({
               declencheurs: recommandationData.declencheurs,
               messageParent: recommandationData.messageParent,
             }}
+            prenomEnfant={enfantActif.prenom}
+          />
+        )}
+
+        {/* Banner évaluation cognitive en cours */}
+        {evaluationActive && enfantActif && (
+          <EvaluationStatusBanner
+            evaluation={evaluationActive}
             prenomEnfant={enfantActif.prenom}
           />
         )}
@@ -354,6 +366,123 @@ function EleveSection({ eleve }: { eleve: EleveShape }) {
           </div>
         </Card>
       )}
+    </div>
+  );
+}
+
+// ── Banner statut évaluation cognitive ───────────────────────────────────────
+
+const DOMAINE_LABELS_BANNER: Record<string, { fr: string; icon: string }> = {
+  NEUROPSYCHOLOGUE: { fr: "Neuropsychologue", icon: "🧠" },
+  ORTHOPEDAGOGUE:   { fr: "Orthopédagogue",   icon: "📚" },
+  ORTHOPHONISTE:    { fr: "Orthophoniste",     icon: "🗣️" },
+  ERGOTHERAPEUTE:   { fr: "Ergothérapeute",    icon: "✋" },
+  OPTOMETRISTE:     { fr: "Optométriste",      icon: "👁️" },
+  PSYCHOEDUCATEUR:  { fr: "Psychoéducateur",   icon: "💬" },
+};
+
+type EvaluationActiveData = NonNullable<Awaited<ReturnType<typeof api.parent.getEvaluationActive>>>;
+
+function EvaluationStatusBanner({
+  evaluation,
+  prenomEnfant,
+}: {
+  evaluation: EvaluationActiveData;
+  prenomEnfant: string;
+}) {
+  const domaine = DOMAINE_LABELS_BANNER[evaluation.domaine];
+
+  type BannerConfig = {
+    icon: string;
+    title: string;
+    desc: string;
+    cta?: string;
+    href?: string;
+    style: string;
+    pulse?: boolean;
+  };
+
+  const config: BannerConfig | null = (() => {
+    switch (evaluation.status) {
+      case "FORM_SENT":
+        return {
+          icon: "📋",
+          title: "Formulaire en attente",
+          desc: `Un questionnaire d'observation est prêt pour ${prenomEnfant}. Il ne prend que 10–15 minutes.`,
+          cta: "Accéder au formulaire →",
+          href: evaluation.formulaireToken ? `/evaluation/${evaluation.formulaireToken}` : undefined,
+          style: "border-[var(--color-accent)] bg-[rgba(217,79,43,0.04)]",
+          pulse: true,
+        };
+      case "FORM_IN_PROGRESS":
+        return {
+          icon: "✍️",
+          title: "Formulaire en cours",
+          desc: `Vous avez commencé le questionnaire pour ${prenomEnfant}. Terminez-le quand vous êtes disponible.`,
+          cta: "Continuer →",
+          href: evaluation.formulaireToken ? `/evaluation/${evaluation.formulaireToken}` : undefined,
+          style: "border-[var(--color-accent)] bg-[rgba(217,79,43,0.04)]",
+        };
+      case "FORM_COMPLETED":
+      case "REPORT_GENERATING":
+        return {
+          icon: "⚙️",
+          title: "Rapport en génération",
+          desc: `L'IA analyse les réponses du questionnaire de ${prenomEnfant}. Vous recevrez une notification sous peu.`,
+          style: "border-[var(--color-rule)] bg-[var(--color-paper-warm)]",
+          pulse: true,
+        };
+      case "REPORT_READY":
+        return {
+          icon: "📊",
+          title: "Rapport prêt à valider",
+          desc: `Le rapport d'évaluation de ${prenomEnfant} est disponible. Votre validation est requise.`,
+          cta: "Voir le rapport →",
+          href: evaluation.formulaireToken ? `/evaluation/rapport/${evaluation.formulaireToken}` : undefined,
+          style: "border-emerald-300 bg-emerald-50",
+          pulse: true,
+        };
+      case "SECOND_CYCLE_PENDING":
+        return {
+          icon: "🔄",
+          title: "Deuxième évaluation en préparation",
+          desc: `Suite à l'évaluation initiale, un deuxième cycle d'évaluation a été lancé pour ${prenomEnfant}. Vous serez contacté prochainement.`,
+          style: "border-violet-200 bg-violet-50",
+        };
+      default:
+        return null;
+    }
+  })();
+
+  if (!config) return null;
+
+  return (
+    <div className={`mb-6 rounded-2xl border-2 p-5 ${config.style}`}>
+      <div className="flex items-start gap-4">
+        <span className={`text-3xl flex-shrink-0 ${config.pulse ? "animate-pulse" : ""}`}>
+          {config.icon}
+        </span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <p className="text-sm font-bold text-[var(--color-ink)]">{config.title}</p>
+            {domaine && (
+              <span className="text-xs text-[var(--color-ink-soft)]">
+                · {domaine.icon} {domaine.fr}
+                {evaluation.round > 1 && ` · Round ${evaluation.round}`}
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-[var(--color-ink-soft)] leading-relaxed">{config.desc}</p>
+          {config.cta && config.href && (
+            <Link
+              href={config.href}
+              className="mt-3 inline-flex items-center text-sm font-semibold text-[var(--color-accent)] hover:underline"
+            >
+              {config.cta}
+            </Link>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

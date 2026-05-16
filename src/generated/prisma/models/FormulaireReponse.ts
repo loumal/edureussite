@@ -42,6 +42,9 @@ export type FormulaireReponseMinAggregateOutputType = {
   tokenAcces: string | null
   etapeActuelle: number | null
   completed: boolean | null
+  consentDonne: boolean | null
+  consentAt: Date | null
+  consentVersion: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +57,9 @@ export type FormulaireReponseMaxAggregateOutputType = {
   tokenAcces: string | null
   etapeActuelle: number | null
   completed: boolean | null
+  consentDonne: boolean | null
+  consentAt: Date | null
+  consentVersion: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -69,6 +75,9 @@ export type FormulaireReponseCountAggregateOutputType = {
   reponsesOuvertes: number
   etapeActuelle: number
   completed: number
+  consentDonne: number
+  consentAt: number
+  consentVersion: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -91,6 +100,9 @@ export type FormulaireReponseMinAggregateInputType = {
   tokenAcces?: true
   etapeActuelle?: true
   completed?: true
+  consentDonne?: true
+  consentAt?: true
+  consentVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -103,6 +115,9 @@ export type FormulaireReponseMaxAggregateInputType = {
   tokenAcces?: true
   etapeActuelle?: true
   completed?: true
+  consentDonne?: true
+  consentAt?: true
+  consentVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -118,6 +133,9 @@ export type FormulaireReponseCountAggregateInputType = {
   reponsesOuvertes?: true
   etapeActuelle?: true
   completed?: true
+  consentDonne?: true
+  consentAt?: true
+  consentVersion?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -220,6 +238,9 @@ export type FormulaireReponseGroupByOutputType = {
   reponsesOuvertes: runtime.JsonValue | null
   etapeActuelle: number
   completed: boolean
+  consentDonne: boolean
+  consentAt: Date | null
+  consentVersion: string | null
   createdAt: Date
   updatedAt: Date
   _count: FormulaireReponseCountAggregateOutputType | null
@@ -258,6 +279,9 @@ export type FormulaireReponseWhereInput = {
   reponsesOuvertes?: Prisma.JsonNullableFilter<"FormulaireReponse">
   etapeActuelle?: Prisma.IntFilter<"FormulaireReponse"> | number
   completed?: Prisma.BoolFilter<"FormulaireReponse"> | boolean
+  consentDonne?: Prisma.BoolFilter<"FormulaireReponse"> | boolean
+  consentAt?: Prisma.DateTimeNullableFilter<"FormulaireReponse"> | Date | string | null
+  consentVersion?: Prisma.StringNullableFilter<"FormulaireReponse"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FormulaireReponse"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FormulaireReponse"> | Date | string
   evaluation?: Prisma.XOR<Prisma.EvaluationRequestScalarRelationFilter, Prisma.EvaluationRequestWhereInput>
@@ -274,6 +298,9 @@ export type FormulaireReponseOrderByWithRelationInput = {
   reponsesOuvertes?: Prisma.SortOrderInput | Prisma.SortOrder
   etapeActuelle?: Prisma.SortOrder
   completed?: Prisma.SortOrder
+  consentDonne?: Prisma.SortOrder
+  consentAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  consentVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   evaluation?: Prisma.EvaluationRequestOrderByWithRelationInput
@@ -293,6 +320,9 @@ export type FormulaireReponseWhereUniqueInput = Prisma.AtLeast<{
   reponsesOuvertes?: Prisma.JsonNullableFilter<"FormulaireReponse">
   etapeActuelle?: Prisma.IntFilter<"FormulaireReponse"> | number
   completed?: Prisma.BoolFilter<"FormulaireReponse"> | boolean
+  consentDonne?: Prisma.BoolFilter<"FormulaireReponse"> | boolean
+  consentAt?: Prisma.DateTimeNullableFilter<"FormulaireReponse"> | Date | string | null
+  consentVersion?: Prisma.StringNullableFilter<"FormulaireReponse"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FormulaireReponse"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FormulaireReponse"> | Date | string
   evaluation?: Prisma.XOR<Prisma.EvaluationRequestScalarRelationFilter, Prisma.EvaluationRequestWhereInput>
@@ -309,6 +339,9 @@ export type FormulaireReponseOrderByWithAggregationInput = {
   reponsesOuvertes?: Prisma.SortOrderInput | Prisma.SortOrder
   etapeActuelle?: Prisma.SortOrder
   completed?: Prisma.SortOrder
+  consentDonne?: Prisma.SortOrder
+  consentAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  consentVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.FormulaireReponseCountOrderByAggregateInput
@@ -332,6 +365,9 @@ export type FormulaireReponseScalarWhereWithAggregatesInput = {
   reponsesOuvertes?: Prisma.JsonNullableWithAggregatesFilter<"FormulaireReponse">
   etapeActuelle?: Prisma.IntWithAggregatesFilter<"FormulaireReponse"> | number
   completed?: Prisma.BoolWithAggregatesFilter<"FormulaireReponse"> | boolean
+  consentDonne?: Prisma.BoolWithAggregatesFilter<"FormulaireReponse"> | boolean
+  consentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FormulaireReponse"> | Date | string | null
+  consentVersion?: Prisma.StringNullableWithAggregatesFilter<"FormulaireReponse"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FormulaireReponse"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FormulaireReponse"> | Date | string
 }
@@ -346,6 +382,9 @@ export type FormulaireReponseCreateInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: number
   completed?: boolean
+  consentDonne?: boolean
+  consentAt?: Date | string | null
+  consentVersion?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   evaluation: Prisma.EvaluationRequestCreateNestedOneWithoutFormulaireInput
@@ -362,6 +401,9 @@ export type FormulaireReponseUncheckedCreateInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: number
   completed?: boolean
+  consentDonne?: boolean
+  consentAt?: Date | string | null
+  consentVersion?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -376,6 +418,9 @@ export type FormulaireReponseUpdateInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: Prisma.IntFieldUpdateOperationsInput | number
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentDonne?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   evaluation?: Prisma.EvaluationRequestUpdateOneRequiredWithoutFormulaireNestedInput
@@ -392,6 +437,9 @@ export type FormulaireReponseUncheckedUpdateInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: Prisma.IntFieldUpdateOperationsInput | number
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentDonne?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -407,6 +455,9 @@ export type FormulaireReponseCreateManyInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: number
   completed?: boolean
+  consentDonne?: boolean
+  consentAt?: Date | string | null
+  consentVersion?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -421,6 +472,9 @@ export type FormulaireReponseUpdateManyMutationInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: Prisma.IntFieldUpdateOperationsInput | number
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentDonne?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -436,6 +490,9 @@ export type FormulaireReponseUncheckedUpdateManyInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: Prisma.IntFieldUpdateOperationsInput | number
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentDonne?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -456,6 +513,9 @@ export type FormulaireReponseCountOrderByAggregateInput = {
   reponsesOuvertes?: Prisma.SortOrder
   etapeActuelle?: Prisma.SortOrder
   completed?: Prisma.SortOrder
+  consentDonne?: Prisma.SortOrder
+  consentAt?: Prisma.SortOrder
+  consentVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -472,6 +532,9 @@ export type FormulaireReponseMaxOrderByAggregateInput = {
   tokenAcces?: Prisma.SortOrder
   etapeActuelle?: Prisma.SortOrder
   completed?: Prisma.SortOrder
+  consentDonne?: Prisma.SortOrder
+  consentAt?: Prisma.SortOrder
+  consentVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -484,6 +547,9 @@ export type FormulaireReponseMinOrderByAggregateInput = {
   tokenAcces?: Prisma.SortOrder
   etapeActuelle?: Prisma.SortOrder
   completed?: Prisma.SortOrder
+  consentDonne?: Prisma.SortOrder
+  consentAt?: Prisma.SortOrder
+  consentVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -534,6 +600,9 @@ export type FormulaireReponseCreateWithoutEvaluationInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: number
   completed?: boolean
+  consentDonne?: boolean
+  consentAt?: Date | string | null
+  consentVersion?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -548,6 +617,9 @@ export type FormulaireReponseUncheckedCreateWithoutEvaluationInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: number
   completed?: boolean
+  consentDonne?: boolean
+  consentAt?: Date | string | null
+  consentVersion?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -578,6 +650,9 @@ export type FormulaireReponseUpdateWithoutEvaluationInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: Prisma.IntFieldUpdateOperationsInput | number
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentDonne?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -592,6 +667,9 @@ export type FormulaireReponseUncheckedUpdateWithoutEvaluationInput = {
   reponsesOuvertes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   etapeActuelle?: Prisma.IntFieldUpdateOperationsInput | number
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentDonne?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  consentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -609,6 +687,9 @@ export type FormulaireReponseSelect<ExtArgs extends runtime.Types.Extensions.Int
   reponsesOuvertes?: boolean
   etapeActuelle?: boolean
   completed?: boolean
+  consentDonne?: boolean
+  consentAt?: boolean
+  consentVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   evaluation?: boolean | Prisma.EvaluationRequestDefaultArgs<ExtArgs>
@@ -625,6 +706,9 @@ export type FormulaireReponseSelectCreateManyAndReturn<ExtArgs extends runtime.T
   reponsesOuvertes?: boolean
   etapeActuelle?: boolean
   completed?: boolean
+  consentDonne?: boolean
+  consentAt?: boolean
+  consentVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   evaluation?: boolean | Prisma.EvaluationRequestDefaultArgs<ExtArgs>
@@ -641,6 +725,9 @@ export type FormulaireReponseSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   reponsesOuvertes?: boolean
   etapeActuelle?: boolean
   completed?: boolean
+  consentDonne?: boolean
+  consentAt?: boolean
+  consentVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   evaluation?: boolean | Prisma.EvaluationRequestDefaultArgs<ExtArgs>
@@ -657,11 +744,14 @@ export type FormulaireReponseSelectScalar = {
   reponsesOuvertes?: boolean
   etapeActuelle?: boolean
   completed?: boolean
+  consentDonne?: boolean
+  consentAt?: boolean
+  consentVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FormulaireReponseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "evaluationId" | "domaine" | "langue" | "tokenAcces" | "reponsesEchelle" | "reponsesAnamnese" | "reponsesOuvertes" | "etapeActuelle" | "completed" | "createdAt" | "updatedAt", ExtArgs["result"]["formulaireReponse"]>
+export type FormulaireReponseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "evaluationId" | "domaine" | "langue" | "tokenAcces" | "reponsesEchelle" | "reponsesAnamnese" | "reponsesOuvertes" | "etapeActuelle" | "completed" | "consentDonne" | "consentAt" | "consentVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["formulaireReponse"]>
 export type FormulaireReponseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   evaluation?: boolean | Prisma.EvaluationRequestDefaultArgs<ExtArgs>
 }
@@ -688,6 +778,9 @@ export type $FormulaireReponsePayload<ExtArgs extends runtime.Types.Extensions.I
     reponsesOuvertes: runtime.JsonValue | null
     etapeActuelle: number
     completed: boolean
+    consentDonne: boolean
+    consentAt: Date | null
+    consentVersion: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["formulaireReponse"]>
@@ -1124,6 +1217,9 @@ export interface FormulaireReponseFieldRefs {
   readonly reponsesOuvertes: Prisma.FieldRef<"FormulaireReponse", 'Json'>
   readonly etapeActuelle: Prisma.FieldRef<"FormulaireReponse", 'Int'>
   readonly completed: Prisma.FieldRef<"FormulaireReponse", 'Boolean'>
+  readonly consentDonne: Prisma.FieldRef<"FormulaireReponse", 'Boolean'>
+  readonly consentAt: Prisma.FieldRef<"FormulaireReponse", 'DateTime'>
+  readonly consentVersion: Prisma.FieldRef<"FormulaireReponse", 'String'>
   readonly createdAt: Prisma.FieldRef<"FormulaireReponse", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FormulaireReponse", 'DateTime'>
 }

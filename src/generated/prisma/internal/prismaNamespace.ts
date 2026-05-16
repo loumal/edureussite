@@ -4721,6 +4721,7 @@ export const ProfilEleveScalarFieldEnum = {
   anxieteScolaire: 'anxieteScolaire',
   autresBesoins: 'autresBesoins',
   profilCognitif: 'profilCognitif',
+  parcoursAdapte: 'parcoursAdapte',
   centresInteret: 'centresInteret',
   sportFavori: 'sportFavori',
   universMediatique: 'universMediatique',
@@ -5509,6 +5510,10 @@ export const EvaluationRequestScalarFieldEnum = {
   nextSpecialist: 'nextSpecialist',
   parentValidation: 'parentValidation',
   parentComment: 'parentComment',
+  tokenConsentementPartage: 'tokenConsentementPartage',
+  consentementPartage: 'consentementPartage',
+  consentementPartageAt: 'consentementPartageAt',
+  consentementPartageRefuse: 'consentementPartageRefuse',
   detectedAt: 'detectedAt',
   adminNotifiedAt: 'adminNotifiedAt',
   adminValidatedAt: 'adminValidatedAt',
@@ -5535,6 +5540,9 @@ export const FormulaireReponseScalarFieldEnum = {
   reponsesOuvertes: 'reponsesOuvertes',
   etapeActuelle: 'etapeActuelle',
   completed: 'completed',
+  consentDonne: 'consentDonne',
+  consentAt: 'consentAt',
+  consentVersion: 'consentVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

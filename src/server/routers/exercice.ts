@@ -3,6 +3,7 @@ import { z } from "zod";
 import { generateExercice, genererFeedback, genererEpreuve, genererFeedbackEpreuve, generateExerciceDepuisDocument, type EpreuveGeneree } from "@/lib/ai/exercice";
 import { genererCours } from "@/lib/ai/cours";
 import { getContexteDocuments } from "@/lib/ai/contexte-documents";
+import { lireAdaptations } from "@/lib/evaluation/adaptations";
 import { Matiere, TypeExercice, NiveauDifficulte, StatutExercice } from "@/generated/prisma";
 import { waitUntil } from "@vercel/functions";
 import { detecterEtCreerSurprise } from "@/lib/surprises/detecter-jalon";
@@ -56,6 +57,25 @@ export const exerciceRouter = createTRPCRouter({
         (s) => !input.type || s.typeQuestion === input.type
       ) ?? structureAnalysee?.sections[0] ?? null;
 
+      // Couches 1+2 : lire les adaptations cognitives validées
+      const adaptations = lireAdaptations(profil.profilCognitif, profil.parcoursAdapte);
+
+      // Appliquer les contraintes de parcours adapté sur le type d'exercice demandé
+      const typeEffectif = (() => {
+        if (!input.type) return undefined;
+        if (adaptations.parcours.typeExercicesAEviter.includes(input.type)) {
+          // Basculer vers un type privilégié si disponible
+          return (adaptations.parcours.typeExercicesPrivilegies[0] as typeof input.type | undefined) ?? input.type;
+        }
+        return input.type;
+      })();
+
+      // Appliquer le niveau de départ recommandé si aucun n'est spécifié
+      const niveauEffectif = input.difficulteChoisie
+        ?? (adaptations.parcours.niveauDifficulteDepart !== "ATTENDU"
+          ? adaptations.parcours.niveauDifficulteDepart as NiveauDifficulte
+          : undefined);
+
       let exerciceData;
       try {
         exerciceData = await generateExercice({
@@ -73,15 +93,16 @@ export const exerciceRouter = createTRPCRouter({
             environnement: profil.environnement,
             personnalite: profil.personnalite as string[],
             objectifScolaire: profil.objectifScolaire,
+            narratifAdaptations: adaptations.narratifPourIA || undefined,
           },
           matiere: input.matiere,
-          type: input.type,
+          type: typeEffectif,
           niveauActuel: niveauMatiere?.niveau ?? "ATTENDU",
           etatEmotionnel: dernierCheckIn?.etat,
           competencePFEQ: input.competencePFEQ,
           notions: input.notions,
           contexteDocuments: contexteDocuments || undefined,
-          difficulteChoisie: input.difficulteChoisie,
+          difficulteChoisie: niveauEffectif,
           lacunes: niveauMatiere?.lacunes?.length ? niveauMatiere.lacunes : undefined,
           modeleReference: modeleChoisi && structureAnalysee ? {
             titre: modeleChoisi.titre,

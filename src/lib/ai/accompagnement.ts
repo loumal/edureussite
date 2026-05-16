@@ -18,6 +18,14 @@ interface CommentaireEleveResume {
   date: string;
 }
 
+export interface ProfilCognitifEvaluation {
+  domaine: string;
+  forces: string[];
+  zonesVulnerabilite: string[];
+  recommandationsParents: string[];
+  ajustements: Record<string, boolean | string>;
+}
+
 interface ProfilPourAccompagnement {
   prenom: string;
   nom: string;
@@ -36,6 +44,7 @@ interface ProfilPourAccompagnement {
   planActif: { titre: string; objectifs: { titre: string; atteint: boolean; matiere: string }[] } | null;
   commentairesParent?: CommentaireParentResume[];
   commentairesEleve?: CommentaireEleveResume[];
+  profilCognitif?: ProfilCognitifEvaluation | null;
 }
 
 export interface StrategieAccompagnement {
@@ -124,6 +133,15 @@ const MATIERES_LABELS: Record<string, string> = {
 const ETATS_LABELS: Record<string, string> = {
   TRES_BIEN: "très bien", BIEN: "bien", CORRECT: "correct",
   FATIGUE: "fatigué(e)", STRESSE: "stressé(e)", TRISTE: "triste",
+};
+
+const DOMAINE_LABELS: Record<string, string> = {
+  NEUROPSYCHOLOGUE: "Neuropsychologue",
+  ORTHOPEDAGOGUE: "Orthopédagogue",
+  ORTHOPHONISTE: "Orthophoniste",
+  ERGOTHERAPEUTE: "Ergothérapeute",
+  OPTOMETRISTE: "Optométriste",
+  PSYCHOEDUCATEUR: "Psychoéducateur",
 };
 
 export async function genererPlanAccompagnement(
@@ -216,6 +234,24 @@ ${profil.commentairesEleve.map(c => {
 }).join("\n")}
 TRÈS IMPORTANT : L'élève a exprimé lui-même ces besoins. Intégrez-les directement dans vos recommandations au parent — dites-lui comment l'aider sur ces points précis.` : ""}
 
+${profil.profilCognitif ? `
+═══ PROFIL COGNITIF (ÉVALUATION SPÉCIALISÉE) ═══
+Un spécialiste (${DOMAINE_LABELS[profil.profilCognitif.domaine] ?? profil.profilCognitif.domaine}) a évalué cet enfant et voici les résultats :
+
+• Forces identifiées par le spécialiste :
+${profil.profilCognitif.forces.map(f => `  - ${f}`).join("\n") || "  Aucune force documentée"}
+
+• Zones nécessitant un soutien selon le spécialiste :
+${profil.profilCognitif.zonesVulnerabilite.map(z => `  - ${z}`).join("\n") || "  Aucune zone documentée"}
+
+• Recommandations du spécialiste pour les parents :
+${profil.profilCognitif.recommandationsParents.map(r => `  - ${r}`).join("\n") || "  Aucune recommandation documentée"}
+
+• Ajustements validés par le parent :
+${Object.entries(profil.profilCognitif.ajustements).filter(([, v]) => v === true || (typeof v === "string" && v)).map(([k, v]) => `  - ${k}${typeof v === "string" ? ` : ${v}` : ""}`).join("\n") || "  Aucun ajustement spécifique"}
+
+TRÈS IMPORTANT : Ce rapport a été validé par le parent. Intégrez ces résultats comme base prioritaire de votre analyse. Les forces et zones de vulnérabilité identifiées par le spécialiste doivent orienter directement vos recommandations concrètes.
+` : ""}
 ═══ MISSION ═══
 Produisez un plan d'accompagnement parental COMPLET, CONCRET et BIENVEILLANT.
 Ce plan est destiné AU PARENT — pas à l'enseignant ni à l'enfant directement.

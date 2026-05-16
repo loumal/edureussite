@@ -149,6 +149,7 @@ export type ProfilEleveCountAggregateOutputType = {
   anxieteScolaire: number
   autresBesoins: number
   profilCognitif: number
+  parcoursAdapte: number
   centresInteret: number
   sportFavori: number
   universMediatique: number
@@ -298,6 +299,7 @@ export type ProfilEleveCountAggregateInputType = {
   anxieteScolaire?: true
   autresBesoins?: true
   profilCognitif?: true
+  parcoursAdapte?: true
   centresInteret?: true
   sportFavori?: true
   universMediatique?: true
@@ -430,6 +432,7 @@ export type ProfilEleveGroupByOutputType = {
   anxieteScolaire: boolean
   autresBesoins: string | null
   profilCognitif: runtime.JsonValue | null
+  parcoursAdapte: runtime.JsonValue | null
   centresInteret: string[]
   sportFavori: string | null
   universMediatique: string | null
@@ -498,6 +501,7 @@ export type ProfilEleveWhereInput = {
   anxieteScolaire?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   autresBesoins?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   profilCognitif?: Prisma.JsonNullableFilter<"ProfilEleve">
+  parcoursAdapte?: Prisma.JsonNullableFilter<"ProfilEleve">
   centresInteret?: Prisma.StringNullableListFilter<"ProfilEleve">
   sportFavori?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   universMediatique?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
@@ -570,6 +574,7 @@ export type ProfilEleveOrderByWithRelationInput = {
   anxieteScolaire?: Prisma.SortOrder
   autresBesoins?: Prisma.SortOrderInput | Prisma.SortOrder
   profilCognitif?: Prisma.SortOrderInput | Prisma.SortOrder
+  parcoursAdapte?: Prisma.SortOrderInput | Prisma.SortOrder
   centresInteret?: Prisma.SortOrder
   sportFavori?: Prisma.SortOrderInput | Prisma.SortOrder
   universMediatique?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -645,6 +650,7 @@ export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
   anxieteScolaire?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   autresBesoins?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   profilCognitif?: Prisma.JsonNullableFilter<"ProfilEleve">
+  parcoursAdapte?: Prisma.JsonNullableFilter<"ProfilEleve">
   centresInteret?: Prisma.StringNullableListFilter<"ProfilEleve">
   sportFavori?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   universMediatique?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
@@ -717,6 +723,7 @@ export type ProfilEleveOrderByWithAggregationInput = {
   anxieteScolaire?: Prisma.SortOrder
   autresBesoins?: Prisma.SortOrderInput | Prisma.SortOrder
   profilCognitif?: Prisma.SortOrderInput | Prisma.SortOrder
+  parcoursAdapte?: Prisma.SortOrderInput | Prisma.SortOrder
   centresInteret?: Prisma.SortOrder
   sportFavori?: Prisma.SortOrderInput | Prisma.SortOrder
   universMediatique?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -770,6 +777,7 @@ export type ProfilEleveScalarWhereWithAggregatesInput = {
   anxieteScolaire?: Prisma.BoolWithAggregatesFilter<"ProfilEleve"> | boolean
   autresBesoins?: Prisma.StringNullableWithAggregatesFilter<"ProfilEleve"> | string | null
   profilCognitif?: Prisma.JsonNullableWithAggregatesFilter<"ProfilEleve">
+  parcoursAdapte?: Prisma.JsonNullableWithAggregatesFilter<"ProfilEleve">
   centresInteret?: Prisma.StringNullableListFilter<"ProfilEleve">
   sportFavori?: Prisma.StringNullableWithAggregatesFilter<"ProfilEleve"> | string | null
   universMediatique?: Prisma.StringNullableWithAggregatesFilter<"ProfilEleve"> | string | null
@@ -814,6 +822,7 @@ export type ProfilEleveCreateInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -885,6 +894,7 @@ export type ProfilEleveUncheckedCreateInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -954,6 +964,7 @@ export type ProfilEleveUpdateInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1025,6 +1036,7 @@ export type ProfilEleveUncheckedUpdateInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1095,6 +1107,7 @@ export type ProfilEleveCreateManyInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -1139,6 +1152,7 @@ export type ProfilEleveUpdateManyMutationInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1183,6 +1197,7 @@ export type ProfilEleveUncheckedUpdateManyInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1249,6 +1264,7 @@ export type ProfilEleveCountOrderByAggregateInput = {
   anxieteScolaire?: Prisma.SortOrder
   autresBesoins?: Prisma.SortOrder
   profilCognitif?: Prisma.SortOrder
+  parcoursAdapte?: Prisma.SortOrder
   centresInteret?: Prisma.SortOrder
   sportFavori?: Prisma.SortOrder
   universMediatique?: Prisma.SortOrder
@@ -1923,6 +1939,7 @@ export type ProfilEleveCreateWithoutUserInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -1992,6 +2009,7 @@ export type ProfilEleveUncheckedCreateWithoutUserInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2077,6 +2095,7 @@ export type ProfilEleveUpdateWithoutUserInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2146,6 +2165,7 @@ export type ProfilEleveUncheckedUpdateWithoutUserInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2215,6 +2235,7 @@ export type ProfilEleveCreateWithoutMiraMessagesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2285,6 +2306,7 @@ export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2369,6 +2391,7 @@ export type ProfilEleveUpdateWithoutMiraMessagesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2439,6 +2462,7 @@ export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2507,6 +2531,7 @@ export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2577,6 +2602,7 @@ export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2661,6 +2687,7 @@ export type ProfilEleveUpdateWithoutNiveauxMatieresInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2731,6 +2758,7 @@ export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2799,6 +2827,7 @@ export type ProfilEleveCreateWithoutParentsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2869,6 +2898,7 @@ export type ProfilEleveUncheckedCreateWithoutParentsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -2962,6 +2992,7 @@ export type ProfilEleveScalarWhereInput = {
   anxieteScolaire?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   autresBesoins?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   profilCognitif?: Prisma.JsonNullableFilter<"ProfilEleve">
+  parcoursAdapte?: Prisma.JsonNullableFilter<"ProfilEleve">
   centresInteret?: Prisma.StringNullableListFilter<"ProfilEleve">
   sportFavori?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   universMediatique?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
@@ -3006,6 +3037,7 @@ export type ProfilEleveCreateWithoutPlansAccompagnementInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3076,6 +3108,7 @@ export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3160,6 +3193,7 @@ export type ProfilEleveUpdateWithoutPlansAccompagnementInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3230,6 +3264,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3298,6 +3333,7 @@ export type ProfilEleveCreateWithoutCoursRemediationInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3368,6 +3404,7 @@ export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3452,6 +3489,7 @@ export type ProfilEleveUpdateWithoutCoursRemediationInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3522,6 +3560,7 @@ export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3590,6 +3629,7 @@ export type ProfilEleveCreateWithoutSurprisesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3660,6 +3700,7 @@ export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3744,6 +3785,7 @@ export type ProfilEleveUpdateWithoutSurprisesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3814,6 +3856,7 @@ export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3882,6 +3925,7 @@ export type ProfilEleveCreateWithoutCommentairesParentsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -3952,6 +3996,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4036,6 +4081,7 @@ export type ProfilEleveUpdateWithoutCommentairesParentsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4106,6 +4152,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4174,6 +4221,7 @@ export type ProfilEleveCreateWithoutEnseignantInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4244,6 +4292,7 @@ export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4338,6 +4387,7 @@ export type ProfilEleveCreateWithoutPlanActionsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4408,6 +4458,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4492,6 +4543,7 @@ export type ProfilEleveUpdateWithoutPlanActionsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4562,6 +4614,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4630,6 +4683,7 @@ export type ProfilEleveCreateWithoutExercicesAssignesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4700,6 +4754,7 @@ export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4784,6 +4839,7 @@ export type ProfilEleveUpdateWithoutExercicesAssignesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4854,6 +4910,7 @@ export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4922,6 +4979,7 @@ export type ProfilEleveCreateWithoutSessionsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -4992,6 +5050,7 @@ export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5076,6 +5135,7 @@ export type ProfilEleveUpdateWithoutSessionsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5146,6 +5206,7 @@ export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5214,6 +5275,7 @@ export type ProfilEleveCreateWithoutCheckInsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5284,6 +5346,7 @@ export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5368,6 +5431,7 @@ export type ProfilEleveUpdateWithoutCheckInsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5438,6 +5502,7 @@ export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5506,6 +5571,7 @@ export type ProfilEleveCreateWithoutBadgesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5576,6 +5642,7 @@ export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5660,6 +5727,7 @@ export type ProfilEleveUpdateWithoutBadgesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5730,6 +5798,7 @@ export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -5798,6 +5867,7 @@ export type ProfilEleveCreateWithoutCommentairesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5868,6 +5938,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -5952,6 +6023,7 @@ export type ProfilEleveUpdateWithoutCommentairesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6022,6 +6094,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6090,6 +6163,7 @@ export type ProfilEleveCreateWithoutCommentairesEleveInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6160,6 +6234,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6244,6 +6319,7 @@ export type ProfilEleveUpdateWithoutCommentairesEleveInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6314,6 +6390,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6382,6 +6459,7 @@ export type ProfilEleveCreateWithoutDemandesRencontreInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6452,6 +6530,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6536,6 +6615,7 @@ export type ProfilEleveUpdateWithoutDemandesRencontreInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6606,6 +6686,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6674,6 +6755,7 @@ export type ProfilEleveCreateWithoutRendezVousInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6744,6 +6826,7 @@ export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -6828,6 +6911,7 @@ export type ProfilEleveUpdateWithoutRendezVousInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6898,6 +6982,7 @@ export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -6966,6 +7051,7 @@ export type ProfilEleveCreateWithoutRecommandationsIAInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7036,6 +7122,7 @@ export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7120,6 +7207,7 @@ export type ProfilEleveUpdateWithoutRecommandationsIAInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7190,6 +7278,7 @@ export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7258,6 +7347,7 @@ export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7328,6 +7418,7 @@ export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7412,6 +7503,7 @@ export type ProfilEleveUpdateWithoutDefJourCompletionsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7482,6 +7574,7 @@ export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7550,6 +7643,7 @@ export type ProfilEleveCreateWithoutMissionsHebdoInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7620,6 +7714,7 @@ export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7704,6 +7799,7 @@ export type ProfilEleveUpdateWithoutMissionsHebdoInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7774,6 +7870,7 @@ export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -7842,6 +7939,7 @@ export type ProfilEleveCreateWithoutObjectifsNotesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7912,6 +8010,7 @@ export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -7996,6 +8095,7 @@ export type ProfilEleveUpdateWithoutObjectifsNotesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8066,6 +8166,7 @@ export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8134,6 +8235,7 @@ export type ProfilEleveCreateWithoutPlanifNotionsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8204,6 +8306,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8288,6 +8391,7 @@ export type ProfilEleveUpdateWithoutPlanifNotionsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8358,6 +8462,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8426,6 +8531,7 @@ export type ProfilEleveCreateWithoutDisponibiliteInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8496,6 +8602,7 @@ export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8580,6 +8687,7 @@ export type ProfilEleveUpdateWithoutDisponibiliteInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8650,6 +8758,7 @@ export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8718,6 +8827,7 @@ export type ProfilEleveCreateWithoutDemandesJeuxInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8788,6 +8898,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -8872,6 +8983,7 @@ export type ProfilEleveUpdateWithoutDemandesJeuxInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -8942,6 +9054,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9010,6 +9123,7 @@ export type ProfilEleveCreateWithoutPartiesMultiInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -9080,6 +9194,7 @@ export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -9164,6 +9279,7 @@ export type ProfilEleveUpdateWithoutPartiesMultiInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9234,6 +9350,7 @@ export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9302,6 +9419,7 @@ export type ProfilEleveCreateWithoutEvaluationsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -9372,6 +9490,7 @@ export type ProfilEleveUncheckedCreateWithoutEvaluationsInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -9456,6 +9575,7 @@ export type ProfilEleveUpdateWithoutEvaluationsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9526,6 +9646,7 @@ export type ProfilEleveUncheckedUpdateWithoutEvaluationsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9594,6 +9715,7 @@ export type ProfilEleveUpdateWithoutParentsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9664,6 +9786,7 @@ export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9733,6 +9856,7 @@ export type ProfilEleveUncheckedUpdateManyWithoutParentsInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9778,6 +9902,7 @@ export type ProfilEleveCreateManyEnseignantInput = {
   anxieteScolaire?: boolean
   autresBesoins?: string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
   sportFavori?: string | null
   universMediatique?: string | null
@@ -9821,6 +9946,7 @@ export type ProfilEleveUpdateWithoutEnseignantInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9891,6 +10017,7 @@ export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -9960,6 +10087,7 @@ export type ProfilEleveUncheckedUpdateManyWithoutEnseignantInput = {
   anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
   autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
   sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -10242,6 +10370,7 @@ export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   anxieteScolaire?: boolean
   autresBesoins?: boolean
   profilCognitif?: boolean
+  parcoursAdapte?: boolean
   centresInteret?: boolean
   sportFavori?: boolean
   universMediatique?: boolean
@@ -10315,6 +10444,7 @@ export type ProfilEleveSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   anxieteScolaire?: boolean
   autresBesoins?: boolean
   profilCognitif?: boolean
+  parcoursAdapte?: boolean
   centresInteret?: boolean
   sportFavori?: boolean
   universMediatique?: boolean
@@ -10362,6 +10492,7 @@ export type ProfilEleveSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   anxieteScolaire?: boolean
   autresBesoins?: boolean
   profilCognitif?: boolean
+  parcoursAdapte?: boolean
   centresInteret?: boolean
   sportFavori?: boolean
   universMediatique?: boolean
@@ -10409,6 +10540,7 @@ export type ProfilEleveSelectScalar = {
   anxieteScolaire?: boolean
   autresBesoins?: boolean
   profilCognitif?: boolean
+  parcoursAdapte?: boolean
   centresInteret?: boolean
   sportFavori?: boolean
   universMediatique?: boolean
@@ -10433,7 +10565,7 @@ export type ProfilEleveSelectScalar = {
   miraSecsBonus?: boolean
 }
 
-export type ProfilEleveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "codeAcces" | "prenom" | "nom" | "dateNaissance" | "niveauScolaire" | "ecole" | "styleApprentissage" | "vitesseTraitement" | "niveauMotivation" | "facteursStress" | "matieresPreferees" | "matieresRedoutees" | "tdah" | "dyslexie" | "dyscalculie" | "anxieteScolaire" | "autresBesoins" | "profilCognitif" | "centresInteret" | "sportFavori" | "universMediatique" | "autresPassions" | "environnement" | "personnalite" | "objectifScolaire" | "streakJours" | "streakMaxJours" | "streakBoucliers" | "derniereConnexion" | "totalPoints" | "niveauJeu" | "cosmetiques" | "onboardingComplete" | "onboardingEtape" | "enseignantId" | "createdAt" | "updatedAt" | "miraSecsUsedWeek" | "miraWeekOf" | "miraSecsBonus", ExtArgs["result"]["profilEleve"]>
+export type ProfilEleveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "codeAcces" | "prenom" | "nom" | "dateNaissance" | "niveauScolaire" | "ecole" | "styleApprentissage" | "vitesseTraitement" | "niveauMotivation" | "facteursStress" | "matieresPreferees" | "matieresRedoutees" | "tdah" | "dyslexie" | "dyscalculie" | "anxieteScolaire" | "autresBesoins" | "profilCognitif" | "parcoursAdapte" | "centresInteret" | "sportFavori" | "universMediatique" | "autresPassions" | "environnement" | "personnalite" | "objectifScolaire" | "streakJours" | "streakMaxJours" | "streakBoucliers" | "derniereConnexion" | "totalPoints" | "niveauJeu" | "cosmetiques" | "onboardingComplete" | "onboardingEtape" | "enseignantId" | "createdAt" | "updatedAt" | "miraSecsUsedWeek" | "miraWeekOf" | "miraSecsBonus", ExtArgs["result"]["profilEleve"]>
 export type ProfilEleveInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enseignant?: boolean | Prisma.ProfilEleve$enseignantArgs<ExtArgs>
@@ -10525,6 +10657,7 @@ export type $ProfilElevePayload<ExtArgs extends runtime.Types.Extensions.Interna
     anxieteScolaire: boolean
     autresBesoins: string | null
     profilCognitif: runtime.JsonValue | null
+    parcoursAdapte: runtime.JsonValue | null
     centresInteret: string[]
     sportFavori: string | null
     universMediatique: string | null
@@ -11017,6 +11150,7 @@ export interface ProfilEleveFieldRefs {
   readonly anxieteScolaire: Prisma.FieldRef<"ProfilEleve", 'Boolean'>
   readonly autresBesoins: Prisma.FieldRef<"ProfilEleve", 'String'>
   readonly profilCognitif: Prisma.FieldRef<"ProfilEleve", 'Json'>
+  readonly parcoursAdapte: Prisma.FieldRef<"ProfilEleve", 'Json'>
   readonly centresInteret: Prisma.FieldRef<"ProfilEleve", 'String[]'>
   readonly sportFavori: Prisma.FieldRef<"ProfilEleve", 'String'>
   readonly universMediatique: Prisma.FieldRef<"ProfilEleve", 'String'>

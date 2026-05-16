@@ -337,7 +337,8 @@ model ProfilEleve {
   autresBesoins   String?
 
   // ── Profil cognitif issu de l'évaluation multi-spécialistes ───────────────
-  profilCognitif  Json?   // ajustements parcours : { attentionFragile, memoireTravailFaible, forceVerbale, ... }
+  profilCognitif  Json?   // ajustements parcours : { round_N: { domaineEvalue, forces, zonesVulnerabilite, ajustements } }
+  parcoursAdapte  Json?   // document généré par l'agent IA post-évaluation : { notionsPrioritaires, typeExercicesPrivilegies, dureeSessionMax, ... }
 
   // Univers personnel — personnalisation des exercices
   centresInteret    String[]  // ex: ["SOCCER", "MANGA", "JEUX_VIDEO"]
@@ -1419,6 +1420,12 @@ model EvaluationRequest {
   parentValidation ValidationParent @default(PENDING)
   parentComment    String?
 
+  // Consentement partage avec spécialiste suivant (cycle secondaire)
+  tokenConsentementPartage  String?   @unique
+  consentementPartage       Boolean   @default(false)
+  consentementPartageAt     DateTime?
+  consentementPartageRefuse Boolean   @default(false)
+
   // Timestamps
   detectedAt       DateTime  @default(now())
   adminNotifiedAt  DateTime?
@@ -1458,6 +1465,11 @@ model FormulaireReponse {
   // Sauvegarde progressive
   etapeActuelle Int     @default(1)
   completed     Boolean @default(false)
+
+  // Consentement explicite du parent (RGPD / Loi 25 QC)
+  consentDonne   Boolean   @default(false)
+  consentAt      DateTime?
+  consentVersion String?   // ex: "v1.0-2024" — version du texte de consentement accepté
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

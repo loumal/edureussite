@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma/client";
 import { getNextSpecialist } from "./triage";
+import { randomUUID } from "crypto";
 import type { DomaineSpecialiste } from "@/generated/prisma";
 import type { RapportDetail } from "./report-generator";
 
@@ -66,19 +67,81 @@ export async function ajusterParcoursApresValidation(evaluationId: string): Prom
       },
     });
 
-    // ── Détection du cycle secondaire ──────────────────────────────────────
+    // ── Agent de redesign de parcours (Couche 2) ───────────────────────────
+    // Déclenché en fire-and-forget — génère parcoursAdapte sur ProfilEleve
+    const { lancerRedesignParcours } = await import("./parcours-redesign-agent");
+    void lancerRedesignParcours(evaluationId);
+
+    // ── Détection du cycle secondaire + consentement partage ──────────────
     const nextSpecialist = getNextSpecialist(triageScores, evaluation.primarySpecialist);
     if (nextSpecialist) {
+      const tokenConsentement = randomUUID();
+
+      // Stocker nextSpecialist + token de consentement, mais PAS encore SECOND_CYCLE_PENDING
+      // Le statut passera à SECOND_CYCLE_PENDING seulement après accord du parent
       await prisma.evaluationRequest.update({
         where: { id: evaluationId },
         data: {
-          status: "SECOND_CYCLE_PENDING",
           nextSpecialist,
+          tokenConsentementPartage: tokenConsentement,
+          // status reste PARCOURS_ADJUSTED jusqu'au consentement
         },
       });
+
+      // Récupérer l'email du parent pour lui envoyer la demande de consentement
+      void envoyerDemandeConsentementPartage(evaluationId, tokenConsentement, nextSpecialist);
     }
   } catch (err) {
     console.error("[parcours-adjuster] Erreur:", err);
+  }
+}
+
+/**
+ * Récupère l'email parent et envoie la demande de consentement de partage.
+ * Fire-and-forget — ne bloque pas le flux principal.
+ */
+async function envoyerDemandeConsentementPartage(
+  evaluationId: string,
+  token: string,
+  nextSpecialist: DomaineSpecialiste
+): Promise<void> {
+  try {
+    const evaluation = await prisma.evaluationRequest.findUnique({
+      where: { id: evaluationId },
+      select: {
+        primarySpecialist: true,
+        eleve: {
+          select: {
+            prenom: true,
+            nom: true,
+            parents: {
+              select: {
+                user: { select: { email: true } },
+              },
+              take: 1,
+            },
+          },
+        },
+      },
+    });
+
+    const parentEmail = evaluation?.eleve.parents[0]?.user?.email;
+    if (!parentEmail || !evaluation) return;
+
+    const appUrl = process.env.NEXTAUTH_URL ?? process.env.APP_URL ?? "https://edureussite.ca";
+    const { sendConsentementPartageSpecialiste } = await import("@/lib/email/send-consentement-partage");
+
+    await sendConsentementPartageSpecialiste({
+      parentEmail,
+      prenomEnfant: evaluation.eleve.prenom,
+      nomEnfant: evaluation.eleve.nom,
+      specialisteActuel: evaluation.primarySpecialist,
+      prochainSpecialiste: nextSpecialist,
+      tokenConsentement: token,
+      appUrl,
+    });
+  } catch (err) {
+    console.error("[parcours-adjuster] Erreur envoi email consentement:", err);
   }
 }
 
