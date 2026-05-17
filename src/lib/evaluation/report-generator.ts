@@ -79,6 +79,12 @@ const NIVEAU_LABELS_FR: Partial<Record<NiveauScolaire, string>> = {
   SECONDAIRE_1: "Secondaire 1", SECONDAIRE_2: "Secondaire 2", SECONDAIRE_3: "Secondaire 3",
   SECONDAIRE_4: "Secondaire 4", SECONDAIRE_5: "Secondaire 5",
 };
+const NIVEAU_LABELS_EN: Partial<Record<NiveauScolaire, string>> = {
+  PRIMAIRE_1: "Grade 1", PRIMAIRE_2: "Grade 2", PRIMAIRE_3: "Grade 3",
+  PRIMAIRE_4: "Grade 4", PRIMAIRE_5: "Grade 5", PRIMAIRE_6: "Grade 6",
+  SECONDAIRE_1: "Secondary 1", SECONDAIRE_2: "Secondary 2", SECONDAIRE_3: "Secondary 3",
+  SECONDAIRE_4: "Secondary 4", SECONDAIRE_5: "Secondary 5",
+};
 
 // ── Résumé des réponses pour le prompt ────────────────────────────────────
 
@@ -144,83 +150,61 @@ function resumeReponsesOuvertes(
   return lignes.join("\n") || (fr ? "Aucune réponse ouverte fournie." : "No open-ended responses provided.");
 }
 
-// ── Génération du rapport sommaire ──────────────────────────────────────────
+// ── Génération du rapport sommaire (toujours en anglais, puis traduit si FR) ──
 
 export async function genererRapportSommaire(params: {
   domaine: DomaineSpecialiste;
-  langue: "fr" | "en";
   prenomEnfant: string;
   niveauScolaire: NiveauScolaire;
   reponsesEchelle: Record<string, number>;
   reponsesOuvertes: Record<string, string>;
-}): Promise<RapportSommaire> {
-  const { domaine, langue, prenomEnfant, niveauScolaire, reponsesEchelle, reponsesOuvertes } = params;
-  const fr = langue === "fr";
+}): Promise<{ en: RapportSommaire; fr: RapportSommaire }> {
+  const { domaine, prenomEnfant, niveauScolaire, reponsesEchelle, reponsesOuvertes } = params;
   const questionnaire = getQuestionnaire(domaine);
   const anamnese = QUESTIONNAIRE_ANAMNESE;
-  const domaineLabel = fr ? DOMAINE_LABELS_FR[domaine] : DOMAINE_LABELS_EN[domaine];
-  const niveauLabel = NIVEAU_LABELS_FR[niveauScolaire] ?? niveauScolaire;
+  const domaineLabel = DOMAINE_LABELS_EN[domaine];
+  const niveauLabelEn = NIVEAU_LABELS_EN[niveauScolaire] ?? niveauScolaire;
+  const niveauLabelFr = NIVEAU_LABELS_FR[niveauScolaire] ?? niveauScolaire;
 
-  const resumeEchelle = resumeReponses(reponsesEchelle, questionnaire, langue);
-  const resumeOuvertes = resumeReponsesOuvertes(reponsesOuvertes, questionnaire, anamnese, langue);
+  // Data résumés en anglais (item labels EN)
+  const resumeEchelle = resumeReponses(reponsesEchelle, questionnaire, "en");
+  const resumeOuvertes = resumeReponsesOuvertes(reponsesOuvertes, questionnaire, anamnese, "en");
 
-  const systemPrompt = fr
-    ? `Tu es un professionnel de l'éducation spécialisé (${domaineLabel}). Tu rédiges des rapports sommaires destinés aux enseignants et à l'école — clairs, pratiques, sans jargon clinique excessif. Le rapport est basé sur un questionnaire rempli par les parents, PAS sur une évaluation clinique directe. Tu dois toujours inclure un avertissement clair à ce sujet.`
-    : `You are a specialized education professional (${domaineLabel}). You write summary reports for teachers and schools — clear, practical, without excessive clinical jargon. The report is based on a parent-completed questionnaire, NOT a direct clinical assessment. Always include a clear disclaimer.`;
+  const systemPrompt = `You are a specialized education professional (${domaineLabel}) writing a clinical summary report for teachers and schools.
 
-  const userPrompt = fr
-    ? `Génère un rapport sommaire structuré en JSON pour l'enfant ${prenomEnfant} (${niveauLabel}).
+⚠️ MANDATORY LANGUAGE RULE: Write EVERY word of your JSON output in English. The questionnaire data may contain French text — analyze it, but respond EXCLUSIVELY in English. Writing in French is not acceptable.
 
-Données du questionnaire (items cotés ≥2/3 par les parents) :
+Style: clear, practical, clinically informed, no excessive jargon. This report is based on a parent-completed questionnaire, NOT a direct clinical assessment.`;
+
+  const userPrompt = `Generate a structured summary report in JSON for the child ${prenomEnfant} (${niveauLabelEn}).
+
+Questionnaire data (items rated ≥2/3 by parents — may include French item descriptions):
 ${resumeEchelle}
 
-Réponses aux questions ouvertes :
-${resumeOuvertes}
-
-Génère un JSON avec exactement ces champs :
-{
-  "pointsSaillants": ["...", "...", "...", "...", "..."],
-  "forces": ["...", "...", "..."],
-  "recommandationsEnseignant": ["...", "...", "...", "..."],
-  "ajustementsClasse": ["...", "...", "...", "..."],
-  "avertissement": "..."
-}
-
-Rules :
-- pointsSaillants : 3-5 observations cliniques principales (neutre, factuel)
-- forces : 2-4 forces observées (positif)
-- recommandationsEnseignant : 3-5 recommandations concrètes pour la classe
-- ajustementsClasse : 3-5 ajustements pédagogiques pratiques (ex: plus de temps, support visuel)
-- avertissement : 1 phrase rappelant que ceci est basé sur un questionnaire parent et non une évaluation professionnelle directe
-- Réponds UNIQUEMENT avec le JSON, sans texte avant ou après.`
-    : `Generate a structured summary report in JSON for the child ${prenomEnfant} (${niveauLabel}).
-
-Questionnaire data (items rated ≥2/3 by parents):
-${resumeEchelle}
-
-Open-ended responses:
+Open-ended parent responses (may be in French — interpret and analyze in English):
 ${resumeOuvertes}
 
 Generate a JSON with exactly these fields:
 {
-  "pointsSaillants": ["...", "...", "...", "...", "..."],
+  "pointsSaillants": ["...", "...", "..."],
   "forces": ["...", "...", "..."],
-  "recommandationsEnseignant": ["...", "...", "...", "..."],
-  "ajustementsClasse": ["...", "...", "...", "..."],
+  "recommandationsEnseignant": ["...", "...", "..."],
+  "ajustementsClasse": ["...", "...", "..."],
   "avertissement": "..."
 }
 
 Rules:
-- pointsSaillants: 3-5 main clinical observations (neutral, factual)
-- forces: 2-4 observed strengths (positive)
-- recommandationsEnseignant: 3-5 concrete recommendations for the classroom
-- ajustementsClasse: 3-5 practical pedagogical adjustments (e.g., extra time, visual supports)
-- avertissement: 1 sentence reminding that this is based on a parent questionnaire and not a direct professional assessment
+- pointsSaillants: 3-5 main clinical observations (neutral, factual, pattern-based interpretation)
+- forces: 2-4 observed strengths identified from low-rated items and open responses
+- recommandationsEnseignant: 3-5 concrete, actionable classroom recommendations
+- ajustementsClasse: 3-5 specific pedagogical adjustments (e.g., extra time, visual cues, preferential seating)
+- avertissement: 1 sentence stating this is based on a parent questionnaire, not a direct professional assessment
+- ALL values must be in English — no French words allowed
 - Reply ONLY with the JSON, no text before or after.`;
 
   const message = await anthropic.messages.create({
     model: "claude-sonnet-4-6",
-    max_tokens: 1500,
+    max_tokens: 2000,
     system: systemPrompt,
     messages: [{ role: "user", content: userPrompt }],
   });
@@ -228,86 +212,60 @@ Rules:
 
   const raw = (message.content[0] as { type: string; text: string }).text.trim();
   const jsonMatch = raw.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error("Claude returned no valid JSON for sommaire");
+  if (!jsonMatch) throw new Error("Claude returned no valid JSON for sommaire EN");
   const parsed = JSON.parse(jsonMatch[0]);
 
-  return {
+  const dateGeneration = new Date().toISOString();
+  const baseEn: RapportSommaire = {
     type: "SOMMAIRE",
     domaine,
-    langue,
-    enfant: { prenom: prenomEnfant, niveauScolaire: niveauLabel },
-    dateGeneration: new Date().toISOString(),
+    langue: "en",
+    enfant: { prenom: prenomEnfant, niveauScolaire: niveauLabelEn },
+    dateGeneration,
     pointsSaillants: parsed.pointsSaillants ?? [],
     forces: parsed.forces ?? [],
     recommandationsEnseignant: parsed.recommandationsEnseignant ?? [],
     ajustementsClasse: parsed.ajustementsClasse ?? [],
     avertissement: parsed.avertissement ?? "",
   };
+
+  // Traduire EN → FR pour garantir contenu identique, langue correcte
+  const baseFr = await traduireRapportSommaire(baseEn, niveauLabelFr);
+  return { en: baseEn, fr: baseFr };
 }
 
-// ── Génération du rapport détaillé ──────────────────────────────────────────
+// ── Génération du rapport détaillé (toujours en anglais, puis traduit si FR) ──
 
 export async function genererRapportDetail(params: {
   domaine: DomaineSpecialiste;
-  langue: "fr" | "en";
   prenomEnfant: string;
   niveauScolaire: NiveauScolaire;
   reponsesEchelle: Record<string, number>;
   reponsesOuvertes: Record<string, string>;
-}): Promise<RapportDetail> {
-  const { domaine, langue, prenomEnfant, niveauScolaire, reponsesEchelle, reponsesOuvertes } = params;
-  const fr = langue === "fr";
+}): Promise<{ en: RapportDetail; fr: RapportDetail }> {
+  const { domaine, prenomEnfant, niveauScolaire, reponsesEchelle, reponsesOuvertes } = params;
   const questionnaire = getQuestionnaire(domaine);
   const anamnese = QUESTIONNAIRE_ANAMNESE;
-  const domaineLabel = fr ? DOMAINE_LABELS_FR[domaine] : DOMAINE_LABELS_EN[domaine];
-  const niveauLabel = NIVEAU_LABELS_FR[niveauScolaire] ?? niveauScolaire;
+  const domaineLabel = DOMAINE_LABELS_EN[domaine];
+  const niveauLabelEn = NIVEAU_LABELS_EN[niveauScolaire] ?? niveauScolaire;
+  const niveauLabelFr = NIVEAU_LABELS_FR[niveauScolaire] ?? niveauScolaire;
 
-  const resumeEchelle = resumeReponses(reponsesEchelle, questionnaire, langue);
-  const resumeOuvertes = resumeReponsesOuvertes(reponsesOuvertes, questionnaire, anamnese, langue);
+  // Data résumés en anglais
+  const resumeEchelle = resumeReponses(reponsesEchelle, questionnaire, "en");
+  const resumeOuvertes = resumeReponsesOuvertes(reponsesOuvertes, questionnaire, anamnese, "en");
 
-  const systemPrompt = fr
-    ? `Tu es un professionnel de l'éducation spécialisé (${domaineLabel}) qui rédige un rapport détaillé pour les parents. Le ton est chaleureux, empathique, rassurant tout en étant honnête. Le rapport est basé sur un questionnaire parental — tu dois toujours mentionner qu'il ne s'agit pas d'une évaluation clinique directe. Utilise "votre enfant" pour t'adresser aux parents.`
-    : `You are a specialized education professional (${domaineLabel}) writing a detailed report for parents. The tone is warm, empathetic, reassuring while being honest. The report is based on a parent questionnaire — always mention it is not a direct clinical assessment. Use "your child" when addressing parents.`;
+  const systemPrompt = `You are a specialized education professional (${domaineLabel}) writing a detailed parent report.
 
-  const userPrompt = fr
-    ? `Génère un rapport détaillé structuré en JSON pour l'enfant ${prenomEnfant} (${niveauLabel}).
+⚠️ MANDATORY LANGUAGE RULE: Write EVERY word of your JSON output in English. The questionnaire data and parent responses may be in French — analyze and interpret them, but write ALL your output exclusively in English. Any French word in your output is a failure.
 
-Données du questionnaire (items cotés ≥2/3 par les parents) :
+Style: warm, empathetic, clinically informed, reassuring yet honest. Use "your child" when referring to the child. This report is based on a parent-completed questionnaire — it is NOT a direct clinical assessment and must say so.`;
+
+  const userPrompt = `Generate a detailed parent report in JSON for the child ${prenomEnfant} (${niveauLabelEn}).
+
+Questionnaire data (items rated ≥2/3 by parents — may include French item descriptions):
 ${resumeEchelle}
 
-Réponses aux questions ouvertes :
-${resumeOuvertes}
-
-Génère un JSON avec exactement ces champs :
-{
-  "introduction": "...",
-  "analyseSections": [
-    { "section": "...", "observations": ["...", "..."], "niveau": "eleve|moyen|faible" }
-  ],
-  "forces": ["...", "...", "..."],
-  "zonesVulnerabilite": ["...", "...", "..."],
-  "recommandationsParents": ["...", "...", "...", "...", "..."],
-  "prochainesEtapes": ["...", "...", "..."],
-  "motCloture": "...",
-  "avertissement": "..."
-}
-
-Rules :
-- introduction : 2-3 phrases de contexte (pourquoi ce questionnaire, ce qu'il mesure)
-- analyseSections : 3-5 sections avec observations spécifiques basées sur les réponses élevées
-- forces : 3-5 forces concrètes identifiées (basées sur réponses faibles + réponses ouvertes)
-- zonesVulnerabilite : 3-5 zones nécessitant un soutien (sans dramatiser)
-- recommandationsParents : 4-6 conseils pratiques à la maison (actionables, bienveillants)
-- prochainesEtapes : 2-4 étapes suggérées (ex: consultation spécialiste, supports disponibles)
-- motCloture : 2-3 phrases de clôture encourageantes pour les parents
-- avertissement : rappel clair que ceci est un questionnaire et non une évaluation clinique directe
-- Réponds UNIQUEMENT avec le JSON valide, sans texte avant ou après.`
-    : `Generate a detailed structured report in JSON for the child ${prenomEnfant} (${niveauLabel}).
-
-Questionnaire data (items rated ≥2/3 by parents):
-${resumeEchelle}
-
-Open-ended responses:
+Open-ended parent responses (may be in French — interpret clinically, write output in English):
 ${resumeOuvertes}
 
 Generate a JSON with exactly these fields:
@@ -325,14 +283,15 @@ Generate a JSON with exactly these fields:
 }
 
 Rules:
-- introduction: 2-3 context sentences (why this questionnaire, what it measures)
-- analyseSections: 3-5 sections with specific observations based on high ratings
-- forces: 3-5 concrete strengths identified (from low ratings + open responses)
-- zonesVulnerabilite: 3-5 areas needing support (without dramatizing)
-- recommandationsParents: 4-6 practical home tips (actionable, kind)
-- prochainesEtapes: 2-4 suggested next steps (e.g., specialist consultation, available supports)
-- motCloture: 2-3 encouraging closing sentences for parents
-- avertissement: clear reminder this is a questionnaire, not a direct clinical assessment
+- introduction: 2-3 sentences contextualizing this assessment (what the questionnaire measures, why it was administered)
+- analyseSections: 3-6 sections, each with a descriptive clinical name, 2-4 specific observations interpreted from the data, and a niveau ("eleve"=high concern, "moyen"=moderate, "faible"=low concern) — DO NOT translate these three niveau values
+- forces: 3-5 concrete, evidence-based strengths (derived from low-rated items and positive open responses)
+- zonesVulnerabilite: 3-5 areas warranting support (name patterns, not just symptoms; frame constructively without catastrophizing)
+- recommandationsParents: 4-6 practical, specific, actionable home strategies (not generic advice)
+- prochainesEtapes: 2-4 concrete next steps (e.g., consult specialist, request school assessment, specific accommodations)
+- motCloture: 2-3 warm, encouraging closing sentences for parents
+- avertissement: clear reminder this questionnaire is not a substitute for a direct professional clinical assessment
+- ALL string values must be in English — no French words allowed in any value
 - Reply ONLY with valid JSON, no text before or after.`;
 
   const message = await anthropic.messages.create({
@@ -345,15 +304,16 @@ Rules:
 
   const raw = (message.content[0] as { type: string; text: string }).text.trim();
   const jsonMatch = raw.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error("Claude returned no valid JSON for detail");
+  if (!jsonMatch) throw new Error("Claude returned no valid JSON for detail EN");
   const parsed = JSON.parse(jsonMatch[0]);
 
-  return {
+  const dateGeneration = new Date().toISOString();
+  const baseEn: RapportDetail = {
     type: "DETAIL",
     domaine,
-    langue,
-    enfant: { prenom: prenomEnfant, niveauScolaire: niveauLabel },
-    dateGeneration: new Date().toISOString(),
+    langue: "en",
+    enfant: { prenom: prenomEnfant, niveauScolaire: niveauLabelEn },
+    dateGeneration,
     introduction: parsed.introduction ?? "",
     analyseSections: parsed.analyseSections ?? [],
     forces: parsed.forces ?? [],
@@ -362,5 +322,91 @@ Rules:
     prochainesEtapes: parsed.prochainesEtapes ?? [],
     motCloture: parsed.motCloture ?? "",
     avertissement: parsed.avertissement ?? "",
+  };
+
+  // Traduire EN → FR pour garantir contenu identique, langue correcte
+  const baseFr = await traduireRapportDetail(baseEn, niveauLabelFr);
+  return { en: baseEn, fr: baseFr };
+}
+
+// ── Traduction EN → FR ────────────────────────────────────────────────────────
+
+async function traduireRapportDetail(rapport: RapportDetail, niveauLabelFr: string): Promise<RapportDetail> {
+  const system = `You are a professional medical and educational translator. Translate an evaluation report JSON from English to Quebec French (Canadian French, formal "vous" register).
+
+Rules:
+- Translate ALL string values to French
+- Keep these exact values UNCHANGED (they are internal codes): "eleve", "moyen", "faible", "DETAIL", "SOMMAIRE"
+- The JSON keys themselves must stay in English
+- Use Quebec French educational terminology. "Your child" → "votre enfant". "Strengths" → "forces". Professional, warm tone.
+- Reply ONLY with valid JSON, no text before or after.`;
+
+  const userPrompt = `Translate all string values to Quebec French in this JSON. Keep keys in English. Keep niveau values ("eleve","moyen","faible") unchanged:\n\n${JSON.stringify(rapport, null, 2)}`;
+
+  const message = await anthropic.messages.create({
+    model: "claude-sonnet-4-6",
+    max_tokens: 4096,
+    system,
+    messages: [{ role: "user", content: userPrompt }],
+  });
+  logClaude({ service: ApiService.CLAUDE_ANALYSE, inputTokens: message.usage.input_tokens, outputTokens: message.usage.output_tokens });
+
+  const raw = (message.content[0] as { type: string; text: string }).text.trim();
+  const jsonMatch = raw.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error("Translation returned no valid JSON for detail");
+  const parsed = JSON.parse(jsonMatch[0]);
+
+  return {
+    type: "DETAIL",
+    domaine: rapport.domaine,
+    langue: "fr",
+    enfant: { prenom: rapport.enfant.prenom, niveauScolaire: niveauLabelFr },
+    dateGeneration: rapport.dateGeneration,
+    introduction: parsed.introduction ?? rapport.introduction,
+    analyseSections: parsed.analyseSections ?? rapport.analyseSections,
+    forces: parsed.forces ?? rapport.forces,
+    zonesVulnerabilite: parsed.zonesVulnerabilite ?? rapport.zonesVulnerabilite,
+    recommandationsParents: parsed.recommandationsParents ?? rapport.recommandationsParents,
+    prochainesEtapes: parsed.prochainesEtapes ?? rapport.prochainesEtapes,
+    motCloture: parsed.motCloture ?? rapport.motCloture,
+    avertissement: parsed.avertissement ?? rapport.avertissement,
+  };
+}
+
+async function traduireRapportSommaire(rapport: RapportSommaire, niveauLabelFr: string): Promise<RapportSommaire> {
+  const system = `You are a professional medical and educational translator. Translate an evaluation report JSON from English to Quebec French (Canadian French, formal "vous" register).
+
+Rules:
+- Translate ALL string values to French
+- The JSON keys themselves must stay in English
+- Use Quebec French educational terminology. Professional, precise tone.
+- Reply ONLY with valid JSON, no text before or after.`;
+
+  const userPrompt = `Translate all string values to Quebec French in this JSON. Keep keys in English:\n\n${JSON.stringify(rapport, null, 2)}`;
+
+  const message = await anthropic.messages.create({
+    model: "claude-sonnet-4-6",
+    max_tokens: 2000,
+    system,
+    messages: [{ role: "user", content: userPrompt }],
+  });
+  logClaude({ service: ApiService.CLAUDE_ANALYSE, inputTokens: message.usage.input_tokens, outputTokens: message.usage.output_tokens });
+
+  const raw = (message.content[0] as { type: string; text: string }).text.trim();
+  const jsonMatch = raw.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error("Translation returned no valid JSON for sommaire");
+  const parsed = JSON.parse(jsonMatch[0]);
+
+  return {
+    type: "SOMMAIRE",
+    domaine: rapport.domaine,
+    langue: "fr",
+    enfant: { prenom: rapport.enfant.prenom, niveauScolaire: niveauLabelFr },
+    dateGeneration: rapport.dateGeneration,
+    pointsSaillants: parsed.pointsSaillants ?? rapport.pointsSaillants,
+    forces: parsed.forces ?? rapport.forces,
+    recommandationsEnseignant: parsed.recommandationsEnseignant ?? rapport.recommandationsEnseignant,
+    ajustementsClasse: parsed.ajustementsClasse ?? rapport.ajustementsClasse,
+    avertissement: parsed.avertissement ?? rapport.avertissement,
   };
 }

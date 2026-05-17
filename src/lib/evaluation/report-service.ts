@@ -23,7 +23,6 @@ export async function genererEtSauvegarderRapports(evaluationId: string): Promis
 
     const reponsesEchelle = (evaluation.formulaire.reponsesEchelle ?? {}) as Record<string, number>;
     const reponsesOuvertes = (evaluation.formulaire.reponsesOuvertes ?? {}) as Record<string, string>;
-    const langue = (evaluation.formulaire.langue ?? "fr") as "fr" | "en";
 
     // Passer en génération
     await prisma.evaluationRequest.update({
@@ -31,41 +30,20 @@ export async function genererEtSauvegarderRapports(evaluationId: string): Promis
       data: { status: "REPORT_GENERATING" },
     });
 
-    // 2. Générer les 4 rapports en parallèle (sommaire FR + EN, détaillé FR + EN)
-    const [sommaireFr, sommaireEn, detailFr, detailEn] = await Promise.all([
-      genererRapportSommaire({
-        domaine: evaluation.primarySpecialist,
-        langue: "fr",
-        prenomEnfant: evaluation.eleve.prenom,
-        niveauScolaire: evaluation.eleve.niveauScolaire,
-        reponsesEchelle,
-        reponsesOuvertes,
-      }),
-      genererRapportSommaire({
-        domaine: evaluation.primarySpecialist,
-        langue: "en",
-        prenomEnfant: evaluation.eleve.prenom,
-        niveauScolaire: evaluation.eleve.niveauScolaire,
-        reponsesEchelle,
-        reponsesOuvertes,
-      }),
-      genererRapportDetail({
-        domaine: evaluation.primarySpecialist,
-        langue: "fr",
-        prenomEnfant: evaluation.eleve.prenom,
-        niveauScolaire: evaluation.eleve.niveauScolaire,
-        reponsesEchelle,
-        reponsesOuvertes,
-      }),
-      genererRapportDetail({
-        domaine: evaluation.primarySpecialist,
-        langue: "en",
-        prenomEnfant: evaluation.eleve.prenom,
-        niveauScolaire: evaluation.eleve.niveauScolaire,
-        reponsesEchelle,
-        reponsesOuvertes,
-      }),
+    // 2. Générer sommaire + détail (chacun produit EN + FR via traduction interne)
+    const sharedParams = {
+      domaine: evaluation.primarySpecialist,
+      prenomEnfant: evaluation.eleve.prenom,
+      niveauScolaire: evaluation.eleve.niveauScolaire,
+      reponsesEchelle,
+      reponsesOuvertes,
+    };
+    const [sommaire, detail] = await Promise.all([
+      genererRapportSommaire(sharedParams),
+      genererRapportDetail(sharedParams),
     ]);
+    const { en: sommaireEn, fr: sommaireFr } = sommaire;
+    const { en: detailEn, fr: detailFr } = detail;
 
     // 3. Sauvegarder les 4 rapports
     await prisma.rapportEvaluation.createMany({
