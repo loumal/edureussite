@@ -52,6 +52,7 @@ export type EvaluationRequestMinAggregateOutputType = {
   adminValidatedAt: Date | null
   formSentAt: Date | null
   formCompletedAt: Date | null
+  rapportEmailSentAt: Date | null
   reportGeneratedAt: Date | null
   parentValidatedAt: Date | null
   parcoursAdjustedAt: Date | null
@@ -77,6 +78,7 @@ export type EvaluationRequestMaxAggregateOutputType = {
   adminValidatedAt: Date | null
   formSentAt: Date | null
   formCompletedAt: Date | null
+  rapportEmailSentAt: Date | null
   reportGeneratedAt: Date | null
   parentValidatedAt: Date | null
   parcoursAdjustedAt: Date | null
@@ -104,6 +106,7 @@ export type EvaluationRequestCountAggregateOutputType = {
   adminValidatedAt: number
   formSentAt: number
   formCompletedAt: number
+  rapportEmailSentAt: number
   reportGeneratedAt: number
   parentValidatedAt: number
   parcoursAdjustedAt: number
@@ -139,6 +142,7 @@ export type EvaluationRequestMinAggregateInputType = {
   adminValidatedAt?: true
   formSentAt?: true
   formCompletedAt?: true
+  rapportEmailSentAt?: true
   reportGeneratedAt?: true
   parentValidatedAt?: true
   parcoursAdjustedAt?: true
@@ -164,6 +168,7 @@ export type EvaluationRequestMaxAggregateInputType = {
   adminValidatedAt?: true
   formSentAt?: true
   formCompletedAt?: true
+  rapportEmailSentAt?: true
   reportGeneratedAt?: true
   parentValidatedAt?: true
   parcoursAdjustedAt?: true
@@ -191,6 +196,7 @@ export type EvaluationRequestCountAggregateInputType = {
   adminValidatedAt?: true
   formSentAt?: true
   formCompletedAt?: true
+  rapportEmailSentAt?: true
   reportGeneratedAt?: true
   parentValidatedAt?: true
   parcoursAdjustedAt?: true
@@ -305,6 +311,7 @@ export type EvaluationRequestGroupByOutputType = {
   adminValidatedAt: Date | null
   formSentAt: Date | null
   formCompletedAt: Date | null
+  rapportEmailSentAt: Date | null
   reportGeneratedAt: Date | null
   parentValidatedAt: Date | null
   parcoursAdjustedAt: Date | null
@@ -355,6 +362,7 @@ export type EvaluationRequestWhereInput = {
   adminValidatedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   formSentAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   formCompletedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
+  rapportEmailSentAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   reportGeneratedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   parentValidatedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   parcoursAdjustedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
@@ -385,6 +393,7 @@ export type EvaluationRequestOrderByWithRelationInput = {
   adminValidatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   formSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   formCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  rapportEmailSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   reportGeneratedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   parentValidatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   parcoursAdjustedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -418,6 +427,7 @@ export type EvaluationRequestWhereUniqueInput = Prisma.AtLeast<{
   adminValidatedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   formSentAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   formCompletedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
+  rapportEmailSentAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   reportGeneratedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   parentValidatedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   parcoursAdjustedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
@@ -448,6 +458,7 @@ export type EvaluationRequestOrderByWithAggregationInput = {
   adminValidatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   formSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   formCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  rapportEmailSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   reportGeneratedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   parentValidatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   parcoursAdjustedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -483,6 +494,7 @@ export type EvaluationRequestScalarWhereWithAggregatesInput = {
   adminValidatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvaluationRequest"> | Date | string | null
   formSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvaluationRequest"> | Date | string | null
   formCompletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvaluationRequest"> | Date | string | null
+  rapportEmailSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvaluationRequest"> | Date | string | null
   reportGeneratedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvaluationRequest"> | Date | string | null
   parentValidatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvaluationRequest"> | Date | string | null
   parcoursAdjustedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EvaluationRequest"> | Date | string | null
@@ -509,6 +521,7 @@ export type EvaluationRequestCreateInput = {
   adminValidatedAt?: Date | string | null
   formSentAt?: Date | string | null
   formCompletedAt?: Date | string | null
+  rapportEmailSentAt?: Date | string | null
   reportGeneratedAt?: Date | string | null
   parentValidatedAt?: Date | string | null
   parcoursAdjustedAt?: Date | string | null
@@ -539,6 +552,7 @@ export type EvaluationRequestUncheckedCreateInput = {
   adminValidatedAt?: Date | string | null
   formSentAt?: Date | string | null
   formCompletedAt?: Date | string | null
+  rapportEmailSentAt?: Date | string | null
   reportGeneratedAt?: Date | string | null
   parentValidatedAt?: Date | string | null
   parcoursAdjustedAt?: Date | string | null
@@ -567,6 +581,7 @@ export type EvaluationRequestUpdateInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -597,6 +612,7 @@ export type EvaluationRequestUncheckedUpdateInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -626,6 +642,7 @@ export type EvaluationRequestCreateManyInput = {
   adminValidatedAt?: Date | string | null
   formSentAt?: Date | string | null
   formCompletedAt?: Date | string | null
+  rapportEmailSentAt?: Date | string | null
   reportGeneratedAt?: Date | string | null
   parentValidatedAt?: Date | string | null
   parcoursAdjustedAt?: Date | string | null
@@ -652,6 +669,7 @@ export type EvaluationRequestUpdateManyMutationInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -679,6 +697,7 @@ export type EvaluationRequestUncheckedUpdateManyInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -716,6 +735,7 @@ export type EvaluationRequestCountOrderByAggregateInput = {
   adminValidatedAt?: Prisma.SortOrder
   formSentAt?: Prisma.SortOrder
   formCompletedAt?: Prisma.SortOrder
+  rapportEmailSentAt?: Prisma.SortOrder
   reportGeneratedAt?: Prisma.SortOrder
   parentValidatedAt?: Prisma.SortOrder
   parcoursAdjustedAt?: Prisma.SortOrder
@@ -745,6 +765,7 @@ export type EvaluationRequestMaxOrderByAggregateInput = {
   adminValidatedAt?: Prisma.SortOrder
   formSentAt?: Prisma.SortOrder
   formCompletedAt?: Prisma.SortOrder
+  rapportEmailSentAt?: Prisma.SortOrder
   reportGeneratedAt?: Prisma.SortOrder
   parentValidatedAt?: Prisma.SortOrder
   parcoursAdjustedAt?: Prisma.SortOrder
@@ -770,6 +791,7 @@ export type EvaluationRequestMinOrderByAggregateInput = {
   adminValidatedAt?: Prisma.SortOrder
   formSentAt?: Prisma.SortOrder
   formCompletedAt?: Prisma.SortOrder
+  rapportEmailSentAt?: Prisma.SortOrder
   reportGeneratedAt?: Prisma.SortOrder
   parentValidatedAt?: Prisma.SortOrder
   parcoursAdjustedAt?: Prisma.SortOrder
@@ -891,6 +913,7 @@ export type EvaluationRequestCreateWithoutEleveInput = {
   adminValidatedAt?: Date | string | null
   formSentAt?: Date | string | null
   formCompletedAt?: Date | string | null
+  rapportEmailSentAt?: Date | string | null
   reportGeneratedAt?: Date | string | null
   parentValidatedAt?: Date | string | null
   parcoursAdjustedAt?: Date | string | null
@@ -919,6 +942,7 @@ export type EvaluationRequestUncheckedCreateWithoutEleveInput = {
   adminValidatedAt?: Date | string | null
   formSentAt?: Date | string | null
   formCompletedAt?: Date | string | null
+  rapportEmailSentAt?: Date | string | null
   reportGeneratedAt?: Date | string | null
   parentValidatedAt?: Date | string | null
   parcoursAdjustedAt?: Date | string | null
@@ -977,6 +1001,7 @@ export type EvaluationRequestScalarWhereInput = {
   adminValidatedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   formSentAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   formCompletedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
+  rapportEmailSentAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   reportGeneratedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   parentValidatedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
   parcoursAdjustedAt?: Prisma.DateTimeNullableFilter<"EvaluationRequest"> | Date | string | null
@@ -1003,6 +1028,7 @@ export type EvaluationRequestCreateWithoutFormulaireInput = {
   adminValidatedAt?: Date | string | null
   formSentAt?: Date | string | null
   formCompletedAt?: Date | string | null
+  rapportEmailSentAt?: Date | string | null
   reportGeneratedAt?: Date | string | null
   parentValidatedAt?: Date | string | null
   parcoursAdjustedAt?: Date | string | null
@@ -1032,6 +1058,7 @@ export type EvaluationRequestUncheckedCreateWithoutFormulaireInput = {
   adminValidatedAt?: Date | string | null
   formSentAt?: Date | string | null
   formCompletedAt?: Date | string | null
+  rapportEmailSentAt?: Date | string | null
   reportGeneratedAt?: Date | string | null
   parentValidatedAt?: Date | string | null
   parcoursAdjustedAt?: Date | string | null
@@ -1075,6 +1102,7 @@ export type EvaluationRequestUpdateWithoutFormulaireInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1104,6 +1132,7 @@ export type EvaluationRequestUncheckedUpdateWithoutFormulaireInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1131,6 +1160,7 @@ export type EvaluationRequestCreateWithoutRapportsInput = {
   adminValidatedAt?: Date | string | null
   formSentAt?: Date | string | null
   formCompletedAt?: Date | string | null
+  rapportEmailSentAt?: Date | string | null
   reportGeneratedAt?: Date | string | null
   parentValidatedAt?: Date | string | null
   parcoursAdjustedAt?: Date | string | null
@@ -1160,6 +1190,7 @@ export type EvaluationRequestUncheckedCreateWithoutRapportsInput = {
   adminValidatedAt?: Date | string | null
   formSentAt?: Date | string | null
   formCompletedAt?: Date | string | null
+  rapportEmailSentAt?: Date | string | null
   reportGeneratedAt?: Date | string | null
   parentValidatedAt?: Date | string | null
   parcoursAdjustedAt?: Date | string | null
@@ -1203,6 +1234,7 @@ export type EvaluationRequestUpdateWithoutRapportsInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1232,6 +1264,7 @@ export type EvaluationRequestUncheckedUpdateWithoutRapportsInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1259,6 +1292,7 @@ export type EvaluationRequestCreateManyEleveInput = {
   adminValidatedAt?: Date | string | null
   formSentAt?: Date | string | null
   formCompletedAt?: Date | string | null
+  rapportEmailSentAt?: Date | string | null
   reportGeneratedAt?: Date | string | null
   parentValidatedAt?: Date | string | null
   parcoursAdjustedAt?: Date | string | null
@@ -1285,6 +1319,7 @@ export type EvaluationRequestUpdateWithoutEleveInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1313,6 +1348,7 @@ export type EvaluationRequestUncheckedUpdateWithoutEleveInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1341,6 +1377,7 @@ export type EvaluationRequestUncheckedUpdateManyWithoutEleveInput = {
   adminValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   formCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rapportEmailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reportGeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parentValidatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   parcoursAdjustedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1399,6 +1436,7 @@ export type EvaluationRequestSelect<ExtArgs extends runtime.Types.Extensions.Int
   adminValidatedAt?: boolean
   formSentAt?: boolean
   formCompletedAt?: boolean
+  rapportEmailSentAt?: boolean
   reportGeneratedAt?: boolean
   parentValidatedAt?: boolean
   parcoursAdjustedAt?: boolean
@@ -1430,6 +1468,7 @@ export type EvaluationRequestSelectCreateManyAndReturn<ExtArgs extends runtime.T
   adminValidatedAt?: boolean
   formSentAt?: boolean
   formCompletedAt?: boolean
+  rapportEmailSentAt?: boolean
   reportGeneratedAt?: boolean
   parentValidatedAt?: boolean
   parcoursAdjustedAt?: boolean
@@ -1458,6 +1497,7 @@ export type EvaluationRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   adminValidatedAt?: boolean
   formSentAt?: boolean
   formCompletedAt?: boolean
+  rapportEmailSentAt?: boolean
   reportGeneratedAt?: boolean
   parentValidatedAt?: boolean
   parcoursAdjustedAt?: boolean
@@ -1486,6 +1526,7 @@ export type EvaluationRequestSelectScalar = {
   adminValidatedAt?: boolean
   formSentAt?: boolean
   formCompletedAt?: boolean
+  rapportEmailSentAt?: boolean
   reportGeneratedAt?: boolean
   parentValidatedAt?: boolean
   parcoursAdjustedAt?: boolean
@@ -1493,7 +1534,7 @@ export type EvaluationRequestSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EvaluationRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eleveId" | "triageScores" | "primarySpecialist" | "triageEvidence" | "status" | "round" | "nextSpecialist" | "parentValidation" | "parentComment" | "tokenConsentementPartage" | "consentementPartage" | "consentementPartageAt" | "consentementPartageRefuse" | "detectedAt" | "adminNotifiedAt" | "adminValidatedAt" | "formSentAt" | "formCompletedAt" | "reportGeneratedAt" | "parentValidatedAt" | "parcoursAdjustedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["evaluationRequest"]>
+export type EvaluationRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eleveId" | "triageScores" | "primarySpecialist" | "triageEvidence" | "status" | "round" | "nextSpecialist" | "parentValidation" | "parentComment" | "tokenConsentementPartage" | "consentementPartage" | "consentementPartageAt" | "consentementPartageRefuse" | "detectedAt" | "adminNotifiedAt" | "adminValidatedAt" | "formSentAt" | "formCompletedAt" | "rapportEmailSentAt" | "reportGeneratedAt" | "parentValidatedAt" | "parcoursAdjustedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["evaluationRequest"]>
 export type EvaluationRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   eleve?: boolean | Prisma.ProfilEleveDefaultArgs<ExtArgs>
   formulaire?: boolean | Prisma.EvaluationRequest$formulaireArgs<ExtArgs>
@@ -1534,6 +1575,7 @@ export type $EvaluationRequestPayload<ExtArgs extends runtime.Types.Extensions.I
     adminValidatedAt: Date | null
     formSentAt: Date | null
     formCompletedAt: Date | null
+    rapportEmailSentAt: Date | null
     reportGeneratedAt: Date | null
     parentValidatedAt: Date | null
     parcoursAdjustedAt: Date | null
@@ -1984,6 +2026,7 @@ export interface EvaluationRequestFieldRefs {
   readonly adminValidatedAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>
   readonly formSentAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>
   readonly formCompletedAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>
+  readonly rapportEmailSentAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>
   readonly reportGeneratedAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>
   readonly parentValidatedAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>
   readonly parcoursAdjustedAt: Prisma.FieldRef<"EvaluationRequest", 'DateTime'>

@@ -1002,6 +1002,7 @@ export const EvaluationRequestScalarFieldEnum = {
   adminValidatedAt: 'adminValidatedAt',
   formSentAt: 'formSentAt',
   formCompletedAt: 'formCompletedAt',
+  rapportEmailSentAt: 'rapportEmailSentAt',
   reportGeneratedAt: 'reportGeneratedAt',
   parentValidatedAt: 'parentValidatedAt',
   parcoursAdjustedAt: 'parcoursAdjustedAt',

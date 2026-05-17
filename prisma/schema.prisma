@@ -1431,7 +1431,8 @@ model EvaluationRequest {
   adminNotifiedAt  DateTime?
   adminValidatedAt DateTime?
   formSentAt       DateTime?
-  formCompletedAt  DateTime?
+  formCompletedAt   DateTime?
+  rapportEmailSentAt DateTime?
   reportGeneratedAt DateTime?
   parentValidatedAt DateTime?
   parcoursAdjustedAt DateTime?
