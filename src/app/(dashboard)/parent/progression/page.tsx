@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { trpc } from "@/lib/trpc/client";
 import { Card } from "@/components/ui/card";
+import { NavParent } from "@/components/layout/nav-parent";
 
 const MATIERES_COULEURS: Record<string, string> = {
   FRANCAIS:          "#5b4fcf",
@@ -49,7 +51,6 @@ function LigneChart({
   const points = data.map((d, i) => ({ x: toX(i), y: toY(d.scoreMoyen), d }));
   const polylinePoints = points.map((p) => `${p.x},${p.y}`).join(" ");
 
-  // Étiquettes X : afficher max 6 semaines
   const xLabels: number[] = [];
   if (n <= 6) {
     for (let i = 0; i < n; i++) xLabels.push(i);
@@ -68,7 +69,6 @@ function LigneChart({
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} width="100%" style={{ maxWidth: width }}>
-      {/* Grille horizontale */}
       {[0, 25, 50, 75, 100].map((v) => {
         const y = toY(v);
         return (
@@ -79,14 +79,10 @@ function LigneChart({
           </g>
         );
       })}
-
-      {/* Zone remplie sous la courbe */}
       <polygon
         points={`${PAD_L},${toY(0)} ${polylinePoints} ${PAD_L + W * (n > 1 ? 1 : 0)},${toY(0)}`}
         fill="rgba(42,124,111,0.07)"
       />
-
-      {/* Ligne principale */}
       <polyline
         points={polylinePoints}
         fill="none"
@@ -95,19 +91,14 @@ function LigneChart({
         strokeLinejoin="round"
         strokeLinecap="round"
       />
-
-      {/* Points */}
       {points.map((p, i) => (
         <g key={i}>
           <circle cx={p.x} cy={p.y} r={5} fill="#2a7c6f" />
           <circle cx={p.x} cy={p.y} r={3} fill="white" />
-          {/* Tooltip au survol simulé avec title */}
           <title>{`${semaineLabel(p.d.semaine, i === n - 1)} : ${p.d.scoreMoyen}% (${p.d.nbExercices} ex.)`}</title>
           <circle cx={p.x} cy={p.y} r={10} fill="transparent" />
         </g>
       ))}
-
-      {/* Score au-dessus du dernier point */}
       {points.length > 0 && (
         <text
           x={points[points.length - 1].x}
@@ -120,8 +111,6 @@ function LigneChart({
           {data[data.length - 1].scoreMoyen}%
         </text>
       )}
-
-      {/* Étiquettes X */}
       {xLabels.map((i) => (
         <text key={i} x={toX(i)} y={height - 6} textAnchor="middle" fontSize={10} fill="#999">
           {semaineLabel(data[i].semaine, i === n - 1)}
@@ -148,14 +137,16 @@ function BarreMatiere({ label, score, couleur }: { label: string; score: number;
   );
 }
 
-// ── Page principale ───────────────────────────────────────────────────────────
+// ── Contenu principal (nécessite useSearchParams) ─────────────────────────────
 
-export default function ProgressionPage() {
-  const { data: dashboard } = trpc.parent.getDashboard.useQuery();
+function ProgressionContent() {
+  const searchParams = useSearchParams();
+  const { data: dashboard } = trpc.parent.getDashboard.useQuery(undefined, { staleTime: 120_000 });
   const enfants = dashboard?.eleves ?? [];
-  const [eleveId, setEleveId] = useState<string | null>(null);
 
-  const activeId = eleveId ?? enfants[0]?.id ?? null;
+  const enfantId = searchParams.get("enfant");
+  const activeId = enfantId ?? enfants[0]?.id ?? null;
+  const enfantQ = activeId ? `?enfant=${activeId}` : "";
 
   const { data, isLoading } = trpc.parent.getProgressionDetaille.useQuery(
     { eleveId: activeId! },
@@ -164,35 +155,17 @@ export default function ProgressionPage() {
 
   return (
     <div className="min-h-screen bg-[var(--color-paper)]">
+      <NavParent />
       <div className="mx-auto max-w-3xl px-4 py-8 space-y-6">
 
         {/* En-tête */}
         <div>
-          <Link href="/parent" className="text-sm text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] mb-3 inline-flex items-center gap-1">
+          <Link href={`/parent${enfantQ}`} className="text-sm text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] mb-3 inline-flex items-center gap-1">
             ← Tableau de bord
           </Link>
           <h1 className="text-2xl font-black text-[var(--color-ink)]">Courbe de progression</h1>
           <p className="text-sm text-[var(--color-ink-soft)] mt-1">Suivi semaine par semaine</p>
         </div>
-
-        {/* Sélecteur d'enfant */}
-        {enfants.length > 1 && (
-          <div className="flex gap-2 flex-wrap">
-            {enfants.map((e) => (
-              <button
-                key={e.id}
-                onClick={() => setEleveId(e.id)}
-                className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-all ${
-                  (eleveId ?? enfants[0].id) === e.id
-                    ? "bg-[var(--color-ink)] text-white"
-                    : "border border-[var(--color-rule)] text-[var(--color-ink-soft)] hover:border-[var(--color-ink)]"
-                }`}
-              >
-                {e.prenom}
-              </button>
-            ))}
-          </div>
-        )}
 
         {isLoading && (
           <div className="space-y-4">
@@ -273,7 +246,6 @@ export default function ProgressionPage() {
 
             {/* Top 3 */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Maîtrisées */}
               <Card className="p-5">
                 <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-success)] mb-4">
                   ✅ Top 3 maîtrisées
@@ -294,7 +266,6 @@ export default function ProgressionPage() {
                 )}
               </Card>
 
-              {/* À travailler */}
               <Card className="p-5">
                 <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-accent)] mb-4">
                   🎯 Top 3 à renforcer
@@ -319,7 +290,7 @@ export default function ProgressionPage() {
             {/* Lien rapports détaillés */}
             <div className="text-center pt-2">
               <Link
-                href="/parent/rapports"
+                href={`/parent/rapports${enfantQ}`}
                 className="text-sm text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] underline"
               >
                 Voir le rapport complet →
@@ -336,5 +307,15 @@ export default function ProgressionPage() {
         )}
       </div>
     </div>
+  );
+}
+
+// ── Wrapper avec Suspense (requis par useSearchParams) ────────────────────────
+
+export default function ProgressionPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[var(--color-paper)]" />}>
+      <ProgressionContent />
+    </Suspense>
   );
 }
