@@ -554,7 +554,19 @@ RÉPONDS avec ce JSON exact :
     }
 
     if (type === "QCM") {
-      if (!contenu.question || String(contenu.question).trim().length < 5) {
+      // Le QCM doit avoir soit un champ question + choix (format simple),
+      // soit un tableau questions avec au moins une sous-question ayant des choix (format multi).
+      const hasSimple =
+        contenu.question &&
+        String(contenu.question).trim().length >= 5 &&
+        Array.isArray(contenu.choix) &&
+        (contenu.choix as unknown[]).length > 0;
+      const hasMulti =
+        Array.isArray(contenu.questions) &&
+        (contenu.questions as { choix?: unknown[] }[]).some(
+          (q) => Array.isArray(q.choix) && q.choix.length > 0
+        );
+      if (!hasSimple && !hasMulti) {
         throw new Error("MISSING_QUESTION");
       }
     }
@@ -615,18 +627,56 @@ RÉPONDS avec ce JSON exact :
 
       try {
         const retryParsed = JSON.parse(retryCleaned);
+        const retryContenu = retryParsed.contenu;
+        const retryType = (retryParsed.type ?? "") as string;
+
+        // Re-valider que le retry a bien produit du contenu utilisable
+        if (!retryContenu || typeof retryContenu !== "object") {
+          throw new Error("Nous avons retourné une réponse invalide. Veuillez réessayer.");
+        }
+        if (retryType === "QCM") {
+          const hasSimple =
+            retryContenu.question &&
+            String(retryContenu.question).trim().length >= 5 &&
+            Array.isArray(retryContenu.choix) &&
+            (retryContenu.choix as unknown[]).length > 0;
+          const hasMulti =
+            Array.isArray(retryContenu.questions) &&
+            (retryContenu.questions as { choix?: unknown[] }[]).some(
+              (q) => Array.isArray(q.choix) && q.choix.length > 0
+            );
+          if (!hasSimple && !hasMulti) {
+            throw new Error("Nous avons retourné une réponse invalide. Veuillez réessayer.");
+          }
+        }
+        if (
+          ["PROBLEME_MATHEMATIQUE", "QUESTION_OUVERTE", "MINI_DEFI", "MISE_EN_SITUATION"].includes(retryType)
+        ) {
+          const q = retryContenu.question ?? retryContenu.enonce ?? retryContenu.probleme;
+          if (!q || String(q).trim().length < 5) {
+            throw new Error("Nous avons retourné une réponse invalide. Veuillez réessayer.");
+          }
+        }
+        if (retryType === "LECTURE_COMPREHENSION") {
+          if (!Array.isArray(retryContenu.questions) || (retryContenu.questions as unknown[]).length === 0) {
+            throw new Error("Nous avons retourné une réponse invalide. Veuillez réessayer.");
+          }
+        }
+
         return {
           titre: retryParsed.titre,
           consigne: retryParsed.consigne,
-          contenu: retryParsed.contenu ?? {},
-          type: retryParsed.type as TypeExercice,
+          contenu: retryContenu,
+          type: retryType as TypeExercice,
           difficulte: retryParsed.difficulte as NiveauDifficulte,
           competencesPFEQ: retryParsed.competencesPFEQ ?? [],
           dureeMinutes: retryParsed.dureeMinutes ?? 10,
           correctionAttendue: retryParsed.correctionAttendue,
         };
-      } catch {
-        throw new Error("Nous avons retourné une réponse invalide. Veuillez réessayer.");
+      } catch (retryErr) {
+        // Si l'erreur est déjà formatée pour l'utilisateur, la propager directement
+        const msg = retryErr instanceof Error ? retryErr.message : "";
+        throw new Error(msg || "Nous avons retourné une réponse invalide. Veuillez réessayer.");
       }
     }
 
