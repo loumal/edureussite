@@ -31,7 +31,10 @@ export type SecurityAction =
   | "ALERTE_SECURITE_ENVOYEE"
   // Contrôle réseau
   | "IP_BLOQUEE"
-  | "IP_DEBLOQUEE";
+  | "IP_DEBLOQUEE"
+  // Impersonation super admin
+  | "IMPERSONATION_DEBUT"
+  | "IMPERSONATION_FIN";
 
 const SEVERITY_MAP: Record<SecurityAction, "INFO" | "WARNING" | "CRITICAL"> = {
   // Échecs d'authentification — signal d'attaque potentielle
@@ -59,6 +62,9 @@ const SEVERITY_MAP: Record<SecurityAction, "INFO" | "WARNING" | "CRITICAL"> = {
   // Réseau
   IP_BLOQUEE:                 "CRITICAL",
   IP_DEBLOQUEE:               "WARNING",
+  // Impersonation
+  IMPERSONATION_DEBUT:        "WARNING",
+  IMPERSONATION_FIN:          "INFO",
 };
 
 export async function logSecurityEvent({

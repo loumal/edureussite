@@ -39,12 +39,10 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   });
 });
 
-// Procédure réservée aux enseignants
+// Procédure réservée aux enseignants (+ SUPER_ADMIN pour impersonation)
 export const enseignantProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (
-    ctx.session.user.role !== "ENSEIGNANT" &&
-    ctx.session.user.role !== "ADMIN"
-  ) {
+  const { role } = ctx.session.user;
+  if (role !== "ENSEIGNANT" && role !== "ADMIN" && role !== "SUPER_ADMIN") {
     throw new TRPCError({ code: "FORBIDDEN" });
   }
   return next({ ctx });

@@ -11,6 +11,7 @@ import { TtsProviderSelector } from "./_components/tts-provider-selector";
 import { ApiRenewals } from "./_components/api-renewals";
 import { ProvinceManager } from "./_components/province-manager";
 import { SecurityLogsPanel } from "./_components/security-logs-panel";
+import { ImpersonationPanel } from "./_components/impersonation-panel";
 
 const MATIERE_LABEL: Record<string, string> = {
   FRANCAIS: "Français",
@@ -93,6 +94,13 @@ export default async function AdminDashboardPage() {
         )}
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Simuler une vue — Super Admin uniquement */}
+          {isSuperAdmin && (
+            <div className="md:col-span-2">
+              <ImpersonationPanel />
+            </div>
+          )}
+
           {/* Modèles d'épreuves récents */}
           <Card className="p-5">
             <div className="flex items-center justify-between mb-4">

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Role } from "@/generated/prisma";
 import { prisma } from "@/lib/prisma/client";
 import { z } from "zod";
+import { getImpersonationState } from "./impersonation";
 
 // ── Validation mot de passe fort ──────────────────────────────────────────────
 // Règles : min 10 chars, au moins 1 majuscule, 1 minuscule, 1 chiffre, 1 spécial
@@ -24,21 +25,36 @@ export async function requireAuth() {
 
 // Redirige si le rôle n'est pas autorisé
 // Vérifie aussi la suspension et le reset MDP forcé
+// Un SUPER_ADMIN avec un cookie d'impersonation actif peut accéder aux pages
+// du rôle simulé (ENSEIGNANT / SPECIALISTE) sans être redirigé.
 export async function requireRole(roles: Role[]) {
   const session = await requireAuth();
-  if (!roles.includes(session.user.role)) {
-    redirect("/dashboard");
+
+  // Chemin normal : le rôle réel est dans la liste autorisée
+  if (roles.includes(session.user.role)) {
+    const dbUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { suspended: true, forcePasswordReset: true },
+    });
+    if (dbUser?.suspended) redirect("/compte-suspendu");
+    if (dbUser?.forcePasswordReset) redirect("/changer-password?forced=1");
+    return session;
   }
 
-  // Vérification sécurité depuis la DB (hors JWT)
-  const dbUser = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { suspended: true, forcePasswordReset: true },
-  });
-  if (dbUser?.suspended) redirect("/compte-suspendu");
-  if (dbUser?.forcePasswordReset) redirect("/changer-password?forced=1");
+  // Cas spécial : SUPER_ADMIN en mode impersonation
+  if (session.user.role === "SUPER_ADMIN") {
+    const impersonation = await getImpersonationState();
+    if (
+      impersonation &&
+      impersonation.superAdminId === session.user.id &&
+      roles.includes(impersonation.actingAs as Role)
+    ) {
+      // Pas de vérif suspension pour le super admin lui-même
+      return session;
+    }
+  }
 
-  return session;
+  redirect("/dashboard");
 }
 
 // Retourne le chemin du dashboard selon le rôle
