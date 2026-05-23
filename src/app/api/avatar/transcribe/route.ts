@@ -86,6 +86,8 @@ export async function POST(req: NextRequest) {
     const elForm = new FormData();
     elForm.append("audio", blob, `recording.${ext}`);
     elForm.append("model_id", "scribe_v1");
+    // Forcer le français pour éviter l'auto-détection incorrecte sur l'audio québécois
+    elForm.append("language_code", "fr");
 
     const res = await fetch("https://api.elevenlabs.io/v1/speech-to-text", {
       method: "POST",

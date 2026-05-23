@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { useAvatarVoice, unlockAudio } from "@/hooks/useAvatarVoice";
+import { useMicInput } from "@/hooks/useMicInput";
 import { MIRA } from "@/lib/avatarVoices";
 import { stripFigureTags } from "@/components/mira/mira-figures";
 import {
@@ -35,14 +36,8 @@ function MiraLibrePanel({ onClose }: MiraLibrePanelProps) {
   const [inputText, setInputText] = useState("");
   const [isThinking, setIsThinking] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [isListening, setIsListening] = useState(false);
-  const [isTranscribing, setIsTranscribing] = useState(false);
-  const [micError, setMicError] = useState<string | null>(null);
   const [historyLoaded, setHistoryLoaded] = useState(false);
 
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
-  const autoStopRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   // Ref pour éviter le stale closure dans onstop (ctx charge async)
@@ -175,118 +170,20 @@ function MiraLibrePanel({ onClose }: MiraLibrePanelProps) {
   // Toujours garder le ref à jour avec la dernière version de sendMessage
   useEffect(() => { sendMessageRef.current = sendMessage; }, [sendMessage]);
 
-  // ── Micro : Web Speech API (auto-stop) → fallback MediaRecorder (Firefox) ──
-  const toggleMic = useCallback(async () => {
-    if (isListening) {
-      if (autoStopRef.current) clearTimeout(autoStopRef.current);
-      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") mediaRecorderRef.current.stop();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const recognition = (window as any).__miraLibreRecognition;
-      if (recognition) { try { recognition.stop(); } catch { /* ok */ } }
-      setIsListening(false);
-      return;
-    }
-
-    setMicError(null);
-    unlockAudio();
-
-    // ── MÉTHODE 1 : Web Speech API (Chrome, Edge, Safari) — auto-stop sur silence ──
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const SpeechRecognitionCtor = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (SpeechRecognitionCtor) {
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const recognition = new SpeechRecognitionCtor() as any;
-        recognition.lang = "fr-CA";
-        recognition.interimResults = true;
-        recognition.continuous = false;
-        recognition.maxAlternatives = 1;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (window as any).__miraLibreRecognition = recognition;
-
-        recognition.onstart = () => setIsListening(true);
-
-        recognition.onresult = (e: any) => {
-          const results = Array.from(e.results as any[]);
-          const transcript = results.map((r: any) => r[0].transcript).join("");
-          const isFinal = (e.results[e.results.length - 1] as any).isFinal;
-          if (isFinal) {
-            setInputText("");
-            setIsListening(false);
-            if (transcript.trim()) sendMessageRef.current?.(transcript.trim());
-          } else {
-            setInputText(transcript);
-          }
-        };
-
-        recognition.onerror = (e: any) => {
-          setIsListening(false);
-          if (e.error === "not-allowed") setMicError("Autorise l'accès au microphone dans ton navigateur.");
-          else if (e.error !== "no-speech" && e.error !== "aborted") setMicError("Erreur micro. Recharge la page.");
-        };
-
-        recognition.onend = () => setIsListening(false);
-
-        recognition.start();
-        autoStopRef.current = setTimeout(() => { try { recognition.stop(); } catch { /* ok */ } }, 30000);
-        return;
-      } catch {
-        // Speech API en erreur → fallback MediaRecorder
-      }
-    }
-
-    // ── MÉTHODE 2 : MediaRecorder + transcription serveur (Firefox) ──
-    if (typeof MediaRecorder === "undefined") {
-      setMicError("Ton navigateur ne supporte pas le micro. Utilise Chrome, Edge ou Safari.");
-      return;
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mimeType = ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus", "audio/mp4"]
-        .find((m) => MediaRecorder.isTypeSupported(m)) ?? "";
-      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
-      chunksRef.current = [];
-
-      recorder.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
-
-      recorder.onstop = async () => {
-        stream.getTracks().forEach((t) => t.stop());
-        setIsListening(false);
-        const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
-        if (blob.size < 500) return;
-        setIsTranscribing(true);
-        try {
-          const ext = recorder.mimeType?.includes("mp4") ? "mp4" : recorder.mimeType?.includes("ogg") ? "ogg" : "webm";
-          const form = new FormData();
-          form.append("audio", blob, `audio.${ext}`);
-          const res = await fetch("/api/avatar/transcribe", { method: "POST", body: form });
-          const data = await res.json();
-          if (data.text?.trim()) sendMessageRef.current?.(data.text.trim());
-          else setMicError("Je n'ai rien compris. Réessaie.");
-        } catch {
-          setMicError("Erreur lors de la transcription.");
-        } finally {
-          setIsTranscribing(false);
-        }
-      };
-
-      mediaRecorderRef.current = recorder;
-      recorder.start();
-      setIsListening(true);
-      autoStopRef.current = setTimeout(() => {
-        if (mediaRecorderRef.current?.state !== "inactive") mediaRecorderRef.current?.stop();
-      }, 30000);
-    } catch (err) {
-      const name = err instanceof Error ? err.name : "";
-      if (name === "NotAllowedError" || name === "PermissionDeniedError") {
-        setMicError("Autorise l'accès au microphone dans ton navigateur.");
-      } else if (name === "NotFoundError") {
-        setMicError("Aucun micro détecté sur cet appareil.");
-      } else {
-        setMicError("Erreur micro. Recharge la page.");
-      }
-    }
-  }, [isListening]);
+  // ── Micro (via hook partagé) ───────────────────────────────────────────────
+  const {
+    isListening,
+    isTranscribing,
+    micError,
+    toggleMic,
+  } = useMicInput({
+    windowKey: "__miraLibreRecognition",
+    onTranscript: (text) => {
+      setInputText("");
+      sendMessageRef.current?.(text);
+    },
+    onInterim: (text) => setInputText(text),
+  });
 
   const handleClose = () => {
     if (timer.secsAddedThisSession > 0) {

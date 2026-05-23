@@ -11,10 +11,11 @@ export function getRedis(): Redis | null {
     return null;
   }
   if (!_redis) {
-    _redis = new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL.trim(),
-      token: process.env.UPSTASH_REDIS_REST_TOKEN.trim(),
-    });
+    // Supprimer tout espace blanc (y compris les sauts de ligne encodés Vercel)
+    const url   = process.env.UPSTASH_REDIS_REST_URL.replace(/\s+/g, "");
+    const token = process.env.UPSTASH_REDIS_REST_TOKEN.replace(/\s+/g, "");
+    if (!url || !token) return null;
+    _redis = new Redis({ url, token });
   }
   return _redis;
 }
