@@ -95,6 +95,7 @@ export const ModelName = {
   ObjectifNote: 'ObjectifNote',
   PlanifNotionEleve: 'PlanifNotionEleve',
   DisponibiliteEleve: 'DisponibiliteEleve',
+  EpreuveSemainePlan: 'EpreuveSemainePlan',
   AgentLog: 'AgentLog',
   OpportunitePartenariat: 'OpportunitePartenariat',
   CompteSocial: 'CompteSocial',
@@ -828,6 +829,23 @@ export const DisponibiliteEleveScalarFieldEnum = {
 } as const
 
 export type DisponibiliteEleveScalarFieldEnum = (typeof DisponibiliteEleveScalarFieldEnum)[keyof typeof DisponibiliteEleveScalarFieldEnum]
+
+
+export const EpreuveSemainePlanScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  semaineISO: 'semaineISO',
+  contenu: 'contenu',
+  progression: 'progression',
+  statut: 'statut',
+  score: 'score',
+  feedbackIA: 'feedbackIA',
+  tempsSecondes: 'tempsSecondes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EpreuveSemainePlanScalarFieldEnum = (typeof EpreuveSemainePlanScalarFieldEnum)[keyof typeof EpreuveSemainePlanScalarFieldEnum]
 
 
 export const AgentLogScalarFieldEnum = {

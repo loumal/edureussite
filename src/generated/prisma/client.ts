@@ -262,6 +262,11 @@ export type PlanifNotionEleve = Prisma.PlanifNotionEleveModel
  */
 export type DisponibiliteEleve = Prisma.DisponibiliteEleveModel
 /**
+ * Model EpreuveSemainePlan
+ * Épreuve de fin de semaine générée à partir du plan de révision de l'élève
+ */
+export type EpreuveSemainePlan = Prisma.EpreuveSemainePlanModel
+/**
  * Model AgentLog
  * Journal de toutes les générations IA faites via la page Agents
  */

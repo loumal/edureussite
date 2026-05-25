@@ -4,6 +4,7 @@ import { Matiere, PrioriteNotion } from "@/generated/prisma";
 import { TRPCError } from "@trpc/server";
 import { getNotionsPourNiveau, NIVEAU_TO_CYCLE } from "@/lib/pfeq/notions";
 import { sendAidePlanificationParent } from "@/lib/email/send-aide-planification-parent";
+import { genererEpreuveSemainePlan, genererFeedbackEpreuveSemaine } from "@/lib/ai/epreuve-semaine";
 
 const NIVEAUX_JEUNES = ["PRIMAIRE_1", "PRIMAIRE_2", "PRIMAIRE_3"] as const;
 
@@ -548,6 +549,145 @@ export const planRouter = createTRPCRouter({
       aUnPlan: notionsPlanifiees.length > 0 || objectifsAvecSousObjectifs.length > 0,
     };
   }),
+
+  // ── Épreuve de fin de semaine ──────────────────────────────────────────────
+
+  /** Récupère l'épreuve de fin de semaine existante (ou null). */
+  getEpreuveSemaine: protectedProcedure
+    .input(z.object({ semaineISO: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUnique({ where: { userId: ctx.user.id } });
+      if (!profil) throw new TRPCError({ code: "NOT_FOUND" });
+      const epreuve = await ctx.prisma.epreuveSemainePlan.findUnique({
+        where: { eleveId_semaineISO: { eleveId: profil.id, semaineISO: input.semaineISO } },
+      });
+      return epreuve ?? null;
+    }),
+
+  /** Génère une nouvelle épreuve de fin de semaine pour les notions de la semaine.
+   *  Si une épreuve EN_COURS existe déjà, la retourne directement (idempotent). */
+  genererEpreuveSemaine: protectedProcedure
+    .input(z.object({ semaineISO: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        include: { planifNotions: true },
+      });
+
+      // Retourner l'épreuve EN_COURS si elle existe déjà
+      const existante = await ctx.prisma.epreuveSemainePlan.findUnique({
+        where: { eleveId_semaineISO: { eleveId: profil.id, semaineISO: input.semaineISO } },
+      });
+      if (existante) return existante;
+
+      // Notions de cette semaine
+      const notionsDeSemaine = profil.planifNotions.filter(
+        (n) => n.semaineDebut === input.semaineISO && !n.maitrisee && n.priorite !== "MAITRISE"
+      );
+      if (notionsDeSemaine.length === 0) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Aucune notion planifiée pour cette semaine." });
+      }
+
+      // Générer via IA
+      const epreuveGeneree = await genererEpreuveSemainePlan({
+        notions: notionsDeSemaine.map((n) => ({
+          notion: n.notion,
+          matiere: n.matiere,
+          priorite: n.priorite,
+        })),
+        profil: {
+          prenom: profil.prenom,
+          niveauScolaire: profil.niveauScolaire,
+          centresInteret: (profil.centresInteret as string[] | null) ?? [],
+          sportFavori: profil.sportFavori,
+          universMediatique: profil.universMediatique,
+          autresPassions: profil.autresPassions,
+          profilCognitif: profil.profilCognitif,
+          parcoursAdapte: profil.parcoursAdapte,
+        },
+        semaineISO: input.semaineISO,
+      });
+
+      // Sauvegarder en DB
+      const epreuve = await ctx.prisma.epreuveSemainePlan.create({
+        data: {
+          eleveId: profil.id,
+          semaineISO: input.semaineISO,
+          contenu: epreuveGeneree as object,
+          progression: {},
+          statut: "EN_COURS",
+        },
+      });
+
+      return epreuve;
+    }),
+
+  /** Sauvegarde la progression (pause mid-exam) — appelé quand l'élève s'arrête. */
+  sauvegarderProgressionEpreuveSemaine: protectedProcedure
+    .input(z.object({
+      epreuveId:    z.string(),
+      partieActive: z.number().int().min(0),
+      reponses:     z.record(z.string(), z.string()),
+      tempsSecondes: z.number().int().min(0),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUnique({ where: { userId: ctx.user.id } });
+      if (!profil) throw new TRPCError({ code: "NOT_FOUND" });
+
+      await ctx.prisma.epreuveSemainePlan.updateMany({
+        where: { id: input.epreuveId, eleveId: profil.id, statut: "EN_COURS" },
+        data: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          progression: { partieActive: input.partieActive, reponses: input.reponses as any },
+          tempsSecondes: input.tempsSecondes,
+        },
+      });
+      return { success: true };
+    }),
+
+  /** Soumet l'épreuve, génère le feedback IA et marque comme TERMINÉE. */
+  terminerEpreuveSemaine: protectedProcedure
+    .input(z.object({
+      epreuveId:    z.string(),
+      reponses:     z.record(z.string(), z.string()),
+      tempsSecondes: z.number().int().min(0),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUnique({ where: { userId: ctx.user.id } });
+      if (!profil) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const epreuve = await ctx.prisma.epreuveSemainePlan.findFirst({
+        where: { id: input.epreuveId, eleveId: profil.id },
+      });
+      if (!epreuve) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const epreuveContenu = epreuve.contenu as unknown as import("@/lib/ai/exercice").EpreuveGeneree;
+
+      // Générer le feedback IA
+      const feedback = await genererFeedbackEpreuveSemaine({
+        epreuve: epreuveContenu,
+        reponses: input.reponses,
+        prenom: profil.prenom,
+        profilCognitif: profil.profilCognitif,
+        parcoursAdapte: profil.parcoursAdapte,
+      });
+
+      // Sauvegarder résultat final
+      const updated = await ctx.prisma.epreuveSemainePlan.update({
+        where: { id: input.epreuveId },
+        data: {
+          statut: "TERMINE",
+          score: feedback.score,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          feedbackIA: feedback as any,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          progression: { partieActive: 0, reponses: input.reponses as any },
+          tempsSecondes: input.tempsSecondes,
+        },
+      });
+
+      return { epreuve: updated, feedback };
+    }),
 
   // ── Notions disponibles pour la matière + niveau de l'élève ───────────────
 

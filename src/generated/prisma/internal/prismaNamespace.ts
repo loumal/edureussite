@@ -428,6 +428,7 @@ export const ModelName = {
   ObjectifNote: 'ObjectifNote',
   PlanifNotionEleve: 'PlanifNotionEleve',
   DisponibiliteEleve: 'DisponibiliteEleve',
+  EpreuveSemainePlan: 'EpreuveSemainePlan',
   AgentLog: 'AgentLog',
   OpportunitePartenariat: 'OpportunitePartenariat',
   CompteSocial: 'CompteSocial',
@@ -455,7 +456,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur" | "evaluationRequest" | "formulaireReponse" | "rapportEvaluation"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "epreuveSemainePlan" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur" | "evaluationRequest" | "formulaireReponse" | "rapportEvaluation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3715,6 +3716,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EpreuveSemainePlan: {
+      payload: Prisma.$EpreuveSemainePlanPayload<ExtArgs>
+      fields: Prisma.EpreuveSemainePlanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EpreuveSemainePlanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EpreuveSemainePlanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload>
+        }
+        findFirst: {
+          args: Prisma.EpreuveSemainePlanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EpreuveSemainePlanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload>
+        }
+        findMany: {
+          args: Prisma.EpreuveSemainePlanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload>[]
+        }
+        create: {
+          args: Prisma.EpreuveSemainePlanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload>
+        }
+        createMany: {
+          args: Prisma.EpreuveSemainePlanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EpreuveSemainePlanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload>[]
+        }
+        delete: {
+          args: Prisma.EpreuveSemainePlanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload>
+        }
+        update: {
+          args: Prisma.EpreuveSemainePlanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload>
+        }
+        deleteMany: {
+          args: Prisma.EpreuveSemainePlanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EpreuveSemainePlanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EpreuveSemainePlanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload>[]
+        }
+        upsert: {
+          args: Prisma.EpreuveSemainePlanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpreuveSemainePlanPayload>
+        }
+        aggregate: {
+          args: Prisma.EpreuveSemainePlanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEpreuveSemainePlan>
+        }
+        groupBy: {
+          args: Prisma.EpreuveSemainePlanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EpreuveSemainePlanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EpreuveSemainePlanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EpreuveSemainePlanCountAggregateOutputType> | number
+        }
+      }
+    }
     AgentLog: {
       payload: Prisma.$AgentLogPayload<ExtArgs>
       fields: Prisma.AgentLogFieldRefs
@@ -5347,6 +5422,23 @@ export const DisponibiliteEleveScalarFieldEnum = {
 export type DisponibiliteEleveScalarFieldEnum = (typeof DisponibiliteEleveScalarFieldEnum)[keyof typeof DisponibiliteEleveScalarFieldEnum]
 
 
+export const EpreuveSemainePlanScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  semaineISO: 'semaineISO',
+  contenu: 'contenu',
+  progression: 'progression',
+  statut: 'statut',
+  score: 'score',
+  feedbackIA: 'feedbackIA',
+  tempsSecondes: 'tempsSecondes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EpreuveSemainePlanScalarFieldEnum = (typeof EpreuveSemainePlanScalarFieldEnum)[keyof typeof EpreuveSemainePlanScalarFieldEnum]
+
+
 export const AgentLogScalarFieldEnum = {
   id: 'id',
   agentType: 'agentType',
@@ -6256,6 +6348,7 @@ export type GlobalOmitConfig = {
   objectifNote?: Prisma.ObjectifNoteOmit
   planifNotionEleve?: Prisma.PlanifNotionEleveOmit
   disponibiliteEleve?: Prisma.DisponibiliteEleveOmit
+  epreuveSemainePlan?: Prisma.EpreuveSemainePlanOmit
   agentLog?: Prisma.AgentLogOmit
   opportunitePartenariat?: Prisma.OpportunitePartenariatOmit
   compteSocial?: Prisma.CompteSocialOmit

@@ -150,11 +150,12 @@ function assignerJoursParNotion(
 export default async function PlanPage() {
   await requireRole(["ELEVE"]);
 
-  const [{ profil }, planDuJour, planifNotions, dispo] = await Promise.all([
+  const [{ profil }, planDuJour, planifNotions, dispo, epreuveSemaine] = await Promise.all([
     api.eleve.getDashboard(),
     api.plan.getPlanDuJour(),
     api.plan.getPlanifNotions(),
     api.plan.getDisponibilite(),
+    api.plan.getEpreuveSemaine({ semaineISO: getSemaineISO(new Date()) }),
   ]);
 
   if (!profil) return null;
@@ -614,7 +615,7 @@ export default async function PlanPage() {
 
                         {/* ── CTA si semaine active ou en retard ── */}
                         {(estActive || enRetard) && (
-                          <div className="px-4 pb-4 pt-1">
+                          <div className="px-4 pb-4 pt-1 space-y-2">
                             <Link
                               href={`/eleve/exercices/nouveau?plan=1&matiere=${notions[0]?.matiere ?? ""}`}
                               className={`flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-bold text-white hover:opacity-90 transition-opacity ${
@@ -623,6 +624,46 @@ export default async function PlanPage() {
                             >
                               {enRetard ? "⏳ Rattraper cette semaine →" : "✨ Faire l'exercice du jour"}
                             </Link>
+                            {/* ── Bouton épreuve de fin de semaine ── */}
+                            {estActive && (() => {
+                              const ep = epreuveSemaine;
+                              if (ep?.statut === "TERMINE") {
+                                return (
+                                  <Link
+                                    href={`/eleve/exercices/epreuve-semaine?semaine=${semaine}`}
+                                    className="flex w-full items-center justify-center gap-2 rounded-xl py-2 text-xs font-bold border border-[rgba(42,124,111,0.4)] bg-[rgba(42,124,111,0.06)] text-[var(--color-success)] hover:bg-[rgba(42,124,111,0.1)] transition-colors"
+                                  >
+                                    ✅ Épreuve terminée · {Math.round(ep.score ?? 0)}/100 — Revoir les résultats
+                                  </Link>
+                                );
+                              }
+                              if (ep?.statut === "EN_COURS") {
+                                return (
+                                  <Link
+                                    href={`/eleve/exercices/epreuve-semaine?semaine=${semaine}`}
+                                    className="flex w-full items-center justify-center gap-2 rounded-xl py-2 text-xs font-bold border border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors"
+                                  >
+                                    ▶️ Reprendre l&apos;épreuve de la semaine
+                                  </Link>
+                                );
+                              }
+                              return (
+                                <Link
+                                  href={`/eleve/exercices/epreuve-semaine?semaine=${semaine}`}
+                                  className="flex w-full items-center justify-center gap-2 rounded-xl py-2 text-xs font-bold border border-[rgba(91,79,207,0.35)] bg-[rgba(91,79,207,0.05)] text-[var(--color-purple)] hover:bg-[rgba(91,79,207,0.1)] transition-colors"
+                                >
+                                  🏆 Faire l&apos;épreuve de la semaine
+                                </Link>
+                              );
+                            })()}
+                            {enRetard && (
+                              <Link
+                                href={`/eleve/exercices/epreuve-semaine?semaine=${semaine}`}
+                                className="flex w-full items-center justify-center gap-2 rounded-xl py-2 text-xs font-bold border border-[rgba(91,79,207,0.35)] bg-[rgba(91,79,207,0.05)] text-[var(--color-purple)] hover:bg-[rgba(91,79,207,0.1)] transition-colors"
+                              >
+                                🏆 Épreuve de cette semaine
+                              </Link>
+                            )}
                           </div>
                         )}
                       </Card>

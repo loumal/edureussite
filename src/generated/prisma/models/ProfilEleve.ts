@@ -551,6 +551,7 @@ export type ProfilEleveWhereInput = {
   planifNotions?: Prisma.PlanifNotionEleveListRelationFilter
   disponibilite?: Prisma.XOR<Prisma.DisponibiliteEleveNullableScalarRelationFilter, Prisma.DisponibiliteEleveWhereInput> | null
   evaluations?: Prisma.EvaluationRequestListRelationFilter
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanListRelationFilter
 }
 
 export type ProfilEleveOrderByWithRelationInput = {
@@ -624,6 +625,7 @@ export type ProfilEleveOrderByWithRelationInput = {
   planifNotions?: Prisma.PlanifNotionEleveOrderByRelationAggregateInput
   disponibilite?: Prisma.DisponibiliteEleveOrderByWithRelationInput
   evaluations?: Prisma.EvaluationRequestOrderByRelationAggregateInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanOrderByRelationAggregateInput
 }
 
 export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
@@ -700,6 +702,7 @@ export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
   planifNotions?: Prisma.PlanifNotionEleveListRelationFilter
   disponibilite?: Prisma.XOR<Prisma.DisponibiliteEleveNullableScalarRelationFilter, Prisma.DisponibiliteEleveWhereInput> | null
   evaluations?: Prisma.EvaluationRequestListRelationFilter
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanListRelationFilter
 }, "id" | "userId" | "codeAcces">
 
 export type ProfilEleveOrderByWithAggregationInput = {
@@ -871,6 +874,7 @@ export type ProfilEleveCreateInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateInput = {
@@ -942,6 +946,7 @@ export type ProfilEleveUncheckedCreateInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUpdateInput = {
@@ -1013,6 +1018,7 @@ export type ProfilEleveUpdateInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateInput = {
@@ -1084,6 +1090,7 @@ export type ProfilEleveUncheckedUpdateInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateManyInput = {
@@ -1877,6 +1884,20 @@ export type ProfilEleveUpdateOneRequiredWithoutDisponibiliteNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutDisponibiliteInput, Prisma.ProfilEleveUpdateWithoutDisponibiliteInput>, Prisma.ProfilEleveUncheckedUpdateWithoutDisponibiliteInput>
 }
 
+export type ProfilEleveCreateNestedOneWithoutEpreuvesSemaineInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutEpreuvesSemaineInput, Prisma.ProfilEleveUncheckedCreateWithoutEpreuvesSemaineInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutEpreuvesSemaineInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+}
+
+export type ProfilEleveUpdateOneRequiredWithoutEpreuvesSemaineNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutEpreuvesSemaineInput, Prisma.ProfilEleveUncheckedCreateWithoutEpreuvesSemaineInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutEpreuvesSemaineInput
+  upsert?: Prisma.ProfilEleveUpsertWithoutEpreuvesSemaineInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutEpreuvesSemaineInput, Prisma.ProfilEleveUpdateWithoutEpreuvesSemaineInput>, Prisma.ProfilEleveUncheckedUpdateWithoutEpreuvesSemaineInput>
+}
+
 export type ProfilEleveCreateNestedOneWithoutDemandesJeuxInput = {
   create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutDemandesJeuxInput, Prisma.ProfilEleveUncheckedCreateWithoutDemandesJeuxInput>
   connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutDemandesJeuxInput
@@ -1987,6 +2008,7 @@ export type ProfilEleveCreateWithoutUserInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutUserInput = {
@@ -2057,6 +2079,7 @@ export type ProfilEleveUncheckedCreateWithoutUserInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutUserInput = {
@@ -2143,6 +2166,7 @@ export type ProfilEleveUpdateWithoutUserInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutUserInput = {
@@ -2213,6 +2237,7 @@ export type ProfilEleveUncheckedUpdateWithoutUserInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutMiraMessagesInput = {
@@ -2283,6 +2308,7 @@ export type ProfilEleveCreateWithoutMiraMessagesInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
@@ -2353,6 +2379,7 @@ export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutMiraMessagesInput = {
@@ -2439,6 +2466,7 @@ export type ProfilEleveUpdateWithoutMiraMessagesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
@@ -2509,6 +2537,7 @@ export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
@@ -2579,6 +2608,7 @@ export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
@@ -2649,6 +2679,7 @@ export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutNiveauxMatieresInput = {
@@ -2735,6 +2766,7 @@ export type ProfilEleveUpdateWithoutNiveauxMatieresInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
@@ -2805,6 +2837,7 @@ export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutParentsInput = {
@@ -2875,6 +2908,7 @@ export type ProfilEleveCreateWithoutParentsInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutParentsInput = {
@@ -2945,6 +2979,7 @@ export type ProfilEleveUncheckedCreateWithoutParentsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutParentsInput = {
@@ -3085,6 +3120,7 @@ export type ProfilEleveCreateWithoutPlansAccompagnementInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
@@ -3155,6 +3191,7 @@ export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlansAccompagnementInput = {
@@ -3241,6 +3278,7 @@ export type ProfilEleveUpdateWithoutPlansAccompagnementInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
@@ -3311,6 +3349,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCoursRemediationInput = {
@@ -3381,6 +3420,7 @@ export type ProfilEleveCreateWithoutCoursRemediationInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
@@ -3451,6 +3491,7 @@ export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCoursRemediationInput = {
@@ -3537,6 +3578,7 @@ export type ProfilEleveUpdateWithoutCoursRemediationInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
@@ -3607,6 +3649,7 @@ export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutSurprisesInput = {
@@ -3677,6 +3720,7 @@ export type ProfilEleveCreateWithoutSurprisesInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
@@ -3747,6 +3791,7 @@ export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutSurprisesInput = {
@@ -3833,6 +3878,7 @@ export type ProfilEleveUpdateWithoutSurprisesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
@@ -3903,6 +3949,7 @@ export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesParentsInput = {
@@ -3973,6 +4020,7 @@ export type ProfilEleveCreateWithoutCommentairesParentsInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
@@ -4043,6 +4091,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesParentsInput = {
@@ -4129,6 +4178,7 @@ export type ProfilEleveUpdateWithoutCommentairesParentsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
@@ -4199,6 +4249,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutEnseignantInput = {
@@ -4269,6 +4320,7 @@ export type ProfilEleveCreateWithoutEnseignantInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
@@ -4339,6 +4391,7 @@ export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutEnseignantInput = {
@@ -4435,6 +4488,7 @@ export type ProfilEleveCreateWithoutPlanActionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
@@ -4505,6 +4559,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlanActionsInput = {
@@ -4591,6 +4646,7 @@ export type ProfilEleveUpdateWithoutPlanActionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
@@ -4661,6 +4717,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutExercicesAssignesInput = {
@@ -4731,6 +4788,7 @@ export type ProfilEleveCreateWithoutExercicesAssignesInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
@@ -4801,6 +4859,7 @@ export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutExercicesAssignesInput = {
@@ -4887,6 +4946,7 @@ export type ProfilEleveUpdateWithoutExercicesAssignesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
@@ -4957,6 +5017,7 @@ export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutSessionsInput = {
@@ -5027,6 +5088,7 @@ export type ProfilEleveCreateWithoutSessionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
@@ -5097,6 +5159,7 @@ export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutSessionsInput = {
@@ -5183,6 +5246,7 @@ export type ProfilEleveUpdateWithoutSessionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
@@ -5253,6 +5317,7 @@ export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCheckInsInput = {
@@ -5323,6 +5388,7 @@ export type ProfilEleveCreateWithoutCheckInsInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
@@ -5393,6 +5459,7 @@ export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCheckInsInput = {
@@ -5479,6 +5546,7 @@ export type ProfilEleveUpdateWithoutCheckInsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
@@ -5549,6 +5617,7 @@ export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutBadgesInput = {
@@ -5619,6 +5688,7 @@ export type ProfilEleveCreateWithoutBadgesInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
@@ -5689,6 +5759,7 @@ export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutBadgesInput = {
@@ -5775,6 +5846,7 @@ export type ProfilEleveUpdateWithoutBadgesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
@@ -5845,6 +5917,7 @@ export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesInput = {
@@ -5915,6 +5988,7 @@ export type ProfilEleveCreateWithoutCommentairesInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
@@ -5985,6 +6059,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesInput = {
@@ -6071,6 +6146,7 @@ export type ProfilEleveUpdateWithoutCommentairesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
@@ -6141,6 +6217,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesEleveInput = {
@@ -6211,6 +6288,7 @@ export type ProfilEleveCreateWithoutCommentairesEleveInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
@@ -6281,6 +6359,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesEleveInput = {
@@ -6367,6 +6446,7 @@ export type ProfilEleveUpdateWithoutCommentairesEleveInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
@@ -6437,6 +6517,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDemandesRencontreInput = {
@@ -6507,6 +6588,7 @@ export type ProfilEleveCreateWithoutDemandesRencontreInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
@@ -6577,6 +6659,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDemandesRencontreInput = {
@@ -6663,6 +6746,7 @@ export type ProfilEleveUpdateWithoutDemandesRencontreInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
@@ -6733,6 +6817,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutRendezVousInput = {
@@ -6803,6 +6888,7 @@ export type ProfilEleveCreateWithoutRendezVousInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
@@ -6873,6 +6959,7 @@ export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutRendezVousInput = {
@@ -6959,6 +7046,7 @@ export type ProfilEleveUpdateWithoutRendezVousInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
@@ -7029,6 +7117,7 @@ export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutRecommandationsIAInput = {
@@ -7099,6 +7188,7 @@ export type ProfilEleveCreateWithoutRecommandationsIAInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
@@ -7169,6 +7259,7 @@ export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutRecommandationsIAInput = {
@@ -7255,6 +7346,7 @@ export type ProfilEleveUpdateWithoutRecommandationsIAInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
@@ -7325,6 +7417,7 @@ export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
@@ -7395,6 +7488,7 @@ export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
@@ -7465,6 +7559,7 @@ export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDefJourCompletionsInput = {
@@ -7551,6 +7646,7 @@ export type ProfilEleveUpdateWithoutDefJourCompletionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
@@ -7621,6 +7717,7 @@ export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutMissionsHebdoInput = {
@@ -7691,6 +7788,7 @@ export type ProfilEleveCreateWithoutMissionsHebdoInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
@@ -7761,6 +7859,7 @@ export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutMissionsHebdoInput = {
@@ -7847,6 +7946,7 @@ export type ProfilEleveUpdateWithoutMissionsHebdoInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
@@ -7917,6 +8017,7 @@ export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutObjectifsNotesInput = {
@@ -7987,6 +8088,7 @@ export type ProfilEleveCreateWithoutObjectifsNotesInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
@@ -8057,6 +8159,7 @@ export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutObjectifsNotesInput = {
@@ -8143,6 +8246,7 @@ export type ProfilEleveUpdateWithoutObjectifsNotesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
@@ -8213,6 +8317,7 @@ export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutPlanifNotionsInput = {
@@ -8283,6 +8388,7 @@ export type ProfilEleveCreateWithoutPlanifNotionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
@@ -8353,6 +8459,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlanifNotionsInput = {
@@ -8439,6 +8546,7 @@ export type ProfilEleveUpdateWithoutPlanifNotionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
@@ -8509,6 +8617,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDisponibiliteInput = {
@@ -8579,6 +8688,7 @@ export type ProfilEleveCreateWithoutDisponibiliteInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
@@ -8649,6 +8759,7 @@ export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDisponibiliteInput = {
@@ -8735,6 +8846,7 @@ export type ProfilEleveUpdateWithoutDisponibiliteInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
@@ -8804,6 +8916,307 @@ export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
   miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+}
+
+export type ProfilEleveCreateWithoutEpreuvesSemaineInput = {
+  id?: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  user: Prisma.UserCreateNestedOneWithoutProfilEleveInput
+  enseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutElevesInput
+  parents?: Prisma.ProfilParentCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIACreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
+  miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+}
+
+export type ProfilEleveUncheckedCreateWithoutEpreuvesSemaineInput = {
+  id?: string
+  userId: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  enseignantId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  parents?: Prisma.ProfilParentUncheckedCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionUncheckedCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueUncheckedCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveUncheckedCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedCreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
+  miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+}
+
+export type ProfilEleveCreateOrConnectWithoutEpreuvesSemaineInput = {
+  where: Prisma.ProfilEleveWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutEpreuvesSemaineInput, Prisma.ProfilEleveUncheckedCreateWithoutEpreuvesSemaineInput>
+}
+
+export type ProfilEleveUpsertWithoutEpreuvesSemaineInput = {
+  update: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutEpreuvesSemaineInput, Prisma.ProfilEleveUncheckedUpdateWithoutEpreuvesSemaineInput>
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutEpreuvesSemaineInput, Prisma.ProfilEleveUncheckedCreateWithoutEpreuvesSemaineInput>
+  where?: Prisma.ProfilEleveWhereInput
+}
+
+export type ProfilEleveUpdateToOneWithWhereWithoutEpreuvesSemaineInput = {
+  where?: Prisma.ProfilEleveWhereInput
+  data: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutEpreuvesSemaineInput, Prisma.ProfilEleveUncheckedUpdateWithoutEpreuvesSemaineInput>
+}
+
+export type ProfilEleveUpdateWithoutEpreuvesSemaineInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.UserUpdateOneRequiredWithoutProfilEleveNestedInput
+  enseignant?: Prisma.ProfilEnseignantUpdateOneWithoutElevesNestedInput
+  parents?: Prisma.ProfilParentUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
+  miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+}
+
+export type ProfilEleveUncheckedUpdateWithoutEpreuvesSemaineInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  parents?: Prisma.ProfilParentUncheckedUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUncheckedUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUncheckedUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUncheckedUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
+  miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
 }
 
@@ -8875,6 +9288,7 @@ export type ProfilEleveCreateWithoutDemandesJeuxInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
@@ -8945,6 +9359,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDemandesJeuxInput = {
@@ -9031,6 +9446,7 @@ export type ProfilEleveUpdateWithoutDemandesJeuxInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
@@ -9101,6 +9517,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutPartiesMultiInput = {
@@ -9171,6 +9588,7 @@ export type ProfilEleveCreateWithoutPartiesMultiInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
@@ -9241,6 +9659,7 @@ export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPartiesMultiInput = {
@@ -9327,6 +9746,7 @@ export type ProfilEleveUpdateWithoutPartiesMultiInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
@@ -9397,6 +9817,7 @@ export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutEvaluationsInput = {
@@ -9467,6 +9888,7 @@ export type ProfilEleveCreateWithoutEvaluationsInput = {
   objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutEvaluationsInput = {
@@ -9537,6 +9959,7 @@ export type ProfilEleveUncheckedCreateWithoutEvaluationsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutEvaluationsInput = {
@@ -9623,6 +10046,7 @@ export type ProfilEleveUpdateWithoutEvaluationsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutEvaluationsInput = {
@@ -9693,6 +10117,7 @@ export type ProfilEleveUncheckedUpdateWithoutEvaluationsInput = {
   objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUpdateWithoutParentsInput = {
@@ -9763,6 +10188,7 @@ export type ProfilEleveUpdateWithoutParentsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
@@ -9833,6 +10259,7 @@ export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateManyWithoutParentsInput = {
@@ -9994,6 +10421,7 @@ export type ProfilEleveUpdateWithoutEnseignantInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
@@ -10064,6 +10492,7 @@ export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateManyWithoutEnseignantInput = {
@@ -10141,6 +10570,7 @@ export type ProfilEleveCountOutputType = {
   objectifsNotes: number
   planifNotions: number
   evaluations: number
+  epreuvesSemaine: number
 }
 
 export type ProfilEleveCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -10168,6 +10598,7 @@ export type ProfilEleveCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   objectifsNotes?: boolean | ProfilEleveCountOutputTypeCountObjectifsNotesArgs
   planifNotions?: boolean | ProfilEleveCountOutputTypeCountPlanifNotionsArgs
   evaluations?: boolean | ProfilEleveCountOutputTypeCountEvaluationsArgs
+  epreuvesSemaine?: boolean | ProfilEleveCountOutputTypeCountEpreuvesSemaineArgs
 }
 
 /**
@@ -10348,6 +10779,13 @@ export type ProfilEleveCountOutputTypeCountEvaluationsArgs<ExtArgs extends runti
   where?: Prisma.EvaluationRequestWhereInput
 }
 
+/**
+ * ProfilEleveCountOutputType without action
+ */
+export type ProfilEleveCountOutputTypeCountEpreuvesSemaineArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EpreuveSemainePlanWhereInput
+}
+
 
 export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -10420,6 +10858,7 @@ export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   planifNotions?: boolean | Prisma.ProfilEleve$planifNotionsArgs<ExtArgs>
   disponibilite?: boolean | Prisma.ProfilEleve$disponibiliteArgs<ExtArgs>
   evaluations?: boolean | Prisma.ProfilEleve$evaluationsArgs<ExtArgs>
+  epreuvesSemaine?: boolean | Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs>
   _count?: boolean | Prisma.ProfilEleveCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["profilEleve"]>
 
@@ -10594,6 +11033,7 @@ export type ProfilEleveInclude<ExtArgs extends runtime.Types.Extensions.Internal
   planifNotions?: boolean | Prisma.ProfilEleve$planifNotionsArgs<ExtArgs>
   disponibilite?: boolean | Prisma.ProfilEleve$disponibiliteArgs<ExtArgs>
   evaluations?: boolean | Prisma.ProfilEleve$evaluationsArgs<ExtArgs>
+  epreuvesSemaine?: boolean | Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs>
   _count?: boolean | Prisma.ProfilEleveCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProfilEleveIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -10635,6 +11075,7 @@ export type $ProfilElevePayload<ExtArgs extends runtime.Types.Extensions.Interna
     planifNotions: Prisma.$PlanifNotionElevePayload<ExtArgs>[]
     disponibilite: Prisma.$DisponibiliteElevePayload<ExtArgs> | null
     evaluations: Prisma.$EvaluationRequestPayload<ExtArgs>[]
+    epreuvesSemaine: Prisma.$EpreuveSemainePlanPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -11101,6 +11542,7 @@ export interface Prisma__ProfilEleveClient<T, Null = never, ExtArgs extends runt
   planifNotions<T extends Prisma.ProfilEleve$planifNotionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$planifNotionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanifNotionElevePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   disponibilite<T extends Prisma.ProfilEleve$disponibiliteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$disponibiliteArgs<ExtArgs>>): Prisma.Prisma__DisponibiliteEleveClient<runtime.Types.Result.GetResult<Prisma.$DisponibiliteElevePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   evaluations<T extends Prisma.ProfilEleve$evaluationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$evaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  epreuvesSemaine<T extends Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EpreuveSemainePlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12185,6 +12627,30 @@ export type ProfilEleve$evaluationsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.EvaluationRequestScalarFieldEnum | Prisma.EvaluationRequestScalarFieldEnum[]
+}
+
+/**
+ * ProfilEleve.epreuvesSemaine
+ */
+export type ProfilEleve$epreuvesSemaineArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EpreuveSemainePlan
+   */
+  select?: Prisma.EpreuveSemainePlanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EpreuveSemainePlan
+   */
+  omit?: Prisma.EpreuveSemainePlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EpreuveSemainePlanInclude<ExtArgs> | null
+  where?: Prisma.EpreuveSemainePlanWhereInput
+  orderBy?: Prisma.EpreuveSemainePlanOrderByWithRelationInput | Prisma.EpreuveSemainePlanOrderByWithRelationInput[]
+  cursor?: Prisma.EpreuveSemainePlanWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EpreuveSemainePlanScalarFieldEnum | Prisma.EpreuveSemainePlanScalarFieldEnum[]
 }
 
 /**

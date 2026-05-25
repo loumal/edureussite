@@ -393,6 +393,7 @@ model ProfilEleve {
   planifNotions         PlanifNotionEleve[]
   disponibilite         DisponibiliteEleve?
   evaluations           EvaluationRequest[]
+  epreuvesSemaine       EpreuveSemainePlan[]
 
   // ── Quota Mira IA (session vocale hebdomadaire) ───────────────────────
   miraSecsUsedWeek Int     @default(0)   @map("sofiaSecsUsedWeek") // secondes utilisées cette semaine
@@ -1178,6 +1179,29 @@ model DisponibiliteEleve {
   eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
 
   @@map("disponibilites_eleve")
+}
+
+/// Épreuve de fin de semaine générée à partir du plan de révision de l'élève
+model EpreuveSemainePlan {
+  id             String    @id @default(cuid())
+  eleveId        String
+  semaineISO     String    // "2026-W21"
+  /// EpreuveGeneree JSON (parties, questions, mise en situation…)
+  contenu        Json
+  /// { partieActive: number, reponses: Record<string,string> }
+  progression    Json      @default("{}")
+  statut         String    @default("EN_COURS")  // "EN_COURS" | "TERMINE"
+  score          Float?
+  feedbackIA     Json?
+  tempsSecondes  Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  eleve  ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@unique([eleveId, semaineISO])
+  @@index([eleveId])
+  @@map("epreuves_semaine_plan")
 }
 
 // ─── AGENTS IA ADMIN ──────────────────────────────────────────────────────────
