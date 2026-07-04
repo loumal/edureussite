@@ -353,6 +353,10 @@ model ProfilEleve {
 
   anneeScolaireActive String  @default("2025-2026")
 
+  // ── Rentrée scolaire ──────────────────────────────────────────────────────
+  dateRentree      DateTime?        // date de rentrée choisie par l'élève
+  modePreRentree   Boolean @default(false) // true si inscrit avant la rentrée
+
   streakJours       Int      @default(0)
   streakMaxJours    Int      @default(0)
   streakBoucliers   Int      @default(0)
@@ -399,6 +403,7 @@ model ProfilEleve {
   disponibilite         DisponibiliteEleve?
   evaluations           EvaluationRequest[]
   epreuvesSemaine       EpreuveSemainePlan[]
+  lectures              LectureJournaliere[]
 
   // ── Quota Mira IA (session vocale hebdomadaire) ───────────────────────
   miraSecsUsedWeek Int     @default(0)   @map("sofiaSecsUsedWeek") // secondes utilisées cette semaine
@@ -420,6 +425,35 @@ model HistoriqueNiveauEleve {
 
   @@index([eleveId])
   @@map("historique_niveaux_eleves")
+}
+
+// ── Lecture quotidienne (Canada) — 5W + analyse IA ────────────────────────
+model LectureJournaliere {
+  id             String   @id @default(cuid())
+  eleveId        String
+  date           DateTime @default(now())
+
+  titreLivre     String
+  auteur         String?
+
+  // Cadre des 5W (Qui, Quoi, Où, Quand, Pourquoi)
+  qui            String?   // Qui sont les personnages principaux ?
+  quoi           String?   // Que s'est-il passé ?
+  ou             String?   @map("ou_field")  // Où se passe l'histoire ?
+  quand          String?   // Quand se passe l'histoire ?
+  pourquoi       String?   // Pourquoi cela s'est-il produit ?
+
+  resumePhotoUrl String?   // URL photo si soumis par photo (uploadée sur S3)
+  analyseIA      String?   // JSON feedback de l'IA
+  scoreGlobal    Int?      // 0-100
+
+  createdAt      DateTime  @default(now())
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@index([eleveId])
+  @@index([eleveId, date])
+  @@map("lectures_journalieres")
 }
 
 // ── Historique persistant des conversations Mira (mode aide libre) ─────────

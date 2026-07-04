@@ -18,9 +18,14 @@ import { estJeuneEleve } from "@/lib/utils/niveau-eleve";
 import { parseCosmetiques } from "@/lib/boutique/items";
 import Link from "next/link";
 
+const CANADA_PROVINCES = new Set(["QC","ON","BC","AB","SK","MB","NB","NS","PE","NL","YT","NT","NU"]);
+
 export default async function EleveDashboardPage() {
   const { profil, totalExercices, aFaitExerciceAujourdhui } = await api.eleve.getDashboard();
   if (!profil) return null;
+
+  const province = (profil as { user?: { province?: string } }).user?.province ?? "QC";
+  const estCanada = CANADA_PROVINCES.has(province);
 
   const modeDoux = profil.checkIns[0]?.modeDoux ?? false;
   const jeune = estJeuneEleve(profil.niveauScolaire);
@@ -34,12 +39,25 @@ export default async function EleveDashboardPage() {
     return auj.getDate() === nais.getDate() && auj.getMonth() === nais.getMonth();
   })();
 
+  // Calcul du nombre de jours avant la rentrée
+  const dateRentree = (profil as { dateRentree?: Date | null }).dateRentree;
+  const modePreRentree = (profil as { modePreRentree?: boolean }).modePreRentree ?? false;
+  const joursAvantRentree = dateRentree
+    ? Math.max(0, Math.ceil((new Date(dateRentree).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+    : null;
+
   return (
     <div className="min-h-screen bg-[var(--color-paper)]">
       <WelcomeTour role="eleve" prenom={profil.prenom} />
       <SessionTracker />
       {estAnniversaire && <BirthdayOverlay prenom={profil.prenom} />}
-      <NavEleve prenom={profil.prenom} streak={profil.streakJours} niveauScolaire={profil.niveauScolaire} avatarEquipe={cosmetiques.avatarEquipe} />
+      <NavEleve
+        prenom={profil.prenom}
+        streak={profil.streakJours}
+        niveauScolaire={profil.niveauScolaire}
+        avatarEquipe={cosmetiques.avatarEquipe}
+        province={province}
+      />
 
       <main className="mx-auto max-w-5xl px-4 py-5 sm:py-6">
 
@@ -56,11 +74,37 @@ export default async function EleveDashboardPage() {
           jeune={jeune}
         />
 
+        {/* ── MODE PRÉ-RENTRÉE ── */}
+        {modePreRentree && joursAvantRentree !== null && (
+          <div className="mb-5 rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-teal-50 px-5 py-4">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl flex-shrink-0">🎒</span>
+              <div className="flex-1">
+                <p className="font-bold text-emerald-800">
+                  {joursAvantRentree === 0
+                    ? "C'est la rentrée aujourd'hui !"
+                    : `${joursAvantRentree} jour${joursAvantRentree > 1 ? "s" : ""} avant ta rentrée`}
+                </p>
+                <p className="text-sm text-emerald-700 mt-0.5">
+                  Profite de ce temps pour explorer les notions de ta nouvelle année scolaire !
+                </p>
+              </div>
+              <Link
+                href="/eleve/plan"
+                className="flex-shrink-0 rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 transition-colors"
+              >
+                Explorer →
+              </Link>
+            </div>
+          </div>
+        )}
+
         {/* ── ACCÈS RAPIDE — 3 raccourcis contextuels ── */}
-        <div className="grid grid-cols-3 gap-2 mb-5">
+        <div className={`grid gap-2 mb-5 ${estCanada ? "grid-cols-4" : "grid-cols-3"}`}>
           <QuickCard href="/eleve/cours" emoji="📚" label="Mes cours" badge={profil.coursRemediation.filter(c => c.statut !== "TERMINE").length || undefined} />
           <QuickCard href="/eleve/plan" emoji="🗺️" label="Mon plan" />
           <QuickCard href="/eleve/boutique?onglet=jeux" emoji="🎮" label="Jeux" />
+          {estCanada && <QuickCard href="/eleve/lecture" emoji="📖" label="Lecture" />}
         </div>
 
         {/* ── GRILLE PRINCIPALE ── */}

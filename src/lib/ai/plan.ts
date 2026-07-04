@@ -52,6 +52,8 @@ const MATIERES_LABELS: Record<MatiereType, string> = {
   FRANCAIS: "Français", MATHEMATIQUES: "Mathématiques", SCIENCES: "Sciences",
   UNIVERS_SOCIAL: "Univers social", ARTS: "Arts", ETHIQUE: "Éthique",
   ANGLAIS: "Anglais", EDUCATION_PHYSIQUE: "Éducation physique",
+  SVT: "Sciences de la Vie et de la Terre",
+  PCT: "Physique-Chimie-Technologie",
 };
 
 export async function genererPlanAction(profil: ProfilPourPlan): Promise<PlanGenere> {

@@ -75,6 +75,8 @@ export type ProfilEleveMinAggregateOutputType = {
   environnement: string | null
   objectifScolaire: string | null
   anneeScolaireActive: string | null
+  dateRentree: Date | null
+  modePreRentree: boolean | null
   streakJours: number | null
   streakMaxJours: number | null
   streakBoucliers: number | null
@@ -114,6 +116,8 @@ export type ProfilEleveMaxAggregateOutputType = {
   environnement: string | null
   objectifScolaire: string | null
   anneeScolaireActive: string | null
+  dateRentree: Date | null
+  modePreRentree: boolean | null
   streakJours: number | null
   streakMaxJours: number | null
   streakBoucliers: number | null
@@ -160,6 +164,8 @@ export type ProfilEleveCountAggregateOutputType = {
   personnalite: number
   objectifScolaire: number
   anneeScolaireActive: number
+  dateRentree: number
+  modePreRentree: number
   streakJours: number
   streakMaxJours: number
   streakBoucliers: number
@@ -228,6 +234,8 @@ export type ProfilEleveMinAggregateInputType = {
   environnement?: true
   objectifScolaire?: true
   anneeScolaireActive?: true
+  dateRentree?: true
+  modePreRentree?: true
   streakJours?: true
   streakMaxJours?: true
   streakBoucliers?: true
@@ -267,6 +275,8 @@ export type ProfilEleveMaxAggregateInputType = {
   environnement?: true
   objectifScolaire?: true
   anneeScolaireActive?: true
+  dateRentree?: true
+  modePreRentree?: true
   streakJours?: true
   streakMaxJours?: true
   streakBoucliers?: true
@@ -313,6 +323,8 @@ export type ProfilEleveCountAggregateInputType = {
   personnalite?: true
   objectifScolaire?: true
   anneeScolaireActive?: true
+  dateRentree?: true
+  modePreRentree?: true
   streakJours?: true
   streakMaxJours?: true
   streakBoucliers?: true
@@ -447,6 +459,8 @@ export type ProfilEleveGroupByOutputType = {
   personnalite: string[]
   objectifScolaire: string | null
   anneeScolaireActive: string
+  dateRentree: Date | null
+  modePreRentree: boolean
   streakJours: number
   streakMaxJours: number
   streakBoucliers: number
@@ -517,6 +531,8 @@ export type ProfilEleveWhereInput = {
   personnalite?: Prisma.StringNullableListFilter<"ProfilEleve">
   objectifScolaire?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   anneeScolaireActive?: Prisma.StringFilter<"ProfilEleve"> | string
+  dateRentree?: Prisma.DateTimeNullableFilter<"ProfilEleve"> | Date | string | null
+  modePreRentree?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   streakJours?: Prisma.IntFilter<"ProfilEleve"> | number
   streakMaxJours?: Prisma.IntFilter<"ProfilEleve"> | number
   streakBoucliers?: Prisma.IntFilter<"ProfilEleve"> | number
@@ -561,6 +577,7 @@ export type ProfilEleveWhereInput = {
   disponibilite?: Prisma.XOR<Prisma.DisponibiliteEleveNullableScalarRelationFilter, Prisma.DisponibiliteEleveWhereInput> | null
   evaluations?: Prisma.EvaluationRequestListRelationFilter
   epreuvesSemaine?: Prisma.EpreuveSemainePlanListRelationFilter
+  lectures?: Prisma.LectureJournaliereListRelationFilter
 }
 
 export type ProfilEleveOrderByWithRelationInput = {
@@ -593,6 +610,8 @@ export type ProfilEleveOrderByWithRelationInput = {
   personnalite?: Prisma.SortOrder
   objectifScolaire?: Prisma.SortOrderInput | Prisma.SortOrder
   anneeScolaireActive?: Prisma.SortOrder
+  dateRentree?: Prisma.SortOrderInput | Prisma.SortOrder
+  modePreRentree?: Prisma.SortOrder
   streakJours?: Prisma.SortOrder
   streakMaxJours?: Prisma.SortOrder
   streakBoucliers?: Prisma.SortOrder
@@ -637,6 +656,7 @@ export type ProfilEleveOrderByWithRelationInput = {
   disponibilite?: Prisma.DisponibiliteEleveOrderByWithRelationInput
   evaluations?: Prisma.EvaluationRequestOrderByRelationAggregateInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanOrderByRelationAggregateInput
+  lectures?: Prisma.LectureJournaliereOrderByRelationAggregateInput
 }
 
 export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
@@ -672,6 +692,8 @@ export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
   personnalite?: Prisma.StringNullableListFilter<"ProfilEleve">
   objectifScolaire?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   anneeScolaireActive?: Prisma.StringFilter<"ProfilEleve"> | string
+  dateRentree?: Prisma.DateTimeNullableFilter<"ProfilEleve"> | Date | string | null
+  modePreRentree?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   streakJours?: Prisma.IntFilter<"ProfilEleve"> | number
   streakMaxJours?: Prisma.IntFilter<"ProfilEleve"> | number
   streakBoucliers?: Prisma.IntFilter<"ProfilEleve"> | number
@@ -716,6 +738,7 @@ export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
   disponibilite?: Prisma.XOR<Prisma.DisponibiliteEleveNullableScalarRelationFilter, Prisma.DisponibiliteEleveWhereInput> | null
   evaluations?: Prisma.EvaluationRequestListRelationFilter
   epreuvesSemaine?: Prisma.EpreuveSemainePlanListRelationFilter
+  lectures?: Prisma.LectureJournaliereListRelationFilter
 }, "id" | "userId" | "codeAcces">
 
 export type ProfilEleveOrderByWithAggregationInput = {
@@ -748,6 +771,8 @@ export type ProfilEleveOrderByWithAggregationInput = {
   personnalite?: Prisma.SortOrder
   objectifScolaire?: Prisma.SortOrderInput | Prisma.SortOrder
   anneeScolaireActive?: Prisma.SortOrder
+  dateRentree?: Prisma.SortOrderInput | Prisma.SortOrder
+  modePreRentree?: Prisma.SortOrder
   streakJours?: Prisma.SortOrder
   streakMaxJours?: Prisma.SortOrder
   streakBoucliers?: Prisma.SortOrder
@@ -803,6 +828,8 @@ export type ProfilEleveScalarWhereWithAggregatesInput = {
   personnalite?: Prisma.StringNullableListFilter<"ProfilEleve">
   objectifScolaire?: Prisma.StringNullableWithAggregatesFilter<"ProfilEleve"> | string | null
   anneeScolaireActive?: Prisma.StringWithAggregatesFilter<"ProfilEleve"> | string
+  dateRentree?: Prisma.DateTimeNullableWithAggregatesFilter<"ProfilEleve"> | Date | string | null
+  modePreRentree?: Prisma.BoolWithAggregatesFilter<"ProfilEleve"> | boolean
   streakJours?: Prisma.IntWithAggregatesFilter<"ProfilEleve"> | number
   streakMaxJours?: Prisma.IntWithAggregatesFilter<"ProfilEleve"> | number
   streakBoucliers?: Prisma.IntWithAggregatesFilter<"ProfilEleve"> | number
@@ -849,6 +876,8 @@ export type ProfilEleveCreateInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -892,6 +921,7 @@ export type ProfilEleveCreateInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateInput = {
@@ -924,6 +954,8 @@ export type ProfilEleveUncheckedCreateInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -966,6 +998,7 @@ export type ProfilEleveUncheckedCreateInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUpdateInput = {
@@ -997,6 +1030,8 @@ export type ProfilEleveUpdateInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1040,6 +1075,7 @@ export type ProfilEleveUpdateInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateInput = {
@@ -1072,6 +1108,8 @@ export type ProfilEleveUncheckedUpdateInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1114,6 +1152,7 @@ export type ProfilEleveUncheckedUpdateInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateManyInput = {
@@ -1146,6 +1185,8 @@ export type ProfilEleveCreateManyInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -1192,6 +1233,8 @@ export type ProfilEleveUpdateManyMutationInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1238,6 +1281,8 @@ export type ProfilEleveUncheckedUpdateManyInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1306,6 +1351,8 @@ export type ProfilEleveCountOrderByAggregateInput = {
   personnalite?: Prisma.SortOrder
   objectifScolaire?: Prisma.SortOrder
   anneeScolaireActive?: Prisma.SortOrder
+  dateRentree?: Prisma.SortOrder
+  modePreRentree?: Prisma.SortOrder
   streakJours?: Prisma.SortOrder
   streakMaxJours?: Prisma.SortOrder
   streakBoucliers?: Prisma.SortOrder
@@ -1359,6 +1406,8 @@ export type ProfilEleveMaxOrderByAggregateInput = {
   environnement?: Prisma.SortOrder
   objectifScolaire?: Prisma.SortOrder
   anneeScolaireActive?: Prisma.SortOrder
+  dateRentree?: Prisma.SortOrder
+  modePreRentree?: Prisma.SortOrder
   streakJours?: Prisma.SortOrder
   streakMaxJours?: Prisma.SortOrder
   streakBoucliers?: Prisma.SortOrder
@@ -1398,6 +1447,8 @@ export type ProfilEleveMinOrderByAggregateInput = {
   environnement?: Prisma.SortOrder
   objectifScolaire?: Prisma.SortOrder
   anneeScolaireActive?: Prisma.SortOrder
+  dateRentree?: Prisma.SortOrder
+  modePreRentree?: Prisma.SortOrder
   streakJours?: Prisma.SortOrder
   streakMaxJours?: Prisma.SortOrder
   streakBoucliers?: Prisma.SortOrder
@@ -1547,6 +1598,20 @@ export type ProfilEleveUpdateOneRequiredWithoutHistoriqueNiveauxNestedInput = {
   upsert?: Prisma.ProfilEleveUpsertWithoutHistoriqueNiveauxInput
   connect?: Prisma.ProfilEleveWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutHistoriqueNiveauxInput, Prisma.ProfilEleveUpdateWithoutHistoriqueNiveauxInput>, Prisma.ProfilEleveUncheckedUpdateWithoutHistoriqueNiveauxInput>
+}
+
+export type ProfilEleveCreateNestedOneWithoutLecturesInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutLecturesInput, Prisma.ProfilEleveUncheckedCreateWithoutLecturesInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutLecturesInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+}
+
+export type ProfilEleveUpdateOneRequiredWithoutLecturesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutLecturesInput, Prisma.ProfilEleveUncheckedCreateWithoutLecturesInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutLecturesInput
+  upsert?: Prisma.ProfilEleveUpsertWithoutLecturesInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutLecturesInput, Prisma.ProfilEleveUpdateWithoutLecturesInput>, Prisma.ProfilEleveUncheckedUpdateWithoutLecturesInput>
 }
 
 export type ProfilEleveCreateNestedOneWithoutMiraMessagesInput = {
@@ -2012,6 +2077,8 @@ export type ProfilEleveCreateWithoutUserInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -2054,6 +2121,7 @@ export type ProfilEleveCreateWithoutUserInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutUserInput = {
@@ -2085,6 +2153,8 @@ export type ProfilEleveUncheckedCreateWithoutUserInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -2127,6 +2197,7 @@ export type ProfilEleveUncheckedCreateWithoutUserInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutUserInput = {
@@ -2174,6 +2245,8 @@ export type ProfilEleveUpdateWithoutUserInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2216,6 +2289,7 @@ export type ProfilEleveUpdateWithoutUserInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutUserInput = {
@@ -2247,6 +2321,8 @@ export type ProfilEleveUncheckedUpdateWithoutUserInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2289,6 +2365,7 @@ export type ProfilEleveUncheckedUpdateWithoutUserInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutHistoriqueNiveauxInput = {
@@ -2320,6 +2397,8 @@ export type ProfilEleveCreateWithoutHistoriqueNiveauxInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -2362,6 +2441,7 @@ export type ProfilEleveCreateWithoutHistoriqueNiveauxInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutHistoriqueNiveauxInput = {
@@ -2394,6 +2474,8 @@ export type ProfilEleveUncheckedCreateWithoutHistoriqueNiveauxInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -2435,6 +2517,7 @@ export type ProfilEleveUncheckedCreateWithoutHistoriqueNiveauxInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutHistoriqueNiveauxInput = {
@@ -2482,6 +2565,8 @@ export type ProfilEleveUpdateWithoutHistoriqueNiveauxInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2524,6 +2609,7 @@ export type ProfilEleveUpdateWithoutHistoriqueNiveauxInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutHistoriqueNiveauxInput = {
@@ -2556,6 +2642,8 @@ export type ProfilEleveUncheckedUpdateWithoutHistoriqueNiveauxInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2573,6 +2661,327 @@ export type ProfilEleveUncheckedUpdateWithoutHistoriqueNiveauxInput = {
   miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
   parents?: Prisma.ProfilParentUncheckedUpdateManyWithoutElevesNestedInput
   niveauxMatieres?: Prisma.NiveauMatiereUncheckedUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUncheckedUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUncheckedUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUncheckedUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
+  miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+}
+
+export type ProfilEleveCreateWithoutLecturesInput = {
+  id?: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  user: Prisma.UserCreateNestedOneWithoutProfilEleveInput
+  enseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutElevesInput
+  parents?: Prisma.ProfilParentCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereCreateNestedManyWithoutEleveInput
+  historiqueNiveaux?: Prisma.HistoriqueNiveauEleveCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIACreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
+  miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+}
+
+export type ProfilEleveUncheckedCreateWithoutLecturesInput = {
+  id?: string
+  userId: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  enseignantId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  parents?: Prisma.ProfilParentUncheckedCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedCreateNestedManyWithoutEleveInput
+  historiqueNiveaux?: Prisma.HistoriqueNiveauEleveUncheckedCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionUncheckedCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueUncheckedCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveUncheckedCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedCreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
+  miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+}
+
+export type ProfilEleveCreateOrConnectWithoutLecturesInput = {
+  where: Prisma.ProfilEleveWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutLecturesInput, Prisma.ProfilEleveUncheckedCreateWithoutLecturesInput>
+}
+
+export type ProfilEleveUpsertWithoutLecturesInput = {
+  update: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutLecturesInput, Prisma.ProfilEleveUncheckedUpdateWithoutLecturesInput>
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutLecturesInput, Prisma.ProfilEleveUncheckedCreateWithoutLecturesInput>
+  where?: Prisma.ProfilEleveWhereInput
+}
+
+export type ProfilEleveUpdateToOneWithWhereWithoutLecturesInput = {
+  where?: Prisma.ProfilEleveWhereInput
+  data: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutLecturesInput, Prisma.ProfilEleveUncheckedUpdateWithoutLecturesInput>
+}
+
+export type ProfilEleveUpdateWithoutLecturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.UserUpdateOneRequiredWithoutProfilEleveNestedInput
+  enseignant?: Prisma.ProfilEnseignantUpdateOneWithoutElevesNestedInput
+  parents?: Prisma.ProfilParentUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUpdateManyWithoutEleveNestedInput
+  historiqueNiveaux?: Prisma.HistoriqueNiveauEleveUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
+  miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+}
+
+export type ProfilEleveUncheckedUpdateWithoutLecturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  parents?: Prisma.ProfilParentUncheckedUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedUpdateManyWithoutEleveNestedInput
+  historiqueNiveaux?: Prisma.HistoriqueNiveauEleveUncheckedUpdateManyWithoutEleveNestedInput
   planActions?: Prisma.PlanActionUncheckedUpdateManyWithoutEleveNestedInput
   sessions?: Prisma.SessionPratiqueUncheckedUpdateManyWithoutEleveNestedInput
   checkIns?: Prisma.CheckInEmotionnelUncheckedUpdateManyWithoutEleveNestedInput
@@ -2628,6 +3037,8 @@ export type ProfilEleveCreateWithoutMiraMessagesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -2670,6 +3081,7 @@ export type ProfilEleveCreateWithoutMiraMessagesInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
@@ -2702,6 +3114,8 @@ export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -2743,6 +3157,7 @@ export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutMiraMessagesInput = {
@@ -2790,6 +3205,8 @@ export type ProfilEleveUpdateWithoutMiraMessagesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2832,6 +3249,7 @@ export type ProfilEleveUpdateWithoutMiraMessagesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
@@ -2864,6 +3282,8 @@ export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2905,6 +3325,7 @@ export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
@@ -2936,6 +3357,8 @@ export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -2978,6 +3401,7 @@ export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
@@ -3010,6 +3434,8 @@ export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -3051,6 +3477,7 @@ export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutNiveauxMatieresInput = {
@@ -3098,6 +3525,8 @@ export type ProfilEleveUpdateWithoutNiveauxMatieresInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3140,6 +3569,7 @@ export type ProfilEleveUpdateWithoutNiveauxMatieresInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
@@ -3172,6 +3602,8 @@ export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3213,6 +3645,7 @@ export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutParentsInput = {
@@ -3244,6 +3677,8 @@ export type ProfilEleveCreateWithoutParentsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -3286,6 +3721,7 @@ export type ProfilEleveCreateWithoutParentsInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutParentsInput = {
@@ -3318,6 +3754,8 @@ export type ProfilEleveUncheckedCreateWithoutParentsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -3359,6 +3797,7 @@ export type ProfilEleveUncheckedCreateWithoutParentsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutParentsInput = {
@@ -3415,6 +3854,8 @@ export type ProfilEleveScalarWhereInput = {
   personnalite?: Prisma.StringNullableListFilter<"ProfilEleve">
   objectifScolaire?: Prisma.StringNullableFilter<"ProfilEleve"> | string | null
   anneeScolaireActive?: Prisma.StringFilter<"ProfilEleve"> | string
+  dateRentree?: Prisma.DateTimeNullableFilter<"ProfilEleve"> | Date | string | null
+  modePreRentree?: Prisma.BoolFilter<"ProfilEleve"> | boolean
   streakJours?: Prisma.IntFilter<"ProfilEleve"> | number
   streakMaxJours?: Prisma.IntFilter<"ProfilEleve"> | number
   streakBoucliers?: Prisma.IntFilter<"ProfilEleve"> | number
@@ -3461,6 +3902,8 @@ export type ProfilEleveCreateWithoutPlansAccompagnementInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -3503,6 +3946,7 @@ export type ProfilEleveCreateWithoutPlansAccompagnementInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
@@ -3535,6 +3979,8 @@ export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -3576,6 +4022,7 @@ export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlansAccompagnementInput = {
@@ -3623,6 +4070,8 @@ export type ProfilEleveUpdateWithoutPlansAccompagnementInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3665,6 +4114,7 @@ export type ProfilEleveUpdateWithoutPlansAccompagnementInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
@@ -3697,6 +4147,8 @@ export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3738,6 +4190,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCoursRemediationInput = {
@@ -3769,6 +4222,8 @@ export type ProfilEleveCreateWithoutCoursRemediationInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -3811,6 +4266,7 @@ export type ProfilEleveCreateWithoutCoursRemediationInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
@@ -3843,6 +4299,8 @@ export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -3884,6 +4342,7 @@ export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCoursRemediationInput = {
@@ -3931,6 +4390,8 @@ export type ProfilEleveUpdateWithoutCoursRemediationInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3973,6 +4434,7 @@ export type ProfilEleveUpdateWithoutCoursRemediationInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
@@ -4005,6 +4467,8 @@ export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4046,6 +4510,7 @@ export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutSurprisesInput = {
@@ -4077,6 +4542,8 @@ export type ProfilEleveCreateWithoutSurprisesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -4119,6 +4586,7 @@ export type ProfilEleveCreateWithoutSurprisesInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
@@ -4151,6 +4619,8 @@ export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -4192,6 +4662,7 @@ export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutSurprisesInput = {
@@ -4239,6 +4710,8 @@ export type ProfilEleveUpdateWithoutSurprisesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4281,6 +4754,7 @@ export type ProfilEleveUpdateWithoutSurprisesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
@@ -4313,6 +4787,8 @@ export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4354,6 +4830,7 @@ export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesParentsInput = {
@@ -4385,6 +4862,8 @@ export type ProfilEleveCreateWithoutCommentairesParentsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -4427,6 +4906,7 @@ export type ProfilEleveCreateWithoutCommentairesParentsInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
@@ -4459,6 +4939,8 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -4500,6 +4982,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesParentsInput = {
@@ -4547,6 +5030,8 @@ export type ProfilEleveUpdateWithoutCommentairesParentsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4589,6 +5074,7 @@ export type ProfilEleveUpdateWithoutCommentairesParentsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
@@ -4621,6 +5107,8 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4662,6 +5150,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutEnseignantInput = {
@@ -4693,6 +5182,8 @@ export type ProfilEleveCreateWithoutEnseignantInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -4735,6 +5226,7 @@ export type ProfilEleveCreateWithoutEnseignantInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
@@ -4767,6 +5259,8 @@ export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -4808,6 +5302,7 @@ export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutEnseignantInput = {
@@ -4865,6 +5360,8 @@ export type ProfilEleveCreateWithoutPlanActionsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -4907,6 +5404,7 @@ export type ProfilEleveCreateWithoutPlanActionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
@@ -4939,6 +5437,8 @@ export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -4980,6 +5480,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlanActionsInput = {
@@ -5027,6 +5528,8 @@ export type ProfilEleveUpdateWithoutPlanActionsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5069,6 +5572,7 @@ export type ProfilEleveUpdateWithoutPlanActionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
@@ -5101,6 +5605,8 @@ export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5142,6 +5648,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutExercicesAssignesInput = {
@@ -5173,6 +5680,8 @@ export type ProfilEleveCreateWithoutExercicesAssignesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -5215,6 +5724,7 @@ export type ProfilEleveCreateWithoutExercicesAssignesInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
@@ -5247,6 +5757,8 @@ export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -5288,6 +5800,7 @@ export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutExercicesAssignesInput = {
@@ -5335,6 +5848,8 @@ export type ProfilEleveUpdateWithoutExercicesAssignesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5377,6 +5892,7 @@ export type ProfilEleveUpdateWithoutExercicesAssignesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
@@ -5409,6 +5925,8 @@ export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5450,6 +5968,7 @@ export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutSessionsInput = {
@@ -5481,6 +6000,8 @@ export type ProfilEleveCreateWithoutSessionsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -5523,6 +6044,7 @@ export type ProfilEleveCreateWithoutSessionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
@@ -5555,6 +6077,8 @@ export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -5596,6 +6120,7 @@ export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutSessionsInput = {
@@ -5643,6 +6168,8 @@ export type ProfilEleveUpdateWithoutSessionsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5685,6 +6212,7 @@ export type ProfilEleveUpdateWithoutSessionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
@@ -5717,6 +6245,8 @@ export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5758,6 +6288,7 @@ export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCheckInsInput = {
@@ -5789,6 +6320,8 @@ export type ProfilEleveCreateWithoutCheckInsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -5831,6 +6364,7 @@ export type ProfilEleveCreateWithoutCheckInsInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
@@ -5863,6 +6397,8 @@ export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -5904,6 +6440,7 @@ export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCheckInsInput = {
@@ -5951,6 +6488,8 @@ export type ProfilEleveUpdateWithoutCheckInsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -5993,6 +6532,7 @@ export type ProfilEleveUpdateWithoutCheckInsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
@@ -6025,6 +6565,8 @@ export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6066,6 +6608,7 @@ export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutBadgesInput = {
@@ -6097,6 +6640,8 @@ export type ProfilEleveCreateWithoutBadgesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -6139,6 +6684,7 @@ export type ProfilEleveCreateWithoutBadgesInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
@@ -6171,6 +6717,8 @@ export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -6212,6 +6760,7 @@ export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutBadgesInput = {
@@ -6259,6 +6808,8 @@ export type ProfilEleveUpdateWithoutBadgesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6301,6 +6852,7 @@ export type ProfilEleveUpdateWithoutBadgesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
@@ -6333,6 +6885,8 @@ export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6374,6 +6928,7 @@ export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesInput = {
@@ -6405,6 +6960,8 @@ export type ProfilEleveCreateWithoutCommentairesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -6447,6 +7004,7 @@ export type ProfilEleveCreateWithoutCommentairesInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
@@ -6479,6 +7037,8 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -6520,6 +7080,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesInput = {
@@ -6567,6 +7128,8 @@ export type ProfilEleveUpdateWithoutCommentairesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6609,6 +7172,7 @@ export type ProfilEleveUpdateWithoutCommentairesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
@@ -6641,6 +7205,8 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6682,6 +7248,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesEleveInput = {
@@ -6713,6 +7280,8 @@ export type ProfilEleveCreateWithoutCommentairesEleveInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -6755,6 +7324,7 @@ export type ProfilEleveCreateWithoutCommentairesEleveInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
@@ -6787,6 +7357,8 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -6828,6 +7400,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesEleveInput = {
@@ -6875,6 +7448,8 @@ export type ProfilEleveUpdateWithoutCommentairesEleveInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6917,6 +7492,7 @@ export type ProfilEleveUpdateWithoutCommentairesEleveInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
@@ -6949,6 +7525,8 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -6990,6 +7568,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDemandesRencontreInput = {
@@ -7021,6 +7600,8 @@ export type ProfilEleveCreateWithoutDemandesRencontreInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -7063,6 +7644,7 @@ export type ProfilEleveCreateWithoutDemandesRencontreInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
@@ -7095,6 +7677,8 @@ export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -7136,6 +7720,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDemandesRencontreInput = {
@@ -7183,6 +7768,8 @@ export type ProfilEleveUpdateWithoutDemandesRencontreInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -7225,6 +7812,7 @@ export type ProfilEleveUpdateWithoutDemandesRencontreInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
@@ -7257,6 +7845,8 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -7298,6 +7888,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutRendezVousInput = {
@@ -7329,6 +7920,8 @@ export type ProfilEleveCreateWithoutRendezVousInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -7371,6 +7964,7 @@ export type ProfilEleveCreateWithoutRendezVousInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
@@ -7403,6 +7997,8 @@ export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -7444,6 +8040,7 @@ export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutRendezVousInput = {
@@ -7491,6 +8088,8 @@ export type ProfilEleveUpdateWithoutRendezVousInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -7533,6 +8132,7 @@ export type ProfilEleveUpdateWithoutRendezVousInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
@@ -7565,6 +8165,8 @@ export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -7606,6 +8208,7 @@ export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutRecommandationsIAInput = {
@@ -7637,6 +8240,8 @@ export type ProfilEleveCreateWithoutRecommandationsIAInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -7679,6 +8284,7 @@ export type ProfilEleveCreateWithoutRecommandationsIAInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
@@ -7711,6 +8317,8 @@ export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -7752,6 +8360,7 @@ export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutRecommandationsIAInput = {
@@ -7799,6 +8408,8 @@ export type ProfilEleveUpdateWithoutRecommandationsIAInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -7841,6 +8452,7 @@ export type ProfilEleveUpdateWithoutRecommandationsIAInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
@@ -7873,6 +8485,8 @@ export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -7914,6 +8528,7 @@ export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
@@ -7945,6 +8560,8 @@ export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -7987,6 +8604,7 @@ export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
@@ -8019,6 +8637,8 @@ export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -8060,6 +8680,7 @@ export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDefJourCompletionsInput = {
@@ -8107,6 +8728,8 @@ export type ProfilEleveUpdateWithoutDefJourCompletionsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -8149,6 +8772,7 @@ export type ProfilEleveUpdateWithoutDefJourCompletionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
@@ -8181,6 +8805,8 @@ export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -8222,6 +8848,7 @@ export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutMissionsHebdoInput = {
@@ -8253,6 +8880,8 @@ export type ProfilEleveCreateWithoutMissionsHebdoInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -8295,6 +8924,7 @@ export type ProfilEleveCreateWithoutMissionsHebdoInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
@@ -8327,6 +8957,8 @@ export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -8368,6 +9000,7 @@ export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutMissionsHebdoInput = {
@@ -8415,6 +9048,8 @@ export type ProfilEleveUpdateWithoutMissionsHebdoInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -8457,6 +9092,7 @@ export type ProfilEleveUpdateWithoutMissionsHebdoInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
@@ -8489,6 +9125,8 @@ export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -8530,6 +9168,7 @@ export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutObjectifsNotesInput = {
@@ -8561,6 +9200,8 @@ export type ProfilEleveCreateWithoutObjectifsNotesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -8603,6 +9244,7 @@ export type ProfilEleveCreateWithoutObjectifsNotesInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
@@ -8635,6 +9277,8 @@ export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -8676,6 +9320,7 @@ export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutObjectifsNotesInput = {
@@ -8723,6 +9368,8 @@ export type ProfilEleveUpdateWithoutObjectifsNotesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -8765,6 +9412,7 @@ export type ProfilEleveUpdateWithoutObjectifsNotesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
@@ -8797,6 +9445,8 @@ export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -8838,6 +9488,7 @@ export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutPlanifNotionsInput = {
@@ -8869,6 +9520,8 @@ export type ProfilEleveCreateWithoutPlanifNotionsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -8911,6 +9564,7 @@ export type ProfilEleveCreateWithoutPlanifNotionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
@@ -8943,6 +9597,8 @@ export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -8984,6 +9640,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlanifNotionsInput = {
@@ -9031,6 +9688,8 @@ export type ProfilEleveUpdateWithoutPlanifNotionsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -9073,6 +9732,7 @@ export type ProfilEleveUpdateWithoutPlanifNotionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
@@ -9105,6 +9765,8 @@ export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -9146,6 +9808,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDisponibiliteInput = {
@@ -9177,6 +9840,8 @@ export type ProfilEleveCreateWithoutDisponibiliteInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -9219,6 +9884,7 @@ export type ProfilEleveCreateWithoutDisponibiliteInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
@@ -9251,6 +9917,8 @@ export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -9292,6 +9960,7 @@ export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDisponibiliteInput = {
@@ -9339,6 +10008,8 @@ export type ProfilEleveUpdateWithoutDisponibiliteInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -9381,6 +10052,7 @@ export type ProfilEleveUpdateWithoutDisponibiliteInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
@@ -9413,6 +10085,8 @@ export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -9454,6 +10128,7 @@ export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutEpreuvesSemaineInput = {
@@ -9485,6 +10160,8 @@ export type ProfilEleveCreateWithoutEpreuvesSemaineInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -9527,6 +10204,7 @@ export type ProfilEleveCreateWithoutEpreuvesSemaineInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutEpreuvesSemaineInput = {
@@ -9559,6 +10237,8 @@ export type ProfilEleveUncheckedCreateWithoutEpreuvesSemaineInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -9600,6 +10280,7 @@ export type ProfilEleveUncheckedCreateWithoutEpreuvesSemaineInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutEpreuvesSemaineInput = {
@@ -9647,6 +10328,8 @@ export type ProfilEleveUpdateWithoutEpreuvesSemaineInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -9689,6 +10372,7 @@ export type ProfilEleveUpdateWithoutEpreuvesSemaineInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutEpreuvesSemaineInput = {
@@ -9721,6 +10405,8 @@ export type ProfilEleveUncheckedUpdateWithoutEpreuvesSemaineInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -9762,6 +10448,7 @@ export type ProfilEleveUncheckedUpdateWithoutEpreuvesSemaineInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDemandesJeuxInput = {
@@ -9793,6 +10480,8 @@ export type ProfilEleveCreateWithoutDemandesJeuxInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -9835,6 +10524,7 @@ export type ProfilEleveCreateWithoutDemandesJeuxInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
@@ -9867,6 +10557,8 @@ export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -9908,6 +10600,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDemandesJeuxInput = {
@@ -9955,6 +10648,8 @@ export type ProfilEleveUpdateWithoutDemandesJeuxInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -9997,6 +10692,7 @@ export type ProfilEleveUpdateWithoutDemandesJeuxInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
@@ -10029,6 +10725,8 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -10070,6 +10768,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutPartiesMultiInput = {
@@ -10101,6 +10800,8 @@ export type ProfilEleveCreateWithoutPartiesMultiInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -10143,6 +10844,7 @@ export type ProfilEleveCreateWithoutPartiesMultiInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
@@ -10175,6 +10877,8 @@ export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -10216,6 +10920,7 @@ export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPartiesMultiInput = {
@@ -10263,6 +10968,8 @@ export type ProfilEleveUpdateWithoutPartiesMultiInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -10305,6 +11012,7 @@ export type ProfilEleveUpdateWithoutPartiesMultiInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
@@ -10337,6 +11045,8 @@ export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -10378,6 +11088,7 @@ export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutEvaluationsInput = {
@@ -10409,6 +11120,8 @@ export type ProfilEleveCreateWithoutEvaluationsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -10451,6 +11164,7 @@ export type ProfilEleveCreateWithoutEvaluationsInput = {
   planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutEvaluationsInput = {
@@ -10483,6 +11197,8 @@ export type ProfilEleveUncheckedCreateWithoutEvaluationsInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -10524,6 +11240,7 @@ export type ProfilEleveUncheckedCreateWithoutEvaluationsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutEvaluationsInput = {
@@ -10571,6 +11288,8 @@ export type ProfilEleveUpdateWithoutEvaluationsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -10613,6 +11332,7 @@ export type ProfilEleveUpdateWithoutEvaluationsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutEvaluationsInput = {
@@ -10645,6 +11365,8 @@ export type ProfilEleveUncheckedUpdateWithoutEvaluationsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -10686,6 +11408,7 @@ export type ProfilEleveUncheckedUpdateWithoutEvaluationsInput = {
   planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUpdateWithoutParentsInput = {
@@ -10717,6 +11440,8 @@ export type ProfilEleveUpdateWithoutParentsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -10759,6 +11484,7 @@ export type ProfilEleveUpdateWithoutParentsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
@@ -10791,6 +11517,8 @@ export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -10832,6 +11560,7 @@ export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateManyWithoutParentsInput = {
@@ -10864,6 +11593,8 @@ export type ProfilEleveUncheckedUpdateManyWithoutParentsInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -10911,6 +11642,8 @@ export type ProfilEleveCreateManyEnseignantInput = {
   personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
   objectifScolaire?: string | null
   anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
   streakJours?: number
   streakMaxJours?: number
   streakBoucliers?: number
@@ -10956,6 +11689,8 @@ export type ProfilEleveUpdateWithoutEnseignantInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -10998,6 +11733,7 @@ export type ProfilEleveUpdateWithoutEnseignantInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
@@ -11030,6 +11766,8 @@ export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -11071,6 +11809,7 @@ export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateManyWithoutEnseignantInput = {
@@ -11103,6 +11842,8 @@ export type ProfilEleveUncheckedUpdateManyWithoutEnseignantInput = {
   personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
   objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
   streakJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
   streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
@@ -11151,6 +11892,7 @@ export type ProfilEleveCountOutputType = {
   planifNotions: number
   evaluations: number
   epreuvesSemaine: number
+  lectures: number
 }
 
 export type ProfilEleveCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -11180,6 +11922,7 @@ export type ProfilEleveCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   planifNotions?: boolean | ProfilEleveCountOutputTypeCountPlanifNotionsArgs
   evaluations?: boolean | ProfilEleveCountOutputTypeCountEvaluationsArgs
   epreuvesSemaine?: boolean | ProfilEleveCountOutputTypeCountEpreuvesSemaineArgs
+  lectures?: boolean | ProfilEleveCountOutputTypeCountLecturesArgs
 }
 
 /**
@@ -11374,6 +12117,13 @@ export type ProfilEleveCountOutputTypeCountEpreuvesSemaineArgs<ExtArgs extends r
   where?: Prisma.EpreuveSemainePlanWhereInput
 }
 
+/**
+ * ProfilEleveCountOutputType without action
+ */
+export type ProfilEleveCountOutputTypeCountLecturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LectureJournaliereWhereInput
+}
+
 
 export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -11405,6 +12155,8 @@ export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   personnalite?: boolean
   objectifScolaire?: boolean
   anneeScolaireActive?: boolean
+  dateRentree?: boolean
+  modePreRentree?: boolean
   streakJours?: boolean
   streakMaxJours?: boolean
   streakBoucliers?: boolean
@@ -11449,6 +12201,7 @@ export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   disponibilite?: boolean | Prisma.ProfilEleve$disponibiliteArgs<ExtArgs>
   evaluations?: boolean | Prisma.ProfilEleve$evaluationsArgs<ExtArgs>
   epreuvesSemaine?: boolean | Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs>
+  lectures?: boolean | Prisma.ProfilEleve$lecturesArgs<ExtArgs>
   _count?: boolean | Prisma.ProfilEleveCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["profilEleve"]>
 
@@ -11482,6 +12235,8 @@ export type ProfilEleveSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   personnalite?: boolean
   objectifScolaire?: boolean
   anneeScolaireActive?: boolean
+  dateRentree?: boolean
+  modePreRentree?: boolean
   streakJours?: boolean
   streakMaxJours?: boolean
   streakBoucliers?: boolean
@@ -11531,6 +12286,8 @@ export type ProfilEleveSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   personnalite?: boolean
   objectifScolaire?: boolean
   anneeScolaireActive?: boolean
+  dateRentree?: boolean
+  modePreRentree?: boolean
   streakJours?: boolean
   streakMaxJours?: boolean
   streakBoucliers?: boolean
@@ -11580,6 +12337,8 @@ export type ProfilEleveSelectScalar = {
   personnalite?: boolean
   objectifScolaire?: boolean
   anneeScolaireActive?: boolean
+  dateRentree?: boolean
+  modePreRentree?: boolean
   streakJours?: boolean
   streakMaxJours?: boolean
   streakBoucliers?: boolean
@@ -11597,7 +12356,7 @@ export type ProfilEleveSelectScalar = {
   miraSecsBonus?: boolean
 }
 
-export type ProfilEleveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "codeAcces" | "prenom" | "nom" | "dateNaissance" | "niveauScolaire" | "ecole" | "styleApprentissage" | "vitesseTraitement" | "niveauMotivation" | "facteursStress" | "matieresPreferees" | "matieresRedoutees" | "tdah" | "dyslexie" | "dyscalculie" | "anxieteScolaire" | "autresBesoins" | "profilCognitif" | "parcoursAdapte" | "centresInteret" | "sportFavori" | "universMediatique" | "autresPassions" | "environnement" | "personnalite" | "objectifScolaire" | "anneeScolaireActive" | "streakJours" | "streakMaxJours" | "streakBoucliers" | "derniereConnexion" | "totalPoints" | "niveauJeu" | "cosmetiques" | "onboardingComplete" | "onboardingEtape" | "enseignantId" | "createdAt" | "updatedAt" | "miraSecsUsedWeek" | "miraWeekOf" | "miraSecsBonus", ExtArgs["result"]["profilEleve"]>
+export type ProfilEleveOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "codeAcces" | "prenom" | "nom" | "dateNaissance" | "niveauScolaire" | "ecole" | "styleApprentissage" | "vitesseTraitement" | "niveauMotivation" | "facteursStress" | "matieresPreferees" | "matieresRedoutees" | "tdah" | "dyslexie" | "dyscalculie" | "anxieteScolaire" | "autresBesoins" | "profilCognitif" | "parcoursAdapte" | "centresInteret" | "sportFavori" | "universMediatique" | "autresPassions" | "environnement" | "personnalite" | "objectifScolaire" | "anneeScolaireActive" | "dateRentree" | "modePreRentree" | "streakJours" | "streakMaxJours" | "streakBoucliers" | "derniereConnexion" | "totalPoints" | "niveauJeu" | "cosmetiques" | "onboardingComplete" | "onboardingEtape" | "enseignantId" | "createdAt" | "updatedAt" | "miraSecsUsedWeek" | "miraWeekOf" | "miraSecsBonus", ExtArgs["result"]["profilEleve"]>
 export type ProfilEleveInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   enseignant?: boolean | Prisma.ProfilEleve$enseignantArgs<ExtArgs>
@@ -11628,6 +12387,7 @@ export type ProfilEleveInclude<ExtArgs extends runtime.Types.Extensions.Internal
   disponibilite?: boolean | Prisma.ProfilEleve$disponibiliteArgs<ExtArgs>
   evaluations?: boolean | Prisma.ProfilEleve$evaluationsArgs<ExtArgs>
   epreuvesSemaine?: boolean | Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs>
+  lectures?: boolean | Prisma.ProfilEleve$lecturesArgs<ExtArgs>
   _count?: boolean | Prisma.ProfilEleveCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProfilEleveIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -11671,6 +12431,7 @@ export type $ProfilElevePayload<ExtArgs extends runtime.Types.Extensions.Interna
     disponibilite: Prisma.$DisponibiliteElevePayload<ExtArgs> | null
     evaluations: Prisma.$EvaluationRequestPayload<ExtArgs>[]
     epreuvesSemaine: Prisma.$EpreuveSemainePlanPayload<ExtArgs>[]
+    lectures: Prisma.$LectureJournalierePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -11702,6 +12463,8 @@ export type $ProfilElevePayload<ExtArgs extends runtime.Types.Extensions.Interna
     personnalite: string[]
     objectifScolaire: string | null
     anneeScolaireActive: string
+    dateRentree: Date | null
+    modePreRentree: boolean
     streakJours: number
     streakMaxJours: number
     streakBoucliers: number
@@ -12140,6 +12903,7 @@ export interface Prisma__ProfilEleveClient<T, Null = never, ExtArgs extends runt
   disponibilite<T extends Prisma.ProfilEleve$disponibiliteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$disponibiliteArgs<ExtArgs>>): Prisma.Prisma__DisponibiliteEleveClient<runtime.Types.Result.GetResult<Prisma.$DisponibiliteElevePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   evaluations<T extends Prisma.ProfilEleve$evaluationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$evaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   epreuvesSemaine<T extends Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EpreuveSemainePlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  lectures<T extends Prisma.ProfilEleve$lecturesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$lecturesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LectureJournalierePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12198,6 +12962,8 @@ export interface ProfilEleveFieldRefs {
   readonly personnalite: Prisma.FieldRef<"ProfilEleve", 'String[]'>
   readonly objectifScolaire: Prisma.FieldRef<"ProfilEleve", 'String'>
   readonly anneeScolaireActive: Prisma.FieldRef<"ProfilEleve", 'String'>
+  readonly dateRentree: Prisma.FieldRef<"ProfilEleve", 'DateTime'>
+  readonly modePreRentree: Prisma.FieldRef<"ProfilEleve", 'Boolean'>
   readonly streakJours: Prisma.FieldRef<"ProfilEleve", 'Int'>
   readonly streakMaxJours: Prisma.FieldRef<"ProfilEleve", 'Int'>
   readonly streakBoucliers: Prisma.FieldRef<"ProfilEleve", 'Int'>
@@ -13273,6 +14039,30 @@ export type ProfilEleve$epreuvesSemaineArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.EpreuveSemainePlanScalarFieldEnum | Prisma.EpreuveSemainePlanScalarFieldEnum[]
+}
+
+/**
+ * ProfilEleve.lectures
+ */
+export type ProfilEleve$lecturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LectureJournaliere
+   */
+  select?: Prisma.LectureJournaliereSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LectureJournaliere
+   */
+  omit?: Prisma.LectureJournaliereOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LectureJournaliereInclude<ExtArgs> | null
+  where?: Prisma.LectureJournaliereWhereInput
+  orderBy?: Prisma.LectureJournaliereOrderByWithRelationInput | Prisma.LectureJournaliereOrderByWithRelationInput[]
+  cursor?: Prisma.LectureJournaliereWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LectureJournaliereScalarFieldEnum | Prisma.LectureJournaliereScalarFieldEnum[]
 }
 
 /**

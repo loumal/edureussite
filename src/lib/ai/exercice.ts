@@ -149,6 +149,8 @@ const MATIERES_LABELS: Record<Matiere, string> = {
   ETHIQUE: "Éthique et culture religieuse",
   ANGLAIS: "Anglais langue seconde",
   EDUCATION_PHYSIQUE: "Éducation physique et à la santé",
+  SVT: "Sciences de la Vie et de la Terre",
+  PCT: "Physique-Chimie-Technologie",
 };
 
 const INTERET_LABELS: Record<string, string> = {

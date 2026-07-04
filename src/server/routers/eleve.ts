@@ -5,6 +5,7 @@ import {
 import { TOUS_LES_ITEMS, parseCosmetiques, COSMETIQUES_DEFAUT } from "@/lib/boutique/items";
 import { getJeuById } from "@/lib/jeux/catalog";
 import { checkAndTriggerEvaluation } from "@/lib/evaluation/trigger";
+import { anthropic } from "@/lib/ai/client";
 
 // Retourne la date du lundi de la semaine courante (YYYY-MM-DD) — clé de reset hebdo
 function getMondayKey(date = new Date()): string {
@@ -74,6 +75,7 @@ export const eleveRouter = createTRPCRouter({
         nom: z.string().optional().default(""),
         niveauScolaire: z.nativeEnum(NiveauScolaire),
         ecole: z.string().optional(),
+        dateRentree: z.string().optional(), // YYYY-MM-DD
         styleApprentissage: z.nativeEnum(StyleApprentissage).optional(),
         matieresPreferees: z.array(z.nativeEnum(Matiere)).optional(),
         matieresRedoutees: z.array(z.nativeEnum(Matiere)).optional(),
@@ -91,11 +93,17 @@ export const eleveRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // Mode pré-rentrée si la date de rentrée est dans le futur
+      const dateRentreeDate = input.dateRentree ? new Date(input.dateRentree) : null;
+      const modePreRentree = dateRentreeDate ? dateRentreeDate > new Date() : false;
+
       const profileData = {
         prenom: input.prenom,
         nom: input.nom,
         niveauScolaire: input.niveauScolaire,
         ecole: input.ecole,
+        dateRentree: dateRentreeDate,
+        modePreRentree,
         styleApprentissage: input.styleApprentissage,
         matieresPreferees: input.matieresPreferees ?? [],
         matieresRedoutees: input.matieresRedoutees ?? [],
@@ -168,6 +176,7 @@ export const eleveRouter = createTRPCRouter({
     const profil = await ctx.prisma.profilEleve.findUnique({
       where: { userId: ctx.user.id },
       include: {
+        user: { select: { province: true } },
         niveauxMatieres: true,
         badges: { include: { badge: true } },
         exercicesAssignes: {
@@ -1055,4 +1064,164 @@ export const eleveRouter = createTRPCRouter({
 
     return { niveauSuivant, prochaineAnnee };
   }),
+
+  // ── Enregistrer la date de rentrée (passage d'année ou paramètres) ────────
+  enregistrerDateRentree: protectedProcedure
+    .input(z.object({ dateRentree: z.string() })) // YYYY-MM-DD
+    .mutation(async ({ ctx, input }) => {
+      const dateRentreeDate = new Date(input.dateRentree);
+      const modePreRentree = dateRentreeDate > new Date();
+      return ctx.prisma.profilEleve.update({
+        where: { userId: ctx.user.id },
+        data: { dateRentree: dateRentreeDate, modePreRentree },
+      });
+    }),
+
+  // ── Vérifier et mettre à jour le mode pré-rentrée ─────────────────────────
+  // Appelé au chargement du dashboard — désactive modePreRentree si la rentrée est passée
+  verifierModePreRentree: protectedProcedure.mutation(async ({ ctx }) => {
+    const profil = await ctx.prisma.profilEleve.findUnique({
+      where: { userId: ctx.user.id },
+      select: { dateRentree: true, modePreRentree: true },
+    });
+    if (profil?.modePreRentree && profil.dateRentree && profil.dateRentree <= new Date()) {
+      await ctx.prisma.profilEleve.update({
+        where: { userId: ctx.user.id },
+        data: { modePreRentree: false },
+      });
+      return { modePreRentree: false };
+    }
+    return { modePreRentree: profil?.modePreRentree ?? false };
+  }),
+
+  // ── Lecture quotidienne — soumettre ───────────────────────────────────────
+  soumettreLecture: protectedProcedure
+    .input(
+      z.object({
+        titreLivre: z.string().min(1).max(200),
+        auteur: z.string().max(100).optional(),
+        qui: z.string().max(1000).optional(),
+        quoi: z.string().max(1000).optional(),
+        ou: z.string().max(500).optional(),
+        quand: z.string().max(500).optional(),
+        pourquoi: z.string().max(1000).optional(),
+        resumePhotoUrl: z.string().url().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const [profil, user] = await Promise.all([
+        ctx.prisma.profilEleve.findUniqueOrThrow({
+          where: { userId: ctx.user.id },
+          select: { id: true },
+        }),
+        ctx.prisma.user.findUniqueOrThrow({
+          where: { id: ctx.user.id },
+          select: { province: true },
+        }),
+      ]);
+
+      // Générer l'analyse IA si des réponses ont été saisies
+      let analyseIA: string | undefined;
+      let scoreGlobal: number | undefined;
+
+      const reponsesRemplies = [input.qui, input.quoi, input.ou, input.quand, input.pourquoi].filter(Boolean);
+      if (reponsesRemplies.length > 0) {
+        try {
+          const enFrancais = ["QC", "NB"].includes(user.province as string);
+          const langue = enFrancais ? "français québécois (tutoiement, encourageant)" : "English (Canadian, encouraging)";
+          const champLabels = enFrancais
+            ? { qui: "Qui", quoi: "Quoi", ou: "Où", quand: "Quand", pourquoi: "Pourquoi" }
+            : { qui: "Who", quoi: "What", ou: "Where", quand: "When", pourquoi: "Why" };
+
+          const detailsLecture = [
+            `${enFrancais ? "Livre" : "Book"}: "${input.titreLivre}"${input.auteur ? ` (${input.auteur})` : ""}`,
+            input.qui    ? `${champLabels.qui}: ${input.qui}`       : "",
+            input.quoi   ? `${champLabels.quoi}: ${input.quoi}`     : "",
+            input.ou     ? `${champLabels.ou}: ${input.ou}`         : "",
+            input.quand  ? `${champLabels.quand}: ${input.quand}`   : "",
+            input.pourquoi ? `${champLabels.pourquoi}: ${input.pourquoi}` : "",
+          ].filter(Boolean).join("\n");
+
+          const prompt = enFrancais
+            ? `Tu es un tuteur bienveillant pour un élève canadien. Analyse ce résumé de lecture en 5W et donne un retour encourageant en ${langue}. Réponds en JSON avec deux champs : "analyse" (string, 2-3 phrases de feedback personnalisé mentionnant les points forts et une piste d'amélioration) et "score" (number entre 0 et 100, basé sur la complétude et la qualité des réponses). Voici le résumé :\n\n${detailsLecture}`
+            : `You are a supportive tutor for a Canadian student. Analyze this 5W reading summary and give encouraging feedback in ${langue}. Reply in JSON with two fields: "analyse" (string, 2-3 sentences of personalized feedback mentioning strengths and one improvement tip) and "score" (number between 0 and 100, based on completeness and quality). Here is the summary:\n\n${detailsLecture}`;
+
+          const response = await anthropic.messages.create({
+            model: "claude-sonnet-4-6",
+            max_tokens: 400,
+            messages: [{ role: "user", content: prompt }],
+          });
+
+          const text = response.content[0]?.type === "text" ? response.content[0].text.trim() : "";
+          const jsonMatch = text.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]) as { analyse?: string; score?: number };
+            analyseIA = parsed.analyse;
+            scoreGlobal = typeof parsed.score === "number" ? Math.max(0, Math.min(100, Math.round(parsed.score))) : undefined;
+          }
+        } catch {
+          // Analyse optionnelle — ne bloque pas la sauvegarde
+        }
+      }
+
+      // On remplace la lecture du jour si elle existe déjà
+      const debutJour = new Date();
+      debutJour.setHours(0, 0, 0, 0);
+      const finJour = new Date();
+      finJour.setHours(23, 59, 59, 999);
+
+      const lectureExistante = await ctx.prisma.lectureJournaliere.findFirst({
+        where: { eleveId: profil.id, date: { gte: debutJour, lte: finJour } },
+        select: { id: true },
+      });
+
+      const data = { ...input, ou: input.ou, analyseIA, scoreGlobal };
+
+      if (lectureExistante) {
+        return ctx.prisma.lectureJournaliere.update({
+          where: { id: lectureExistante.id },
+          data,
+        });
+      }
+
+      return ctx.prisma.lectureJournaliere.create({
+        data: { eleveId: profil.id, ...data },
+      });
+    }),
+
+  // ── Lecture quotidienne — vérifier si déjà faite aujourd'hui ──────────────
+  getLectureAujourdhui: protectedProcedure.query(async ({ ctx }) => {
+    const profil = await ctx.prisma.profilEleve.findUnique({
+      where: { userId: ctx.user.id },
+      select: { id: true },
+    });
+    if (!profil) return null;
+
+    const debutJour = new Date();
+    debutJour.setHours(0, 0, 0, 0);
+    const finJour = new Date();
+    finJour.setHours(23, 59, 59, 999);
+
+    return ctx.prisma.lectureJournaliere.findFirst({
+      where: { eleveId: profil.id, date: { gte: debutJour, lte: finJour } },
+      orderBy: { createdAt: "desc" },
+    });
+  }),
+
+  // ── Lecture quotidienne — historique ──────────────────────────────────────
+  getLecturesHistorique: protectedProcedure
+    .input(z.object({ limit: z.number().min(1).max(50).default(20) }))
+    .query(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUnique({
+        where: { userId: ctx.user.id },
+        select: { id: true },
+      });
+      if (!profil) return [];
+
+      return ctx.prisma.lectureJournaliere.findMany({
+        where: { eleveId: profil.id },
+        orderBy: { date: "desc" },
+        take: input.limit,
+      });
+    }),
 });

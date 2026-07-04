@@ -160,7 +160,9 @@ export const Matiere = {
   ARTS: 'ARTS',
   ETHIQUE: 'ETHIQUE',
   ANGLAIS: 'ANGLAIS',
-  EDUCATION_PHYSIQUE: 'EDUCATION_PHYSIQUE'
+  EDUCATION_PHYSIQUE: 'EDUCATION_PHYSIQUE',
+  SVT: 'SVT',
+  PCT: 'PCT'
 } as const
 
 export type Matiere = (typeof Matiere)[keyof typeof Matiere]

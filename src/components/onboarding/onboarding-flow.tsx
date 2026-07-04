@@ -19,6 +19,7 @@ export interface OnboardingData {
   nom: string;
   niveauScolaire: NiveauScolaire | "";
   ecole: string;
+  dateRentree?: string;           // YYYY-MM-DD, facultatif
   styleApprentissage: StyleApprentissage | "";
   matieresPreferees: Matiere[];
   matieresRedoutees: Matiere[];

@@ -8,19 +8,23 @@ import { trpc } from "@/lib/trpc/client";
 import { estJeuneEleve } from "@/lib/utils/niveau-eleve";
 import { getGradientAvatar } from "@/lib/boutique/items";
 
+const CANADA_PROVINCES = new Set(["QC","ON","BC","AB","SK","MB","NB","NS","PE","NL","YT","NT","NU"]);
+
 interface NavEleveProps {
   prenom: string;
   streak: number;
   niveauScolaire?: string;
   avatarEquipe?: string;
+  province?: string;
 }
 
-export function NavEleve({ prenom, streak, niveauScolaire, avatarEquipe }: NavEleveProps) {
+export function NavEleve({ prenom, streak, niveauScolaire, avatarEquipe, province = "QC" }: NavEleveProps) {
   const jeune = estJeuneEleve(niveauScolaire ?? "");
   const avatarGradient = getGradientAvatar(avatarEquipe ?? "avatar_violet");
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
+  const estCanada = CANADA_PROVINCES.has(province);
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
@@ -106,6 +110,9 @@ export function NavEleve({ prenom, streak, niveauScolaire, avatarEquipe }: NavEl
                 </MenuLink>
                 <MenuLink href="/eleve/plan" onClick={() => setMenuOpen(false)}>🗺️ Mon plan</MenuLink>
                 <MenuLink href="/eleve/jeux/multijoueur" onClick={() => setMenuOpen(false)}>🎮 Multijoueur</MenuLink>
+                {estCanada && (
+                  <MenuLink href="/eleve/lecture" onClick={() => setMenuOpen(false)}>📖 Lecture du jour</MenuLink>
+                )}
 
                 <div className="h-px bg-[var(--color-rule)] mx-1 my-1" />
 
@@ -123,7 +130,15 @@ export function NavEleve({ prenom, streak, niveauScolaire, avatarEquipe }: NavEl
       </nav>
 
       {/* Mobile bottom tab bar */}
-      <BottomBar pathname={pathname} unread={unread} streak={streak} prenom={prenom} jeune={jeune} avatarGradient={avatarGradient} />
+      <BottomBar
+        pathname={pathname}
+        unread={unread}
+        streak={streak}
+        prenom={prenom}
+        jeune={jeune}
+        avatarGradient={avatarGradient}
+        estCanada={estCanada}
+      />
     </>
   );
 }
@@ -150,8 +165,8 @@ function MenuLink({ href, onClick, children }: { href: string; onClick: () => vo
   );
 }
 
-function BottomBar({ pathname, unread, streak, prenom, jeune, avatarGradient }: {
-  pathname: string; unread: number; streak: number; prenom: string; jeune: boolean; avatarGradient: string;
+function BottomBar({ pathname, unread, streak, prenom, jeune, avatarGradient, estCanada }: {
+  pathname: string; unread: number; streak: number; prenom: string; jeune: boolean; avatarGradient: string; estCanada: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -186,6 +201,9 @@ function BottomBar({ pathname, unread, streak, prenom, jeune, avatarGradient }: 
           </Link>
           <Link href="/eleve/plan" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">🗺️ Mon plan</Link>
           <Link href="/eleve/jeux/multijoueur" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">🎮 Multijoueur</Link>
+          {estCanada && (
+            <Link href="/eleve/lecture" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">📖 Lecture du jour</Link>
+          )}
           <div className="h-px bg-[var(--color-rule)] mx-1 my-1" />
           <Link href="/eleve/parametres" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">⚙️ Paramètres</Link>
           <button onClick={() => signOut({ callbackUrl: "/login" })} className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-500 hover:bg-red-50">🚪 Déconnexion</button>

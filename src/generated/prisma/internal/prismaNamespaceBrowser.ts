@@ -57,6 +57,7 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   ProfilEleve: 'ProfilEleve',
   HistoriqueNiveauEleve: 'HistoriqueNiveauEleve',
+  LectureJournaliere: 'LectureJournaliere',
   MiraMessage: 'MiraMessage',
   NiveauMatiere: 'NiveauMatiere',
   ProfilParent: 'ProfilParent',
@@ -215,6 +216,8 @@ export const ProfilEleveScalarFieldEnum = {
   personnalite: 'personnalite',
   objectifScolaire: 'objectifScolaire',
   anneeScolaireActive: 'anneeScolaireActive',
+  dateRentree: 'dateRentree',
+  modePreRentree: 'modePreRentree',
   streakJours: 'streakJours',
   streakMaxJours: 'streakMaxJours',
   streakBoucliers: 'streakBoucliers',
@@ -244,6 +247,26 @@ export const HistoriqueNiveauEleveScalarFieldEnum = {
 } as const
 
 export type HistoriqueNiveauEleveScalarFieldEnum = (typeof HistoriqueNiveauEleveScalarFieldEnum)[keyof typeof HistoriqueNiveauEleveScalarFieldEnum]
+
+
+export const LectureJournaliereScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  date: 'date',
+  titreLivre: 'titreLivre',
+  auteur: 'auteur',
+  qui: 'qui',
+  quoi: 'quoi',
+  ou: 'ou',
+  quand: 'quand',
+  pourquoi: 'pourquoi',
+  resumePhotoUrl: 'resumePhotoUrl',
+  analyseIA: 'analyseIA',
+  scoreGlobal: 'scoreGlobal',
+  createdAt: 'createdAt'
+} as const
+
+export type LectureJournaliereScalarFieldEnum = (typeof LectureJournaliereScalarFieldEnum)[keyof typeof LectureJournaliereScalarFieldEnum]
 
 
 export const MiraMessageScalarFieldEnum = {

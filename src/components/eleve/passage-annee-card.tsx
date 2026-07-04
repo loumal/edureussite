@@ -50,17 +50,27 @@ type Props = {
 
 export function PassageAnneeCard({ niveauScolaire, anneeScolaireActive, historiqueNiveaux }: Props) {
   const router = useRouter();
-  const [etape, setEtape] = useState<"idle" | "confirmer" | "succes">("idle");
+  const [etape, setEtape] = useState<"idle" | "confirmer" | "date_rentree" | "succes">("idle");
   const [erreur, setErreur] = useState<string | null>(null);
+  const [dateRentree, setDateRentree] = useState("");
 
-  const mutation = trpc.eleve.passageAnnee.useMutation({
+  const passage = trpc.eleve.passageAnnee.useMutation({
+    onSuccess: () => {
+      setEtape("date_rentree");
+    },
+    onError: (e) => {
+      setErreur(e.message);
+      setEtape("idle");
+    },
+  });
+
+  const enregistrerDate = trpc.eleve.enregistrerDateRentree.useMutation({
     onSuccess: () => {
       setEtape("succes");
       router.refresh();
     },
     onError: (e) => {
       setErreur(e.message);
-      setEtape("idle");
     },
   });
 
@@ -74,6 +84,8 @@ export function PassageAnneeCard({ niveauScolaire, anneeScolaireActive, historiq
 
   const labelActuel = NIVEAU_LABEL[niveauScolaire] ?? niveauScolaire;
   const labelSuivant = NIVEAU_LABEL[prochainNiveau] ?? prochainNiveau;
+  const todayStr = new Date().toISOString().split("T")[0];
+  const rentreeFuture = dateRentree && dateRentree > todayStr;
 
   return (
     <Card className="mb-4">
@@ -128,17 +140,64 @@ export function PassageAnneeCard({ niveauScolaire, anneeScolaireActive, historiq
           <div className="flex gap-3">
             <button
               onClick={() => setEtape("idle")}
-              disabled={mutation.isPending}
+              disabled={passage.isPending}
               className="flex-1 rounded-[var(--radius-md)] border border-[var(--color-rule)] bg-white px-4 py-2 text-sm font-medium text-[var(--color-ink)] transition hover:bg-[var(--color-paper)] disabled:opacity-50"
             >
               Annuler
             </button>
             <button
-              onClick={() => mutation.mutate()}
-              disabled={mutation.isPending}
+              onClick={() => passage.mutate()}
+              disabled={passage.isPending}
               className="flex-1 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[var(--color-accent-hover)] disabled:opacity-60"
             >
-              {mutation.isPending ? "En cours…" : "Confirmer"}
+              {passage.isPending ? "En cours…" : "Confirmer"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {etape === "date_rentree" && (
+        <div className="rounded-[var(--radius-md)] border border-blue-200 bg-blue-50 p-4">
+          <p className="mb-0.5 font-semibold text-[var(--color-ink)]">🎉 Bravo ! Passage effectué.</p>
+          <p className="mb-3 text-sm text-[var(--color-ink-soft)]">
+            Bienvenue en <strong>{labelSuivant}</strong> pour <strong>{prochaineAnnee}</strong> !
+          </p>
+          <p className="mb-1 text-sm font-medium text-[var(--color-ink)]">
+            📅 Quelle est ta date de rentrée scolaire ?
+          </p>
+          <p className="mb-2 text-xs text-[var(--color-ink-soft)]">
+            Si tu t'inscris avant la rentrée, on t'aidera à explorer les notions à l'avance !
+          </p>
+          <input
+            type="date"
+            value={dateRentree}
+            onChange={(e) => setDateRentree(e.target.value)}
+            min={todayStr}
+            className="mb-3 w-full rounded-lg border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]"
+          />
+          {rentreeFuture && (
+            <div className="mb-3 flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+              <span className="flex-shrink-0 text-base">🎒</span>
+              <p className="text-xs text-emerald-700">
+                Mode pré-rentrée activé ! On t'aidera à préparer ta nouvelle année avant le premier jour de classe.
+              </p>
+            </div>
+          )}
+          {erreur && <p className="mb-2 text-xs text-red-600">{erreur}</p>}
+          <div className="flex gap-3">
+            <button
+              onClick={() => { setEtape("succes"); router.refresh(); }}
+              disabled={enregistrerDate.isPending}
+              className="flex-1 rounded-[var(--radius-md)] border border-[var(--color-rule)] bg-white px-4 py-2 text-sm font-medium text-[var(--color-ink-soft)] transition hover:bg-[var(--color-paper)] disabled:opacity-50"
+            >
+              Passer
+            </button>
+            <button
+              onClick={() => dateRentree && enregistrerDate.mutate({ dateRentree })}
+              disabled={!dateRentree || enregistrerDate.isPending}
+              className="flex-1 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[var(--color-accent-hover)] disabled:opacity-60"
+            >
+              {enregistrerDate.isPending ? "En cours…" : "Confirmer la date"}
             </button>
           </div>
         </div>
@@ -146,9 +205,9 @@ export function PassageAnneeCard({ niveauScolaire, anneeScolaireActive, historiq
 
       {etape === "succes" && (
         <div className="rounded-[var(--radius-md)] bg-[var(--color-success)]/10 px-4 py-3 text-center">
-          <p className="text-2xl mb-1">🎉</p>
+          <p className="mb-1 text-2xl">🎉</p>
           <p className="font-semibold text-[var(--color-success)]">Passage d'année effectué !</p>
-          <p className="text-sm text-[var(--color-ink-soft)] mt-1">
+          <p className="mt-1 text-sm text-[var(--color-ink-soft)]">
             Bienvenue en <strong>{labelSuivant}</strong> pour l'année <strong>{prochaineAnnee}</strong>.
           </p>
         </div>

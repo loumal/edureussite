@@ -48,6 +48,11 @@ export type ProfilEleve = Prisma.ProfilEleveModel
  */
 export type HistoriqueNiveauEleve = Prisma.HistoriqueNiveauEleveModel
 /**
+ * Model LectureJournaliere
+ * 
+ */
+export type LectureJournaliere = Prisma.LectureJournaliereModel
+/**
  * Model MiraMessage
  * 
  */

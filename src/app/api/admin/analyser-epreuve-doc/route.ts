@@ -47,6 +47,8 @@ const MATIERES_LABELS: Record<Matiere, string> = {
   ETHIQUE: "Éthique et culture religieuse",
   ANGLAIS: "Anglais langue seconde",
   EDUCATION_PHYSIQUE: "Éducation physique",
+  SVT: "Sciences de la Vie et de la Terre",
+  PCT: "Physique-Chimie-Technologie",
 };
 
 const VALID_MATIERES = new Set(["FRANCAIS", "MATHEMATIQUES", "SCIENCES", "UNIVERS_SOCIAL", "ARTS", "ETHIQUE", "ANGLAIS", "EDUCATION_PHYSIQUE"]);

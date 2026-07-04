@@ -390,6 +390,7 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   ProfilEleve: 'ProfilEleve',
   HistoriqueNiveauEleve: 'HistoriqueNiveauEleve',
+  LectureJournaliere: 'LectureJournaliere',
   MiraMessage: 'MiraMessage',
   NiveauMatiere: 'NiveauMatiere',
   ProfilParent: 'ProfilParent',
@@ -457,7 +458,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "historiqueNiveauEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "epreuveSemainePlan" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur" | "evaluationRequest" | "formulaireReponse" | "rapportEvaluation"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "historiqueNiveauEleve" | "lectureJournaliere" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "epreuveSemainePlan" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur" | "evaluationRequest" | "formulaireReponse" | "rapportEvaluation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -902,6 +903,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.HistoriqueNiveauEleveCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.HistoriqueNiveauEleveCountAggregateOutputType> | number
+        }
+      }
+    }
+    LectureJournaliere: {
+      payload: Prisma.$LectureJournalierePayload<ExtArgs>
+      fields: Prisma.LectureJournaliereFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LectureJournaliereFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LectureJournaliereFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload>
+        }
+        findFirst: {
+          args: Prisma.LectureJournaliereFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LectureJournaliereFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload>
+        }
+        findMany: {
+          args: Prisma.LectureJournaliereFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload>[]
+        }
+        create: {
+          args: Prisma.LectureJournaliereCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload>
+        }
+        createMany: {
+          args: Prisma.LectureJournaliereCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LectureJournaliereCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload>[]
+        }
+        delete: {
+          args: Prisma.LectureJournaliereDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload>
+        }
+        update: {
+          args: Prisma.LectureJournaliereUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload>
+        }
+        deleteMany: {
+          args: Prisma.LectureJournaliereDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LectureJournaliereUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LectureJournaliereUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload>[]
+        }
+        upsert: {
+          args: Prisma.LectureJournaliereUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LectureJournalierePayload>
+        }
+        aggregate: {
+          args: Prisma.LectureJournaliereAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLectureJournaliere>
+        }
+        groupBy: {
+          args: Prisma.LectureJournaliereGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LectureJournaliereGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LectureJournaliereCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LectureJournaliereCountAggregateOutputType> | number
         }
       }
     }
@@ -4880,6 +4955,8 @@ export const ProfilEleveScalarFieldEnum = {
   personnalite: 'personnalite',
   objectifScolaire: 'objectifScolaire',
   anneeScolaireActive: 'anneeScolaireActive',
+  dateRentree: 'dateRentree',
+  modePreRentree: 'modePreRentree',
   streakJours: 'streakJours',
   streakMaxJours: 'streakMaxJours',
   streakBoucliers: 'streakBoucliers',
@@ -4909,6 +4986,26 @@ export const HistoriqueNiveauEleveScalarFieldEnum = {
 } as const
 
 export type HistoriqueNiveauEleveScalarFieldEnum = (typeof HistoriqueNiveauEleveScalarFieldEnum)[keyof typeof HistoriqueNiveauEleveScalarFieldEnum]
+
+
+export const LectureJournaliereScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  date: 'date',
+  titreLivre: 'titreLivre',
+  auteur: 'auteur',
+  qui: 'qui',
+  quoi: 'quoi',
+  ou: 'ou',
+  quand: 'quand',
+  pourquoi: 'pourquoi',
+  resumePhotoUrl: 'resumePhotoUrl',
+  analyseIA: 'analyseIA',
+  scoreGlobal: 'scoreGlobal',
+  createdAt: 'createdAt'
+} as const
+
+export type LectureJournaliereScalarFieldEnum = (typeof LectureJournaliereScalarFieldEnum)[keyof typeof LectureJournaliereScalarFieldEnum]
 
 
 export const MiraMessageScalarFieldEnum = {
@@ -6397,6 +6494,7 @@ export type GlobalOmitConfig = {
   verificationToken?: Prisma.VerificationTokenOmit
   profilEleve?: Prisma.ProfilEleveOmit
   historiqueNiveauEleve?: Prisma.HistoriqueNiveauEleveOmit
+  lectureJournaliere?: Prisma.LectureJournaliereOmit
   miraMessage?: Prisma.MiraMessageOmit
   niveauMatiere?: Prisma.NiveauMatiereOmit
   profilParent?: Prisma.ProfilParentOmit

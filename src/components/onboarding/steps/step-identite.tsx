@@ -21,10 +21,16 @@ export function StepIdentite({ data, onNext, province = "QC" }: Props) {
     data.niveauScolaire
   );
   const [ecole, setEcole] = useState(data.ecole);
+  const [dateRentree, setDateRentree] = useState<string>(data.dateRentree ?? "");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const NIVEAUX = getNiveauxParRegion(province);
   const cycleLabels = getCycleLabel(province);
+
+  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+
+  // Texte adapté si la rentrée est dans le futur
+  const rentreeFuture = dateRentree && dateRentree > today;
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -39,10 +45,22 @@ export function StepIdentite({ data, onNext, province = "QC" }: Props) {
       setErrors(errs);
       return;
     }
-    onNext({ prenom, nom, niveauScolaire: niveauScolaire as NiveauScolaire, ecole });
+    onNext({
+      prenom,
+      nom,
+      niveauScolaire: niveauScolaire as NiveauScolaire,
+      ecole,
+      dateRentree: dateRentree || undefined,
+    });
   };
 
-  const primaireNiveaux = NIVEAUX.filter((n) => n.cycle === cycleLabels.primaire || n.cycle === "Primaire" || n.cycle === "Elementary");
+  const primaireNiveaux = NIVEAUX.filter(
+    (n) =>
+      n.cycle === cycleLabels.primaire ||
+      n.cycle === "Primaire" ||
+      n.cycle === "Elementary" ||
+      n.cycle.startsWith("Primaire")
+  );
   const secondaireNiveaux = NIVEAUX.filter((n) => !primaireNiveaux.includes(n));
 
   return (
@@ -131,6 +149,45 @@ export function StepIdentite({ data, onNext, province = "QC" }: Props) {
           onChange={(e) => setEcole(e.target.value)}
           placeholder="Ex : École Bois-Joli"
         />
+
+        {/* ── Date de rentrée ─────────────────────────────────────────────── */}
+        {niveauScolaire && (
+          <div className="rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper-warm)] p-4">
+            <p className="text-sm font-semibold text-[var(--color-ink)] mb-1">
+              📅 Quelle est ta date de rentrée scolaire ?
+            </p>
+            <p className="text-xs text-[var(--color-ink-soft)] mb-3">
+              Si tu t'inscris avant la rentrée, on t'aidera à voir les notions à
+              l'avance pour que tu sois prêt(e) dès le premier jour !
+            </p>
+            <input
+              type="date"
+              value={dateRentree}
+              onChange={(e) => setDateRentree(e.target.value)}
+              min={today}
+              className="w-full rounded-lg border border-[var(--color-rule)] bg-white px-3 py-2 text-sm text-[var(--color-ink)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ink)]"
+            />
+            {rentreeFuture && (
+              <div className="mt-3 flex items-start gap-2 rounded-lg bg-emerald-50 border border-emerald-200 p-3">
+                <span className="text-base flex-shrink-0">🎒</span>
+                <div>
+                  <p className="text-xs font-semibold text-emerald-800">
+                    Super ! Tu te prépares à l'avance.
+                  </p>
+                  <p className="text-xs text-emerald-700 mt-0.5">
+                    On va t'aider à explorer les notions de ta prochaine classe
+                    pour que tu arrives en forme à la rentrée !
+                  </p>
+                </div>
+              </div>
+            )}
+            {!dateRentree && (
+              <p className="text-xs text-[var(--color-ink-soft)] mt-2 italic">
+                Facultatif — tu pourras l'ajouter plus tard dans tes paramètres.
+              </p>
+            )}
+          </div>
+        )}
 
         <Button onClick={handleSubmit} size="lg" className="w-full mt-2">
           Continuer →
