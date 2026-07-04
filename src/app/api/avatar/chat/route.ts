@@ -105,6 +105,41 @@ Utilise des phrases complètes et naturelles.
 Varie tes formules d'encouragement pour qu'elles sonnent toujours sincères.
 Tu ne révèles jamais que tu es une IA générale. Tu es Mira, enseignante IA d'Édu-Réussite QC.`;
 
+// ── Bloc pré-rentrée — mode découverte et mini-cours ─────────────────────────
+
+const PRERENTREE_BLOC = `═══ MODE PRÉ-RENTRÉE — DÉCOUVERTE ET MINI-COURS ═══
+L'élève est en période pré-rentrée : les cours officiels n'ont pas encore commencé.
+Il ou elle DÉCOUVRE pour la première fois les notions du programme à venir.
+
+⚠ RÈGLE ABSOLUE : Tu n'administres AUCUN EXERCICE, AUCUN QUIZ, AUCUN TEST dans cette session.
+
+TON RÔLE UNIQUEMENT : enseigner, explorer, rendre les notions fascinantes et accessibles.
+
+SÉQUENCE OBLIGATOIRE pour chaque notion :
+1. ACCROCHE : commence par une question-curiosité ou une situation de la vie réelle qui crée un besoin de comprendre.
+   Exemples oraux : "Est-ce que tu as déjà remarqué pourquoi une pizza coupée en 4 donne de plus grosses parts qu'une pizza coupée en 8 ?"
+                    "Sais-tu comment les architectes savent exactement combien de briques ils ont besoin pour une maison ?"
+2. MINI-LEÇON : explique la notion avec une analogie simple et une histoire courte.
+   — 3 à 4 phrases maximum, langage d'enfant, concret et imagé.
+   — Une métaphore tirée de son univers quotidien (sport, jeux, famille, nature, école).
+3. EXEMPLE VÉCU : illustre avec 1 exemple de la vie réelle lié à son univers si tu le connais.
+   — Adapte à ses intérêts (hockey, minecraft, cuisine, animaux, musique…).
+4. VÉRIFICATION DOUCE (aucune correction, aucun score) :
+   — Pose une question ouverte pour voir si la lumière s'allume : "Est-ce que ça te fait penser à quelque chose dans ta vie ?"
+   — Si oui : célèbre et approfondis. Si non : change complètement d'analogie et recommence.
+5. INVITATION À EXPLORER : termine chaque notion avec une question qui donne envie d'aller plus loin.
+   "Et tu savais qu'il y a encore quelque chose de fascinant là-dedans ?"
+
+INTERDICTIONS absolues en mode pré-rentrée :
+- Aucun exercice, aucun quiz, aucun score, aucune note
+- Ne dis jamais "c'est difficile" ou "c'est complexe" — dis plutôt "c'est une découverte passionnante"
+- Ne demande jamais de mémoriser — dis plutôt "tu vas explorer ça comme une aventure"
+- Aucune comparaison avec d'autres élèves
+
+ATTITUDE GLOBALE : tu es un guide d'aventure intellectuelle, pas un examinateur.
+Chaque échange doit laisser l'élève avec l'envie d'en découvrir plus.
+Suis son élan naturel et sa curiosité — laisse la notion se déployer à son rythme.`;
+
 // ── Bloc mode enseignement de l'anglais ──────────────────────────────────────
 
 const STYLE_VOCAL_ANGLAIS = `═══ MODE ENSEIGNEMENT DE L'ANGLAIS LANGUE SECONDE ═══
@@ -397,14 +432,27 @@ export async function POST(req: NextRequest) {
       planContext,       // { notionActive, matiere, matiereLabel, nbNotions, nbMaitrisees } (mode plan)
     } = body;
 
-    // ── Détection première session (onboarding J1) ────────────────────────────
-    // Si l'historique est vide, vérifier si l'élève n'a jamais eu de session
+    // ── Détection première session (onboarding J1) + mode pré-rentrée ─────────
     let isFirstSession = false;
+    let isModePreRentree = false;
     if (!Array.isArray(history) || history.length === 0) {
-      const sessionCount = await prisma.sessionPratique.count({
-        where: { eleve: { userId: session.user.id } },
-      }).catch(() => 1); // en cas d'erreur DB, on suppose que ce n'est pas la première
+      const [sessionCount, profilPreRentree] = await Promise.all([
+        prisma.sessionPratique.count({
+          where: { eleve: { userId: session.user.id } },
+        }).catch(() => 1),
+        prisma.profilEleve.findUnique({
+          where: { userId: session.user.id },
+          select: { modePreRentree: true },
+        }).catch(() => null),
+      ]);
       isFirstSession = sessionCount === 0;
+      isModePreRentree = profilPreRentree?.modePreRentree ?? false;
+    } else {
+      const profilPreRentree = await prisma.profilEleve.findUnique({
+        where: { userId: session.user.id },
+        select: { modePreRentree: true },
+      }).catch(() => null);
+      isModePreRentree = profilPreRentree?.modePreRentree ?? false;
     }
 
     // ── Mode génération de résumé fin de session ──────────────────────────────
@@ -458,6 +506,7 @@ export async function POST(req: NextRequest) {
     const premierSessionBloc = isFirstSession ? "\n\n" + buildPremierSessionBloc(prenomNorm) : "";
     const isAnglais = isAnglaisMatiere(subjectContext, planContext, message, history);
     const anglaisBloc = isAnglais ? "\n\n" + STYLE_VOCAL_ANGLAIS : "";
+    const preRentreeBloc = isModePreRentree ? "\n\n" + PRERENTREE_BLOC : "";
 
     const systemPrompt = (mode === "plan" && planContext
       ? buildPlanSystemPrompt({
@@ -481,7 +530,7 @@ export async function POST(req: NextRequest) {
           subjectContext: subjectContext ?? "matière non précisée",
           profilExtra,
           diagnosticContext,
-        })) + premierSessionBloc + anglaisBloc;
+        })) + premierSessionBloc + anglaisBloc + preRentreeBloc;
 
     const response = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",

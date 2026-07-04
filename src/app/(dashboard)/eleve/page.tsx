@@ -2,6 +2,7 @@ import { api } from "@/lib/trpc/server";
 import { CheckInEmotionnelWidget } from "@/components/dashboard/check-in-widget";
 import { ExercicesDuJourWidget } from "@/components/dashboard/exercices-du-jour";
 import { PlanDuJourWidget, ObjectifsProgressionWidget } from "@/components/dashboard/plan-du-jour-widget";
+import { PreRentreeWidget } from "@/components/dashboard/pre-rentree-widget";
 import { ProgressionWidget } from "@/components/dashboard/progression-widget";
 import { CoursWidget } from "@/components/dashboard/cours-widget";
 import { DefJourWidget } from "@/components/dashboard/def-jour-widget";
@@ -113,8 +114,11 @@ export default async function EleveDashboardPage() {
           {/* ── Colonne principale ── */}
           <div className="md:col-span-1 lg:col-span-2 space-y-4">
 
-            {/* Défi du jour — priorité absolue */}
-            <PlanDuJourWidget niveauScolaire={profil.niveauScolaire} />
+            {/* Défi du jour OU mode pré-rentrée */}
+            {modePreRentree
+              ? <PreRentreeWidget niveauScolaire={profil.niveauScolaire} prenom={profil.prenom} />
+              : <PlanDuJourWidget niveauScolaire={profil.niveauScolaire} />
+            }
 
             {/* Check-in — seulement si nouvelle session */}
             {!profil.sessions[0] && (

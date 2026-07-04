@@ -173,6 +173,14 @@ export const eleveRouter = createTRPCRouter({
 
   // Tableau de bord — données agrégées
   getDashboard: protectedProcedure.query(async ({ ctx }) => {
+    // Date de début de l'année scolaire courante = date du dernier passage de niveau
+    const dernierPassage = await ctx.prisma.historiqueNiveauEleve.findFirst({
+      where: { eleve: { userId: ctx.user.id } },
+      orderBy: { createdAt: "desc" },
+      select: { createdAt: true },
+    });
+    const debutAnneeScolaire = dernierPassage?.createdAt;
+
     const profil = await ctx.prisma.profilEleve.findUnique({
       where: { userId: ctx.user.id },
       include: {
@@ -180,14 +188,22 @@ export const eleveRouter = createTRPCRouter({
         niveauxMatieres: true,
         badges: { include: { badge: true } },
         exercicesAssignes: {
-          where: { statut: { in: ["NON_COMMENCE", "EN_COURS"] } },
+          where: {
+            statut: { in: ["NON_COMMENCE", "EN_COURS"] },
+            ...(debutAnneeScolaire ? { dateAssignation: { gte: debutAnneeScolaire } } : {}),
+          },
           include: { exercice: true },
           orderBy: { dateAssignation: "desc" },
           take: 5,
         },
         checkIns: { orderBy: { date: "desc" }, take: 1 },
-        sessions: { orderBy: { dateSession: "desc" }, take: 7 },
+        sessions: {
+          where: debutAnneeScolaire ? { dateSession: { gte: debutAnneeScolaire } } : {},
+          orderBy: { dateSession: "desc" },
+          take: 7,
+        },
         coursRemediation: {
+          where: debutAnneeScolaire ? { createdAt: { gte: debutAnneeScolaire } } : {},
           orderBy: { createdAt: "desc" },
           take: 5,
         },
@@ -199,7 +215,13 @@ export const eleveRouter = createTRPCRouter({
     const debutJour = debutJourMontreal();
 
     const [totalExercices, exerciceAujourdhui] = await Promise.all([
-      ctx.prisma.exerciceAssigne.count({ where: { eleveId: profil.id, statut: "TERMINE" } }),
+      ctx.prisma.exerciceAssigne.count({
+        where: {
+          eleveId: profil.id,
+          statut: "TERMINE",
+          ...(debutAnneeScolaire ? { dateFin: { gte: debutAnneeScolaire } } : {}),
+        },
+      }),
       ctx.prisma.exerciceAssigne.count({
         where: { eleveId: profil.id, statut: "TERMINE", dateFin: { gte: debutJour } },
       }),
@@ -395,30 +417,40 @@ export const eleveRouter = createTRPCRouter({
 
   // Données complètes pour la page progression
   getProgression: protectedProcedure.query(async ({ ctx }) => {
-    const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
-      where: { userId: ctx.user.id },
-      select: {
-        id: true,
-        prenom: true,
-        streakJours: true,
-        streakMaxJours: true,
-        niveauxMatieres: { orderBy: { scoreGlobal: "asc" } },
-        badges: {
-          include: { badge: true },
-          orderBy: { date: "desc" },
+    const [profil, dernierPassage] = await Promise.all([
+      ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: {
+          id: true,
+          prenom: true,
+          streakJours: true,
+          streakMaxJours: true,
+          niveauxMatieres: { orderBy: { scoreGlobal: "asc" } },
+          badges: {
+            include: { badge: true },
+            orderBy: { date: "desc" },
+          },
         },
-      },
-    });
+      }),
+      ctx.prisma.historiqueNiveauEleve.findFirst({
+        where: { eleve: { userId: ctx.user.id } },
+        orderBy: { createdAt: "desc" },
+        select: { createdAt: true },
+      }),
+    ]);
+
+    const debutAnneeScolaire = dernierPassage?.createdAt;
+    const filtreAnnee = debutAnneeScolaire ? { dateFin: { gte: debutAnneeScolaire } } : {};
 
     const exercicesTermines = await ctx.prisma.exerciceAssigne.findMany({
-      where: { eleveId: profil.id, statut: "TERMINE" },
+      where: { eleveId: profil.id, statut: "TERMINE", ...filtreAnnee },
       include: { exercice: { select: { titre: true, matiere: true, difficulte: true } } },
       orderBy: { dateFin: "desc" },
       take: 20,
     });
 
     const totalExercices = await ctx.prisma.exerciceAssigne.count({
-      where: { eleveId: profil.id, statut: "TERMINE" },
+      where: { eleveId: profil.id, statut: "TERMINE", ...filtreAnnee },
     });
 
     const scores = exercicesTermines.map((e) => e.score ?? 0).filter((s) => s > 0);
@@ -1059,6 +1091,11 @@ export const eleveRouter = createTRPCRouter({
           derniereEval: null,
           prochaineRevision: null,
         },
+      }),
+      // 7. Annuler les exercices incomplets (isolation des données par année scolaire)
+      ctx.prisma.exerciceAssigne.updateMany({
+        where: { eleveId: profil.id, statut: { in: ["NON_COMMENCE", "EN_COURS"] } },
+        data: { statut: "ABANDONNE" },
       }),
     ]);
 

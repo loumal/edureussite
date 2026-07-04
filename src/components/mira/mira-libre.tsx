@@ -352,6 +352,13 @@ function MiraLibrePanel({ onClose }: MiraLibrePanelProps) {
 export function MiraLibreBtn() {
   const [open, setOpen] = useState(false);
 
+  // Permet aux autres composants d'ouvrir Mira via window.dispatchEvent(new CustomEvent('mira:open'))
+  useEffect(() => {
+    const handler = () => setOpen(true);
+    window.addEventListener("mira:open", handler);
+    return () => window.removeEventListener("mira:open", handler);
+  }, []);
+
   return (
     <>
       {/* Bouton flottant */}
