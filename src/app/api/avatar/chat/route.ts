@@ -458,7 +458,7 @@ export async function POST(req: NextRequest) {
     // ── Mode génération de résumé fin de session ──────────────────────────────
     if (generateSummary === true) {
       const summaryResponse = await anthropic.messages.create({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-6",
         max_tokens: 200,
         system: buildSummaryPrompt(prenom ?? "l'élève", subjectContext ?? "la session"),
         messages: [
@@ -533,7 +533,7 @@ export async function POST(req: NextRequest) {
         })) + premierSessionBloc + anglaisBloc + preRentreeBloc;
 
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 480,
       system: systemPrompt,
       messages: conversationMessages,
