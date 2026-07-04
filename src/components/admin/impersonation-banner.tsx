@@ -2,21 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import type { ImpersonatedRole } from "@/lib/auth/impersonation";
 
 interface Props {
-  actingAs: "ENSEIGNANT" | "SPECIALISTE";
+  actingAs: ImpersonatedRole;
   superAdminEmail: string;
+  targetUserName?: string;
 }
 
-const ROLE_LABELS: Record<"ENSEIGNANT" | "SPECIALISTE", { label: string; emoji: string; color: string }> = {
+const ROLE_META: Record<ImpersonatedRole, { label: string; emoji: string; color: string }> = {
+  ELEVE:      { label: "Élève",         emoji: "🎒", color: "#0f766e" },
+  PARENT:     { label: "Parent",        emoji: "👨‍👩‍👧", color: "#b45309" },
   ENSEIGNANT: { label: "Enseignant(e)", emoji: "🍎", color: "#2563eb" },
-  SPECIALISTE: { label: "Spécialiste", emoji: "👩‍⚕️", color: "#7c3aed" },
+  SPECIALISTE:{ label: "Spécialiste",   emoji: "👩‍⚕️", color: "#7c3aed" },
 };
 
-export function ImpersonationBanner({ actingAs, superAdminEmail }: Props) {
+export function ImpersonationBanner({ actingAs, superAdminEmail, targetUserName }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const meta = ROLE_LABELS[actingAs];
+  const meta = ROLE_META[actingAs];
+  const displayName = targetUserName ?? meta.label;
 
   async function stopImpersonation() {
     setLoading(true);
@@ -38,10 +43,13 @@ export function ImpersonationBanner({ actingAs, superAdminEmail }: Props) {
       <div className="flex items-center gap-2 text-sm font-semibold">
         <span>{meta.emoji}</span>
         <span>
-          Vue simulée :&nbsp;<strong>{meta.label}</strong>
+          Vue simulée :&nbsp;<strong>{displayName}</strong>
+          {targetUserName && (
+            <span className="font-normal text-white/80 ml-1">({meta.label})</span>
+          )}
         </span>
-        <span className="hidden sm:inline text-white/70 font-normal text-xs ml-1">
-          (connecté en tant que {superAdminEmail})
+        <span className="hidden sm:inline text-white/60 font-normal text-xs ml-1">
+          — {superAdminEmail}
         </span>
       </div>
       <button

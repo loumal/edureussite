@@ -67,6 +67,11 @@ export type VerificationToken = Prisma.VerificationTokenModel
  */
 export type ProfilEleve = Prisma.ProfilEleveModel
 /**
+ * Model HistoriqueNiveauEleve
+ * 
+ */
+export type HistoriqueNiveauEleve = Prisma.HistoriqueNiveauEleveModel
+/**
  * Model MiraMessage
  * 
  */

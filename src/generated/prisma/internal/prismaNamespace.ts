@@ -389,6 +389,7 @@ export const ModelName = {
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   ProfilEleve: 'ProfilEleve',
+  HistoriqueNiveauEleve: 'HistoriqueNiveauEleve',
   MiraMessage: 'MiraMessage',
   NiveauMatiere: 'NiveauMatiere',
   ProfilParent: 'ProfilParent',
@@ -456,7 +457,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "epreuveSemainePlan" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur" | "evaluationRequest" | "formulaireReponse" | "rapportEvaluation"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "historiqueNiveauEleve" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "epreuveSemainePlan" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur" | "evaluationRequest" | "formulaireReponse" | "rapportEvaluation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -827,6 +828,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProfilEleveCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProfilEleveCountAggregateOutputType> | number
+        }
+      }
+    }
+    HistoriqueNiveauEleve: {
+      payload: Prisma.$HistoriqueNiveauElevePayload<ExtArgs>
+      fields: Prisma.HistoriqueNiveauEleveFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HistoriqueNiveauEleveFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HistoriqueNiveauEleveFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload>
+        }
+        findFirst: {
+          args: Prisma.HistoriqueNiveauEleveFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HistoriqueNiveauEleveFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload>
+        }
+        findMany: {
+          args: Prisma.HistoriqueNiveauEleveFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload>[]
+        }
+        create: {
+          args: Prisma.HistoriqueNiveauEleveCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload>
+        }
+        createMany: {
+          args: Prisma.HistoriqueNiveauEleveCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HistoriqueNiveauEleveCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload>[]
+        }
+        delete: {
+          args: Prisma.HistoriqueNiveauEleveDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload>
+        }
+        update: {
+          args: Prisma.HistoriqueNiveauEleveUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload>
+        }
+        deleteMany: {
+          args: Prisma.HistoriqueNiveauEleveDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HistoriqueNiveauEleveUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HistoriqueNiveauEleveUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload>[]
+        }
+        upsert: {
+          args: Prisma.HistoriqueNiveauEleveUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HistoriqueNiveauElevePayload>
+        }
+        aggregate: {
+          args: Prisma.HistoriqueNiveauEleveAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHistoriqueNiveauEleve>
+        }
+        groupBy: {
+          args: Prisma.HistoriqueNiveauEleveGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HistoriqueNiveauEleveGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HistoriqueNiveauEleveCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HistoriqueNiveauEleveCountAggregateOutputType> | number
         }
       }
     }
@@ -4804,6 +4879,7 @@ export const ProfilEleveScalarFieldEnum = {
   environnement: 'environnement',
   personnalite: 'personnalite',
   objectifScolaire: 'objectifScolaire',
+  anneeScolaireActive: 'anneeScolaireActive',
   streakJours: 'streakJours',
   streakMaxJours: 'streakMaxJours',
   streakBoucliers: 'streakBoucliers',
@@ -4822,6 +4898,17 @@ export const ProfilEleveScalarFieldEnum = {
 } as const
 
 export type ProfilEleveScalarFieldEnum = (typeof ProfilEleveScalarFieldEnum)[keyof typeof ProfilEleveScalarFieldEnum]
+
+
+export const HistoriqueNiveauEleveScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  niveauScolaire: 'niveauScolaire',
+  anneeScolaire: 'anneeScolaire',
+  createdAt: 'createdAt'
+} as const
+
+export type HistoriqueNiveauEleveScalarFieldEnum = (typeof HistoriqueNiveauEleveScalarFieldEnum)[keyof typeof HistoriqueNiveauEleveScalarFieldEnum]
 
 
 export const MiraMessageScalarFieldEnum = {
@@ -6309,6 +6396,7 @@ export type GlobalOmitConfig = {
   session?: Prisma.SessionOmit
   verificationToken?: Prisma.VerificationTokenOmit
   profilEleve?: Prisma.ProfilEleveOmit
+  historiqueNiveauEleve?: Prisma.HistoriqueNiveauEleveOmit
   miraMessage?: Prisma.MiraMessageOmit
   niveauMatiere?: Prisma.NiveauMatiereOmit
   profilParent?: Prisma.ProfilParentOmit

@@ -56,6 +56,7 @@ export const ModelName = {
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   ProfilEleve: 'ProfilEleve',
+  HistoriqueNiveauEleve: 'HistoriqueNiveauEleve',
   MiraMessage: 'MiraMessage',
   NiveauMatiere: 'NiveauMatiere',
   ProfilParent: 'ProfilParent',
@@ -213,6 +214,7 @@ export const ProfilEleveScalarFieldEnum = {
   environnement: 'environnement',
   personnalite: 'personnalite',
   objectifScolaire: 'objectifScolaire',
+  anneeScolaireActive: 'anneeScolaireActive',
   streakJours: 'streakJours',
   streakMaxJours: 'streakMaxJours',
   streakBoucliers: 'streakBoucliers',
@@ -231,6 +233,17 @@ export const ProfilEleveScalarFieldEnum = {
 } as const
 
 export type ProfilEleveScalarFieldEnum = (typeof ProfilEleveScalarFieldEnum)[keyof typeof ProfilEleveScalarFieldEnum]
+
+
+export const HistoriqueNiveauEleveScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  niveauScolaire: 'niveauScolaire',
+  anneeScolaire: 'anneeScolaire',
+  createdAt: 'createdAt'
+} as const
+
+export type HistoriqueNiveauEleveScalarFieldEnum = (typeof HistoriqueNiveauEleveScalarFieldEnum)[keyof typeof HistoriqueNiveauEleveScalarFieldEnum]
 
 
 export const MiraMessageScalarFieldEnum = {

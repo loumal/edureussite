@@ -134,6 +134,8 @@ enum Matiere {
   ETHIQUE
   ANGLAIS
   EDUCATION_PHYSIQUE
+  SVT   // Sciences de la Vie et de la Terre — Bénin & Afrique APC
+  PCT   // Physique-Chimie-Technologie — Bénin & Afrique APC
 }
 
 enum NiveauDifficulte {
@@ -349,6 +351,8 @@ model ProfilEleve {
   personnalite      String[]  // ex: ["CURIEUX", "CREATIF", "COMPETITEUR"]
   objectifScolaire  String?   // ex: "REUSSIR_ANNEE", "UNIVERSITE"
 
+  anneeScolaireActive String  @default("2025-2026")
+
   streakJours       Int      @default(0)
   streakMaxJours    Int      @default(0)
   streakBoucliers   Int      @default(0)
@@ -370,6 +374,7 @@ model ProfilEleve {
   parents    ProfilParent[]    @relation("ParentEnfants")
 
   niveauxMatieres       NiveauMatiere[]
+  historiqueNiveaux     HistoriqueNiveauEleve[]
   planActions           PlanAction[]
   sessions              SessionPratique[]
   checkIns              CheckInEmotionnel[]
@@ -401,6 +406,20 @@ model ProfilEleve {
   miraSecsBonus    Int     @default(0)   @map("sofiaSecsBonus")    // bonus accordé par super admin (s'ajoute aux 30 min)
 
   @@map("profils_eleves")
+}
+
+// ── Historique des niveaux scolaires (passage d'année) ────────────────────
+model HistoriqueNiveauEleve {
+  id             String         @id @default(cuid())
+  eleveId        String
+  niveauScolaire NiveauScolaire
+  anneeScolaire  String         // ex: "2024-2025"
+  createdAt      DateTime       @default(now())
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@index([eleveId])
+  @@map("historique_niveaux_eleves")
 }
 
 // ── Historique persistant des conversations Mira (mode aide libre) ─────────

@@ -6,6 +6,7 @@ import { NavEleve } from "@/components/layout/nav-eleve";
 import Link from "next/link";
 import { ParametresClient } from "@/components/eleve/parametres-client";
 import { ThemeSelector } from "@/components/eleve/theme-selector";
+import { PassageAnneeCard } from "@/components/eleve/passage-annee-card";
 import { Card } from "@/components/ui/card";
 
 export default async function ParametresPage() {
@@ -39,6 +40,12 @@ export default async function ParametresPage() {
         <Card className="px-5 py-5 mb-4">
           <ThemeSelector />
         </Card>
+
+        <PassageAnneeCard
+          niveauScolaire={profil.niveauScolaire ?? ""}
+          anneeScolaireActive={profil.anneeScolaireActive}
+          historiqueNiveaux={profil.historiqueNiveaux}
+        />
 
         <ParametresClient profil={profil} />
       </main>

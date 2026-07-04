@@ -26,6 +26,8 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 // Procédure protégée (auth requise)
+// Quand un SUPER_ADMIN impersonne un utilisateur cible (targetUserId dans le cookie),
+// ctx.user.id retourne l'ID de cet utilisateur dans tous les routers sans modification.
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   if (!ctx.session?.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
@@ -34,7 +36,10 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
     ctx: {
       ...ctx,
       session: ctx.session,
-      user: ctx.session.user,
+      user: {
+        ...ctx.session.user,
+        id: ctx.effectiveUserId ?? ctx.session.user.id,
+      },
     },
   });
 });

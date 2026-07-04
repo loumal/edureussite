@@ -2,13 +2,17 @@ import { createHmac } from "crypto";
 import { cookies } from "next/headers";
 import type { Role } from "@/generated/prisma";
 
-export type ImpersonatedRole = "ENSEIGNANT" | "SPECIALISTE";
+export type ImpersonatedRole = "ELEVE" | "PARENT" | "ENSEIGNANT" | "SPECIALISTE";
 
 export interface ImpersonationState {
   actingAs: ImpersonatedRole;
   superAdminId: string;
   superAdminEmail: string;
   issuedAt: number;
+  /** ID de l'utilisateur cible (impersonation spécifique avec données réelles) */
+  targetUserId?: string;
+  /** Nom affiché dans le bandeau de simulation */
+  targetUserName?: string;
 }
 
 export const IMPERSONATION_COOKIE = "__impers";
@@ -50,17 +54,21 @@ export async function getImpersonationState(): Promise<ImpersonationState | null
 }
 
 export const ROLE_LABELS: Record<ImpersonatedRole, string> = {
+  ELEVE: "Élève",
+  PARENT: "Parent",
   ENSEIGNANT: "Enseignant(e)",
   SPECIALISTE: "Spécialiste",
 };
 
 export const ROLE_PATHS: Record<ImpersonatedRole, string> = {
+  ELEVE: "/eleve",
+  PARENT: "/parent",
   ENSEIGNANT: "/enseignant",
   SPECIALISTE: "/specialiste",
 };
 
 export function isImpersonatableRole(role: string): role is ImpersonatedRole {
-  return role === "ENSEIGNANT" || role === "SPECIALISTE";
+  return ["ELEVE", "PARENT", "ENSEIGNANT", "SPECIALISTE"].includes(role);
 }
 
 // Returns the effective role to use for access checks.

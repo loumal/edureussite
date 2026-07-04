@@ -22,6 +22,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
           <ImpersonationBanner
             actingAs={impersonation.actingAs}
             superAdminEmail={session!.user.email}
+            targetUserName={impersonation.targetUserName}
           />
           {/* Spacer so the fixed banner doesn't cover page content */}
           <div className="h-10" />

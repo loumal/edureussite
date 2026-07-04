@@ -9,6 +9,7 @@ import { CreerSuperAdminBtn } from "@/components/admin/creer-super-admin-btn";
 import { ReinitialiserMdpBtn } from "@/components/admin/reinitialiser-mdp-btn";
 import { BonusMiraBtn } from "@/components/admin/bonus-mira-btn";
 import { SuspendreUserBtn } from "@/components/admin/suspendre-user-btn";
+import { ImpersonerUserBtn } from "@/components/admin/impersoner-user-btn";
 import Link from "next/link";
 
 const ROLE_LABEL: Record<string, string> = {
@@ -177,6 +178,16 @@ export default async function UtilisateursPage({ searchParams }: PageProps) {
                     <span className="text-xs text-[var(--color-ink-soft)]">
                       {new Date(user.createdAt).toLocaleDateString("fr-CA")}
                     </span>
+                    {["ELEVE", "PARENT", "ENSEIGNANT"].includes(user.role) && (
+                      <ImpersonerUserBtn
+                        targetUserId={user.id}
+                        nom={
+                          user.profilEleve
+                            ? `${user.profilEleve.prenom} ${user.profilEleve.nom}`
+                            : (user.name ?? user.email)
+                        }
+                      />
+                    )}
                     {user.profilEleve && (
                       <BonusMiraBtn
                         eleveId={user.profilEleve.id}

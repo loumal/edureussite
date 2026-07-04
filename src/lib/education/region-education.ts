@@ -87,10 +87,30 @@ const NIVEAUX_AFRIQUE_FR: NiveauInfo[] = [
   { value: "SECONDAIRE_7",  label: "Terminale",          cycle: "Lycée"       },
 ];
 
+// ─── Bénin (BJ) — Nomenclature officielle APC / NPE ──────────────────────────
+// Primaire : CI, CP, CE1, CE2, CM1, CM2 (3 sous-cycles de 2 ans)
+// Secondaire : 6ème→3ème (Collège / BEPC) + 2nde→Terminale (Lycée / BAC)
+const NIVEAUX_BENIN: NiveauInfo[] = [
+  { value: "PRIMAIRE_1",    label: "CI",                 cycle: "Primaire – Sous-cycle élémentaire" },
+  { value: "PRIMAIRE_2",    label: "CP",                 cycle: "Primaire – Sous-cycle élémentaire" },
+  { value: "PRIMAIRE_3",    label: "CE1",                cycle: "Primaire – Sous-cycle moyen"       },
+  { value: "PRIMAIRE_4",    label: "CE2",                cycle: "Primaire – Sous-cycle moyen"       },
+  { value: "PRIMAIRE_5",    label: "CM1",                cycle: "Primaire – Sous-cycle supérieur"   },
+  { value: "PRIMAIRE_6",    label: "CM2",                cycle: "Primaire – Sous-cycle supérieur"   },
+  { value: "SECONDAIRE_1",  label: "6ème",               cycle: "Collège"                           },
+  { value: "SECONDAIRE_2",  label: "5ème",               cycle: "Collège"                           },
+  { value: "SECONDAIRE_3",  label: "4ème",               cycle: "Collège"                           },
+  { value: "SECONDAIRE_4",  label: "3ème",               cycle: "Collège – BEPC"                    },
+  { value: "SECONDAIRE_5",  label: "2nde",               cycle: "Lycée"                             },
+  { value: "SECONDAIRE_6",  label: "1ère",               cycle: "Lycée"                             },
+  { value: "SECONDAIRE_7",  label: "Terminale",          cycle: "Lycée – BAC"                       },
+];
+
 export function getNiveauxParRegion(regionCode: string): NiveauInfo[] {
   if (regionCode === "QC" || regionCode === "NB") return NIVEAUX_QC;
   if (CANADA_EN.has(regionCode))                  return NIVEAUX_CANADA_EN;
   if (regionCode === "FR")                         return NIVEAUX_FRANCE;
+  if (regionCode === "BJ")                         return NIVEAUX_BENIN;
   if (AFRIQUE_FR.has(regionCode))                 return NIVEAUX_AFRIQUE_FR;
   return NIVEAUX_QC; // fallback
 }
@@ -141,10 +161,26 @@ const MATIERES_AFRIQUE_FR: MatiereInfo[] = [
   { value: "EDUCATION_PHYSIQUE", emoji: "⚽", label: "EPS"                         },
 ];
 
+// ─── Bénin (BJ) — Matières APC : SVT et PCT séparées ─────────────────────────
+// Au primaire : EST (Éducation Scientifique et Technologique) couvre les deux
+// Au secondaire : SVT (biologie/géologie) et PCT (physique/chimie/techno) distincts
+const MATIERES_BENIN: MatiereInfo[] = [
+  { value: "FRANCAIS",           emoji: "📖", label: "Français"              },
+  { value: "MATHEMATIQUES",      emoji: "🔢", label: "Mathématiques"         },
+  { value: "SVT",                emoji: "🌿", label: "SVT"                   },
+  { value: "PCT",                emoji: "⚗️", label: "PCT"                   },
+  { value: "UNIVERS_SOCIAL",     emoji: "🗺️", label: "Histoire-Géographie"  },
+  { value: "ANGLAIS",            emoji: "🗣️", label: "Anglais"               },
+  { value: "ARTS",               emoji: "🎨", label: "Arts Plastiques"       },
+  { value: "ETHIQUE",            emoji: "💭", label: "Éducation Civique"     },
+  { value: "EDUCATION_PHYSIQUE", emoji: "⚽", label: "EPS"                   },
+];
+
 export function getMatieresParRegion(regionCode: string): MatiereInfo[] {
   if (regionCode === "QC" || regionCode === "NB") return MATIERES_QC;
   if (CANADA_EN.has(regionCode))                  return MATIERES_CANADA_EN;
   if (regionCode === "FR")                         return MATIERES_FRANCE;
+  if (regionCode === "BJ")                         return MATIERES_BENIN;
   if (AFRIQUE_FR.has(regionCode))                 return MATIERES_AFRIQUE_FR;
   return MATIERES_QC; // fallback
 }
@@ -152,6 +188,7 @@ export function getMatieresParRegion(regionCode: string): MatiereInfo[] {
 /** Retourne le nom localisé d'un cycle scolaire */
 export function getCycleLabel(regionCode: string): { primaire: string; secondaire: string } {
   if (CANADA_EN.has(regionCode)) return { primaire: "Elementary", secondaire: "Secondary" };
+  if (regionCode === "BJ")       return { primaire: "Primaire (NPE/APC)", secondaire: "Collège / Lycée" };
   if (regionCode === "FR" || AFRIQUE_FR.has(regionCode)) return { primaire: "Primaire", secondaire: "Collège / Lycée" };
   return { primaire: "Primaire", secondaire: "Secondaire" };
 }

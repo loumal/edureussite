@@ -432,6 +432,7 @@ export const eleveRouter = createTRPCRouter({
           prenom: true,
           nom: true,
           niveauScolaire: true,
+          anneeScolaireActive: true,
           ecole: true,
           styleApprentissage: true,
           matieresPreferees: true,
@@ -447,6 +448,10 @@ export const eleveRouter = createTRPCRouter({
           personnalite: true,
           objectifScolaire: true,
           dateNaissance: true,
+          historiqueNiveaux: {
+            orderBy: { createdAt: "desc" },
+            select: { niveauScolaire: true, anneeScolaire: true, createdAt: true },
+          },
         },
       }),
       ctx.prisma.user.findUnique({ where: { id: ctx.user.id }, select: { province: true } }),
@@ -976,4 +981,78 @@ export const eleveRouter = createTRPCRouter({
 
       return { success: true };
     }),
+
+  // ─── Passage d'année scolaire ────────────────────────────────────────────────
+  passageAnnee: protectedProcedure.mutation(async ({ ctx }) => {
+    const NIVEAU_SUIVANT: Partial<Record<NiveauScolaire, NiveauScolaire>> = {
+      PRIMAIRE_1: NiveauScolaire.PRIMAIRE_2,
+      PRIMAIRE_2: NiveauScolaire.PRIMAIRE_3,
+      PRIMAIRE_3: NiveauScolaire.PRIMAIRE_4,
+      PRIMAIRE_4: NiveauScolaire.PRIMAIRE_5,
+      PRIMAIRE_5: NiveauScolaire.PRIMAIRE_6,
+      PRIMAIRE_6: NiveauScolaire.SECONDAIRE_1,
+      SECONDAIRE_1: NiveauScolaire.SECONDAIRE_2,
+      SECONDAIRE_2: NiveauScolaire.SECONDAIRE_3,
+      SECONDAIRE_3: NiveauScolaire.SECONDAIRE_4,
+      SECONDAIRE_4: NiveauScolaire.SECONDAIRE_5,
+      SECONDAIRE_5: NiveauScolaire.SECONDAIRE_6,
+      SECONDAIRE_6: NiveauScolaire.SECONDAIRE_7,
+    };
+
+    const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+      where: { userId: ctx.user.id },
+      select: { id: true, niveauScolaire: true, anneeScolaireActive: true },
+    });
+
+    const niveauSuivant = NIVEAU_SUIVANT[profil.niveauScolaire];
+    if (!niveauSuivant) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Aucun niveau supérieur disponible." });
+    }
+
+    // Calcul de la prochaine année scolaire (ex: "2025-2026" → "2026-2027")
+    const [anneeDebut] = profil.anneeScolaireActive.split("-").map(Number);
+    const prochaineAnnee = `${anneeDebut + 1}-${anneeDebut + 2}`;
+
+    await ctx.prisma.$transaction([
+      // 1. Enregistrer le niveau actuel dans l'historique
+      ctx.prisma.historiqueNiveauEleve.create({
+        data: {
+          eleveId: profil.id,
+          niveauScolaire: profil.niveauScolaire,
+          anneeScolaire: profil.anneeScolaireActive,
+        },
+      }),
+      // 2. Mettre à jour le profil élève
+      ctx.prisma.profilEleve.update({
+        where: { id: profil.id },
+        data: {
+          niveauScolaire: niveauSuivant,
+          anneeScolaireActive: prochaineAnnee,
+        },
+      }),
+      // 3. Archiver les plans d'action actifs
+      ctx.prisma.planAction.updateMany({
+        where: { eleveId: profil.id, statut: "ACTIF" },
+        data: { statut: "ARCHIVE" },
+      }),
+      // 4. Supprimer les objectifs de notes (spécifiques à l'année)
+      ctx.prisma.objectifNote.deleteMany({ where: { eleveId: profil.id } }),
+      // 5. Supprimer la planification de notions (spécifique à l'année)
+      ctx.prisma.planifNotionEleve.deleteMany({ where: { eleveId: profil.id } }),
+      // 6. Réinitialiser les niveaux par matière (nouveau départ académique)
+      ctx.prisma.niveauMatiere.updateMany({
+        where: { eleveId: profil.id },
+        data: {
+          scoreGlobal: 0,
+          niveau: NiveauDifficulte.BASE,
+          lacunes: [],
+          competencesPFEQ: [],
+          derniereEval: null,
+          prochaineRevision: null,
+        },
+      }),
+    ]);
+
+    return { niveauSuivant, prochaineAnnee };
+  }),
 });
