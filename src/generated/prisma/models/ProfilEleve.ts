@@ -578,6 +578,7 @@ export type ProfilEleveWhereInput = {
   evaluations?: Prisma.EvaluationRequestListRelationFilter
   epreuvesSemaine?: Prisma.EpreuveSemainePlanListRelationFilter
   lectures?: Prisma.LectureJournaliereListRelationFilter
+  sessionsLecture?: Prisma.SessionLectureListRelationFilter
 }
 
 export type ProfilEleveOrderByWithRelationInput = {
@@ -657,6 +658,7 @@ export type ProfilEleveOrderByWithRelationInput = {
   evaluations?: Prisma.EvaluationRequestOrderByRelationAggregateInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanOrderByRelationAggregateInput
   lectures?: Prisma.LectureJournaliereOrderByRelationAggregateInput
+  sessionsLecture?: Prisma.SessionLectureOrderByRelationAggregateInput
 }
 
 export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
@@ -739,6 +741,7 @@ export type ProfilEleveWhereUniqueInput = Prisma.AtLeast<{
   evaluations?: Prisma.EvaluationRequestListRelationFilter
   epreuvesSemaine?: Prisma.EpreuveSemainePlanListRelationFilter
   lectures?: Prisma.LectureJournaliereListRelationFilter
+  sessionsLecture?: Prisma.SessionLectureListRelationFilter
 }, "id" | "userId" | "codeAcces">
 
 export type ProfilEleveOrderByWithAggregationInput = {
@@ -922,6 +925,7 @@ export type ProfilEleveCreateInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateInput = {
@@ -999,6 +1003,7 @@ export type ProfilEleveUncheckedCreateInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUpdateInput = {
@@ -1076,6 +1081,7 @@ export type ProfilEleveUpdateInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateInput = {
@@ -1153,6 +1159,7 @@ export type ProfilEleveUncheckedUpdateInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateManyInput = {
@@ -1612,6 +1619,20 @@ export type ProfilEleveUpdateOneRequiredWithoutLecturesNestedInput = {
   upsert?: Prisma.ProfilEleveUpsertWithoutLecturesInput
   connect?: Prisma.ProfilEleveWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutLecturesInput, Prisma.ProfilEleveUpdateWithoutLecturesInput>, Prisma.ProfilEleveUncheckedUpdateWithoutLecturesInput>
+}
+
+export type ProfilEleveCreateNestedOneWithoutSessionsLectureInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutSessionsLectureInput, Prisma.ProfilEleveUncheckedCreateWithoutSessionsLectureInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutSessionsLectureInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+}
+
+export type ProfilEleveUpdateOneRequiredWithoutSessionsLectureNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfilEleveCreateWithoutSessionsLectureInput, Prisma.ProfilEleveUncheckedCreateWithoutSessionsLectureInput>
+  connectOrCreate?: Prisma.ProfilEleveCreateOrConnectWithoutSessionsLectureInput
+  upsert?: Prisma.ProfilEleveUpsertWithoutSessionsLectureInput
+  connect?: Prisma.ProfilEleveWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfilEleveUpdateToOneWithWhereWithoutSessionsLectureInput, Prisma.ProfilEleveUpdateWithoutSessionsLectureInput>, Prisma.ProfilEleveUncheckedUpdateWithoutSessionsLectureInput>
 }
 
 export type ProfilEleveCreateNestedOneWithoutMiraMessagesInput = {
@@ -2122,6 +2143,7 @@ export type ProfilEleveCreateWithoutUserInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutUserInput = {
@@ -2198,6 +2220,7 @@ export type ProfilEleveUncheckedCreateWithoutUserInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutUserInput = {
@@ -2290,6 +2313,7 @@ export type ProfilEleveUpdateWithoutUserInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutUserInput = {
@@ -2366,6 +2390,7 @@ export type ProfilEleveUncheckedUpdateWithoutUserInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutHistoriqueNiveauxInput = {
@@ -2442,6 +2467,7 @@ export type ProfilEleveCreateWithoutHistoriqueNiveauxInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutHistoriqueNiveauxInput = {
@@ -2518,6 +2544,7 @@ export type ProfilEleveUncheckedCreateWithoutHistoriqueNiveauxInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutHistoriqueNiveauxInput = {
@@ -2610,6 +2637,7 @@ export type ProfilEleveUpdateWithoutHistoriqueNiveauxInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutHistoriqueNiveauxInput = {
@@ -2686,6 +2714,7 @@ export type ProfilEleveUncheckedUpdateWithoutHistoriqueNiveauxInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutLecturesInput = {
@@ -2762,6 +2791,7 @@ export type ProfilEleveCreateWithoutLecturesInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutLecturesInput = {
@@ -2838,6 +2868,7 @@ export type ProfilEleveUncheckedCreateWithoutLecturesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutLecturesInput = {
@@ -2930,6 +2961,7 @@ export type ProfilEleveUpdateWithoutLecturesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutLecturesInput = {
@@ -3006,6 +3038,331 @@ export type ProfilEleveUncheckedUpdateWithoutLecturesInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
+}
+
+export type ProfilEleveCreateWithoutSessionsLectureInput = {
+  id?: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  user: Prisma.UserCreateNestedOneWithoutProfilEleveInput
+  enseignant?: Prisma.ProfilEnseignantCreateNestedOneWithoutElevesInput
+  parents?: Prisma.ProfilParentCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereCreateNestedManyWithoutEleveInput
+  historiqueNiveaux?: Prisma.HistoriqueNiveauEleveCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIACreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurCreateNestedManyWithoutCreateurInput
+  miraMessages?: Prisma.MiraMessageCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+}
+
+export type ProfilEleveUncheckedCreateWithoutSessionsLectureInput = {
+  id?: string
+  userId: string
+  codeAcces?: string | null
+  prenom: string
+  nom?: string
+  dateNaissance?: Date | string | null
+  niveauScolaire: $Enums.NiveauScolaire
+  ecole?: string | null
+  styleApprentissage?: $Enums.StyleApprentissage | null
+  vitesseTraitement?: number | null
+  niveauMotivation?: number | null
+  facteursStress?: Prisma.ProfilEleveCreatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveCreatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveCreatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: boolean
+  dyslexie?: boolean
+  dyscalculie?: boolean
+  anxieteScolaire?: boolean
+  autresBesoins?: string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveCreatecentresInteretInput | string[]
+  sportFavori?: string | null
+  universMediatique?: string | null
+  autresPassions?: string | null
+  environnement?: string | null
+  personnalite?: Prisma.ProfilEleveCreatepersonnaliteInput | string[]
+  objectifScolaire?: string | null
+  anneeScolaireActive?: string
+  dateRentree?: Date | string | null
+  modePreRentree?: boolean
+  streakJours?: number
+  streakMaxJours?: number
+  streakBoucliers?: number
+  derniereConnexion?: Date | string | null
+  totalPoints?: number
+  niveauJeu?: number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: boolean
+  onboardingEtape?: number
+  enseignantId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  miraSecsUsedWeek?: number
+  miraWeekOf?: string | null
+  miraSecsBonus?: number
+  parents?: Prisma.ProfilParentUncheckedCreateNestedManyWithoutElevesInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedCreateNestedManyWithoutEleveInput
+  historiqueNiveaux?: Prisma.HistoriqueNiveauEleveUncheckedCreateNestedManyWithoutEleveInput
+  planActions?: Prisma.PlanActionUncheckedCreateNestedManyWithoutEleveInput
+  sessions?: Prisma.SessionPratiqueUncheckedCreateNestedManyWithoutEleveInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedCreateNestedManyWithoutEleveInput
+  badges?: Prisma.BadgeEleveUncheckedCreateNestedManyWithoutEleveInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedCreateNestedManyWithoutEleveInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedCreateNestedManyWithoutEleveInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedCreateNestedManyWithoutEleveInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedCreateNestedManyWithoutEleveInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedCreateNestedManyWithoutEleveInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedCreateNestedManyWithoutEleveInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedCreateNestedManyWithoutEleveInput
+  rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutEleveInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedCreateNestedManyWithoutEleveInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedCreateNestedManyWithoutEleveInput
+  surprises?: Prisma.SurpriseParentUncheckedCreateNestedManyWithoutEleveInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedCreateNestedManyWithoutEleveInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedCreateNestedManyWithoutCreateurInput
+  miraMessages?: Prisma.MiraMessageUncheckedCreateNestedManyWithoutEleveInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedCreateNestedManyWithoutEleveInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedCreateNestedManyWithoutEleveInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
+  evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
+  lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+}
+
+export type ProfilEleveCreateOrConnectWithoutSessionsLectureInput = {
+  where: Prisma.ProfilEleveWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutSessionsLectureInput, Prisma.ProfilEleveUncheckedCreateWithoutSessionsLectureInput>
+}
+
+export type ProfilEleveUpsertWithoutSessionsLectureInput = {
+  update: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutSessionsLectureInput, Prisma.ProfilEleveUncheckedUpdateWithoutSessionsLectureInput>
+  create: Prisma.XOR<Prisma.ProfilEleveCreateWithoutSessionsLectureInput, Prisma.ProfilEleveUncheckedCreateWithoutSessionsLectureInput>
+  where?: Prisma.ProfilEleveWhereInput
+}
+
+export type ProfilEleveUpdateToOneWithWhereWithoutSessionsLectureInput = {
+  where?: Prisma.ProfilEleveWhereInput
+  data: Prisma.XOR<Prisma.ProfilEleveUpdateWithoutSessionsLectureInput, Prisma.ProfilEleveUncheckedUpdateWithoutSessionsLectureInput>
+}
+
+export type ProfilEleveUpdateWithoutSessionsLectureInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.UserUpdateOneRequiredWithoutProfilEleveNestedInput
+  enseignant?: Prisma.ProfilEnseignantUpdateOneWithoutElevesNestedInput
+  parents?: Prisma.ProfilParentUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUpdateManyWithoutEleveNestedInput
+  historiqueNiveaux?: Prisma.HistoriqueNiveauEleveUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUpdateManyWithoutCreateurNestedInput
+  miraMessages?: Prisma.MiraMessageUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+}
+
+export type ProfilEleveUncheckedUpdateWithoutSessionsLectureInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  codeAcces?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prenom?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  dateNaissance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  niveauScolaire?: Prisma.EnumNiveauScolaireFieldUpdateOperationsInput | $Enums.NiveauScolaire
+  ecole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  styleApprentissage?: Prisma.NullableEnumStyleApprentissageFieldUpdateOperationsInput | $Enums.StyleApprentissage | null
+  vitesseTraitement?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  niveauMotivation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  facteursStress?: Prisma.ProfilEleveUpdatefacteursStressInput | string[]
+  matieresPreferees?: Prisma.ProfilEleveUpdatematieresPrefereesInput | $Enums.Matiere[]
+  matieresRedoutees?: Prisma.ProfilEleveUpdatematieresRedouteesInput | $Enums.Matiere[]
+  tdah?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyslexie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dyscalculie?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  anxieteScolaire?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  autresBesoins?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilCognitif?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  parcoursAdapte?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  centresInteret?: Prisma.ProfilEleveUpdatecentresInteretInput | string[]
+  sportFavori?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  universMediatique?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autresPassions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  environnement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  personnalite?: Prisma.ProfilEleveUpdatepersonnaliteInput | string[]
+  objectifScolaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  anneeScolaireActive?: Prisma.StringFieldUpdateOperationsInput | string
+  dateRentree?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  modePreRentree?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  streakJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakMaxJours?: Prisma.IntFieldUpdateOperationsInput | number
+  streakBoucliers?: Prisma.IntFieldUpdateOperationsInput | number
+  derniereConnexion?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  niveauJeu?: Prisma.IntFieldUpdateOperationsInput | number
+  cosmetiques?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  onboardingComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingEtape?: Prisma.IntFieldUpdateOperationsInput | number
+  enseignantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  miraSecsUsedWeek?: Prisma.IntFieldUpdateOperationsInput | number
+  miraWeekOf?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  miraSecsBonus?: Prisma.IntFieldUpdateOperationsInput | number
+  parents?: Prisma.ProfilParentUncheckedUpdateManyWithoutElevesNestedInput
+  niveauxMatieres?: Prisma.NiveauMatiereUncheckedUpdateManyWithoutEleveNestedInput
+  historiqueNiveaux?: Prisma.HistoriqueNiveauEleveUncheckedUpdateManyWithoutEleveNestedInput
+  planActions?: Prisma.PlanActionUncheckedUpdateManyWithoutEleveNestedInput
+  sessions?: Prisma.SessionPratiqueUncheckedUpdateManyWithoutEleveNestedInput
+  checkIns?: Prisma.CheckInEmotionnelUncheckedUpdateManyWithoutEleveNestedInput
+  badges?: Prisma.BadgeEleveUncheckedUpdateManyWithoutEleveNestedInput
+  exercicesAssignes?: Prisma.ExerciceAssigneUncheckedUpdateManyWithoutEleveNestedInput
+  commentaires?: Prisma.CommentairePedagogiqueUncheckedUpdateManyWithoutEleveNestedInput
+  plansAccompagnement?: Prisma.PlanAccompagnementParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesParents?: Prisma.CommentaireParentUncheckedUpdateManyWithoutEleveNestedInput
+  commentairesEleve?: Prisma.CommentaireEleveUncheckedUpdateManyWithoutEleveNestedInput
+  coursRemediation?: Prisma.CoursRemediationUncheckedUpdateManyWithoutEleveNestedInput
+  recommandationsIA?: Prisma.RecommandationIAUncheckedUpdateManyWithoutEleveNestedInput
+  demandesRencontre?: Prisma.DemandeRencontreUncheckedUpdateManyWithoutEleveNestedInput
+  rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutEleveNestedInput
+  defJourCompletions?: Prisma.DefJourCompletionUncheckedUpdateManyWithoutEleveNestedInput
+  missionsHebdo?: Prisma.MissionHebdoUncheckedUpdateManyWithoutEleveNestedInput
+  surprises?: Prisma.SurpriseParentUncheckedUpdateManyWithoutEleveNestedInput
+  demandesJeux?: Prisma.DemandeJeuUncheckedUpdateManyWithoutEleveNestedInput
+  partiesMulti?: Prisma.PartieMultijoueurUncheckedUpdateManyWithoutCreateurNestedInput
+  miraMessages?: Prisma.MiraMessageUncheckedUpdateManyWithoutEleveNestedInput
+  objectifsNotes?: Prisma.ObjectifNoteUncheckedUpdateManyWithoutEleveNestedInput
+  planifNotions?: Prisma.PlanifNotionEleveUncheckedUpdateManyWithoutEleveNestedInput
+  disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
+  evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
+  epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
+  lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutMiraMessagesInput = {
@@ -3082,6 +3439,7 @@ export type ProfilEleveCreateWithoutMiraMessagesInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
@@ -3158,6 +3516,7 @@ export type ProfilEleveUncheckedCreateWithoutMiraMessagesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutMiraMessagesInput = {
@@ -3250,6 +3609,7 @@ export type ProfilEleveUpdateWithoutMiraMessagesInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
@@ -3326,6 +3686,7 @@ export type ProfilEleveUncheckedUpdateWithoutMiraMessagesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
@@ -3402,6 +3763,7 @@ export type ProfilEleveCreateWithoutNiveauxMatieresInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
@@ -3478,6 +3840,7 @@ export type ProfilEleveUncheckedCreateWithoutNiveauxMatieresInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutNiveauxMatieresInput = {
@@ -3570,6 +3933,7 @@ export type ProfilEleveUpdateWithoutNiveauxMatieresInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
@@ -3646,6 +4010,7 @@ export type ProfilEleveUncheckedUpdateWithoutNiveauxMatieresInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutParentsInput = {
@@ -3722,6 +4087,7 @@ export type ProfilEleveCreateWithoutParentsInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutParentsInput = {
@@ -3798,6 +4164,7 @@ export type ProfilEleveUncheckedCreateWithoutParentsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutParentsInput = {
@@ -3947,6 +4314,7 @@ export type ProfilEleveCreateWithoutPlansAccompagnementInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
@@ -4023,6 +4391,7 @@ export type ProfilEleveUncheckedCreateWithoutPlansAccompagnementInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlansAccompagnementInput = {
@@ -4115,6 +4484,7 @@ export type ProfilEleveUpdateWithoutPlansAccompagnementInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
@@ -4191,6 +4561,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlansAccompagnementInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCoursRemediationInput = {
@@ -4267,6 +4638,7 @@ export type ProfilEleveCreateWithoutCoursRemediationInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
@@ -4343,6 +4715,7 @@ export type ProfilEleveUncheckedCreateWithoutCoursRemediationInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCoursRemediationInput = {
@@ -4435,6 +4808,7 @@ export type ProfilEleveUpdateWithoutCoursRemediationInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
@@ -4511,6 +4885,7 @@ export type ProfilEleveUncheckedUpdateWithoutCoursRemediationInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutSurprisesInput = {
@@ -4587,6 +4962,7 @@ export type ProfilEleveCreateWithoutSurprisesInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
@@ -4663,6 +5039,7 @@ export type ProfilEleveUncheckedCreateWithoutSurprisesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutSurprisesInput = {
@@ -4755,6 +5132,7 @@ export type ProfilEleveUpdateWithoutSurprisesInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
@@ -4831,6 +5209,7 @@ export type ProfilEleveUncheckedUpdateWithoutSurprisesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesParentsInput = {
@@ -4907,6 +5286,7 @@ export type ProfilEleveCreateWithoutCommentairesParentsInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
@@ -4983,6 +5363,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesParentsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesParentsInput = {
@@ -5075,6 +5456,7 @@ export type ProfilEleveUpdateWithoutCommentairesParentsInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
@@ -5151,6 +5533,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesParentsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutEnseignantInput = {
@@ -5227,6 +5610,7 @@ export type ProfilEleveCreateWithoutEnseignantInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
@@ -5303,6 +5687,7 @@ export type ProfilEleveUncheckedCreateWithoutEnseignantInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutEnseignantInput = {
@@ -5405,6 +5790,7 @@ export type ProfilEleveCreateWithoutPlanActionsInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
@@ -5481,6 +5867,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanActionsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlanActionsInput = {
@@ -5573,6 +5960,7 @@ export type ProfilEleveUpdateWithoutPlanActionsInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
@@ -5649,6 +6037,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanActionsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutExercicesAssignesInput = {
@@ -5725,6 +6114,7 @@ export type ProfilEleveCreateWithoutExercicesAssignesInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
@@ -5801,6 +6191,7 @@ export type ProfilEleveUncheckedCreateWithoutExercicesAssignesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutExercicesAssignesInput = {
@@ -5893,6 +6284,7 @@ export type ProfilEleveUpdateWithoutExercicesAssignesInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
@@ -5969,6 +6361,7 @@ export type ProfilEleveUncheckedUpdateWithoutExercicesAssignesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutSessionsInput = {
@@ -6045,6 +6438,7 @@ export type ProfilEleveCreateWithoutSessionsInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
@@ -6121,6 +6515,7 @@ export type ProfilEleveUncheckedCreateWithoutSessionsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutSessionsInput = {
@@ -6213,6 +6608,7 @@ export type ProfilEleveUpdateWithoutSessionsInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
@@ -6289,6 +6685,7 @@ export type ProfilEleveUncheckedUpdateWithoutSessionsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCheckInsInput = {
@@ -6365,6 +6762,7 @@ export type ProfilEleveCreateWithoutCheckInsInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
@@ -6441,6 +6839,7 @@ export type ProfilEleveUncheckedCreateWithoutCheckInsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCheckInsInput = {
@@ -6533,6 +6932,7 @@ export type ProfilEleveUpdateWithoutCheckInsInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
@@ -6609,6 +7009,7 @@ export type ProfilEleveUncheckedUpdateWithoutCheckInsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutBadgesInput = {
@@ -6685,6 +7086,7 @@ export type ProfilEleveCreateWithoutBadgesInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
@@ -6761,6 +7163,7 @@ export type ProfilEleveUncheckedCreateWithoutBadgesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutBadgesInput = {
@@ -6853,6 +7256,7 @@ export type ProfilEleveUpdateWithoutBadgesInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
@@ -6929,6 +7333,7 @@ export type ProfilEleveUncheckedUpdateWithoutBadgesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesInput = {
@@ -7005,6 +7410,7 @@ export type ProfilEleveCreateWithoutCommentairesInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
@@ -7081,6 +7487,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesInput = {
@@ -7173,6 +7580,7 @@ export type ProfilEleveUpdateWithoutCommentairesInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
@@ -7249,6 +7657,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutCommentairesEleveInput = {
@@ -7325,6 +7734,7 @@ export type ProfilEleveCreateWithoutCommentairesEleveInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
@@ -7401,6 +7811,7 @@ export type ProfilEleveUncheckedCreateWithoutCommentairesEleveInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutCommentairesEleveInput = {
@@ -7493,6 +7904,7 @@ export type ProfilEleveUpdateWithoutCommentairesEleveInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
@@ -7569,6 +7981,7 @@ export type ProfilEleveUncheckedUpdateWithoutCommentairesEleveInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDemandesRencontreInput = {
@@ -7645,6 +8058,7 @@ export type ProfilEleveCreateWithoutDemandesRencontreInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
@@ -7721,6 +8135,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesRencontreInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDemandesRencontreInput = {
@@ -7813,6 +8228,7 @@ export type ProfilEleveUpdateWithoutDemandesRencontreInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
@@ -7889,6 +8305,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesRencontreInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutRendezVousInput = {
@@ -7965,6 +8382,7 @@ export type ProfilEleveCreateWithoutRendezVousInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
@@ -8041,6 +8459,7 @@ export type ProfilEleveUncheckedCreateWithoutRendezVousInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutRendezVousInput = {
@@ -8133,6 +8552,7 @@ export type ProfilEleveUpdateWithoutRendezVousInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
@@ -8209,6 +8629,7 @@ export type ProfilEleveUncheckedUpdateWithoutRendezVousInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutRecommandationsIAInput = {
@@ -8285,6 +8706,7 @@ export type ProfilEleveCreateWithoutRecommandationsIAInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
@@ -8361,6 +8783,7 @@ export type ProfilEleveUncheckedCreateWithoutRecommandationsIAInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutRecommandationsIAInput = {
@@ -8453,6 +8876,7 @@ export type ProfilEleveUpdateWithoutRecommandationsIAInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
@@ -8529,6 +8953,7 @@ export type ProfilEleveUncheckedUpdateWithoutRecommandationsIAInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
@@ -8605,6 +9030,7 @@ export type ProfilEleveCreateWithoutDefJourCompletionsInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
@@ -8681,6 +9107,7 @@ export type ProfilEleveUncheckedCreateWithoutDefJourCompletionsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDefJourCompletionsInput = {
@@ -8773,6 +9200,7 @@ export type ProfilEleveUpdateWithoutDefJourCompletionsInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
@@ -8849,6 +9277,7 @@ export type ProfilEleveUncheckedUpdateWithoutDefJourCompletionsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutMissionsHebdoInput = {
@@ -8925,6 +9354,7 @@ export type ProfilEleveCreateWithoutMissionsHebdoInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
@@ -9001,6 +9431,7 @@ export type ProfilEleveUncheckedCreateWithoutMissionsHebdoInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutMissionsHebdoInput = {
@@ -9093,6 +9524,7 @@ export type ProfilEleveUpdateWithoutMissionsHebdoInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
@@ -9169,6 +9601,7 @@ export type ProfilEleveUncheckedUpdateWithoutMissionsHebdoInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutObjectifsNotesInput = {
@@ -9245,6 +9678,7 @@ export type ProfilEleveCreateWithoutObjectifsNotesInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
@@ -9321,6 +9755,7 @@ export type ProfilEleveUncheckedCreateWithoutObjectifsNotesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutObjectifsNotesInput = {
@@ -9413,6 +9848,7 @@ export type ProfilEleveUpdateWithoutObjectifsNotesInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
@@ -9489,6 +9925,7 @@ export type ProfilEleveUncheckedUpdateWithoutObjectifsNotesInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutPlanifNotionsInput = {
@@ -9565,6 +10002,7 @@ export type ProfilEleveCreateWithoutPlanifNotionsInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
@@ -9641,6 +10079,7 @@ export type ProfilEleveUncheckedCreateWithoutPlanifNotionsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPlanifNotionsInput = {
@@ -9733,6 +10172,7 @@ export type ProfilEleveUpdateWithoutPlanifNotionsInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
@@ -9809,6 +10249,7 @@ export type ProfilEleveUncheckedUpdateWithoutPlanifNotionsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDisponibiliteInput = {
@@ -9885,6 +10326,7 @@ export type ProfilEleveCreateWithoutDisponibiliteInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
@@ -9961,6 +10403,7 @@ export type ProfilEleveUncheckedCreateWithoutDisponibiliteInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDisponibiliteInput = {
@@ -10053,6 +10496,7 @@ export type ProfilEleveUpdateWithoutDisponibiliteInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
@@ -10129,6 +10573,7 @@ export type ProfilEleveUncheckedUpdateWithoutDisponibiliteInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutEpreuvesSemaineInput = {
@@ -10205,6 +10650,7 @@ export type ProfilEleveCreateWithoutEpreuvesSemaineInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutEpreuvesSemaineInput = {
@@ -10281,6 +10727,7 @@ export type ProfilEleveUncheckedCreateWithoutEpreuvesSemaineInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutEpreuvesSemaineInput = {
@@ -10373,6 +10820,7 @@ export type ProfilEleveUpdateWithoutEpreuvesSemaineInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutEpreuvesSemaineInput = {
@@ -10449,6 +10897,7 @@ export type ProfilEleveUncheckedUpdateWithoutEpreuvesSemaineInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutDemandesJeuxInput = {
@@ -10525,6 +10974,7 @@ export type ProfilEleveCreateWithoutDemandesJeuxInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
@@ -10601,6 +11051,7 @@ export type ProfilEleveUncheckedCreateWithoutDemandesJeuxInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutDemandesJeuxInput = {
@@ -10693,6 +11144,7 @@ export type ProfilEleveUpdateWithoutDemandesJeuxInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
@@ -10769,6 +11221,7 @@ export type ProfilEleveUncheckedUpdateWithoutDemandesJeuxInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutPartiesMultiInput = {
@@ -10845,6 +11298,7 @@ export type ProfilEleveCreateWithoutPartiesMultiInput = {
   evaluations?: Prisma.EvaluationRequestCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
@@ -10921,6 +11375,7 @@ export type ProfilEleveUncheckedCreateWithoutPartiesMultiInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedCreateNestedManyWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutPartiesMultiInput = {
@@ -11013,6 +11468,7 @@ export type ProfilEleveUpdateWithoutPartiesMultiInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
@@ -11089,6 +11545,7 @@ export type ProfilEleveUncheckedUpdateWithoutPartiesMultiInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveCreateWithoutEvaluationsInput = {
@@ -11165,6 +11622,7 @@ export type ProfilEleveCreateWithoutEvaluationsInput = {
   disponibilite?: Prisma.DisponibiliteEleveCreateNestedOneWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveUncheckedCreateWithoutEvaluationsInput = {
@@ -11241,6 +11699,7 @@ export type ProfilEleveUncheckedCreateWithoutEvaluationsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedCreateNestedOneWithoutEleveInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedCreateNestedManyWithoutEleveInput
   lectures?: Prisma.LectureJournaliereUncheckedCreateNestedManyWithoutEleveInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedCreateNestedManyWithoutEleveInput
 }
 
 export type ProfilEleveCreateOrConnectWithoutEvaluationsInput = {
@@ -11333,6 +11792,7 @@ export type ProfilEleveUpdateWithoutEvaluationsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUpdateOneWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutEvaluationsInput = {
@@ -11409,6 +11869,7 @@ export type ProfilEleveUncheckedUpdateWithoutEvaluationsInput = {
   disponibilite?: Prisma.DisponibiliteEleveUncheckedUpdateOneWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUpdateWithoutParentsInput = {
@@ -11485,6 +11946,7 @@ export type ProfilEleveUpdateWithoutParentsInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
@@ -11561,6 +12023,7 @@ export type ProfilEleveUncheckedUpdateWithoutParentsInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateManyWithoutParentsInput = {
@@ -11734,6 +12197,7 @@ export type ProfilEleveUpdateWithoutEnseignantInput = {
   evaluations?: Prisma.EvaluationRequestUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
@@ -11810,6 +12274,7 @@ export type ProfilEleveUncheckedUpdateWithoutEnseignantInput = {
   evaluations?: Prisma.EvaluationRequestUncheckedUpdateManyWithoutEleveNestedInput
   epreuvesSemaine?: Prisma.EpreuveSemainePlanUncheckedUpdateManyWithoutEleveNestedInput
   lectures?: Prisma.LectureJournaliereUncheckedUpdateManyWithoutEleveNestedInput
+  sessionsLecture?: Prisma.SessionLectureUncheckedUpdateManyWithoutEleveNestedInput
 }
 
 export type ProfilEleveUncheckedUpdateManyWithoutEnseignantInput = {
@@ -11893,6 +12358,7 @@ export type ProfilEleveCountOutputType = {
   evaluations: number
   epreuvesSemaine: number
   lectures: number
+  sessionsLecture: number
 }
 
 export type ProfilEleveCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -11923,6 +12389,7 @@ export type ProfilEleveCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   evaluations?: boolean | ProfilEleveCountOutputTypeCountEvaluationsArgs
   epreuvesSemaine?: boolean | ProfilEleveCountOutputTypeCountEpreuvesSemaineArgs
   lectures?: boolean | ProfilEleveCountOutputTypeCountLecturesArgs
+  sessionsLecture?: boolean | ProfilEleveCountOutputTypeCountSessionsLectureArgs
 }
 
 /**
@@ -12124,6 +12591,13 @@ export type ProfilEleveCountOutputTypeCountLecturesArgs<ExtArgs extends runtime.
   where?: Prisma.LectureJournaliereWhereInput
 }
 
+/**
+ * ProfilEleveCountOutputType without action
+ */
+export type ProfilEleveCountOutputTypeCountSessionsLectureArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SessionLectureWhereInput
+}
+
 
 export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -12202,6 +12676,7 @@ export type ProfilEleveSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   evaluations?: boolean | Prisma.ProfilEleve$evaluationsArgs<ExtArgs>
   epreuvesSemaine?: boolean | Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs>
   lectures?: boolean | Prisma.ProfilEleve$lecturesArgs<ExtArgs>
+  sessionsLecture?: boolean | Prisma.ProfilEleve$sessionsLectureArgs<ExtArgs>
   _count?: boolean | Prisma.ProfilEleveCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["profilEleve"]>
 
@@ -12388,6 +12863,7 @@ export type ProfilEleveInclude<ExtArgs extends runtime.Types.Extensions.Internal
   evaluations?: boolean | Prisma.ProfilEleve$evaluationsArgs<ExtArgs>
   epreuvesSemaine?: boolean | Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs>
   lectures?: boolean | Prisma.ProfilEleve$lecturesArgs<ExtArgs>
+  sessionsLecture?: boolean | Prisma.ProfilEleve$sessionsLectureArgs<ExtArgs>
   _count?: boolean | Prisma.ProfilEleveCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProfilEleveIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -12432,6 +12908,7 @@ export type $ProfilElevePayload<ExtArgs extends runtime.Types.Extensions.Interna
     evaluations: Prisma.$EvaluationRequestPayload<ExtArgs>[]
     epreuvesSemaine: Prisma.$EpreuveSemainePlanPayload<ExtArgs>[]
     lectures: Prisma.$LectureJournalierePayload<ExtArgs>[]
+    sessionsLecture: Prisma.$SessionLecturePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -12904,6 +13381,7 @@ export interface Prisma__ProfilEleveClient<T, Null = never, ExtArgs extends runt
   evaluations<T extends Prisma.ProfilEleve$evaluationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$evaluationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EvaluationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   epreuvesSemaine<T extends Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$epreuvesSemaineArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EpreuveSemainePlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lectures<T extends Prisma.ProfilEleve$lecturesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$lecturesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LectureJournalierePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessionsLecture<T extends Prisma.ProfilEleve$sessionsLectureArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilEleve$sessionsLectureArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionLecturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14063,6 +14541,30 @@ export type ProfilEleve$lecturesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.LectureJournaliereScalarFieldEnum | Prisma.LectureJournaliereScalarFieldEnum[]
+}
+
+/**
+ * ProfilEleve.sessionsLecture
+ */
+export type ProfilEleve$sessionsLectureArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SessionLecture
+   */
+  select?: Prisma.SessionLectureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SessionLecture
+   */
+  omit?: Prisma.SessionLectureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionLectureInclude<ExtArgs> | null
+  where?: Prisma.SessionLectureWhereInput
+  orderBy?: Prisma.SessionLectureOrderByWithRelationInput | Prisma.SessionLectureOrderByWithRelationInput[]
+  cursor?: Prisma.SessionLectureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SessionLectureScalarFieldEnum | Prisma.SessionLectureScalarFieldEnum[]
 }
 
 /**

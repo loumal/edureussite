@@ -58,6 +58,8 @@ export const ModelName = {
   ProfilEleve: 'ProfilEleve',
   HistoriqueNiveauEleve: 'HistoriqueNiveauEleve',
   LectureJournaliere: 'LectureJournaliere',
+  TexteLectureCache: 'TexteLectureCache',
+  SessionLecture: 'SessionLecture',
   MiraMessage: 'MiraMessage',
   NiveauMatiere: 'NiveauMatiere',
   ProfilParent: 'ProfilParent',
@@ -267,6 +269,45 @@ export const LectureJournaliereScalarFieldEnum = {
 } as const
 
 export type LectureJournaliereScalarFieldEnum = (typeof LectureJournaliereScalarFieldEnum)[keyof typeof LectureJournaliereScalarFieldEnum]
+
+
+export const TexteLectureCacheScalarFieldEnum = {
+  id: 'id',
+  niveauScolaire: 'niveauScolaire',
+  texte: 'texte',
+  nbMots: 'nbMots',
+  questionsJson: 'questionsJson',
+  createdAt: 'createdAt'
+} as const
+
+export type TexteLectureCacheScalarFieldEnum = (typeof TexteLectureCacheScalarFieldEnum)[keyof typeof TexteLectureCacheScalarFieldEnum]
+
+
+export const SessionLectureScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  mode: 'mode',
+  statut: 'statut',
+  texteGenere: 'texteGenere',
+  nbMotsTexte: 'nbMotsTexte',
+  titreLivre: 'titreLivre',
+  auteurLivre: 'auteurLivre',
+  niveauLecture: 'niveauLecture',
+  texteTranscrit: 'texteTranscrit',
+  cacheTexteId: 'cacheTexteId',
+  dateDebut: 'dateDebut',
+  dateFin: 'dateFin',
+  dureeEffectiveSec: 'dureeEffectiveSec',
+  vitesseMots: 'vitesseMots',
+  questions: 'questions',
+  scoreGlobal: 'scoreGlobal',
+  analyseIA: 'analyseIA',
+  niveauPrecision: 'niveauPrecision',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SessionLectureScalarFieldEnum = (typeof SessionLectureScalarFieldEnum)[keyof typeof SessionLectureScalarFieldEnum]
 
 
 export const MiraMessageScalarFieldEnum = {

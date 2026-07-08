@@ -33,6 +33,52 @@ import { Matiere, NiveauDifficulte, NiveauScolaire, StyleApprentissage, TypeComm
 import { genererPlanAction } from "@/lib/ai/plan";
 import { TRPCError } from "@trpc/server";
 
+// ── Constantes partagées module Lecture ───────────────────────────────────────
+const MOTS_PAR_NIVEAU: Partial<Record<NiveauScolaire, number>> = {
+  PRIMAIRE_1: 110, PRIMAIRE_2: 150, PRIMAIRE_3: 200,
+  PRIMAIRE_4: 260, PRIMAIRE_5: 320, PRIMAIRE_6: 380,
+  SECONDAIRE_1: 430, SECONDAIRE_2: 480, SECONDAIRE_3: 530,
+  SECONDAIRE_4: 580, SECONDAIRE_5: 620, SECONDAIRE_6: 650, SECONDAIRE_7: 680,
+};
+const NIVEAU_LABEL: Partial<Record<NiveauScolaire, string>> = {
+  PRIMAIRE_1: "1re année primaire (6 ans)", PRIMAIRE_2: "2e année primaire",
+  PRIMAIRE_3: "3e année primaire", PRIMAIRE_4: "4e année primaire",
+  PRIMAIRE_5: "5e année primaire", PRIMAIRE_6: "6e année primaire",
+  SECONDAIRE_1: "1re secondaire", SECONDAIRE_2: "2e secondaire",
+  SECONDAIRE_3: "3e secondaire", SECONDAIRE_4: "4e secondaire",
+  SECONDAIRE_5: "5e secondaire", SECONDAIRE_6: "6e secondaire", SECONDAIRE_7: "Terminale",
+};
+
+// Appel Claude avec retry exponentiel sur 429/529 (rate limit).
+// Protège contre les pics de charge partagée sur l'API Anthropic.
+async function claudeAvecRetry(
+  params: Parameters<typeof anthropic.messages.create>[0],
+  maxRetries = 3
+): Promise<{ content: Array<{ type: string; text?: string }> }> {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return await (anthropic.messages.create(params) as Promise<any>);
+    } catch (err: unknown) {
+      const status = (err as { status?: number })?.status;
+      const isRateLimit = status === 429 || status === 529 || status === 503;
+      if (attempt === maxRetries || !isRateLimit) throw err;
+      const delayMs = Math.min(1000 * Math.pow(2, attempt), 16000); // 1s → 2s → 4s → 8s
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+  throw new Error("claude: max retries exceeded");
+}
+
+// Extrait un JSON valide d'une réponse Claude (gère les blocs markdown).
+function parseJsonClaude<T>(text: string, fallback: T): T {
+  try {
+    return JSON.parse(text.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "").trim()) as T;
+  } catch {
+    return fallback;
+  }
+}
+
 export const eleveRouter = createTRPCRouter({
   // Récupérer le profil complet de l'élève connecté
   getProfil: protectedProcedure.query(async ({ ctx }) => {
@@ -1263,6 +1309,15 @@ export const eleveRouter = createTRPCRouter({
     }),
 
   // ── Module Lecture Approfondie ─────────────────────────────────────────────
+  //
+  // Architecture scalable pour 1000+ utilisateurs simultanés :
+  // 1. creerSessionLecture : sert depuis le pool pré-généré (TexteLectureCache).
+  //    Zéro appel Claude si le cache est plein. Fallback vers génération live.
+  // 2. terminerSessionLecture : pour TEXTE_GENERE → questions déjà dans le cache,
+  //    retour immédiat (0 appel Claude). Pour LIVRE_PERSO → statut GENERANT_QUESTIONS,
+  //    retour immédiat, génération lancée en tâche de fond par le client.
+  // 3. soumettreReponsesLecture : 1 seul appel Claude, avec retry sur rate limit.
+  // ──────────────────────────────────────────────────────────────────────────
 
   creerSessionLecture: protectedProcedure
     .input(z.object({
@@ -1277,46 +1332,66 @@ export const eleveRouter = createTRPCRouter({
         select: { id: true, niveauScolaire: true, prenom: true, centresInteret: true, sportFavori: true, universMediatique: true },
       });
 
-      const MOTS_PAR_NIVEAU: Partial<Record<NiveauScolaire, number>> = {
-        PRIMAIRE_1: 110, PRIMAIRE_2: 150, PRIMAIRE_3: 200,
-        PRIMAIRE_4: 260, PRIMAIRE_5: 320, PRIMAIRE_6: 380,
-        SECONDAIRE_1: 430, SECONDAIRE_2: 480, SECONDAIRE_3: 530,
-        SECONDAIRE_4: 580, SECONDAIRE_5: 620, SECONDAIRE_6: 650, SECONDAIRE_7: 680,
-      };
-      const NIVEAU_LABEL: Partial<Record<NiveauScolaire, string>> = {
-        PRIMAIRE_1: "1re année primaire (6 ans)", PRIMAIRE_2: "2e année primaire",
-        PRIMAIRE_3: "3e année primaire", PRIMAIRE_4: "4e année primaire",
-        PRIMAIRE_5: "5e année primaire", PRIMAIRE_6: "6e année primaire",
-        SECONDAIRE_1: "1re secondaire", SECONDAIRE_2: "2e secondaire",
-        SECONDAIRE_3: "3e secondaire", SECONDAIRE_4: "4e secondaire",
-        SECONDAIRE_5: "5e secondaire", SECONDAIRE_6: "6e secondaire", SECONDAIRE_7: "Terminale",
-      };
+      // Bloquer si une session est déjà active (évite les doubles sessions)
+      const sessionExistante = await ctx.prisma.sessionLecture.findFirst({
+        where: { eleveId: profil.id, statut: { in: ["EN_COURS", "GENERANT_QUESTIONS", "QUESTIONS"] } },
+        select: { id: true },
+      });
+      if (sessionExistante) {
+        throw new TRPCError({ code: "CONFLICT", message: "Une session de lecture est déjà en cours." });
+      }
 
       let texteGenere: string | null = null;
       let nbMotsTexte: number | null = null;
+      let cacheTexteId: string | null = null;
+      let questionsCache: object[] | null = null;
 
       if (input.mode === "TEXTE_GENERE") {
-        const nbMots = MOTS_PAR_NIVEAU[profil.niveauScolaire] ?? 300;
-        const niveauLabel = NIVEAU_LABEL[profil.niveauScolaire] ?? profil.niveauScolaire;
-        const interets = [profil.sportFavori, profil.universMediatique, ...(profil.centresInteret ?? [])]
-          .filter(Boolean).slice(0, 3).join(", ");
-
-        const resp = await anthropic.messages.create({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1200,
-          messages: [{
-            role: "user",
-            content: `Tu génères un texte de lecture engageant pour ${profil.prenom}, élève de ${niveauLabel}.
-Centres d'intérêt : ${interets || "varié"}
-Longueur cible : ${nbMots} mots (±15 %)
-Style : narratif ou informatif, début accrocheur, vocabulaire adapté au niveau
-Langue : français québécois naturel, aucune violence ni contenu sensible
-
-Génère UNIQUEMENT le texte, sans titre, sans introduction ni commentaire. Commence directement.`,
-          }],
+        // ── Étape 1 : tenter de servir depuis le pool pré-généré ────────────
+        const pool = await ctx.prisma.texteLectureCache.findMany({
+          where: { niveauScolaire: profil.niveauScolaire },
+          orderBy: { createdAt: "asc" },
+          take: 20,
+          select: { id: true, texte: true, nbMots: true, questionsJson: true },
         });
-        texteGenere = resp.content[0].type === "text" ? resp.content[0].text.trim() : "";
-        nbMotsTexte = texteGenere.split(/\s+/).filter(Boolean).length;
+
+        if (pool.length > 0) {
+          // Distribution uniforme dans le pool selon l'ID de l'élève (pas de course critique)
+          const idx = parseInt(profil.id.slice(-6), 16) % pool.length;
+          const cached = pool[idx];
+          texteGenere = cached.texte;
+          nbMotsTexte = cached.nbMots;
+          cacheTexteId = cached.id;
+          questionsCache = parseJsonClaude<object[]>(cached.questionsJson, []);
+        } else {
+          // ── Étape 2 (fallback) : génération live si le cache est vide ────
+          const nbMots = MOTS_PAR_NIVEAU[profil.niveauScolaire] ?? 300;
+          const niveauLabel = NIVEAU_LABEL[profil.niveauScolaire] ?? profil.niveauScolaire;
+          const interets = [profil.sportFavori, profil.universMediatique, ...(profil.centresInteret ?? [])]
+            .filter(Boolean).slice(0, 3).join(", ");
+
+          const resp = await claudeAvecRetry({
+            model: "claude-sonnet-4-6",
+            max_tokens: 1800,
+            messages: [{
+              role: "user",
+              content: `Tu es un orthopédagogue. Génère un texte de lecture ET 5 questions de compréhension Giasson pour ${profil.prenom}, élève de ${niveauLabel}.
+
+Centres d'intérêt : ${interets || "varié"}
+Longueur texte : ${nbMots} mots (±15%)
+Langue : français québécois, aucune violence
+
+RÉPONDS avec ce JSON exact :
+{"texte":"Le texte complet ici sans titre...","questions":[{"id":"q1","niveau":"MICROPROCESSUS","question":"..."},{"id":"q2","niveau":"INTEGRATION","question":"..."},{"id":"q3","niveau":"MACROPROCESSUS","question":"..."},{"id":"q4","niveau":"ELABORATION_CAUSAL","question":"..."},{"id":"q5","niveau":"ELABORATION_PREDICTIF","question":"..."}]}`,
+            }],
+          });
+
+          const raw = resp.content[0].type === "text" ? (resp.content[0].text ?? "{}") : "{}";
+          const parsed = parseJsonClaude<{ texte?: string; questions?: object[] }>(raw, {});
+          texteGenere = parsed.texte?.trim() ?? "";
+          nbMotsTexte = texteGenere.split(/\s+/).filter(Boolean).length;
+          questionsCache = parsed.questions ?? [];
+        }
       }
 
       return ctx.prisma.sessionLecture.create({
@@ -1326,6 +1401,9 @@ Génère UNIQUEMENT le texte, sans titre, sans introduction ni commentaire. Comm
           statut: "EN_COURS",
           texteGenere,
           nbMotsTexte,
+          cacheTexteId,
+          // Pour TEXTE_GENERE : on stocke déjà les questions en attente d'activation
+          questions: questionsCache ? (questionsCache as never) : undefined,
           titreLivre: input.titreLivre,
           auteurLivre: input.auteurLivre,
           niveauLecture: input.niveauLecture,
@@ -1338,76 +1416,55 @@ Génère UNIQUEMENT le texte, sans titre, sans introduction ni commentaire. Comm
     .input(z.object({
       sessionId: z.string(),
       dureeEffectiveSec: z.number().min(1),
-      texteTranscrit: z.string().optional(), // transcription LIVRE_PERSO
+      texteTranscrit: z.string().max(20000).optional(),
     }))
     .mutation(async ({ ctx, input }) => {
       const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
         where: { userId: ctx.user.id },
-        select: { id: true, niveauScolaire: true, prenom: true },
+        select: { id: true, niveauScolaire: true },
       });
       const session = await ctx.prisma.sessionLecture.findUniqueOrThrow({
         where: { id: input.sessionId, eleveId: profil.id },
+        select: { id: true, mode: true, texteGenere: true, nbMotsTexte: true, questions: true, titreLivre: true, auteurLivre: true, niveauLecture: true },
       });
 
-      // Texte source pour les questions
-      const texteSource = session.texteGenere ?? input.texteTranscrit ?? null;
       const nbMots = session.nbMotsTexte
         ?? (input.texteTranscrit ? input.texteTranscrit.split(/\s+/).filter(Boolean).length : null);
       const vitesseMots = nbMots && input.dureeEffectiveSec > 0
         ? Math.round((nbMots / (input.dureeEffectiveSec / 60)) * 10) / 10
         : null;
 
-      const NIVEAU_LABEL: Partial<Record<NiveauScolaire, string>> = {
-        PRIMAIRE_1: "1re année primaire (6 ans)", PRIMAIRE_2: "2e année primaire",
-        PRIMAIRE_3: "3e année primaire", PRIMAIRE_4: "4e année primaire",
-        PRIMAIRE_5: "5e année primaire", PRIMAIRE_6: "6e année primaire",
-        SECONDAIRE_1: "1re secondaire", SECONDAIRE_2: "2e secondaire",
-        SECONDAIRE_3: "3e secondaire", SECONDAIRE_4: "4e secondaire",
-        SECONDAIRE_5: "5e secondaire", SECONDAIRE_6: "6e secondaire", SECONDAIRE_7: "Terminale",
-      };
-      const niveauLabel = NIVEAU_LABEL[profil.niveauScolaire] ?? profil.niveauScolaire;
+      if (session.mode === "TEXTE_GENERE") {
+        // ── TEXTE_GENERE : questions déjà stockées depuis le cache → retour instantané
+        const questionsExistantes = session.questions as object[] | null;
+        return ctx.prisma.sessionLecture.update({
+          where: { id: input.sessionId },
+          data: {
+            statut: "QUESTIONS",
+            dateFin: new Date(),
+            dureeEffectiveSec: input.dureeEffectiveSec,
+            nbMotsTexte: nbMots,
+            vitesseMots,
+            questions: (questionsExistantes && questionsExistantes.length > 0)
+              ? (questionsExistantes as never)
+              : undefined,
+          },
+        });
+      }
 
-      const contexteLecture = texteSource
-        ? `Texte lu par l'élève :\n\n${texteSource.slice(0, 3000)}`
-        : `Livre : "${session.titreLivre ?? "?"}"${session.auteurLivre ? ` de ${session.auteurLivre}` : ""} (niveau ${session.niveauLecture ?? "?"})`;
-
-      const qResp = await anthropic.messages.create({
-        model: "claude-sonnet-4-6",
-        max_tokens: 1000,
-        messages: [{
-          role: "user",
-          content: `Tu es un orthopédagogue expert selon le modèle de Giasson. Génère 5 questions pour ${profil.prenom}, élève de ${niveauLabel}.
-
-${contexteLecture}
-
-5 questions en français québécois, une par niveau Giasson :
-- MICROPROCESSUS (fait explicite)
-- INTEGRATION (anaphore ou connecteur logique)
-- MACROPROCESSUS (idée principale)
-- ELABORATION_CAUSAL (lien cause-effet implicite)
-- ELABORATION_PREDICTIF (prédiction ou inférence pragmatique)
-
-RÉPONDS UNIQUEMENT avec ce JSON :
-[{"id":"q1","niveau":"MICROPROCESSUS","question":"..."},{"id":"q2","niveau":"INTEGRATION","question":"..."},{"id":"q3","niveau":"MACROPROCESSUS","question":"..."},{"id":"q4","niveau":"ELABORATION_CAUSAL","question":"..."},{"id":"q5","niveau":"ELABORATION_PREDICTIF","question":"..."}]`,
-        }],
-      });
-
-      let questions: object[] = [];
-      try {
-        const raw = qResp.content[0].type === "text" ? qResp.content[0].text : "[]";
-        questions = JSON.parse(raw.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "").trim());
-      } catch { questions = []; }
-
+      // ── LIVRE_PERSO : questions générées en asynchrone ───────────────────
+      // Retour immédiat avec statut GENERANT_QUESTIONS.
+      // Le client lance /api/lecture/generer-questions en fire-and-forget
+      // et poll getSessionLectureActive jusqu'au passage à QUESTIONS.
       return ctx.prisma.sessionLecture.update({
         where: { id: input.sessionId },
         data: {
-          statut: "QUESTIONS",
+          statut: "GENERANT_QUESTIONS",
           dateFin: new Date(),
           dureeEffectiveSec: input.dureeEffectiveSec,
           texteTranscrit: input.texteTranscrit,
           nbMotsTexte: nbMots,
           vitesseMots,
-          questions: questions as never,
         },
       });
     }),
@@ -1434,27 +1491,19 @@ RÉPONDS UNIQUEMENT avec ce JSON :
       const contexte = texteSource
         ? `Texte lu :\n${texteSource.slice(0, 2500)}`
         : `Livre : "${session.titreLivre ?? "?"}"${session.auteurLivre ? ` de ${session.auteurLivre}` : ""}`;
+      const niveauLabel = NIVEAU_LABEL[profil.niveauScolaire] ?? profil.niveauScolaire;
 
-      const NIVEAU_LABEL: Partial<Record<NiveauScolaire, string>> = {
-        PRIMAIRE_1: "1re année primaire", PRIMAIRE_2: "2e année primaire",
-        PRIMAIRE_3: "3e année primaire", PRIMAIRE_4: "4e année primaire",
-        PRIMAIRE_5: "5e année primaire", PRIMAIRE_6: "6e année primaire",
-        SECONDAIRE_1: "1re secondaire", SECONDAIRE_2: "2e secondaire",
-        SECONDAIRE_3: "3e secondaire", SECONDAIRE_4: "4e secondaire",
-        SECONDAIRE_5: "5e secondaire", SECONDAIRE_6: "6e secondaire", SECONDAIRE_7: "Terminale",
-      };
-
-      const qrText = questions.map(q => {
-        const rep = input.reponses.find(r => r.questionId === q.id)?.reponse ?? "(pas de réponse)";
+      const qrText = questions.map((q) => {
+        const rep = input.reponses.find((r) => r.questionId === q.id)?.reponse ?? "(pas de réponse)";
         return `[${q.niveau}] Q: ${q.question}\nRéponse : ${rep}`;
       }).join("\n\n");
 
-      const evalResp = await anthropic.messages.create({
+      const evalResp = await claudeAvecRetry({
         model: "claude-sonnet-4-6",
         max_tokens: 1500,
         messages: [{
           role: "user",
-          content: `Évalue la compréhension de ${profil.prenom} (${NIVEAU_LABEL[profil.niveauScolaire] ?? profil.niveauScolaire}) selon Giasson.
+          content: `Évalue la compréhension de ${profil.prenom} (${niveauLabel}) selon Giasson.
 
 ${contexte}
 
@@ -1462,31 +1511,30 @@ QUESTIONS ET RÉPONSES :
 ${qrText}
 
 RÉPONDS avec ce JSON exact :
-{"evaluations":[{"questionId":"q1","score":80,"feedback":"1 phrase bienveillante"},...],"scoreGlobal":75,"niveauPrecision":"FONCTIONNEL","analyseIA":"3-4 phrases encourageantes style oral québécois","forcePrincipale":"Ce que l'élève fait bien (1 phrase)","prochainDefi":"Piste d'amélioration (1 phrase)"}
+{"evaluations":[{"questionId":"q1","score":80,"feedback":"1 phrase bienveillante"},...],"scoreGlobal":75,"niveauPrecision":"FONCTIONNEL","analyseIA":"3-4 phrases encourageantes style oral québécois","forcePrincipale":"Ce que l'élève fait bien","prochainDefi":"Piste d'amélioration"}
 
 niveauPrecision : "INDEPENDANT" (≥90), "FONCTIONNEL" (70-89), "FRUSTRATION" (<70)`,
         }],
       });
 
-      let ev: {
+      type EvalResult = {
         evaluations: Array<{ questionId: string; score: number; feedback: string }>;
         scoreGlobal: number; niveauPrecision: string;
         analyseIA: string; forcePrincipale: string; prochainDefi: string;
       };
-      try {
-        const raw = evalResp.content[0].type === "text" ? evalResp.content[0].text : "{}";
-        ev = JSON.parse(raw.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "").trim());
-      } catch {
-        ev = { evaluations: [], scoreGlobal: 70, niveauPrecision: "FONCTIONNEL",
-          analyseIA: `${profil.prenom} a bien complété sa session. Continue !`,
-          forcePrincipale: "Bonne participation", prochainDefi: "Lire régulièrement" };
-      }
+      const fallbackEval: EvalResult = {
+        evaluations: [], scoreGlobal: 70, niveauPrecision: "FONCTIONNEL",
+        analyseIA: `${profil.prenom} a bien complété sa session. Continue !`,
+        forcePrincipale: "Bonne participation", prochainDefi: "Lire régulièrement",
+      };
+      const raw = evalResp.content[0].type === "text" ? (evalResp.content[0].text ?? "{}") : "{}";
+      const ev = parseJsonClaude<EvalResult>(raw, fallbackEval);
 
-      const questionsFinales = questions.map(q => ({
+      const questionsFinales = questions.map((q) => ({
         ...q,
-        reponseEleve: input.reponses.find(r => r.questionId === q.id)?.reponse,
-        scoreQuestion: ev.evaluations.find(e => e.questionId === q.id)?.score,
-        feedbackQuestion: ev.evaluations.find(e => e.questionId === q.id)?.feedback,
+        reponseEleve: input.reponses.find((r) => r.questionId === q.id)?.reponse,
+        scoreQuestion: ev.evaluations.find((e) => e.questionId === q.id)?.score,
+        feedbackQuestion: ev.evaluations.find((e) => e.questionId === q.id)?.feedback,
       }));
 
       return ctx.prisma.sessionLecture.update({
@@ -1501,13 +1549,14 @@ niveauPrecision : "INDEPENDANT" (≥90), "FONCTIONNEL" (70-89), "FRUSTRATION" (<
       });
     }),
 
+  // Polling léger — appelé toutes les 3s par le client pendant GENERANT_QUESTIONS
   getSessionLectureActive: protectedProcedure.query(async ({ ctx }) => {
     const profil = await ctx.prisma.profilEleve.findUnique({
       where: { userId: ctx.user.id }, select: { id: true },
     });
     if (!profil) return null;
     return ctx.prisma.sessionLecture.findFirst({
-      where: { eleveId: profil.id, statut: { in: ["EN_COURS", "QUESTIONS"] } },
+      where: { eleveId: profil.id, statut: { in: ["EN_COURS", "GENERANT_QUESTIONS", "QUESTIONS"] } },
       orderBy: { createdAt: "desc" },
     });
   }),

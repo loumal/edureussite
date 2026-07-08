@@ -677,14 +677,6 @@ export type EnumStatutExerciceFieldUpdateOperationsInput = {
   set?: $Enums.StatutExercice
 }
 
-export type NullableFloatFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type ExerciceAssigneCreateWithoutEleveInput = {
   id?: string
   statut?: $Enums.StatutExercice

@@ -53,6 +53,16 @@ export type HistoriqueNiveauEleve = Prisma.HistoriqueNiveauEleveModel
  */
 export type LectureJournaliere = Prisma.LectureJournaliereModel
 /**
+ * Model TexteLectureCache
+ * 
+ */
+export type TexteLectureCache = Prisma.TexteLectureCacheModel
+/**
+ * Model SessionLecture
+ * 
+ */
+export type SessionLecture = Prisma.SessionLectureModel
+/**
  * Model MiraMessage
  * 
  */

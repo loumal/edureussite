@@ -292,6 +292,42 @@ export const TypeMission = {
 export type TypeMission = (typeof TypeMission)[keyof typeof TypeMission]
 
 
+export const ModeLecture = {
+  TEXTE_GENERE: 'TEXTE_GENERE',
+  LIVRE_PERSO: 'LIVRE_PERSO'
+} as const
+
+export type ModeLecture = (typeof ModeLecture)[keyof typeof ModeLecture]
+
+
+export const StatutSessionLecture = {
+  EN_COURS: 'EN_COURS',
+  GENERANT_QUESTIONS: 'GENERANT_QUESTIONS',
+  QUESTIONS: 'QUESTIONS',
+  TERMINE: 'TERMINE'
+} as const
+
+export type StatutSessionLecture = (typeof StatutSessionLecture)[keyof typeof StatutSessionLecture]
+
+
+export const NiveauLecture = {
+  FACILE: 'FACILE',
+  MOYEN: 'MOYEN',
+  DIFFICILE: 'DIFFICILE'
+} as const
+
+export type NiveauLecture = (typeof NiveauLecture)[keyof typeof NiveauLecture]
+
+
+export const NiveauPrecisionLecture = {
+  INDEPENDANT: 'INDEPENDANT',
+  FONCTIONNEL: 'FONCTIONNEL',
+  FRUSTRATION: 'FRUSTRATION'
+} as const
+
+export type NiveauPrecisionLecture = (typeof NiveauPrecisionLecture)[keyof typeof NiveauPrecisionLecture]
+
+
 export const TypeDocument = {
   RECHERCHE_SCIENTIFIQUE: 'RECHERCHE_SCIENTIFIQUE',
   GUIDE_PEDAGOGIQUE: 'GUIDE_PEDAGOGIQUE',

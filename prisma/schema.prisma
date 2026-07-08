@@ -457,6 +457,21 @@ model LectureJournaliere {
   @@map("lectures_journalieres")
 }
 
+// ── Pool de textes pré-générés pour le module Lecture ──────────────────────
+// Permet de servir instantanément sans appel Claude pendant la session élève.
+// La cron /api/cron/prefill-lecture-cache maintient 10 textes par niveau.
+model TexteLectureCache {
+  id             String         @id @default(cuid())
+  niveauScolaire NiveauScolaire
+  texte          String         @db.Text
+  nbMots         Int
+  questionsJson  String         @db.Text  // JSON des 5 questions Giasson pré-générées
+  createdAt      DateTime       @default(now())
+
+  @@index([niveauScolaire, createdAt])
+  @@map("textes_lecture_cache")
+}
+
 // ── Module Lecture Approfondie (tous les élèves) ──────────────────────────
 model SessionLecture {
   id      String @id @default(cuid())
@@ -474,6 +489,9 @@ model SessionLecture {
   auteurLivre    String?
   niveauLecture  NiveauLecture?
   texteTranscrit String? @db.Text  // transcription temps réel de la lecture à voix haute
+
+  // Référence au cache utilisé (TEXTE_GENERE)
+  cacheTexteId  String?
 
   // Timing
   dateDebut         DateTime?
@@ -504,6 +522,7 @@ enum ModeLecture {
 
 enum StatutSessionLecture {
   EN_COURS
+  GENERANT_QUESTIONS
   QUESTIONS
   TERMINE
 }

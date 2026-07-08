@@ -9,6 +9,7 @@ import type { NiveauScolaire } from "@/generated/prisma";
 type EtapeLecture =
   | "selection" | "form_livre" | "generation"
   | "lecture_texte" | "lecture_livre"
+  | "generant_questions"
   | "questions" | "analyse" | "historique";
 
 type ModeLecture = "TEXTE_GENERE" | "LIVRE_PERSO";
@@ -84,6 +85,7 @@ export function LectureClient({ sessionActive, historique: historiqueInitial, pr
   const getInitialEtape = (): EtapeLecture => {
     if (!sessionActive) return "selection";
     if (sessionActive.statut === "QUESTIONS") return "questions";
+    if (sessionActive.statut === "GENERANT_QUESTIONS") return "generant_questions";
     if (sessionActive.mode === "TEXTE_GENERE") return "lecture_texte";
     return "lecture_livre";
   };
@@ -114,6 +116,23 @@ export function LectureClient({ sessionActive, historique: historiqueInitial, pr
   const creerSession = trpc.eleve.creerSessionLecture.useMutation();
   const terminerSession = trpc.eleve.terminerSessionLecture.useMutation();
   const soumettreReponses = trpc.eleve.soumettreReponsesLecture.useMutation();
+
+  // Polling tant que le statut est GENERANT_QUESTIONS (génération async en cours)
+  const pollQuery = trpc.eleve.getSessionLectureActive.useQuery(undefined, {
+    enabled: etape === "generant_questions",
+    refetchInterval: etape === "generant_questions" ? 3000 : false,
+    staleTime: 0,
+  });
+
+  // Quand le poll détecte QUESTIONS → passer à l'écran questions
+  useEffect(() => {
+    if (etape !== "generant_questions") return;
+    const data = pollQuery.data;
+    if (data && data.statut === "QUESTIONS") {
+      setSession(data as SessionData);
+      setEtape("questions");
+    }
+  }, [etape, pollQuery.data]);
 
   // ── Timer ──────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -186,10 +205,23 @@ export function LectureClient({ sessionActive, historique: historiqueInitial, pr
         dureeEffectiveSec,
         texteTranscrit,
       });
-      setSession(result as SessionData);
+      const updated = result as SessionData;
+      setSession(updated);
       setQuestionIndex(0);
       setReponses({});
-      setEtape("questions");
+
+      if (updated.statut === "GENERANT_QUESTIONS") {
+        // LIVRE_PERSO : lancer la génération en background, passer en attente
+        setEtape("generant_questions");
+        // Fire-and-forget : la route génère les questions sans bloquer l'UI
+        fetch("/api/lecture/generer-questions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId: updated.id }),
+        }).catch(() => null);
+      } else {
+        setEtape("questions");
+      }
     } catch { /* erreur réseau */ }
   }, [session, etape, transcription, dureeEffectiveSec, terminerSession]);
 
@@ -469,6 +501,23 @@ export function LectureClient({ sessionActive, historique: historiqueInitial, pr
             {terminerSession.isPending ? "Génération des questions…" : "✅ Terminé"}
           </button>
         </div>
+      </div>
+    );
+  }
+
+  // ── Génération des questions en cours (LIVRE_PERSO async) ────────────
+  if (etape === "generant_questions") {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
+        <div className="text-4xl animate-bounce">🎓</div>
+        <p className="font-bold text-[var(--color-ink)]">Mira analyse ta lecture…</p>
+        <p className="text-sm text-[var(--color-ink-soft)]">Elle prépare 5 questions de compréhension sur ce que tu as lu. Ça prend quelques secondes !</p>
+        <div className="flex gap-1.5 mt-2">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" style={{ animationDelay: `${i * 0.3}s` }} />
+          ))}
+        </div>
+        <p className="text-xs text-[var(--color-ink-soft)] mt-4">La page se met à jour automatiquement.</p>
       </div>
     );
   }

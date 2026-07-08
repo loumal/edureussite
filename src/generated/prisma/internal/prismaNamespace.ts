@@ -391,6 +391,8 @@ export const ModelName = {
   ProfilEleve: 'ProfilEleve',
   HistoriqueNiveauEleve: 'HistoriqueNiveauEleve',
   LectureJournaliere: 'LectureJournaliere',
+  TexteLectureCache: 'TexteLectureCache',
+  SessionLecture: 'SessionLecture',
   MiraMessage: 'MiraMessage',
   NiveauMatiere: 'NiveauMatiere',
   ProfilParent: 'ProfilParent',
@@ -458,7 +460,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "historiqueNiveauEleve" | "lectureJournaliere" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "epreuveSemainePlan" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur" | "evaluationRequest" | "formulaireReponse" | "rapportEvaluation"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "profilEleve" | "historiqueNiveauEleve" | "lectureJournaliere" | "texteLectureCache" | "sessionLecture" | "miraMessage" | "niveauMatiere" | "profilParent" | "planAccompagnementParent" | "coursRemediation" | "surpriseParent" | "commentaireParent" | "profilEnseignant" | "planAction" | "objectifPlan" | "exercice" | "exerciceAssigne" | "sessionPratique" | "checkInEmotionnel" | "badge" | "badgeEleve" | "commentairePedagogique" | "notification" | "commentaireEleve" | "documentPedagogique" | "parametreApp" | "specialiste" | "webinaire" | "demandeRencontre" | "creneauDisponible" | "rendezVous" | "inscriptionWebinaire" | "recommandationIA" | "securityLog" | "modeleEpreuve" | "sectionEpreuve" | "defJour" | "defJourCompletion" | "missionHebdo" | "apiUsageLog" | "blockedIp" | "objectifNote" | "planifNotionEleve" | "disponibiliteEleve" | "epreuveSemainePlan" | "agentLog" | "opportunitePartenariat" | "compteSocial" | "publicationSociale" | "personaMarketing" | "strategieMarketing" | "demandeJeu" | "campagneEmail" | "partieMultijoueur" | "evaluationRequest" | "formulaireReponse" | "rapportEvaluation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -977,6 +979,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LectureJournaliereCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LectureJournaliereCountAggregateOutputType> | number
+        }
+      }
+    }
+    TexteLectureCache: {
+      payload: Prisma.$TexteLectureCachePayload<ExtArgs>
+      fields: Prisma.TexteLectureCacheFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TexteLectureCacheFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TexteLectureCacheFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload>
+        }
+        findFirst: {
+          args: Prisma.TexteLectureCacheFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TexteLectureCacheFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload>
+        }
+        findMany: {
+          args: Prisma.TexteLectureCacheFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload>[]
+        }
+        create: {
+          args: Prisma.TexteLectureCacheCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload>
+        }
+        createMany: {
+          args: Prisma.TexteLectureCacheCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TexteLectureCacheCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload>[]
+        }
+        delete: {
+          args: Prisma.TexteLectureCacheDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload>
+        }
+        update: {
+          args: Prisma.TexteLectureCacheUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload>
+        }
+        deleteMany: {
+          args: Prisma.TexteLectureCacheDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TexteLectureCacheUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TexteLectureCacheUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload>[]
+        }
+        upsert: {
+          args: Prisma.TexteLectureCacheUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TexteLectureCachePayload>
+        }
+        aggregate: {
+          args: Prisma.TexteLectureCacheAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTexteLectureCache>
+        }
+        groupBy: {
+          args: Prisma.TexteLectureCacheGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TexteLectureCacheGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TexteLectureCacheCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TexteLectureCacheCountAggregateOutputType> | number
+        }
+      }
+    }
+    SessionLecture: {
+      payload: Prisma.$SessionLecturePayload<ExtArgs>
+      fields: Prisma.SessionLectureFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SessionLectureFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SessionLectureFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload>
+        }
+        findFirst: {
+          args: Prisma.SessionLectureFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SessionLectureFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload>
+        }
+        findMany: {
+          args: Prisma.SessionLectureFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload>[]
+        }
+        create: {
+          args: Prisma.SessionLectureCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload>
+        }
+        createMany: {
+          args: Prisma.SessionLectureCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SessionLectureCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload>[]
+        }
+        delete: {
+          args: Prisma.SessionLectureDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload>
+        }
+        update: {
+          args: Prisma.SessionLectureUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload>
+        }
+        deleteMany: {
+          args: Prisma.SessionLectureDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SessionLectureUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SessionLectureUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload>[]
+        }
+        upsert: {
+          args: Prisma.SessionLectureUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SessionLecturePayload>
+        }
+        aggregate: {
+          args: Prisma.SessionLectureAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSessionLecture>
+        }
+        groupBy: {
+          args: Prisma.SessionLectureGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SessionLectureGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SessionLectureCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SessionLectureCountAggregateOutputType> | number
         }
       }
     }
@@ -5008,6 +5158,45 @@ export const LectureJournaliereScalarFieldEnum = {
 export type LectureJournaliereScalarFieldEnum = (typeof LectureJournaliereScalarFieldEnum)[keyof typeof LectureJournaliereScalarFieldEnum]
 
 
+export const TexteLectureCacheScalarFieldEnum = {
+  id: 'id',
+  niveauScolaire: 'niveauScolaire',
+  texte: 'texte',
+  nbMots: 'nbMots',
+  questionsJson: 'questionsJson',
+  createdAt: 'createdAt'
+} as const
+
+export type TexteLectureCacheScalarFieldEnum = (typeof TexteLectureCacheScalarFieldEnum)[keyof typeof TexteLectureCacheScalarFieldEnum]
+
+
+export const SessionLectureScalarFieldEnum = {
+  id: 'id',
+  eleveId: 'eleveId',
+  mode: 'mode',
+  statut: 'statut',
+  texteGenere: 'texteGenere',
+  nbMotsTexte: 'nbMotsTexte',
+  titreLivre: 'titreLivre',
+  auteurLivre: 'auteurLivre',
+  niveauLecture: 'niveauLecture',
+  texteTranscrit: 'texteTranscrit',
+  cacheTexteId: 'cacheTexteId',
+  dateDebut: 'dateDebut',
+  dateFin: 'dateFin',
+  dureeEffectiveSec: 'dureeEffectiveSec',
+  vitesseMots: 'vitesseMots',
+  questions: 'questions',
+  scoreGlobal: 'scoreGlobal',
+  analyseIA: 'analyseIA',
+  niveauPrecision: 'niveauPrecision',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SessionLectureScalarFieldEnum = (typeof SessionLectureScalarFieldEnum)[keyof typeof SessionLectureScalarFieldEnum]
+
+
 export const MiraMessageScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -6045,16 +6234,44 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
- * Reference to a field of type 'NiveauDifficulte'
+ * Reference to a field of type 'ModeLecture'
  */
-export type EnumNiveauDifficulteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NiveauDifficulte'>
+export type EnumModeLectureFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ModeLecture'>
     
 
 
 /**
- * Reference to a field of type 'NiveauDifficulte[]'
+ * Reference to a field of type 'ModeLecture[]'
  */
-export type ListEnumNiveauDifficulteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NiveauDifficulte[]'>
+export type ListEnumModeLectureFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ModeLecture[]'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutSessionLecture'
+ */
+export type EnumStatutSessionLectureFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutSessionLecture'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutSessionLecture[]'
+ */
+export type ListEnumStatutSessionLectureFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutSessionLecture[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NiveauLecture'
+ */
+export type EnumNiveauLectureFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NiveauLecture'>
+    
+
+
+/**
+ * Reference to a field of type 'NiveauLecture[]'
+ */
+export type ListEnumNiveauLectureFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NiveauLecture[]'>
     
 
 
@@ -6069,6 +6286,34 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NiveauPrecisionLecture'
+ */
+export type EnumNiveauPrecisionLectureFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NiveauPrecisionLecture'>
+    
+
+
+/**
+ * Reference to a field of type 'NiveauPrecisionLecture[]'
+ */
+export type ListEnumNiveauPrecisionLectureFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NiveauPrecisionLecture[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NiveauDifficulte'
+ */
+export type EnumNiveauDifficulteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NiveauDifficulte'>
+    
+
+
+/**
+ * Reference to a field of type 'NiveauDifficulte[]'
+ */
+export type ListEnumNiveauDifficulteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NiveauDifficulte[]'>
     
 
 
@@ -6495,6 +6740,8 @@ export type GlobalOmitConfig = {
   profilEleve?: Prisma.ProfilEleveOmit
   historiqueNiveauEleve?: Prisma.HistoriqueNiveauEleveOmit
   lectureJournaliere?: Prisma.LectureJournaliereOmit
+  texteLectureCache?: Prisma.TexteLectureCacheOmit
+  sessionLecture?: Prisma.SessionLectureOmit
   miraMessage?: Prisma.MiraMessageOmit
   niveauMatiere?: Prisma.NiveauMatiereOmit
   profilParent?: Prisma.ProfilParentOmit
