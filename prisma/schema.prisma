@@ -404,6 +404,7 @@ model ProfilEleve {
   evaluations           EvaluationRequest[]
   epreuvesSemaine       EpreuveSemainePlan[]
   lectures              LectureJournaliere[]
+  sessionsLecture       SessionLecture[]
 
   // ── Quota Mira IA (session vocale hebdomadaire) ───────────────────────
   miraSecsUsedWeek Int     @default(0)   @map("sofiaSecsUsedWeek") // secondes utilisées cette semaine
@@ -454,6 +455,69 @@ model LectureJournaliere {
   @@index([eleveId])
   @@index([eleveId, date])
   @@map("lectures_journalieres")
+}
+
+// ── Module Lecture Approfondie (tous les élèves) ──────────────────────────
+model SessionLecture {
+  id      String @id @default(cuid())
+  eleveId String
+
+  mode   ModeLecture
+  statut StatutSessionLecture @default(EN_COURS)
+
+  // TEXTE_GENERE — texte produit par l'IA
+  texteGenere  String? @db.Text
+  nbMotsTexte  Int?
+
+  // LIVRE_PERSO — métadonnées + transcription audio en direct
+  titreLivre     String?
+  auteurLivre    String?
+  niveauLecture  NiveauLecture?
+  texteTranscrit String? @db.Text  // transcription temps réel de la lecture à voix haute
+
+  // Timing
+  dateDebut         DateTime?
+  dateFin           DateTime?
+  dureeEffectiveSec Int?
+
+  // Résultats
+  vitesseMots     Float?
+  questions       Json?
+  scoreGlobal     Int?
+  analyseIA       String? @db.Text
+  niveauPrecision NiveauPrecisionLecture?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  eleve ProfilEleve @relation(fields: [eleveId], references: [id], onDelete: Cascade)
+
+  @@index([eleveId])
+  @@index([eleveId, createdAt(sort: Desc)])
+  @@map("sessions_lecture")
+}
+
+enum ModeLecture {
+  TEXTE_GENERE
+  LIVRE_PERSO
+}
+
+enum StatutSessionLecture {
+  EN_COURS
+  QUESTIONS
+  TERMINE
+}
+
+enum NiveauLecture {
+  FACILE
+  MOYEN
+  DIFFICILE
+}
+
+enum NiveauPrecisionLecture {
+  INDEPENDANT
+  FONCTIONNEL
+  FRUSTRATION
 }
 
 // ── Historique persistant des conversations Mira (mode aide libre) ─────────

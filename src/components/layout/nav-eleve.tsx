@@ -110,9 +110,7 @@ export function NavEleve({ prenom, streak, niveauScolaire, avatarEquipe, provinc
                 </MenuLink>
                 <MenuLink href="/eleve/plan" onClick={() => setMenuOpen(false)}>🗺️ Mon plan</MenuLink>
                 <MenuLink href="/eleve/jeux/multijoueur" onClick={() => setMenuOpen(false)}>🎮 Multijoueur</MenuLink>
-                {estCanada && (
-                  <MenuLink href="/eleve/lecture" onClick={() => setMenuOpen(false)}>📖 Lecture du jour</MenuLink>
-                )}
+                <MenuLink href="/eleve/lecture" onClick={() => setMenuOpen(false)}>📖 Lecture</MenuLink>
 
                 <div className="h-px bg-[var(--color-rule)] mx-1 my-1" />
 
@@ -201,9 +199,7 @@ function BottomBar({ pathname, unread, streak, prenom, jeune, avatarGradient, es
           </Link>
           <Link href="/eleve/plan" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">🗺️ Mon plan</Link>
           <Link href="/eleve/jeux/multijoueur" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">🎮 Multijoueur</Link>
-          {estCanada && (
-            <Link href="/eleve/lecture" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">📖 Lecture du jour</Link>
-          )}
+          <Link href="/eleve/lecture" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">📖 Lecture</Link>
           <div className="h-px bg-[var(--color-rule)] mx-1 my-1" />
           <Link href="/eleve/parametres" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-warm)]">⚙️ Paramètres</Link>
           <button onClick={() => signOut({ callbackUrl: "/login" })} className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-500 hover:bg-red-50">🚪 Déconnexion</button>

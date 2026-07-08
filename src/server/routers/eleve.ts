@@ -1261,4 +1261,273 @@ export const eleveRouter = createTRPCRouter({
         take: input.limit,
       });
     }),
+
+  // ── Module Lecture Approfondie ─────────────────────────────────────────────
+
+  creerSessionLecture: protectedProcedure
+    .input(z.object({
+      mode: z.enum(["TEXTE_GENERE", "LIVRE_PERSO"]),
+      titreLivre: z.string().min(1).max(300).optional(),
+      auteurLivre: z.string().max(200).optional(),
+      niveauLecture: z.enum(["FACILE", "MOYEN", "DIFFICILE"]).optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true, niveauScolaire: true, prenom: true, centresInteret: true, sportFavori: true, universMediatique: true },
+      });
+
+      const MOTS_PAR_NIVEAU: Partial<Record<NiveauScolaire, number>> = {
+        PRIMAIRE_1: 110, PRIMAIRE_2: 150, PRIMAIRE_3: 200,
+        PRIMAIRE_4: 260, PRIMAIRE_5: 320, PRIMAIRE_6: 380,
+        SECONDAIRE_1: 430, SECONDAIRE_2: 480, SECONDAIRE_3: 530,
+        SECONDAIRE_4: 580, SECONDAIRE_5: 620, SECONDAIRE_6: 650, SECONDAIRE_7: 680,
+      };
+      const NIVEAU_LABEL: Partial<Record<NiveauScolaire, string>> = {
+        PRIMAIRE_1: "1re année primaire (6 ans)", PRIMAIRE_2: "2e année primaire",
+        PRIMAIRE_3: "3e année primaire", PRIMAIRE_4: "4e année primaire",
+        PRIMAIRE_5: "5e année primaire", PRIMAIRE_6: "6e année primaire",
+        SECONDAIRE_1: "1re secondaire", SECONDAIRE_2: "2e secondaire",
+        SECONDAIRE_3: "3e secondaire", SECONDAIRE_4: "4e secondaire",
+        SECONDAIRE_5: "5e secondaire", SECONDAIRE_6: "6e secondaire", SECONDAIRE_7: "Terminale",
+      };
+
+      let texteGenere: string | null = null;
+      let nbMotsTexte: number | null = null;
+
+      if (input.mode === "TEXTE_GENERE") {
+        const nbMots = MOTS_PAR_NIVEAU[profil.niveauScolaire] ?? 300;
+        const niveauLabel = NIVEAU_LABEL[profil.niveauScolaire] ?? profil.niveauScolaire;
+        const interets = [profil.sportFavori, profil.universMediatique, ...(profil.centresInteret ?? [])]
+          .filter(Boolean).slice(0, 3).join(", ");
+
+        const resp = await anthropic.messages.create({
+          model: "claude-sonnet-4-6",
+          max_tokens: 1200,
+          messages: [{
+            role: "user",
+            content: `Tu génères un texte de lecture engageant pour ${profil.prenom}, élève de ${niveauLabel}.
+Centres d'intérêt : ${interets || "varié"}
+Longueur cible : ${nbMots} mots (±15 %)
+Style : narratif ou informatif, début accrocheur, vocabulaire adapté au niveau
+Langue : français québécois naturel, aucune violence ni contenu sensible
+
+Génère UNIQUEMENT le texte, sans titre, sans introduction ni commentaire. Commence directement.`,
+          }],
+        });
+        texteGenere = resp.content[0].type === "text" ? resp.content[0].text.trim() : "";
+        nbMotsTexte = texteGenere.split(/\s+/).filter(Boolean).length;
+      }
+
+      return ctx.prisma.sessionLecture.create({
+        data: {
+          eleveId: profil.id,
+          mode: input.mode,
+          statut: "EN_COURS",
+          texteGenere,
+          nbMotsTexte,
+          titreLivre: input.titreLivre,
+          auteurLivre: input.auteurLivre,
+          niveauLecture: input.niveauLecture,
+          dateDebut: new Date(),
+        },
+      });
+    }),
+
+  terminerSessionLecture: protectedProcedure
+    .input(z.object({
+      sessionId: z.string(),
+      dureeEffectiveSec: z.number().min(1),
+      texteTranscrit: z.string().optional(), // transcription LIVRE_PERSO
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true, niveauScolaire: true, prenom: true },
+      });
+      const session = await ctx.prisma.sessionLecture.findUniqueOrThrow({
+        where: { id: input.sessionId, eleveId: profil.id },
+      });
+
+      // Texte source pour les questions
+      const texteSource = session.texteGenere ?? input.texteTranscrit ?? null;
+      const nbMots = session.nbMotsTexte
+        ?? (input.texteTranscrit ? input.texteTranscrit.split(/\s+/).filter(Boolean).length : null);
+      const vitesseMots = nbMots && input.dureeEffectiveSec > 0
+        ? Math.round((nbMots / (input.dureeEffectiveSec / 60)) * 10) / 10
+        : null;
+
+      const NIVEAU_LABEL: Partial<Record<NiveauScolaire, string>> = {
+        PRIMAIRE_1: "1re année primaire (6 ans)", PRIMAIRE_2: "2e année primaire",
+        PRIMAIRE_3: "3e année primaire", PRIMAIRE_4: "4e année primaire",
+        PRIMAIRE_5: "5e année primaire", PRIMAIRE_6: "6e année primaire",
+        SECONDAIRE_1: "1re secondaire", SECONDAIRE_2: "2e secondaire",
+        SECONDAIRE_3: "3e secondaire", SECONDAIRE_4: "4e secondaire",
+        SECONDAIRE_5: "5e secondaire", SECONDAIRE_6: "6e secondaire", SECONDAIRE_7: "Terminale",
+      };
+      const niveauLabel = NIVEAU_LABEL[profil.niveauScolaire] ?? profil.niveauScolaire;
+
+      const contexteLecture = texteSource
+        ? `Texte lu par l'élève :\n\n${texteSource.slice(0, 3000)}`
+        : `Livre : "${session.titreLivre ?? "?"}"${session.auteurLivre ? ` de ${session.auteurLivre}` : ""} (niveau ${session.niveauLecture ?? "?"})`;
+
+      const qResp = await anthropic.messages.create({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [{
+          role: "user",
+          content: `Tu es un orthopédagogue expert selon le modèle de Giasson. Génère 5 questions pour ${profil.prenom}, élève de ${niveauLabel}.
+
+${contexteLecture}
+
+5 questions en français québécois, une par niveau Giasson :
+- MICROPROCESSUS (fait explicite)
+- INTEGRATION (anaphore ou connecteur logique)
+- MACROPROCESSUS (idée principale)
+- ELABORATION_CAUSAL (lien cause-effet implicite)
+- ELABORATION_PREDICTIF (prédiction ou inférence pragmatique)
+
+RÉPONDS UNIQUEMENT avec ce JSON :
+[{"id":"q1","niveau":"MICROPROCESSUS","question":"..."},{"id":"q2","niveau":"INTEGRATION","question":"..."},{"id":"q3","niveau":"MACROPROCESSUS","question":"..."},{"id":"q4","niveau":"ELABORATION_CAUSAL","question":"..."},{"id":"q5","niveau":"ELABORATION_PREDICTIF","question":"..."}]`,
+        }],
+      });
+
+      let questions: object[] = [];
+      try {
+        const raw = qResp.content[0].type === "text" ? qResp.content[0].text : "[]";
+        questions = JSON.parse(raw.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "").trim());
+      } catch { questions = []; }
+
+      return ctx.prisma.sessionLecture.update({
+        where: { id: input.sessionId },
+        data: {
+          statut: "QUESTIONS",
+          dateFin: new Date(),
+          dureeEffectiveSec: input.dureeEffectiveSec,
+          texteTranscrit: input.texteTranscrit,
+          nbMotsTexte: nbMots,
+          vitesseMots,
+          questions: questions as never,
+        },
+      });
+    }),
+
+  soumettreReponsesLecture: protectedProcedure
+    .input(z.object({
+      sessionId: z.string(),
+      reponses: z.array(z.object({
+        questionId: z.string(),
+        reponse: z.string().min(1).max(3000),
+      })),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUniqueOrThrow({
+        where: { userId: ctx.user.id },
+        select: { id: true, niveauScolaire: true, prenom: true },
+      });
+      const session = await ctx.prisma.sessionLecture.findUniqueOrThrow({
+        where: { id: input.sessionId, eleveId: profil.id },
+      });
+
+      const questions = (session.questions as Array<{ id: string; niveau: string; question: string }>) ?? [];
+      const texteSource = session.texteGenere ?? session.texteTranscrit ?? null;
+      const contexte = texteSource
+        ? `Texte lu :\n${texteSource.slice(0, 2500)}`
+        : `Livre : "${session.titreLivre ?? "?"}"${session.auteurLivre ? ` de ${session.auteurLivre}` : ""}`;
+
+      const NIVEAU_LABEL: Partial<Record<NiveauScolaire, string>> = {
+        PRIMAIRE_1: "1re année primaire", PRIMAIRE_2: "2e année primaire",
+        PRIMAIRE_3: "3e année primaire", PRIMAIRE_4: "4e année primaire",
+        PRIMAIRE_5: "5e année primaire", PRIMAIRE_6: "6e année primaire",
+        SECONDAIRE_1: "1re secondaire", SECONDAIRE_2: "2e secondaire",
+        SECONDAIRE_3: "3e secondaire", SECONDAIRE_4: "4e secondaire",
+        SECONDAIRE_5: "5e secondaire", SECONDAIRE_6: "6e secondaire", SECONDAIRE_7: "Terminale",
+      };
+
+      const qrText = questions.map(q => {
+        const rep = input.reponses.find(r => r.questionId === q.id)?.reponse ?? "(pas de réponse)";
+        return `[${q.niveau}] Q: ${q.question}\nRéponse : ${rep}`;
+      }).join("\n\n");
+
+      const evalResp = await anthropic.messages.create({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1500,
+        messages: [{
+          role: "user",
+          content: `Évalue la compréhension de ${profil.prenom} (${NIVEAU_LABEL[profil.niveauScolaire] ?? profil.niveauScolaire}) selon Giasson.
+
+${contexte}
+
+QUESTIONS ET RÉPONSES :
+${qrText}
+
+RÉPONDS avec ce JSON exact :
+{"evaluations":[{"questionId":"q1","score":80,"feedback":"1 phrase bienveillante"},...],"scoreGlobal":75,"niveauPrecision":"FONCTIONNEL","analyseIA":"3-4 phrases encourageantes style oral québécois","forcePrincipale":"Ce que l'élève fait bien (1 phrase)","prochainDefi":"Piste d'amélioration (1 phrase)"}
+
+niveauPrecision : "INDEPENDANT" (≥90), "FONCTIONNEL" (70-89), "FRUSTRATION" (<70)`,
+        }],
+      });
+
+      let ev: {
+        evaluations: Array<{ questionId: string; score: number; feedback: string }>;
+        scoreGlobal: number; niveauPrecision: string;
+        analyseIA: string; forcePrincipale: string; prochainDefi: string;
+      };
+      try {
+        const raw = evalResp.content[0].type === "text" ? evalResp.content[0].text : "{}";
+        ev = JSON.parse(raw.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "").trim());
+      } catch {
+        ev = { evaluations: [], scoreGlobal: 70, niveauPrecision: "FONCTIONNEL",
+          analyseIA: `${profil.prenom} a bien complété sa session. Continue !`,
+          forcePrincipale: "Bonne participation", prochainDefi: "Lire régulièrement" };
+      }
+
+      const questionsFinales = questions.map(q => ({
+        ...q,
+        reponseEleve: input.reponses.find(r => r.questionId === q.id)?.reponse,
+        scoreQuestion: ev.evaluations.find(e => e.questionId === q.id)?.score,
+        feedbackQuestion: ev.evaluations.find(e => e.questionId === q.id)?.feedback,
+      }));
+
+      return ctx.prisma.sessionLecture.update({
+        where: { id: input.sessionId },
+        data: {
+          statut: "TERMINE",
+          questions: questionsFinales as never,
+          scoreGlobal: ev.scoreGlobal,
+          niveauPrecision: ev.niveauPrecision as "INDEPENDANT" | "FONCTIONNEL" | "FRUSTRATION",
+          analyseIA: JSON.stringify({ analyse: ev.analyseIA, force: ev.forcePrincipale, defi: ev.prochainDefi }),
+        },
+      });
+    }),
+
+  getSessionLectureActive: protectedProcedure.query(async ({ ctx }) => {
+    const profil = await ctx.prisma.profilEleve.findUnique({
+      where: { userId: ctx.user.id }, select: { id: true },
+    });
+    if (!profil) return null;
+    return ctx.prisma.sessionLecture.findFirst({
+      where: { eleveId: profil.id, statut: { in: ["EN_COURS", "QUESTIONS"] } },
+      orderBy: { createdAt: "desc" },
+    });
+  }),
+
+  getHistoriqueSessionsLecture: protectedProcedure
+    .input(z.object({ limit: z.number().min(1).max(30).default(10) }))
+    .query(async ({ ctx, input }) => {
+      const profil = await ctx.prisma.profilEleve.findUnique({
+        where: { userId: ctx.user.id }, select: { id: true },
+      });
+      if (!profil) return [];
+      return ctx.prisma.sessionLecture.findMany({
+        where: { eleveId: profil.id, statut: "TERMINE" },
+        orderBy: { createdAt: "desc" },
+        take: input.limit,
+        select: {
+          id: true, mode: true, titreLivre: true, auteurLivre: true,
+          vitesseMots: true, scoreGlobal: true, niveauPrecision: true,
+          dureeEffectiveSec: true, nbMotsTexte: true, createdAt: true, analyseIA: true,
+        },
+      });
+    }),
 });

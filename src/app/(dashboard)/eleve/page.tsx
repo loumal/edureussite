@@ -101,11 +101,11 @@ export default async function EleveDashboardPage() {
         )}
 
         {/* ── ACCÈS RAPIDE — 3 raccourcis contextuels ── */}
-        <div className={`grid gap-2 mb-5 ${estCanada ? "grid-cols-4" : "grid-cols-3"}`}>
+        <div className="grid gap-2 mb-5 grid-cols-4">
           <QuickCard href="/eleve/cours" emoji="📚" label="Mes cours" badge={profil.coursRemediation.filter(c => c.statut !== "TERMINE").length || undefined} />
           <QuickCard href="/eleve/plan" emoji="🗺️" label="Mon plan" />
           <QuickCard href="/eleve/boutique?onglet=jeux" emoji="🎮" label="Jeux" />
-          {estCanada && <QuickCard href="/eleve/lecture" emoji="📖" label="Lecture" />}
+          <QuickCard href="/eleve/lecture" emoji="📖" label="Lecture" />
         </div>
 
         {/* ── GRILLE PRINCIPALE ── */}
